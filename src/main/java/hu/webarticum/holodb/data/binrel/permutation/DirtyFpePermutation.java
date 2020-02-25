@@ -1,0 +1,242 @@
+package hu.webarticum.holodb.data.binrel.permutation;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+/**
+ * Software derived from a New-BSD licensed implementation for .NET http://dotfpe.codeplex.com
+ *    ... That in turn was ported from the Botan library http://botan.randombit.net/fpe.html.
+ *    ... Using the scheme FE1 from the paper "Format-Preserving Encryption" by Bellare, Rogaway, et al. (http://eprint.iacr.org/2009/251)
+ *
+ * @author Rob Shepherd
+ * @author David Horvath
+ */
+public class DirtyFpePermutation implements Permutation {
+    
+    // Normally FPE is for SSNs, CC#s, etc, nothing too big
+    private static final int MAX_N_BYTES = 128 / 8;
+
+    private static final BigInteger MAX_PRIME = BigInteger.valueOf(65535);
+    
+    
+    private final FpeEncryptor encryptor;
+    
+    private final BigInteger size;
+    
+    private final BigInteger a, b;
+    
+    private final int rounds;
+    
+    
+    public DirtyFpePermutation(BigInteger size, byte[] key) {
+        try {
+            this.encryptor = new FpeEncryptor(key, size);
+        } catch (GeneralSecurityException | IOException e) {
+            throw new IllegalArgumentException("Can not create encryptor for this key");
+        }
+
+        this.size = size;
+        BigInteger[] aAndB = factor(size);
+        a = aAndB[0];
+        b = aAndB[1];
+        rounds = rounds(a, b);
+    }
+    
+    
+    @Override
+    public BigInteger size() {
+        return size;
+    }
+    
+    @Override
+    public boolean isReversible() {
+        return true;
+    }
+
+    /** Generic Z_n FPE encryption, FE1 scheme */
+    @Override
+    public BigInteger at(BigInteger plaintext) {
+        BigInteger x= plaintext;
+        for (int i = 0; i != rounds; ++i) {
+            BigInteger k = x.divide(b);
+            BigInteger r = x.mod(b);
+            BigInteger encrypted;
+            try {
+                encrypted = encryptor.runEncryption(i, r);
+            } catch (IOException e) {
+                // XXX
+                throw new IllegalStateException("Encryption failed");
+            }
+            BigInteger w = (k.add(encrypted)).mod(a);
+            x = a.multiply(r).add(w);
+        }
+        return x;
+    }
+
+    /** Generic Z_n FPE decryption, FD1 scheme */
+    @Override
+    public BigInteger indexOf(BigInteger ciphertext) {
+        BigInteger x = ciphertext;
+        for (int i = 0; i != rounds; ++i) {
+            BigInteger w = x.mod(a);
+            BigInteger r = x.divide(a);
+            BigInteger encrypted;
+            try {
+                encrypted = encryptor.runEncryption(rounds - i - 1, r);
+            } catch (IOException e) {
+                // XXX
+                throw new IllegalStateException("Encryption failed");
+            }
+            BigInteger bigInteger = (w.subtract(encrypted));
+            BigInteger k = bigInteger.mod(a);
+            x = b.multiply(k).add(r);
+        }
+        return x;
+    }
+
+    /**
+     * According to a paper by Rogaway, Bellare, etc, the min safe number
+     * of rounds to use for FPE is 2+log_a(b). If a >= b then log_a(b) &lt;= 1
+     * so 3 rounds is safe. The FPE factorization routine should always
+     * return a >= b, so just confirm that and return 3.
+     */
+    private static int rounds(BigInteger a, BigInteger b) {
+        if (a.compareTo(b) < 0 ) {
+            throw new IllegalArgumentException("FPE rounds: a < b");
+        }
+        
+        return 3;
+    }
+
+    private static class FpeEncryptor {
+        private Mac mac;
+
+        private byte[] macBytes;
+
+        public FpeEncryptor(byte[] key, BigInteger n) throws GeneralSecurityException, IOException {
+            mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKey = new SecretKeySpec(key, "HmacSHA256");
+            mac.init(secretKey);
+
+            byte[] nBin = n.toByteArray();
+
+            if (nBin.length > MAX_N_BYTES) {
+                throw new IllegalArgumentException("N is too large for FPE encryption");
+            }
+
+            ByteArrayOutputStream ms = new ByteArrayOutputStream();
+
+            ms.write(nBin.length);
+            ms.write(nBin);
+
+            mac.reset();
+            macBytes = mac.doFinal(ms.toByteArray());
+        }
+
+        public BigInteger runEncryption(int roundNo, BigInteger r) throws IOException {
+            byte[] rBin = r.toByteArray();
+            ByteArrayOutputStream ms = new ByteArrayOutputStream();
+            ms.write(macBytes);
+            ms.write(roundNo);
+
+            ms.write(rBin.length);
+            ms.write(rBin);
+
+            mac.reset();
+            byte[] x = mac.doFinal(ms.toByteArray());
+            
+            byte[] ext = new byte[x.length + 1];
+            ext[0] = 0; // set the first byte to 0
+            
+            for(int i = 0; i < x.length; i++) {
+                ext[i + 1] = x[i];
+            }
+            
+            return new BigInteger(ext);
+        }
+    }
+
+    /**
+     * Factor n into a and b which are as close together as possible.
+     * Assumes n is composed mostly of small factors which is the case for
+     * typical uses of FPE (typically, n is a power of 10)
+     * Want a >= b since the safe number of rounds is 2+log_a(b);
+     * if a >= b then this is always 3
+     */
+    private static BigInteger[] factor(BigInteger n) {
+        BigInteger a = BigInteger.ONE;
+        BigInteger b = BigInteger.ONE;
+           
+        int nLowZero = lowZeroBits(n);
+        a = a.shiftLeft(nLowZero / 2);
+        b = b.shiftLeft(nLowZero - (nLowZero / 2) );
+            
+        n = n.shiftRight(nLowZero);
+
+        BigInteger prime = BigInteger.ONE;
+        while(prime.compareTo(MAX_PRIME) <= 0) {
+            prime = prime.nextProbablePrime();
+            while (n.mod(prime).compareTo(BigInteger.ZERO) == 0) {
+                a = a.multiply(prime);
+                if (a.compareTo(b) > 0) {
+                    BigInteger oldB = b;
+                    b = a;
+                    a = oldB;
+                }
+                n = n.divide(prime);
+            }
+            if (a.compareTo(BigInteger.ONE) > 0 && b.compareTo(BigInteger.ONE) > 0) {
+                break;
+            }
+        }
+
+        if (a.compareTo(b) > 0) {
+            BigInteger oldB = b;
+            b = a;
+            a = oldB;
+        }
+        a = a.multiply(n);
+        if (a.compareTo(b) < 0) {
+            BigInteger oldB = b;
+            b = a;
+            a = oldB;
+        }
+
+        if (a.compareTo(BigInteger.ONE) < 0 || b.compareTo(BigInteger.ONE) < 0) {
+            throw new IllegalArgumentException("Could not factor n for use in FPE");
+        }
+            
+        return new BigInteger[]{ a,b };
+    }
+    
+    private static int countTrailingZeroes(byte n) {
+        for (int i = 0; i != 8; ++i) {
+            if (((n >> i) & 0x01) > 0) {
+                return i;
+            }
+        }
+        return 8;
+    }
+    
+    private static int lowZeroBits(BigInteger n) {
+        int lowZero = 0;
+        if (n.signum() > 0) {
+            byte[] bytes = n.toByteArray();
+            for (int i = bytes.length-1; i >=0 ; i--) {
+                int x =  (bytes[i] & 0xFF);
+                if (x > 0) {
+                    lowZero += countTrailingZeroes((byte) x);
+                    break;
+                } else {
+                    lowZero += 8;
+                }
+            }
+        }
+        return lowZero;
+    }
+
+}

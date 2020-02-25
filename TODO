@@ -1,0 +1,6 @@
+random monotone function (revertible/indexable)
+create unit tests
+query/query builder
+SQL parser
+basics of the naive fallback query runner
+everything is serializable
