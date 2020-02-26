@@ -4,6 +4,11 @@ import java.math.BigInteger;
 
 import javax.crypto.Cipher;
 
+// TODO: define a hidden implicit parent of root for storing root cipher (necessary?)
+// TODO: ensure minimal key size
+// TODO: use additional content as salt
+// TODO: if requested byte size is even larger, pad with zeros
+// TODO: create random byte source for additional bytes (when value is larger then the maximum BigInteger)
 public class DefaultTreeRandom implements TreeRandom {
 
     private static final byte[] DEFAULT_BYTES = new byte[4];

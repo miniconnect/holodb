@@ -1,4 +1,4 @@
-package hu.webarticum.jfaker.impl;
+package hu.webarticum.holodb.util_old.path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import hu.webarticum.holodb.util_old.path.Path;
 import hu.webarticum.holodb.util_old.path.PathStringParser;
 
-class DefaultPathStringParserTest {
+class PathStringParserTest {
 
     private PathStringParser parser;
     

@@ -9,24 +9,28 @@ import hu.webarticum.holodb.data.binrel.permutation.DirtyFpePermutation;
 import hu.webarticum.holodb.data.binrel.permutation.IdentityPermutation;
 import hu.webarticum.holodb.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.data.binrel.permutation.PermutationUtil;
+import hu.webarticum.holodb.data.random.DefaultTreeRandom;
 import hu.webarticum.holodb.data.random.DefaultTreeRandomOld;
-import hu.webarticum.holodb.util.BitSource;
+import hu.webarticum.holodb.util.bitsource.BitSource;
+import hu.webarticum.holodb.util.bitsource.ByteSource;
 
 public class TestingMain {
 
     public static void main(String[] args) throws Exception {
-        testBitBufferingAndTreeRandom();
+        testBitSource();
+    }
+
+    public static void testBitSource() throws GeneralSecurityException {
+        byte[] initialBuffer = new byte[] { 1, 0 };
+        ByteSource byteSource = () -> 89; // 10011010
+        BitSource bitSource = new BitSource(initialBuffer, byteSource);
+        
+        System.out.println(BitSource.byteArrayToString(bitSource.fetch(24)));
     }
     
-    public static void testBitBufferingAndTreeRandom() throws GeneralSecurityException {
-        byte[] initialBuffer = new byte[] { 1, 0 };
-        Supplier<Byte> byteSupplier = () -> 89; // 10011010
-        BitSource bitSource = new BitSource(initialBuffer, byteSupplier);
-        
-        System.out.println(bitSource.next(1));
-        
-        //DefaultTreeRandom random = new DefaultTreeRandom();
-        //System.out.println(random.sub(BigInteger.valueOf(1)).getNumber(BigInteger.valueOf(7)));
+    public static void testTreeRandom() throws GeneralSecurityException {
+        DefaultTreeRandom random = new DefaultTreeRandom();
+        System.out.println(random.sub(BigInteger.valueOf(1)).getNumber(BigInteger.valueOf(7)));
     }
     
     public static void testMonotonic() {
