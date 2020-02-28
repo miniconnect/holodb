@@ -9,11 +9,11 @@ public interface Index {
 
     public List<Column> getColumns();
     
-    public default Selection filter(Object... values) {
-        return filter(Arrays.asList(values));
+    public default Selection select(Object... values) {
+        return select(Arrays.asList(values));
     }
     
     // TODO: map parameter?
-    public Selection filter(List<Object> values);
+    public Selection select(List<Object> values);
     
 }
