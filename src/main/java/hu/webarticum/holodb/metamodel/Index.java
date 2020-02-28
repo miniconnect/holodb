@@ -5,14 +5,15 @@ import java.util.List;
 
 public interface Index {
 
+    public Table getTable();
+
     public List<Column> getColumns();
     
-    public default Object filter(Object... values) {
+    public default Selection filter(Object... values) {
         return filter(Arrays.asList(values));
     }
     
-    // TODO: return value? Collection? something like 'IdSet'?
     // TODO: map parameter?
-    public Object filter(List<Object> values);
+    public Selection filter(List<Object> values);
     
 }
