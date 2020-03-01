@@ -8,12 +8,6 @@ import java.security.GeneralSecurityException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-// FIXME: MAX_N_BYTES ?? (removed)
-// FIXME: first and last value is fixed (workarounded)
-// FIXME: for primes, had performance issues (workarounded, see next)
-// FIXME: for primes, behaves as identity permutation (possible workaround: use a larger proper number, and reduce permutation)
-// FIXME: there are easily detectable patterns (possible workaround: compose permutations: a, with ciphers with different keys; b, predefined patterns)
-
 /**
  * Software derived from a New-BSD licensed implementation for .NET http://dotfpe.codeplex.com
  *   ... That in turn was ported from the Botan library http://botan.randombit.net/fpe.html.
@@ -50,23 +44,18 @@ public class DirtyFpePermutation implements Permutation {
         mac = Mac.getInstance("HmacSHA256");
         SecretKeySpec secretKey = new SecretKeySpec(key, "HmacSHA256");
         mac.init(secretKey);
-
-
-        // XXX removing first and last value
-        BigInteger innerSize = size.add(BigInteger.valueOf(2));
-        //BigInteger innerSize = size;
         
-        byte[] nBin = innerSize.toByteArray();
+        byte[] sizeBytes = size.toByteArray();
 
         ByteArrayOutputStream macByteStream = new ByteArrayOutputStream();
 
-        macByteStream.write(nBin.length);
-        macByteStream.write(nBin);
+        macByteStream.write(sizeBytes.length);
+        macByteStream.write(sizeBytes);
 
         mac.reset();
         macPrefixBytes = mac.doFinal(macByteStream.toByteArray());
         
-        BigInteger[] aAndB = factor(innerSize);
+        BigInteger[] aAndB = factor(size);
         a = aAndB[0];
         b = aAndB[1];
     }
@@ -85,10 +74,6 @@ public class DirtyFpePermutation implements Permutation {
     /** Generic Z_n FPE encryption, FE1 scheme */
     @Override
     public BigInteger at(BigInteger index) {
-        
-        // XXX removing first and last value
-        index = index.add(BigInteger.ONE);
-        
         BigInteger result = index;
         for (int i = 0; i != rounds; ++i) {
             BigInteger k = result.divide(b);
@@ -103,20 +88,12 @@ public class DirtyFpePermutation implements Permutation {
             BigInteger w = (k.add(encrypted)).mod(a);
             result = a.multiply(r).add(w);
         }
-
-        // XXX removing first and last value
-        result = result.subtract(BigInteger.ONE);
-        
         return result;
     }
 
     /** Generic Z_n FPE decryption, FD1 scheme */
     @Override
     public BigInteger indexOf(BigInteger value) {
-
-        // XXX removing first and last value
-        value = value.add(BigInteger.ONE);
-        
         BigInteger result = value;
         for (int i = 0; i != rounds; ++i) {
             BigInteger w = result.mod(a);
@@ -132,10 +109,6 @@ public class DirtyFpePermutation implements Permutation {
             BigInteger k = bigInteger.mod(a);
             result = b.multiply(k).add(r);
         }
-
-        // XXX removing first and last value
-        result = result.subtract(BigInteger.ONE);
-        
         return result;
     }
 
@@ -150,7 +123,7 @@ public class DirtyFpePermutation implements Permutation {
         mac.reset();
         byte[] decryptedBytes = mac.doFinal(macByteStream.toByteArray());
         byte[] nullPrefixedBytes = new byte[decryptedBytes.length + 1];
-        System.arraycopy(nullPrefixedBytes, 1, decryptedBytes, 0, decryptedBytes.length);
+        System.arraycopy(decryptedBytes, 0, nullPrefixedBytes, 1, decryptedBytes.length);
         
         return new BigInteger(nullPrefixedBytes);
     }
