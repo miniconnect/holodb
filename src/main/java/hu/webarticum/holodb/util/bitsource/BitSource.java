@@ -26,16 +26,8 @@ public class BitSource {
     
     
     public byte[] fetch(int numberOfBits) {
-        System.out.println("BEFORE ENSURE...");
-        dump();
-        System.out.println();
-        
         ensureBytes(numberOfBits);
 
-        System.out.println("AFTER ENSURE...");
-        dump();
-        System.out.println();
-        
         int leadingLength = numberOfBits % 8;
         int numberOfWholeBytes = numberOfBits / 8;
         int numberOfBytes = leadingLength == 0 ? numberOfWholeBytes : numberOfWholeBytes + 1;
@@ -50,7 +42,7 @@ public class BitSource {
         }
         
         for ( ; resultByteIndex < numberOfBytes; resultByteIndex++) {
-            result[resultByteIndex] = extract(readPosition, 8);
+            result[resultByteIndex] = extract(readPosition);
             readPosition += 8;
         }
         
@@ -94,7 +86,7 @@ public class BitSource {
         return (byte) (left | right);
     }
     
-    private byte extract(int from, int length) {
+    private byte extract(int from) {
         int byteIndex = from / 8;
         int shift = from % 8;
         
@@ -105,50 +97,6 @@ public class BitSource {
         byte left = (byte) (bytes[byteIndex] << shift);
         byte right = (byte) ((bytes[byteIndex + 1] & 0xFF) >>> (8 - shift));
         return (byte) (left | right);
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // XXX
-    public void dump() {
-        System.out.println(byteArrayToString(bytes));
-        int before = position + (position / 8) + 1;
-        for (int i = 0; i < before; i++) {
-            System.out.print(" ");
-        }
-        System.out.println("`- (" + position + ")");
-    }
-
-    public static String byteArrayToString(byte[] bytes) {
-        StringBuilder resultBuilder = new StringBuilder();
-        for (int i = 0; i < bytes.length; i++) {
-            resultBuilder.append('|');
-            resultBuilder.append(byteToString(bytes[i]));
-        }
-        return resultBuilder.toString();
-    }
-    
-    public static String byteToString(byte b) {
-        String unpadded = Integer.toString(Byte.toUnsignedInt(b), 2);
-        
-        int remainingLength = 8 - unpadded.length();
-        if (remainingLength == 0) {
-            return unpadded;
-        }
-        
-        StringBuilder resultBuilder = new StringBuilder();
-        for (int i = 0; i < remainingLength; i++) {
-            resultBuilder.append('0');
-        }
-        resultBuilder.append(unpadded);
-        
-        return resultBuilder.toString();
     }
     
 }
