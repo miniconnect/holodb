@@ -26,7 +26,10 @@ public class PermutationExtender implements PermutationDecorator {
 
     @Override
     public BigInteger at(BigInteger index) {
-        return base.at(index.mod(base.size()));
+        BigInteger baseSize = base.size();
+        BigInteger innerValue = base.at(index.mod(baseSize));
+        BigInteger startValue = index.divide(baseSize).multiply(baseSize);
+        return startValue.add(innerValue);
     }
 
     @Override
@@ -36,7 +39,10 @@ public class PermutationExtender implements PermutationDecorator {
 
     @Override
     public BigInteger indexOf(BigInteger value) {
-        return base.indexOf(value.mod(base.size()));
+        BigInteger baseSize = base.size();
+        BigInteger innerIndex = base.indexOf(value.mod(baseSize));
+        BigInteger startIndex = value.divide(baseSize).multiply(baseSize);
+        return startIndex.add(innerIndex);
     }
 
     @Override
