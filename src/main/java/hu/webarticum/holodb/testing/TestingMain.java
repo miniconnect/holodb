@@ -2,7 +2,6 @@ package hu.webarticum.holodb.testing;
 
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
-import java.util.function.Supplier;
 
 import hu.webarticum.holodb.data.binrel.monotonic.SimpleReducerMonotonic;
 import hu.webarticum.holodb.data.binrel.permutation.DirtyFpePermutation;
@@ -17,7 +16,7 @@ import hu.webarticum.holodb.util.bitsource.ByteSource;
 public class TestingMain {
 
     public static void main(String[] args) throws Exception {
-        testBitSource();
+        testPermutation();
     }
 
     public static void testBitSource() throws GeneralSecurityException {
@@ -56,14 +55,14 @@ public class TestingMain {
     }
 
     public static void testPermutation() throws Exception {
-        final byte[] key = "Key lorem ipsum".getBytes();
-        BigInteger size = BigInteger.valueOf(12);
+        final byte[] key = "lorem".getBytes();
+        BigInteger size = BigInteger.valueOf(102);
         
         Permutation[] permutations = new Permutation[] {
-                new DirtyFpePermutation(size, key),
+                new DirtyFpePermutation(key, size),
                 new IdentityPermutation(size),
-                PermutationUtil.resize(new DirtyFpePermutation(size, key), BigInteger.valueOf(7)),
-                PermutationUtil.resize(new DirtyFpePermutation(size, key), BigInteger.valueOf(16)),
+                PermutationUtil.resize(new DirtyFpePermutation(key, size), BigInteger.valueOf(7)),
+                PermutationUtil.resize(new DirtyFpePermutation(key, size), BigInteger.valueOf(16)),
                 };
         
         for (Permutation permutation : permutations) {
