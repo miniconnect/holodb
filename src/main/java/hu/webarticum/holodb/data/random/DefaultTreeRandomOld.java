@@ -81,11 +81,6 @@ public class DefaultTreeRandomOld implements TreeRandom {
     }
 
     @Override
-    public byte getByte() {
-        return getBytes(1)[0];
-    }
-
-    @Override
     public BigInteger getNumber(BigInteger highExclusive) {
         if (highExclusive.signum() != 1) {
             throw new IllegalArgumentException("High value must be positive");

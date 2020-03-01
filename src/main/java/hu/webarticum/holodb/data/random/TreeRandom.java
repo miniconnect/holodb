@@ -8,8 +8,6 @@ public interface TreeRandom {
 
     public TreeRandom sub(BigInteger number);
     
-    public byte getByte();
-    
     public byte[] getBytes(int numberOfBytes);
     
     public BigInteger getNumber(BigInteger highExclusive);

@@ -55,11 +55,6 @@ public class DefaultTreeRandom implements TreeRandom {
 
 
     @Override
-    public byte getByte() {
-        return getBytes(1)[0];
-    }
-
-    @Override
     public BigInteger getNumber(BigInteger highExclusive) {
         
         
