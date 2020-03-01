@@ -17,13 +17,14 @@ import hu.webarticum.holodb.data.binrel.permutation.PermutationUtil;
 import hu.webarticum.holodb.data.random.DefaultTreeRandom;
 import hu.webarticum.holodb.data.random.DefaultTreeRandomOld;
 import hu.webarticum.holodb.util.ByteUtil;
+import hu.webarticum.holodb.util.Range;
 import hu.webarticum.holodb.util.bitsource.BitSource;
 import hu.webarticum.holodb.util.bitsource.ByteSource;
 
 public class TestingMain {
 
     public static void main(String[] args) throws Exception {
-        testTreeRandom();
+        testMonotonic();
     }
 
     public static void testBitSource() throws GeneralSecurityException {
@@ -66,24 +67,29 @@ public class TestingMain {
     }
     
     public static void testMonotonic() {
-        long SIZE = 6L;
-        long IMAGE_SIZE = 27L;
+        int SIZE = 12;
+        int IMAGE_SIZE = 51;
         
-        SimpleReducerMonotonic monotonic = new SimpleReducerMonotonic(
-                new DefaultTreeRandomOld(), BigInteger.valueOf(SIZE), BigInteger.valueOf(IMAGE_SIZE));
-        
-        for (int i = 0; i < SIZE; i++) {
-            System.out.println(String.format("%d: %d", i, monotonic.at(BigInteger.valueOf(i))));
-        }
-        
-        System.out.println();
-        System.out.println("------------------------------");
-        System.out.println();
-        
-        for (int i = 0; i < IMAGE_SIZE; i++) {
-            if (monotonic.indicesOf(BigInteger.valueOf(i)).getLength().longValue() > 0) {
-                System.out.println(String.format("%d found", i));
+        for (int k = 0; k < 10; k++) {
+            SimpleReducerMonotonic monotonic = new SimpleReducerMonotonic(
+                    new DefaultTreeRandom(BigInteger.valueOf(k)), BigInteger.valueOf(SIZE), BigInteger.valueOf(IMAGE_SIZE));
+            
+            int[] values = new int[SIZE];
+            for (int i = 0; i < SIZE; i++) {
+                values[i] = monotonic.at(BigInteger.valueOf(i)).intValue();
             }
+            
+            int[] indirectValues = new int[SIZE];
+            int valueIndex = 0;
+            for (int i = 0; i < IMAGE_SIZE; i++) {
+                if (monotonic.indicesOf(BigInteger.valueOf(i)).getLength().intValue() > 0) {
+                    indirectValues[valueIndex++] = i;
+                }
+            }
+    
+            System.out.println(Arrays.toString(values));
+            System.out.println(Arrays.toString(indirectValues));
+            System.out.println();
         }
     }
 
