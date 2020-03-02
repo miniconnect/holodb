@@ -7,37 +7,49 @@ import hu.webarticum.holodb.util.Range;
 public class FastMonotonic implements Monotonic {
 
     
-    // TODO
+    private final BigInteger size;
+    
+    private final BigInteger imageSize;
+    
+    
+    public FastMonotonic(BigInteger size, BigInteger imageSize) {
+        this.size = size;
+        this.imageSize = imageSize;
+    }
     
     
     @Override
     public BigInteger size() {
-        // TODO Auto-generated method stub
-        return null;
+        return size;
     }
 
     @Override
     public BigInteger at(BigInteger index) {
-        // TODO Auto-generated method stub
-        return null;
+        return index.multiply(imageSize).divide(size);
     }
 
     @Override
     public boolean isReversible() {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public Range indicesOf(BigInteger value) {
-        // TODO Auto-generated method stub
-        return null;
+        return Range.fromUntil(calculateFrom(value), calculateFrom(value.add(BigInteger.ONE)));
+    }
+    
+    private BigInteger calculateFrom(BigInteger value) {
+        BigInteger product = value.multiply(size);
+        BigInteger result = product.divide(imageSize);
+        if (!product.mod(imageSize).equals(BigInteger.ZERO)) {
+            result = result.add(BigInteger.ONE);
+        }
+        return result;
     }
 
     @Override
     public BigInteger imageSize() {
-        // TODO Auto-generated method stub
-        return null;
+        return imageSize;
     }
 
 }
