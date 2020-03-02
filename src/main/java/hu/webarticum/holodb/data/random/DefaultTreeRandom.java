@@ -61,6 +61,10 @@ public class DefaultTreeRandom implements TreeRandom {
 
     @Override
     public BigInteger getNumber(BigInteger highExclusive) {
+        if (highExclusive.signum() != 1) {
+            throw new IllegalArgumentException("High value must be positive");
+        }
+        
         BigInteger two = BigInteger.valueOf(2);
         BigInteger factor = highExclusive;
         BigInteger powerOfTwo = BigInteger.ONE;
