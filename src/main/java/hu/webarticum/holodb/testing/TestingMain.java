@@ -9,7 +9,7 @@ import java.util.Random;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import hu.webarticum.holodb.data.binrel.monotonic.SimpleReducerMonotonic;
+import hu.webarticum.holodb.data.binrel.monotonic.SimpleRandomReducerMonotonic;
 import hu.webarticum.holodb.data.binrel.permutation.DirtyFpePermutation;
 import hu.webarticum.holodb.data.binrel.permutation.IdentityPermutation;
 import hu.webarticum.holodb.data.binrel.permutation.Permutation;
@@ -66,12 +66,12 @@ public class TestingMain {
         System.out.println(Arrays.toString(counts2));
     }
     
-    public static void testMonotonic() {
+    public static void testSimpleRandomReducerMonotonic() {
         int SIZE = 12;
         int IMAGE_SIZE = 51;
         
         for (int k = 0; k < 10; k++) {
-            SimpleReducerMonotonic monotonic = new SimpleReducerMonotonic(
+            SimpleRandomReducerMonotonic monotonic = new SimpleRandomReducerMonotonic(
                     new DefaultTreeRandom(BigInteger.valueOf(k)), BigInteger.valueOf(SIZE), BigInteger.valueOf(IMAGE_SIZE));
             
             int[] values = new int[SIZE];
