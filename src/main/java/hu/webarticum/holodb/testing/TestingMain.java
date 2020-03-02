@@ -9,6 +9,7 @@ import java.util.Random;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import hu.webarticum.holodb.data.binrel.monotonic.SimpleRandomExtenderMonotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.SimpleRandomReducerMonotonic;
 import hu.webarticum.holodb.data.binrel.permutation.DirtyFpePermutation;
 import hu.webarticum.holodb.data.binrel.permutation.IdentityPermutation;
@@ -24,7 +25,7 @@ import hu.webarticum.holodb.util.bitsource.ByteSource;
 public class TestingMain {
 
     public static void main(String[] args) throws Exception {
-        testMonotonic();
+        testPermutation();
     }
 
     public static void testBitSource() throws GeneralSecurityException {
@@ -66,7 +67,7 @@ public class TestingMain {
         System.out.println(Arrays.toString(counts2));
     }
     
-    public static void testSimpleRandomReducerMonotonic() {
+    public static void testSimpleReducerMonotonic() {
         int SIZE = 12;
         int IMAGE_SIZE = 51;
         
@@ -93,15 +94,44 @@ public class TestingMain {
         }
     }
 
+    public static void testSimpleExtenderMonotonic() {
+        int SIZE = 72;
+        int IMAGE_SIZE = 13;
+        
+        for (int k = 0; k < 10; k++) {
+            SimpleRandomExtenderMonotonic monotonic = new SimpleRandomExtenderMonotonic(
+                    new DefaultTreeRandom(BigInteger.valueOf(k)), BigInteger.valueOf(SIZE), BigInteger.valueOf(IMAGE_SIZE));
+            
+            int[] values = new int[SIZE];
+            for (int i = 0; i < SIZE; i++) {
+                values[i] = monotonic.at(BigInteger.valueOf(i)).intValue();
+            }
+            
+            int[] indirectValues = new int[SIZE];
+            for (int i = 0; i < IMAGE_SIZE; i++) {
+                Range range = monotonic.indicesOf(BigInteger.valueOf(i));
+                int from = range.getFrom().intValue();
+                int until = range.getUntil().intValue();
+                for (int j = from; j < until; j++) {
+                    indirectValues[j] = i;
+                }
+            }
+    
+            System.out.println(Arrays.toString(values));
+            System.out.println(Arrays.toString(indirectValues));
+            System.out.println();
+        }
+    }
+    
     public static void testPermutation() throws Exception {
         final byte[] key = "lorem".getBytes();
         BigInteger size = BigInteger.valueOf(11);
         
         Permutation[] permutations = new Permutation[] {
                 new DirtyFpePermutation(key, size),
-                new IdentityPermutation(size),
-                PermutationUtil.resize(new DirtyFpePermutation(key, size), BigInteger.valueOf(7)),
-                PermutationUtil.resize(new DirtyFpePermutation(key, size), BigInteger.valueOf(16)),
+                //new IdentityPermutation(size),
+                //PermutationUtil.resize(new DirtyFpePermutation(key, size), BigInteger.valueOf(7)),
+                //PermutationUtil.resize(new DirtyFpePermutation(key, size), BigInteger.valueOf(16)),
                 };
         
         for (Permutation permutation : permutations) {
