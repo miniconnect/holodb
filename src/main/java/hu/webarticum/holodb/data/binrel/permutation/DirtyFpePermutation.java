@@ -9,9 +9,11 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
+ * Generic Z_n FPE encryption, FE1 scheme
+ * 
  * Software derived from a New-BSD licensed implementation for .NET http://dotfpe.codeplex.com
- *   ... That in turn was ported from the Botan library http://botan.randombit.net/fpe.html.
- *   ... Using the scheme FE1 from the paper "Format-Preserving Encryption" by Bellare, Rogaway, et al. (http://eprint.iacr.org/2009/251)
+ * That in turn was ported from the Botan library http://botan.randombit.net/fpe.html.
+ * Using the scheme FE1 from the paper "Format-Preserving Encryption" by Bellare, Rogaway, et al. (http://eprint.iacr.org/2009/251)
  *
  * @author Rob Shepherd
  * @author David Horvath
@@ -38,19 +40,17 @@ public class DirtyFpePermutation implements Permutation {
     private final int rounds = 3;
     
     
-    public DirtyFpePermutation(byte[] key, BigInteger size) throws GeneralSecurityException, IOException { // FIXME: eliminate exceptions
+    public DirtyFpePermutation(byte[] key, BigInteger size) {
         this.size = size;
         
-        mac = Mac.getInstance("HmacSHA256");
-        SecretKeySpec secretKey = new SecretKeySpec(key, "HmacSHA256");
-        mac.init(secretKey);
+        mac = createMacInstance(key);
         
         byte[] sizeBytes = size.toByteArray();
 
         ByteArrayOutputStream macByteStream = new ByteArrayOutputStream();
 
         macByteStream.write(sizeBytes.length);
-        macByteStream.write(sizeBytes);
+        macByteStream.write(sizeBytes, 0, sizeBytes.length);
 
         mac.reset();
         macPrefixBytes = mac.doFinal(macByteStream.toByteArray());
@@ -58,6 +58,22 @@ public class DirtyFpePermutation implements Permutation {
         BigInteger[] aAndB = factor(size);
         a = aAndB[0];
         b = aAndB[1];
+    }
+    
+
+    private static Mac createMacInstance(byte[] key) {
+        try {
+            return createMacInstanceUnwrapped(key);
+        } catch (GeneralSecurityException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+    
+    private static Mac createMacInstanceUnwrapped(byte[] key) throws GeneralSecurityException {
+        Mac mac = Mac.getInstance("HmacSHA256");
+        SecretKeySpec secretKey = new SecretKeySpec(key, "HmacSHA256");
+        mac.init(secretKey);
+        return mac;
     }
     
     
@@ -71,48 +87,62 @@ public class DirtyFpePermutation implements Permutation {
         return true;
     }
 
-    /** Generic Z_n FPE encryption, FE1 scheme */
     @Override
     public BigInteger at(BigInteger index) {
         BigInteger result = index;
-        for (int i = 0; i != rounds; ++i) {
-            BigInteger k = result.divide(b);
-            BigInteger r = result.mod(b);
-            BigInteger encrypted;
-            try {
-                encrypted = runEncryption(i, r);
-            } catch (IOException e) {
-                // XXX
-                throw new IllegalStateException("Encryption failed");
-            }
-            BigInteger w = (k.add(encrypted)).mod(a);
-            result = a.multiply(r).add(w);
+        for (int i = 0; i != rounds; i++) {
+            result = runEncryptionRound(result, i);
         }
         return result;
     }
+    
+    private BigInteger runEncryptionRound(BigInteger value, int round) {
+        try {
+            return runEncryptionRoundUnwrapped(value, round);
+        } catch (IOException e) {
+            // XXX
+            throw new IllegalStateException("Encryption failed");
+        }
+    }
 
-    /** Generic Z_n FPE decryption, FD1 scheme */
+    private BigInteger runEncryptionRoundUnwrapped(BigInteger value, int round) throws IOException {
+        BigInteger k = value.divide(b);
+        BigInteger r = value.mod(b);
+        BigInteger encrypted;
+        encrypted = runMac(round, r);
+        BigInteger w = (k.add(encrypted)).mod(a);
+        return a.multiply(r).add(w);
+    }
+
     @Override
     public BigInteger indexOf(BigInteger value) {
         BigInteger result = value;
-        for (int i = 0; i != rounds; ++i) {
-            BigInteger w = result.mod(a);
-            BigInteger r = result.divide(a);
-            BigInteger encrypted;
-            try {
-                encrypted = runEncryption(rounds - i - 1, r);
-            } catch (IOException e) {
-                // XXX
-                throw new IllegalStateException("Encryption failed");
-            }
-            BigInteger bigInteger = (w.subtract(encrypted));
-            BigInteger k = bigInteger.mod(a);
-            result = b.multiply(k).add(r);
+        for (int i = 0; i != rounds; i++) {
+            result = runDecryptionRound(result, rounds - i - 1);
         }
         return result;
     }
 
-    public BigInteger runEncryption(int roundNo, BigInteger value) throws IOException {
+    private BigInteger runDecryptionRound(BigInteger value, int round) {
+        try {
+            return runDecryptionRoundUnwrapped(value, round);
+        } catch (IOException e) {
+            // XXX
+            throw new IllegalStateException("Decryption failed");
+        }
+    }
+    
+    private BigInteger runDecryptionRoundUnwrapped(BigInteger value, int round) throws IOException {
+        BigInteger w = value.mod(a);
+        BigInteger r = value.divide(a);
+        BigInteger encrypted;
+        encrypted = runMac(round, r);
+        BigInteger bigInteger = (w.subtract(encrypted));
+        BigInteger k = bigInteger.mod(a);
+        return b.multiply(k).add(r);
+    }
+
+    public BigInteger runMac(int roundNo, BigInteger value) throws IOException {
         byte[] valueBytes = value.toByteArray();
         ByteArrayOutputStream macByteStream = new ByteArrayOutputStream();
         macByteStream.write(macPrefixBytes);
@@ -205,7 +235,7 @@ public class DirtyFpePermutation implements Permutation {
         int lowZero = 0;
         if (n.signum() > 0) {
             byte[] bytes = n.toByteArray();
-            for (int i = bytes.length-1; i >=0 ; i--) {
+            for (int i = bytes.length - 1; i >= 0; i--) {
                 int x =  (bytes[i] & 0xFF);
                 if (x > 0) {
                     lowZero += countTrailingZeroes((byte) x);
@@ -219,7 +249,7 @@ public class DirtyFpePermutation implements Permutation {
     }
 
     private static int countTrailingZeroes(byte n) {
-        for (int i = 0; i != 8; ++i) {
+        for (int i = 0; i < 8; i++) {
             if (((n >> i) & 0x01) > 0) {
                 return i;
             }
