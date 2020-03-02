@@ -18,7 +18,6 @@ import hu.webarticum.holodb.data.binrel.permutation.IdentityPermutation;
 import hu.webarticum.holodb.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.data.binrel.permutation.PermutationUtil;
 import hu.webarticum.holodb.data.random.DefaultTreeRandom;
-import hu.webarticum.holodb.data.random.DefaultTreeRandomOld;
 import hu.webarticum.holodb.data.random.TreeRandom;
 import hu.webarticum.holodb.util.ByteUtil;
 import hu.webarticum.holodb.util.Range;
