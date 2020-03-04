@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Range {
+public class Range implements Selection {
 
     private final BigInteger from;
     
@@ -49,12 +49,23 @@ public class Range {
         return until;
     }
     
-    public BigInteger getLength() {
+    @Override
+    public BigInteger getCount() {
         return until.subtract(from);
     }
 
-    public boolean isZeroLength() {
-        return getLength().equals(BigInteger.ZERO);
+    @Override
+    public boolean isEmpty() {
+        return getCount().equals(BigInteger.ZERO);
+    }
+
+    @Override
+    public BigInteger at(BigInteger index) {
+        if (index.signum() < 0 || index.compareTo(getCount()) >= 0) {
+            throw new IndexOutOfBoundsException("Index out of bounds: " + index);
+        }
+        
+        return index.subtract(from);
     }
 
     @Override
