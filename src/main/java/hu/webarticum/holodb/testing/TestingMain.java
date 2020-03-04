@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.TreeSet;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -19,6 +20,7 @@ import hu.webarticum.holodb.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.data.binrel.permutation.PermutationUtil;
 import hu.webarticum.holodb.data.random.DefaultTreeRandom;
 import hu.webarticum.holodb.data.random.TreeRandom;
+import hu.webarticum.holodb.data.source.ArraySortedValueSource;
 import hu.webarticum.holodb.util.ByteUtil;
 import hu.webarticum.holodb.util.Range;
 import hu.webarticum.holodb.util.bitsource.BitSource;
@@ -27,8 +29,15 @@ import hu.webarticum.holodb.util.bitsource.ByteSource;
 public class TestingMain {
 
     public static void main(String[] args) throws Exception {
-        testSimpleExtenderMonotonic();
+        testArraySortedValueSource();
+        //testSimpleExtenderMonotonic();
         //testExtenderMonotonicPerformance();
+    }
+    
+    public static void testArraySortedValueSource() {
+        TreeSet<String> treeSet = new TreeSet<>(Arrays.asList("alma", "ananasz", "banan", "korte", "meggy", "szolo"));
+        ArraySortedValueSource<String> source = new ArraySortedValueSource<>(treeSet);
+        System.out.println(source.findBetween("korte", true, "meggy", false));
     }
 
     public static void testBitSource() throws GeneralSecurityException {
