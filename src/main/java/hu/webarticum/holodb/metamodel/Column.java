@@ -4,6 +4,9 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+import hu.webarticum.holodb.data.source.ValueSource;
+
+// FIXME: type? generic?
 public class Column {
 
     private final Map<HintKey<?>, Object> hints;
@@ -14,7 +17,7 @@ public class Column {
     
     private final Class<?> type;
     
-    private final ValueGenerator<?> valueGenerator;
+    private final ValueSource<?> valueSource;
     
     private final boolean nullable;
     
@@ -26,7 +29,7 @@ public class Column {
         this.table = table;
         this.name = builder.name;
         this.type = builder.type;
-        this.valueGenerator = builder.valueGenerator;
+        this.valueSource = builder.valueSource;
         this.nullable = builder.nullable;
     }
     
@@ -48,8 +51,8 @@ public class Column {
         return type;
     }
 
-    public ValueGenerator<?> getValueGenerator() {
-        return valueGenerator;
+    public ValueSource<?> getValueSource() {
+        return valueSource;
     }
 
     public boolean isNullable() {
@@ -75,7 +78,7 @@ public class Column {
         
         private Class<?> type;
         
-        private ValueGenerator<?> valueGenerator;
+        private ValueSource<?> valueSource;
         
         private boolean nullable;
         
@@ -84,7 +87,7 @@ public class Column {
             this.hints = new HashMap<>();
             this.name = "";
             this.type = Object.class; // FIXME
-            this.valueGenerator = null;
+            this.valueSource = null;
             this.nullable = false;
         }
 
@@ -92,7 +95,7 @@ public class Column {
             this.hints = new HashMap<>(base.hints);
             this.name = base.name;
             this.type = base.type;
-            this.valueGenerator = base.valueGenerator;
+            this.valueSource = base.valueSource;
             this.nullable = base.nullable;
         }
         
@@ -117,13 +120,13 @@ public class Column {
 
         public ColumnBuilder setType(Class<?> type) {
             this.type = type;
-            this.valueGenerator = null;
+            this.valueSource = null;
             return this;
         }
 
-        public <T> ColumnBuilder setType(Class<T> type, ValueGenerator<T> valueGenerator) {
+        public <T> ColumnBuilder setType(Class<T> type, ValueSource<T> valueSource) {
             this.type = type;
-            this.valueGenerator = valueGenerator;
+            this.valueSource = valueSource;
             return this;
         }
         

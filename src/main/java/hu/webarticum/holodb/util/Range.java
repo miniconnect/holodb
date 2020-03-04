@@ -32,8 +32,8 @@ public class Range {
         return fromLength(BigInteger.valueOf(from), BigInteger.valueOf(until));
     }
 
-    public static Range fromLength(BigInteger from, long until) {
-        return fromLength(from, BigInteger.valueOf(until));
+    public static Range fromLength(BigInteger from, long length) {
+        return fromLength(from, BigInteger.valueOf(length));
     }
     
     public static Range fromLength(BigInteger from, BigInteger length) {
@@ -48,11 +48,15 @@ public class Range {
     public BigInteger getUntil() {
         return until;
     }
-
+    
     public BigInteger getLength() {
         return until.subtract(from);
     }
-    
+
+    public boolean isZeroLength() {
+        return getLength().equals(BigInteger.ZERO);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Range)) {
