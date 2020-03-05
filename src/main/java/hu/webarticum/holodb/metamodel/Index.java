@@ -3,7 +3,7 @@ package hu.webarticum.holodb.metamodel;
 import java.util.Arrays;
 import java.util.List;
 
-import hu.webarticum.holodb.util.Selection;
+import hu.webarticum.holodb.data.selection.Selection;
 
 public interface Index {
 

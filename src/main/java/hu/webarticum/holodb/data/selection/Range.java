@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.util;
+package hu.webarticum.holodb.data.selection;
 
 import java.math.BigInteger;
 
@@ -65,7 +65,7 @@ public class Range implements Selection {
             throw new IndexOutOfBoundsException("Index out of bounds: " + index);
         }
         
-        return index.subtract(from);
+        return index.add(from);
     }
 
     @Override

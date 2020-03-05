@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.util;
+package hu.webarticum.holodb.data.selection;
 
 import java.math.BigInteger;
 

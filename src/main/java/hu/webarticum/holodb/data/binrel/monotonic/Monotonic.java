@@ -2,7 +2,7 @@ package hu.webarticum.holodb.data.binrel.monotonic;
 
 import java.math.BigInteger;
 
-import hu.webarticum.holodb.util.Range;
+import hu.webarticum.holodb.data.selection.Range;
 
 // TODO: separated ReversibleMonotonic interface
 //         or: always reversible?

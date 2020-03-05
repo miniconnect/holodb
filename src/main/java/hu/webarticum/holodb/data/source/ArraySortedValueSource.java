@@ -6,7 +6,9 @@ import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import hu.webarticum.holodb.util.Range;
+import hu.webarticum.holodb.data.selection.Range;
+
+// TODO: reusable single parameter for findBetween? e. g. RangeQuery
 
 public class ArraySortedValueSource<T extends Comparable<T>> implements SortedValueSource<T> {
 

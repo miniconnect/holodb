@@ -1,6 +1,6 @@
 package hu.webarticum.holodb.data.source;
 
-import hu.webarticum.holodb.util.Range;
+import hu.webarticum.holodb.data.selection.Range;
 
 public interface SortedValueSource<T> extends IndexedValueSource<T> {
 

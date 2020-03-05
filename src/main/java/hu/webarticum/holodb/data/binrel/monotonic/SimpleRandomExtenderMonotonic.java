@@ -3,7 +3,7 @@ package hu.webarticum.holodb.data.binrel.monotonic;
 import java.math.BigInteger;
 
 import hu.webarticum.holodb.data.random.TreeRandom;
-import hu.webarticum.holodb.util.Range;
+import hu.webarticum.holodb.data.selection.Range;
 
 public class SimpleRandomExtenderMonotonic implements Monotonic {
 

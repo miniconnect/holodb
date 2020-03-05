@@ -20,24 +20,54 @@ import hu.webarticum.holodb.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.data.binrel.permutation.PermutationUtil;
 import hu.webarticum.holodb.data.random.DefaultTreeRandom;
 import hu.webarticum.holodb.data.random.TreeRandom;
+import hu.webarticum.holodb.data.selection.Range;
 import hu.webarticum.holodb.data.source.ArraySortedValueSource;
+import hu.webarticum.holodb.data.source.MonotonicValueSource;
+import hu.webarticum.holodb.data.source.SelectionValueSource;
+import hu.webarticum.holodb.data.source.ValueSource;
 import hu.webarticum.holodb.util.ByteUtil;
-import hu.webarticum.holodb.util.Range;
 import hu.webarticum.holodb.util.bitsource.BitSource;
 import hu.webarticum.holodb.util.bitsource.ByteSource;
 
 public class TestingMain {
 
     public static void main(String[] args) throws Exception {
-        testArraySortedValueSource();
-        //testSimpleExtenderMonotonic();
+        testMonotonicValueSource();
+        //testSimpleRandomExtenderMonotonic();
         //testExtenderMonotonicPerformance();
+    }
+    
+    public static void testMonotonicValueSource() {
+        TreeSet<String> treeSet = new TreeSet<>(Arrays.asList("alma", "ananasz", "banan", "korte", "meggy", "szolo"));
+        ArraySortedValueSource<String> baseSource = new ArraySortedValueSource<>(treeSet);
+        Range baseRange = baseSource.findBetween("banan", true, "meggy", true);
+        Monotonic monotonic = new FastMonotonic(BigInteger.valueOf(50), baseSource.size());
+        MonotonicValueSource<String> wrapperSource = new MonotonicValueSource<String>(baseSource, monotonic);
+        Range wrapperRange = wrapperSource.findBetween("banan", true, "meggy", true);
+
+        System.out.println(baseRange);
+        dumpValueSource(new SelectionValueSource<String>(baseSource, baseRange));
+        System.out.println("----------------------------------");
+        System.out.println(wrapperRange);
+        dumpValueSource(new SelectionValueSource<String>(wrapperSource, wrapperRange));
+        System.out.println("----------------------------------");
+        dumpValueSource(wrapperSource);
     }
     
     public static void testArraySortedValueSource() {
         TreeSet<String> treeSet = new TreeSet<>(Arrays.asList("alma", "ananasz", "banan", "korte", "meggy", "szolo"));
         ArraySortedValueSource<String> source = new ArraySortedValueSource<>(treeSet);
-        System.out.println(source.findBetween("korte", true, "meggy", false));
+        Range range = source.findBetween("banan", true, "meggy", true);
+        
+        System.out.println(range);
+        dumpValueSource(new SelectionValueSource<String>(source, range));
+    }
+    
+    private static void dumpValueSource(ValueSource<?> valueSource) {
+        BigInteger size = valueSource.size();
+        for (BigInteger i = BigInteger.ZERO; i.compareTo(size) < 0; i = i.add(BigInteger.ONE)) {
+            System.out.println(String.format(" > %d. %s", i, valueSource.at(i)));
+        }
     }
 
     public static void testBitSource() throws GeneralSecurityException {
@@ -79,7 +109,7 @@ public class TestingMain {
         System.out.println(Arrays.toString(counts2));
     }
     
-    public static void testSimpleReducerMonotonic() {
+    public static void testSimpleRandomReducerMonotonic() {
         int SIZE = 12;
         int IMAGE_SIZE = 51;
         
@@ -91,7 +121,7 @@ public class TestingMain {
         }
     }
 
-    public static void testSimpleExtenderMonotonic() {
+    public static void testSimpleRandomExtenderMonotonic() {
         int SIZE = 72;
         int IMAGE_SIZE = 13;
         
