@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import hu.webarticum.holodb.util.Range;
 
 // TODO: separated ReversibleMonotonic interface
+//         or: always reversible?
 
 public interface Monotonic {
 

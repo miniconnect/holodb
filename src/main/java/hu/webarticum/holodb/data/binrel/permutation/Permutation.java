@@ -1,8 +1,10 @@
+
 package hu.webarticum.holodb.data.binrel.permutation;
 
 import java.math.BigInteger;
 
 // TODO: separated ReversiblePermutation interface?
+//         or: always reversible?
 
 public interface Permutation {
 
