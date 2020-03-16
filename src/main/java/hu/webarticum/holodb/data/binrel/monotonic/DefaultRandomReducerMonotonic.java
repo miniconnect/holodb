@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import hu.webarticum.holodb.data.random.TreeRandom;
 import hu.webarticum.holodb.data.selection.Range;
 
-public class SimpleRandomReducerMonotonic implements Monotonic {
+public class DefaultRandomReducerMonotonic implements Monotonic {
 
     private final TreeRandom treeRandom;
     
@@ -14,7 +14,7 @@ public class SimpleRandomReducerMonotonic implements Monotonic {
     private final BigInteger imageSize;
     
     
-    public SimpleRandomReducerMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize) {
+    public DefaultRandomReducerMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize) {
         if (size.compareTo(imageSize) > 0) {
             throw new IllegalArgumentException("Size can not be larger than imageSize");
         }

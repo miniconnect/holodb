@@ -12,8 +12,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import hu.webarticum.holodb.data.binrel.monotonic.FastMonotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.Monotonic;
-import hu.webarticum.holodb.data.binrel.monotonic.SimpleRandomExtenderMonotonic;
-import hu.webarticum.holodb.data.binrel.monotonic.SimpleRandomReducerMonotonic;
+import hu.webarticum.holodb.data.binrel.monotonic.DefaultRandomExtenderMonotonic;
+import hu.webarticum.holodb.data.binrel.monotonic.DefaultRandomReducerMonotonic;
 import hu.webarticum.holodb.data.binrel.permutation.DirtyFpePermutation;
 import hu.webarticum.holodb.data.binrel.permutation.IdentityPermutation;
 import hu.webarticum.holodb.data.binrel.permutation.Permutation;
@@ -114,7 +114,7 @@ public class TestingMain {
         int IMAGE_SIZE = 51;
         
         for (int k = 0; k < 10; k++) {
-            SimpleRandomReducerMonotonic monotonic = new SimpleRandomReducerMonotonic(
+            DefaultRandomReducerMonotonic monotonic = new DefaultRandomReducerMonotonic(
                     new DefaultTreeRandom(BigInteger.valueOf(k)), BigInteger.valueOf(SIZE), BigInteger.valueOf(IMAGE_SIZE));
 
             dumpMonotonic(monotonic);
@@ -126,7 +126,7 @@ public class TestingMain {
         int IMAGE_SIZE = 13;
         
         for (int k = 0; k < 10; k++) {
-            SimpleRandomExtenderMonotonic monotonic = new SimpleRandomExtenderMonotonic(
+            DefaultRandomExtenderMonotonic monotonic = new DefaultRandomExtenderMonotonic(
                     new DefaultTreeRandom(BigInteger.valueOf(k)), BigInteger.valueOf(SIZE), BigInteger.valueOf(IMAGE_SIZE));
             dumpMonotonic(monotonic);
         }
@@ -144,7 +144,7 @@ public class TestingMain {
         long millis1 = System.currentTimeMillis();
         
         for (int i = 10; i < 1000; i++) {
-            SimpleRandomReducerMonotonic reducer = new SimpleRandomReducerMonotonic(treeRandom, BigInteger.valueOf(i), BigInteger.valueOf(1500));
+            DefaultRandomReducerMonotonic reducer = new DefaultRandomReducerMonotonic(treeRandom, BigInteger.valueOf(i), BigInteger.valueOf(1500));
             for (int j = 0; j < i; j++) {
                 BigInteger value = reducer.at(BigInteger.valueOf(j));
                 reducer.indicesOf(value);
@@ -173,7 +173,7 @@ public class TestingMain {
         long millis1 = System.currentTimeMillis();
         
         for (int i = 1600; i < 3000; i++) {
-            SimpleRandomExtenderMonotonic extender = new SimpleRandomExtenderMonotonic(treeRandom, BigInteger.valueOf(i), BigInteger.valueOf(1500));
+            DefaultRandomExtenderMonotonic extender = new DefaultRandomExtenderMonotonic(treeRandom, BigInteger.valueOf(i), BigInteger.valueOf(1500));
             for (int j = 0; j < i; j++) {
                 BigInteger value = extender.at(BigInteger.valueOf(j));
                 extender.indicesOf(value);

@@ -5,7 +5,15 @@ import java.math.BigInteger;
 import hu.webarticum.holodb.data.random.TreeRandom;
 import hu.webarticum.holodb.data.selection.Range;
 
-public class SimpleRandomExtenderMonotonic implements Monotonic {
+// TODO
+// select      not select          permute
+// (1/n)^k  *  ((n-1)/n)^{n-k}  *  (n :: k)
+//
+// =
+//
+// ((n-1)^{n-k}) / n^n  *  (n :: k)
+
+public class DefaultRandomExtenderMonotonic implements Monotonic {
 
     private final TreeRandom treeRandom;
     
@@ -14,7 +22,7 @@ public class SimpleRandomExtenderMonotonic implements Monotonic {
     private final BigInteger imageSize;
     
     
-    public SimpleRandomExtenderMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize) {
+    public DefaultRandomExtenderMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize) {
         if (size.compareTo(imageSize) < 0) {
             throw new IllegalArgumentException("Size can not be smaller than imageSize");
         }
