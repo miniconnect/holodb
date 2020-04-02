@@ -23,11 +23,6 @@ public class IdentityPermutation implements ResizablePermutation {
     }
 
     @Override
-    public boolean isReversible() {
-        return true;
-    }
-
-    @Override
     public BigInteger indexOf(BigInteger value) {
         return value;
     }

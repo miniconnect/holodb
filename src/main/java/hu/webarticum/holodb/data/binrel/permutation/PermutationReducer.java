@@ -11,7 +11,7 @@ public class PermutationReducer implements PermutationDecorator {
     
     public PermutationReducer(Permutation base, BigInteger size) {
         if (size.compareTo(base.size()) > 0) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("New size can not be larger than size of base");
         }
 
         this.base = base;
@@ -31,11 +31,6 @@ public class PermutationReducer implements PermutationDecorator {
             value = base.at(value);
         } while (value.compareTo(size) >= 0);
         return value;
-    }
-
-    @Override
-    public boolean isReversible() {
-        return base.isReversible();
     }
 
     @Override

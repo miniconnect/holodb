@@ -8,10 +8,6 @@ public class PermutationInverter implements PermutationDecorator {
     
     
     public PermutationInverter(Permutation base) {
-        if (!base.isReversible()) {
-            throw new IllegalArgumentException("Base is not reversible");
-        }
-        
         this.base = base;
     }
     
@@ -24,11 +20,6 @@ public class PermutationInverter implements PermutationDecorator {
     @Override
     public BigInteger at(BigInteger index) {
         return base.indexOf(index);
-    }
-
-    @Override
-    public boolean isReversible() {
-        return true;
     }
 
     @Override

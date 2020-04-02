@@ -83,11 +83,6 @@ public class DirtyFpePermutation implements Permutation {
     }
     
     @Override
-    public boolean isReversible() {
-        return true;
-    }
-
-    @Override
     public BigInteger at(BigInteger index) {
         BigInteger result = index;
         for (int i = 0; i != rounds; i++) {
