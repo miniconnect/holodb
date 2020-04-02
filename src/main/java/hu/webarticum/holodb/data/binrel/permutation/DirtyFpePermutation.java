@@ -186,6 +186,10 @@ public class DirtyFpePermutation implements Permutation {
      * if a >= b then this is always 3
      */
     private static BigInteger[] factor(BigInteger n) {
+        if (n.equals(BigInteger.ZERO)) {
+            return new BigInteger[] { BigInteger.ZERO, BigInteger.ZERO };
+        }
+        
         BigInteger a = BigInteger.ONE;
         BigInteger b = BigInteger.ONE;
            
@@ -227,8 +231,8 @@ public class DirtyFpePermutation implements Permutation {
         if (a.compareTo(BigInteger.ONE) < 0 || b.compareTo(BigInteger.ONE) < 0) {
             throw new IllegalArgumentException("Could not factor n for use in FPE");
         }
-            
-        return new BigInteger[]{ a,b };
+        
+        return new BigInteger[] { a, b };
     }
     
     private static int lowZeroBits(BigInteger n) {

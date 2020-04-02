@@ -32,63 +32,72 @@ import hu.webarticum.holodb.util.bitsource.ByteSource;
 public class TestingMain {
 
     public static void main(String[] args) throws Exception {
-        testMonotonicValueSource();
-        //testSimpleRandomExtenderMonotonic();
-        //testExtenderMonotonicPerformance();
+        collectQuantityStatistic();
     }
     
-    public static void testMonotonicValueSource() {
-        TreeSet<String> treeSet = new TreeSet<>(Arrays.asList("alma", "ananasz", "banan", "korte", "meggy", "szolo"));
-        ArraySortedValueSource<String> baseSource = new ArraySortedValueSource<>(treeSet);
-        Range baseRange = baseSource.findBetween("banan", true, "meggy", true);
-        Monotonic monotonic = new FastMonotonic(BigInteger.valueOf(50), baseSource.size());
-        MonotonicValueSource<String> wrapperSource = new MonotonicValueSource<String>(baseSource, monotonic);
-        Range wrapperRange = wrapperSource.findBetween("banan", true, "meggy", true);
-
-        System.out.println(baseRange);
-        dumpValueSource(new SelectionValueSource<String>(baseSource, baseRange));
-        System.out.println("----------------------------------");
-        System.out.println(wrapperRange);
-        dumpValueSource(new SelectionValueSource<String>(wrapperSource, wrapperRange));
-        System.out.println("----------------------------------");
-        dumpValueSource(wrapperSource);
-    }
-    
-    public static void testArraySortedValueSource() {
-        TreeSet<String> treeSet = new TreeSet<>(Arrays.asList("alma", "ananasz", "banan", "korte", "meggy", "szolo"));
-        ArraySortedValueSource<String> source = new ArraySortedValueSource<>(treeSet);
-        Range range = source.findBetween("banan", true, "meggy", true);
+    public static void collectQuantityStatistic() {
+        int n = 1000;
+        int k = 100;
+        int start = 0;
+        int end = 25;
+        int w = 35;
+        int h = 15;
         
-        System.out.println(range);
-        dumpValueSource(new SelectionValueSource<String>(source, range));
-    }
-    
-    private static void dumpValueSource(ValueSource<?> valueSource) {
-        BigInteger size = valueSource.size();
-        for (BigInteger i = BigInteger.ZERO; i.compareTo(size) < 0; i = i.add(BigInteger.ONE)) {
-            System.out.println(String.format(" > %d. %s", i, valueSource.at(i)));
+        Random random = new Random(0);
+        int[] counts = new int[k];
+        for (int i = 0; i < n; i++) {
+            counts[random.nextInt(k)]++;
         }
-    }
-
-    public static void testBitSource() throws GeneralSecurityException {
-        byte[] initialBuffer = new byte[] { 1, 0 };
-        ByteSource byteSource = () -> 89; // 10011010
-        BitSource bitSource = new BitSource(initialBuffer, byteSource);
         
-        System.out.println(ByteUtil.bytesToString(bitSource.fetch(24)));
+        int[] statistics = new int[end - start];
+        for (int i = 0; i < k; i++) {
+            int count = counts[start + i];
+            if (count >= start && count < end) {
+                System.out.println(i + "!");
+                statistics[count - start]++;
+            }
+        }
+
+        System.out.println(start + " <--> " + end);
+        System.out.println(Arrays.toString(counts));
+        System.out.println(Arrays.toString(statistics));
+        
+        printDiagram(statistics, w, h);
     }
     
-    public static void testCipher() throws GeneralSecurityException {
-        Mac mac = Mac.getInstance("HmacSHA256");
-        byte[] keyBytes   = new byte[] { 0, 1, 2, 3, 4, 5 };
-        SecretKeySpec key = new SecretKeySpec(keyBytes, "RawBytes");
-        mac.init(key);
+    private static void printDiagram(int[] values, int w, int h) {
+        int length = values.length;
+        int s = (int) Math.ceil((double) length / w);
+        System.out.println("s: " + s);
+        double max = 0;
+        double[] avgs = new double[w];
+        for (int i = 0; i < w; i++) {
+            int start = i * s;
+            int end = start + s;
+            int ss = end > length ? s - (end - length) : s;
+            int sum = 0;
+            for (int j = 0; j < ss; j++) {
+                sum += values[start + j];
+            }
+            double avg = (double) sum / ss;
+            if (avg > max) {
+                max = avg;
+            }
+            avgs[i] = avg;
+        }
+        double scale = h / max;
         
-        byte[] data  = "hello".getBytes(StandardCharsets.UTF_8);
-        byte[] macBytes = mac.doFinal(data);
-
-        System.out.println("Size: " + macBytes.length);
-        System.out.println(ByteUtil.bytesToString(macBytes));
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                double value = avgs[j] * scale;
+                System.out.print(value < h - i ? ' ' : '#');
+            }
+            System.out.println();
+        }
+        for (int i = 0; i < w; i++) {
+            System.out.print('_');
+        }
+        System.out.println();
     }
     
     public static void testTreeRandom() {
@@ -107,139 +116,6 @@ public class TestingMain {
         System.out.println("----------------------------");
         System.out.println(Arrays.toString(counts1));
         System.out.println(Arrays.toString(counts2));
-    }
-    
-    public static void testSimpleRandomReducerMonotonic() {
-        int SIZE = 12;
-        int IMAGE_SIZE = 51;
-        
-        for (int k = 0; k < 10; k++) {
-            DefaultRandomReducerMonotonic monotonic = new DefaultRandomReducerMonotonic(
-                    new DefaultTreeRandom(BigInteger.valueOf(k)), BigInteger.valueOf(SIZE), BigInteger.valueOf(IMAGE_SIZE));
-
-            dumpMonotonic(monotonic);
-        }
-    }
-
-    public static void testSimpleRandomExtenderMonotonic() {
-        int SIZE = 72;
-        int IMAGE_SIZE = 13;
-        
-        for (int k = 0; k < 10; k++) {
-            DefaultRandomExtenderMonotonic monotonic = new DefaultRandomExtenderMonotonic(
-                    new DefaultTreeRandom(BigInteger.valueOf(k)), BigInteger.valueOf(SIZE), BigInteger.valueOf(IMAGE_SIZE));
-            dumpMonotonic(monotonic);
-        }
-    }
-
-    private static void testFastMonotonic() {
-        dumpMonotonic(new FastMonotonic(BigInteger.valueOf(5), BigInteger.valueOf(13)));
-        dumpMonotonic(new FastMonotonic(BigInteger.valueOf(13), BigInteger.valueOf(13)));
-        dumpMonotonic(new FastMonotonic(BigInteger.valueOf(44), BigInteger.valueOf(13)));
-    }
-    
-    private static void testReducerMonotonicPerformance() {
-        TreeRandom treeRandom = new DefaultTreeRandom(BigInteger.valueOf(999));
-        
-        long millis1 = System.currentTimeMillis();
-        
-        for (int i = 10; i < 1000; i++) {
-            DefaultRandomReducerMonotonic reducer = new DefaultRandomReducerMonotonic(treeRandom, BigInteger.valueOf(i), BigInteger.valueOf(1500));
-            for (int j = 0; j < i; j++) {
-                BigInteger value = reducer.at(BigInteger.valueOf(j));
-                reducer.indicesOf(value);
-            }
-        }
-        
-        long millis2 = System.currentTimeMillis();
-        
-        for (int i = 10; i < 1000; i++) {
-            FastMonotonic fastMonotonic = new FastMonotonic(BigInteger.valueOf(i), BigInteger.valueOf(1500));
-            for (int j = 0; j < i; j++) {
-                BigInteger value = fastMonotonic.at(BigInteger.valueOf(j));
-                fastMonotonic.indicesOf(value);
-            }
-        }
-
-        long millis3 = System.currentTimeMillis();
-
-        System.out.println("T1: " + (millis2 - millis1));
-        System.out.println("T2: " + (millis3 - millis2));
-    }
-
-    private static void testExtenderMonotonicPerformance() {
-        TreeRandom treeRandom = new DefaultTreeRandom(BigInteger.valueOf(999));
-        
-        long millis1 = System.currentTimeMillis();
-        
-        for (int i = 1600; i < 3000; i++) {
-            DefaultRandomExtenderMonotonic extender = new DefaultRandomExtenderMonotonic(treeRandom, BigInteger.valueOf(i), BigInteger.valueOf(1500));
-            for (int j = 0; j < i; j++) {
-                BigInteger value = extender.at(BigInteger.valueOf(j));
-                extender.indicesOf(value);
-            }
-        }
-        
-        long millis2 = System.currentTimeMillis();
-
-        for (int i = 1600; i < 3000; i++) {
-            FastMonotonic fastMonotonic = new FastMonotonic(BigInteger.valueOf(i), BigInteger.valueOf(1500));
-            for (int j = 0; j < i; j++) {
-                BigInteger value = fastMonotonic.at(BigInteger.valueOf(j));
-                fastMonotonic.indicesOf(value);
-            }
-        }
-
-        long millis3 = System.currentTimeMillis();
-
-        System.out.println("T1: " + (millis2 - millis1));
-        System.out.println("T2: " + (millis3 - millis2));
-    }
-    
-    private static void dumpMonotonic(Monotonic monotonic) {
-        int size = monotonic.size().intValue();
-        int imageSize = monotonic.imageSize().intValue();
-        
-        int[] values = new int[size];
-        for (int i = 0; i < size; i++) {
-            values[i] = monotonic.at(BigInteger.valueOf(i)).intValue();
-        }
-        
-        int[] indirectValues = new int[size];
-        for (int i = 0; i < imageSize; i++) {
-            Range range = monotonic.indicesOf(BigInteger.valueOf(i));
-            int from = range.getFrom().intValue();
-            int until = range.getUntil().intValue();
-            for (int j = from; j < until; j++) {
-                indirectValues[j] = i;
-            }
-        }
-
-        System.out.println(Arrays.toString(values));
-        System.out.println(Arrays.toString(indirectValues));
-        System.out.println();
-    }
-    
-    public static void testPermutation() throws Exception {
-        final byte[] key = "lorem".getBytes();
-        BigInteger size = BigInteger.valueOf(11);
-        
-        Permutation[] permutations = new Permutation[] {
-                new DirtyFpePermutation(key, size),
-                new IdentityPermutation(size),
-                PermutationUtil.resize(new DirtyFpePermutation(key, size), BigInteger.valueOf(7)),
-                PermutationUtil.resize(new DirtyFpePermutation(key, size), BigInteger.valueOf(16)),
-                };
-        
-        for (Permutation permutation : permutations) {
-            BigInteger permutationSize = permutation.size();
-            System.out.println("\n--------------\n" + permutationSize + " - " + permutation.getClass());
-            for (BigInteger i = BigInteger.ZERO; i.compareTo(permutationSize) < 0; i = i.add(BigInteger.ONE)) {
-                BigInteger enc = permutation.at(i);
-                BigInteger dec = permutation.indexOf(enc);
-                System.out.println(i + ": " + enc + " " + dec);
-            }
-        }
     }
     
 }
