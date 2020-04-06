@@ -44,11 +44,6 @@ public class DefaultRandomExtenderMonotonic implements Monotonic {
     }
     
     @Override
-    public boolean isReversible() {
-        return true;
-    }
-
-    @Override
     public BigInteger at(BigInteger index) {
         
         // TODO

@@ -3,12 +3,10 @@ package hu.webarticum.holodb.data.binrel.permutation;
 
 import java.math.BigInteger;
 
-public interface Permutation {
+import hu.webarticum.holodb.data.binrel.core.Function;
 
-    public BigInteger size();
-    
-    public BigInteger at(BigInteger index);
-    
+public interface Permutation extends Function {
+
     public BigInteger indexOf(BigInteger value);
     
 }

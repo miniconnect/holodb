@@ -55,11 +55,6 @@ class MonotonicValueSourceTest {
         }
 
         @Override
-        public boolean isReversible() {
-            return true;
-        }
-
-        @Override
         public Range indicesOf(BigInteger value) {
             long longValue = value.longValue();
             int from = values.length;

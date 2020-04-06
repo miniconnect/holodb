@@ -36,11 +36,6 @@ public class DefaultRandomReducerMonotonic implements Monotonic {
     }
     
     @Override
-    public boolean isReversible() {
-        return true;
-    }
-    
-    @Override
     public BigInteger at(BigInteger index) {
         BigInteger fromInclusive = getLowValue(index);
         BigInteger maximumExclusive = getLowValue(index.add(BigInteger.ONE));

@@ -29,11 +29,6 @@ public class FastMonotonic implements Monotonic {
     }
 
     @Override
-    public boolean isReversible() {
-        return true;
-    }
-
-    @Override
     public Range indicesOf(BigInteger value) {
         return Range.fromUntil(calculateFrom(value), calculateFrom(value.add(BigInteger.ONE)));
     }
