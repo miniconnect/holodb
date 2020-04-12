@@ -8,6 +8,7 @@ import hu.webarticum.holodb.data.random.TreeRandom;
 import hu.webarticum.holodb.data.random.TreeRandomUtil;
 import hu.webarticum.holodb.data.selection.Range;
 
+// TODO? cache positions
 public class BinomialDistributedMonotonic implements Monotonic {
 
     private final TreeRandom treeRandom;
@@ -73,7 +74,6 @@ public class BinomialDistributedMonotonic implements Monotonic {
         binomialDistribution.reseedRandomGenerator(seed);
         BigInteger relativeSplitPoint = BigInteger.valueOf(binomialDistribution.sample());
         return range.getFrom().add(relativeSplitPoint);
-        
     }
     
     @Override
