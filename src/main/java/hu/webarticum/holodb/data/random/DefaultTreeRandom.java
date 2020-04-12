@@ -2,9 +2,8 @@ package hu.webarticum.holodb.data.random;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
-import java.security.GeneralSecurityException;
-import java.util.LinkedList;
-import java.util.List;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 import javax.crypto.Mac;
@@ -17,47 +16,59 @@ import hu.webarticum.holodb.util.bitsource.JavaRandomByteSource;
 public class DefaultTreeRandom implements TreeRandom {
 
     private static final int RANDOM_NUMBER_MAX_RETRIES = 15;
-    
-    private static final byte[] SEPARATOR = new byte[] { (byte) 0b11111111 };
-    
-    private static final DefaultTreeRandom ROOT_INSTANCE = new DefaultTreeRandom(null, new byte[2]);
+
+    private static final byte SEPARATOR = (byte) 0b11111111;
+
+    private static final byte SEPARATOR_REPLACEMENT = (byte) 0b00000000;
+
+    private static final byte ESCAPER = (byte) 0b11111110;
     
     
     private final DefaultTreeRandom parent;
     
     private final byte[] bytes;
     
-    private transient Mac macForChildren = null; // TODO: only one Mac instance!
+    private final Mac mac;
     
 
-    public DefaultTreeRandom(long number) {
-        this(BigInteger.valueOf(number));
+    public DefaultTreeRandom(long seed) {
+        this(BigInteger.valueOf(seed));
     }
     
-    public DefaultTreeRandom(BigInteger number) {
-        this(number.toByteArray());
+    public DefaultTreeRandom(BigInteger seed) {
+        this(seed.toByteArray());
     }
     
-    public DefaultTreeRandom(byte[] bytes) {
-        this(ROOT_INSTANCE, bytes);
+    public DefaultTreeRandom(byte[] seed) {
+        this(null, cleanBytes(seed), buildMac(seed));
     }
-
-    private DefaultTreeRandom(DefaultTreeRandom parent, byte[] bytes) {
+    
+    private DefaultTreeRandom(DefaultTreeRandom parent, byte[] bytes, Mac mac) {
         this.parent = parent;
         this.bytes = bytes;
+        this.mac = mac;
     }
-    
+
 
     @Override
-    public DefaultTreeRandom sub(BigInteger number) {
+    public TreeRandom sub(BigInteger number) {
         return sub(number.toByteArray());
     }
-    
+
     @Override
-    public DefaultTreeRandom sub(byte... bytes) {
-        return new DefaultTreeRandom(this, bytes);
+    public TreeRandom sub(byte... bytes) {
+        byte[] cleanSubBytes = cleanBytes(bytes);
+        byte[] bytesForSub = new byte[this.bytes.length + 1 + cleanSubBytes.length];
+        System.arraycopy(this.bytes, 0, bytesForSub, 0, this.bytes.length);
+        bytesForSub[this.bytes.length] = SEPARATOR;
+        System.arraycopy(cleanSubBytes, 0, bytesForSub, this.bytes.length + 1, cleanSubBytes.length);
+        return new DefaultTreeRandom(this, bytesForSub, mac);
     }
 
+    @Override
+    public byte[] getBytes(int numberOfBytes) {
+        return createBitSource().fetch(numberOfBytes * 8);   
+    }
 
     @Override
     public BigInteger getNumber(BigInteger highExclusive) {
@@ -91,49 +102,43 @@ public class DefaultTreeRandom implements TreeRandom {
         return partition.multiply(factor).add(offset);
     }
 
-    @Override
-    public byte[] getBytes(int numberOfBytes) {
-        return createBitSource().fetch(numberOfBytes * 8);   
+    
+    private static Mac buildMac(byte[] bytes) {
+        try {
+            return buildMacThrows(bytes);
+        } catch (InvalidKeyException | NoSuchAlgorithmException e) {
+            // never occurs
+            throw new RuntimeException(); // NOSONAR
+        }
+    }
+    
+    private static Mac buildMacThrows(byte[] bytes) throws NoSuchAlgorithmException, InvalidKeyException {
+        Mac mac = Mac.getInstance("HmacSHA256");
+        SecretKeySpec key = new SecretKeySpec(bytes, "RawBytes");
+        mac.init(key);
+        return mac;
     }
 
+    private static byte[] cleanBytes(byte[] bytes) {
+        ByteArrayOutputStream bytesBuilder = new ByteArrayOutputStream(bytes.length);
+        for (byte b : bytes) {
+            if (b == SEPARATOR) {
+                bytesBuilder.write(ESCAPER);
+                bytesBuilder.write(SEPARATOR_REPLACEMENT);
+            } else if (b == ESCAPER) {
+                bytesBuilder.write(ESCAPER);
+                bytesBuilder.write(ESCAPER);
+            } else {
+                bytesBuilder.write(b);
+            }
+        }
+        return bytesBuilder.toByteArray();
+    }
+    
     private BitSource createBitSource() {
-        byte[] macBytes = parent.getMacForChildren().doFinal(bytes);
+        byte[] macBytes = mac.doFinal(bytes);
         Random random = new Random(ByteUtil.firstBytesToLong(macBytes));
         return new BitSource(macBytes, new JavaRandomByteSource(random));
     }
-    
-    private Mac getMacForChildren() {
-        try {
-            return getMacForChildrenUnwrapped();
-        } catch (GeneralSecurityException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-    
-    private Mac getMacForChildrenUnwrapped() throws GeneralSecurityException {
-        if (macForChildren == null) {
-            Mac mac = Mac.getInstance("HmacSHA256");
-            byte[] keyBytes = composeKey();
-            SecretKeySpec key = new SecretKeySpec(keyBytes, "RawBytes");
-            mac.init(key);
-            macForChildren = mac;
-        }
-        return macForChildren;
-    }
-    
-    private byte[] composeKey() {
-        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        List<DefaultTreeRandom> path = new LinkedList<>();
-        DefaultTreeRandom nextParent = this;
-        while (nextParent != null) {
-            path.add(0, nextParent);
-            nextParent = nextParent.parent;
-        }
-        for (DefaultTreeRandom item : path) {
-            byteStream.write(item.bytes, 0, item.bytes.length);
-            byteStream.write(SEPARATOR, 0, SEPARATOR.length);
-        }
-        return byteStream.toByteArray();
-    }
-    
+
 }

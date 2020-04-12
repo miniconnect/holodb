@@ -24,35 +24,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.distribution.BinomialDistribution;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import hu.webarticum.holodb.data.binrel.monotonic.FastMonotonic;
-import hu.webarticum.holodb.data.binrel.monotonic.Monotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.BinomialDistributedMonotonic;
-import hu.webarticum.holodb.data.binrel.monotonic.DefaultRandomExtenderMonotonic;
-import hu.webarticum.holodb.data.binrel.monotonic.DefaultRandomReducerMonotonic;
-import hu.webarticum.holodb.data.binrel.permutation.DirtyFpePermutation;
-import hu.webarticum.holodb.data.binrel.permutation.IdentityPermutation;
-import hu.webarticum.holodb.data.binrel.permutation.Permutation;
-import hu.webarticum.holodb.data.binrel.permutation.PermutationUtil;
 import hu.webarticum.holodb.data.random.DefaultTreeRandom;
-import hu.webarticum.holodb.data.random.TreeRandom;
-import hu.webarticum.holodb.data.selection.Range;
-import hu.webarticum.holodb.data.source.ArraySortedValueSource;
-import hu.webarticum.holodb.data.source.MonotonicValueSource;
-import hu.webarticum.holodb.data.source.SelectionValueSource;
-import hu.webarticum.holodb.data.source.ValueSource;
-import hu.webarticum.holodb.util.ByteUtil;
-import hu.webarticum.holodb.util.bitsource.BitSource;
-import hu.webarticum.holodb.util.bitsource.ByteSource;
-
 public class TestingMain {
 
     public static void main(String[] args) throws Exception {
