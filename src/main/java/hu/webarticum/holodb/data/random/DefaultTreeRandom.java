@@ -27,7 +27,7 @@ public class DefaultTreeRandom implements TreeRandom {
     
     private final byte[] bytes;
     
-    private transient Mac macForChildren = null;
+    private transient Mac macForChildren = null; // TODO: only one Mac instance!
     
 
     public DefaultTreeRandom(long number) {

@@ -48,10 +48,14 @@ public class Range implements Selection {
     public BigInteger getUntil() {
         return until;
     }
-    
+
+    public BigInteger getLength() {
+        return until.subtract(from);
+    }
+
     @Override
     public BigInteger getCount() {
-        return until.subtract(from);
+        return getLength();
     }
 
     @Override
