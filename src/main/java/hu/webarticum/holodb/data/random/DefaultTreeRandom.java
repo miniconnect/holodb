@@ -24,8 +24,6 @@ public class DefaultTreeRandom implements TreeRandom {
     private static final byte ESCAPER = (byte) 0b11111110;
     
     
-    private final DefaultTreeRandom parent;
-    
     private final byte[] bytes;
     
     private final Mac mac;
@@ -40,11 +38,10 @@ public class DefaultTreeRandom implements TreeRandom {
     }
     
     public DefaultTreeRandom(byte[] seed) {
-        this(null, cleanBytes(seed), buildMac(seed));
+        this(cleanBytes(seed), buildMac(seed));
     }
     
-    private DefaultTreeRandom(DefaultTreeRandom parent, byte[] bytes, Mac mac) {
-        this.parent = parent;
+    private DefaultTreeRandom(byte[] bytes, Mac mac) {
         this.bytes = bytes;
         this.mac = mac;
     }
@@ -62,7 +59,7 @@ public class DefaultTreeRandom implements TreeRandom {
         System.arraycopy(this.bytes, 0, bytesForSub, 0, this.bytes.length);
         bytesForSub[this.bytes.length] = SEPARATOR;
         System.arraycopy(cleanSubBytes, 0, bytesForSub, this.bytes.length + 1, cleanSubBytes.length);
-        return new DefaultTreeRandom(this, bytesForSub, mac);
+        return new DefaultTreeRandom(bytesForSub, mac);
     }
 
     @Override

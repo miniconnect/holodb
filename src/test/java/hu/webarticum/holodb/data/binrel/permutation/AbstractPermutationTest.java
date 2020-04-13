@@ -17,7 +17,7 @@ public abstract class AbstractPermutationTest<T extends Permutation> {
     void testEmpty() {
         checkSize(create(BigInteger.ZERO), BigInteger.ZERO);
     }
-        
+    
     @Test
     void testSmallInstancesCompletely() {
         for (long i = 10; i <= 100; i += 3) {

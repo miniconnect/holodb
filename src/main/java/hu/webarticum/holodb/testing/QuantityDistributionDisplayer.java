@@ -16,8 +16,12 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-public class QuantityDistributionDisplayer implements Runnable {
+import hu.webarticum.holodb.data.binrel.monotonic.BinomialDistributedMonotonic;
+import hu.webarticum.holodb.data.binrel.monotonic.Monotonic;
+import hu.webarticum.holodb.data.random.DefaultTreeRandom;
 
+public class QuantityDistributionDisplayer implements Runnable {
+    
     @Override
     public void run() {
         JFrame frame = new JFrame("Chart");
@@ -31,14 +35,11 @@ public class QuantityDistributionDisplayer implements Runnable {
         gridPanel.add(createQuantityChartPanel(350, 47));
         gridPanel.add(createQuantityChartPanel(420, 73));
         gridPanel.add(createQuantityChartPanel(540, 150));
+        gridPanel.add(createQuantityChartPanel(740, 215));
         gridPanel.add(createQuantityChartPanel(1200, 200));
         gridPanel.add(createQuantityChartPanel(3200, 1100));
         gridPanel.add(createQuantityChartPanel(7800, 1200));
         gridPanel.add(createQuantityChartPanel(12000, 2100));
-        gridPanel.add(createQuantityChartPanel(120000, 12000));
-        gridPanel.add(createQuantityChartPanel(500000, 42000));
-        gridPanel.add(createQuantityChartPanel(1000000, 33000));
-        gridPanel.add(createQuantityChartPanel(2500000, 79000));
         
         JScrollPane scrollPane = new JScrollPane(gridPanel);
         scrollPane.setPreferredSize(new Dimension(gridPanel.getPreferredSize().width + 30, 700));
@@ -49,18 +50,18 @@ public class QuantityDistributionDisplayer implements Runnable {
         frame.setVisible(true);
     }
     
-    private static ChartPanel createQuantityChartPanel(int n, int k) {
+    private ChartPanel createQuantityChartPanel(int n, int k) {
         ChartPanel chartPanel = new ChartPanel(createQuantityChart(n, k));
         chartPanel.setPreferredSize(new Dimension(500, 320));
         return chartPanel;
     }
     
-    private static JFreeChart createQuantityChart(int n, int k) {
+    private JFreeChart createQuantityChart(int n, int k) {
         int m = Math.min(n, (int) Math.ceil(2d * n / k) + 1);
         
         DefaultCategoryDataset lineChartDataset = new DefaultCategoryDataset();
 
-        double[] countsFromMonotonic = getCountsFromMonotonic(n, k, m);
+        double[] countsFromMonotonic = getCountsFromMonotonics(n, k, m);
         for (int i = 0; i < m; i++) {
             lineChartDataset.addValue(countsFromMonotonic[i], "monotonic", Integer.valueOf(i));
         }
@@ -83,15 +84,30 @@ public class QuantityDistributionDisplayer implements Runnable {
             true, false, false
         );
     }
+
+    private double[] getCountsFromMonotonics(int n, int k, int m) {
+        return getAvgs(new double[][] {
+            getCountsFromMonotonic(new BinomialDistributedMonotonic(new DefaultTreeRandom(0), n, k), m),
+            getCountsFromMonotonic(new BinomialDistributedMonotonic(new DefaultTreeRandom(12), n, k), m),
+            getCountsFromMonotonic(new BinomialDistributedMonotonic(new DefaultTreeRandom(273481), n, k), m),
+        });
+    }
     
-    private static double[] getCountsFromMonotonic(int n, int k, int m) {
+    private double[] getCountsFromMonotonic(Monotonic monotonic, int m) {
+        BigInteger imageSize = monotonic.imageSize();
         
-        // TODO
-        return new double[m];
+        double[] result = new double[m];
         
+        for (BigInteger value = BigInteger.ZERO; value.compareTo(imageSize) < 0; value = value.add(BigInteger.ONE)) {
+            int count = monotonic.indicesOf(value).getCount().intValue();
+            if (count < m) {
+                result[count]++;
+            }
+        }
+        return result;
     }
 
-    private static double[] getCountsFromMeasure(int n, int k, int m) {
+    private double[] getCountsFromMeasure(int n, int k, int m) {
         int[] seeds = new int[] { 0, 15, 432, 7362, 11260, 734652, 6473821, 27348245 };
         double[][] measures = new double[seeds.length][];
         for (int i = 0; i < seeds.length; i++) {
@@ -100,20 +116,7 @@ public class QuantityDistributionDisplayer implements Runnable {
         return getAvgs(measures);
     }
     
-    private static double[] getAvgs(double[][] numbers) {
-        int length = numbers[0].length;
-        double[] result = new double[length];
-        for (int i = 0; i < length; i++) {
-            double sum = 0;
-            for (int j = 0; j < numbers.length; j++) {
-                sum += numbers[j][i];
-            }
-            result[i] = sum / numbers.length;
-        }
-        return result;
-    }
-    
-    private static double[] getCountsFromMeasure(int n, int k, int m, int seed) {
+    private double[] getCountsFromMeasure(int n, int k, int m, int seed) {
         Random random = new Random(seed);
         int[] quantities = new int[k];
         for (int i = 0; i < n; i++) {
@@ -129,7 +132,7 @@ public class QuantityDistributionDisplayer implements Runnable {
         return quantityCounts;
     }
 
-    private static double[] getCountsFromFormula(int n, int k, int m) {
+    private double[] getCountsFromFormula(int n, int k, int m) {
         BinomialDistribution binomialDistribution = new BinomialDistribution(n, 1d / k);
         double[] quantityCounts = new double[m];
         for (int i = 0; i < m; i++) {
@@ -139,4 +142,17 @@ public class QuantityDistributionDisplayer implements Runnable {
         return quantityCounts;
     }
 
+    private double[] getAvgs(double[][] numbers) {
+        int length = numbers[0].length;
+        double[] result = new double[length];
+        for (int i = 0; i < length; i++) {
+            double sum = 0;
+            for (int j = 0; j < numbers.length; j++) {
+                sum += numbers[j][i];
+            }
+            result[i] = sum / numbers.length;
+        }
+        return result;
+    }
+    
 }

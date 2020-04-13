@@ -5,20 +5,39 @@ import java.util.Arrays;
 
 import hu.webarticum.holodb.data.binrel.monotonic.BinomialDistributedMonotonic;
 import hu.webarticum.holodb.data.random.DefaultTreeRandom;
+import hu.webarticum.holodb.data.selection.Range;
 public class TestingMain {
 
     public static void main(String[] args) throws Exception {
-        testBinomialDistributedMonotonic();
-        //testDistribution();
+        //testBinomialDistributedMonotonic();
+        testDistribution();
     }
     
     
     private static void testBinomialDistributedMonotonic() {
-        for (int seed = 0; seed < 45; seed++) {
+        for (int seed = 0; seed < 3; seed++) {
             BinomialDistributedMonotonic monotonic = new BinomialDistributedMonotonic(new DefaultTreeRandom(seed), 90, 10);
             for (int i = 0; i < monotonic.size().intValue(); i++) {
                 System.out.print(monotonic.at(BigInteger.valueOf(i)) + " ");
             }
+            System.out.println();
+            for (int i = 0; i < 10; i++) {
+                Range range = monotonic.indicesOf(BigInteger.valueOf(i));
+                int from = range.getFrom().intValue();
+                int until = range.getUntil().intValue();
+                for (int j = 0; j < from; j++) {
+                    System.out.print("  ");
+                }
+                for (int j = from; j < until; j++) {
+                    System.out.print(i + " ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+            for (int i = 0; i < 180; i++) {
+                System.out.print('-');
+            }
+            System.out.println();
             System.out.println();
         }
     }

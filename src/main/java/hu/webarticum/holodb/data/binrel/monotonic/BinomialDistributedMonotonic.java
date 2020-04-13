@@ -8,7 +8,9 @@ import hu.webarticum.holodb.data.random.TreeRandom;
 import hu.webarticum.holodb.data.random.TreeRandomUtil;
 import hu.webarticum.holodb.data.selection.Range;
 
-// TODO? cache positions
+// TODO: randomize fallback split
+// TODO: cache positions (max 1024 or so, smaller binomials are faster)
+// TODO: cache local positions if necessary
 public class BinomialDistributedMonotonic implements Monotonic {
 
     private final TreeRandom treeRandom;
@@ -54,10 +56,20 @@ public class BinomialDistributedMonotonic implements Monotonic {
 
     @Override
     public Range indicesOf(BigInteger value) {
-        
-        // TODO
-        
-        return null;
+        Range range = Range.fromLength(BigInteger.ZERO, size);
+        Range imageRange = Range.fromLength(BigInteger.ZERO, imageSize);
+        while (imageRange.getLength().compareTo(BigInteger.ONE) > 0) {
+            BigInteger imageSplitPoint = imageRange.getFrom().add(imageRange.getUntil()).divide(BigInteger.TWO);
+            BigInteger splitPoint = split(range, imageRange, imageSplitPoint);
+            if (imageSplitPoint.compareTo(value) > 0) {
+                range = Range.fromUntil(range.getFrom(), splitPoint);
+                imageRange = Range.fromUntil(imageRange.getFrom(), imageSplitPoint);
+            } else {
+                range = Range.fromUntil(splitPoint, range.getUntil());
+                imageRange = Range.fromUntil(imageSplitPoint, imageRange.getUntil());
+            }
+        }
+        return range;
     }
     
     private BigInteger split(Range range, Range imageRange, BigInteger imageSplitPoint) {
@@ -65,6 +77,8 @@ public class BinomialDistributedMonotonic implements Monotonic {
         
         if (length.compareTo(BigInteger.valueOf(100000L)) > 0) {
             return range.getFrom().add(length.divide(BigInteger.TWO));
+        } else if (length.equals(BigInteger.ZERO)) {
+            return range.getFrom();
         }
         
         BigInteger imageFirstLength = imageSplitPoint.subtract(imageRange.getFrom());
