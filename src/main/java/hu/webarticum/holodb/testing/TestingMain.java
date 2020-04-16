@@ -13,15 +13,17 @@ public class TestingMain {
         testDistribution();
     }
     
-    
+
     private static void testBinomialDistributedMonotonic() {
+        long size = 90;
+        long imageSize = 10;
         for (int seed = 0; seed < 3; seed++) {
-            BinomialDistributedMonotonic monotonic = new BinomialDistributedMonotonic(new DefaultTreeRandom(seed), 90, 10);
-            for (int i = 0; i < monotonic.size().intValue(); i++) {
+            BinomialDistributedMonotonic monotonic = new BinomialDistributedMonotonic(new DefaultTreeRandom(seed), size, imageSize);
+            for (int i = 0; i < size; i++) {
                 System.out.print(monotonic.at(BigInteger.valueOf(i)) + " ");
             }
             System.out.println();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < imageSize; i++) {
                 Range range = monotonic.indicesOf(BigInteger.valueOf(i));
                 int from = range.getFrom().intValue();
                 int until = range.getUntil().intValue();

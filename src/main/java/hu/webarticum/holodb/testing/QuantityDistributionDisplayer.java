@@ -1,13 +1,16 @@
 package hu.webarticum.holodb.testing;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.math.BigInteger;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.WindowConstants;
 
 import org.apache.commons.math3.distribution.BinomialDistribution;
 import org.jfree.chart.ChartFactory;
@@ -26,8 +29,12 @@ public class QuantityDistributionDisplayer implements Runnable {
     public void run() {
         JFrame frame = new JFrame("Chart");
         
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        
         JPanel gridPanel = new JPanel(new GridLayout(0, 3));
 
+        long millis1 = System.currentTimeMillis();
         gridPanel.add(createQuantityChartPanel(10, 3));
         gridPanel.add(createQuantityChartPanel(50, 7));
         gridPanel.add(createQuantityChartPanel(100, 10));
@@ -40,13 +47,24 @@ public class QuantityDistributionDisplayer implements Runnable {
         gridPanel.add(createQuantityChartPanel(3200, 1100));
         gridPanel.add(createQuantityChartPanel(7800, 1200));
         gridPanel.add(createQuantityChartPanel(12000, 2100));
+        gridPanel.add(createQuantityChartPanel(35000, 8900));
+        gridPanel.add(createQuantityChartPanel(112000, 18300));
+        gridPanel.add(createQuantityChartPanel(503000, 79200));
+        gridPanel.add(createQuantityChartPanel(1080000, 115000));
+        gridPanel.add(createQuantityChartPanel(1567000, 232100));
+        gridPanel.add(createQuantityChartPanel(70000000, 9321000));
+        long millis2 = System.currentTimeMillis();
+
+        JLabel infoLabel = new JLabel(String.format("Collected in: %d milliseconds", millis2 - millis1));
+        mainPanel.add(infoLabel, BorderLayout.PAGE_START);
         
         JScrollPane scrollPane = new JScrollPane(gridPanel);
         scrollPane.setPreferredSize(new Dimension(gridPanel.getPreferredSize().width + 30, 700));
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
         
-        frame.setContentPane(scrollPane);
+        frame.setContentPane(mainPanel);
         frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
     
@@ -75,7 +93,7 @@ public class QuantityDistributionDisplayer implements Runnable {
         for (int i = 0; i < m; i++) {
             lineChartDataset.addValue(countsFromFormula[i], "formula", Integer.valueOf(i));
         }
-
+        
         return ChartFactory.createLineChart(
             String.format("Distribution (n=%d, k=%d)", n, k),
             "Quantity", "Count",
@@ -87,10 +105,14 @@ public class QuantityDistributionDisplayer implements Runnable {
 
     private double[] getCountsFromMonotonics(int n, int k, int m) {
         return getAvgs(new double[][] {
-            getCountsFromMonotonic(new BinomialDistributedMonotonic(new DefaultTreeRandom(0), n, k), m),
-            getCountsFromMonotonic(new BinomialDistributedMonotonic(new DefaultTreeRandom(12), n, k), m),
-            getCountsFromMonotonic(new BinomialDistributedMonotonic(new DefaultTreeRandom(273481), n, k), m),
+            getCountsFromMonotonic(n, k, m, 0),
+            getCountsFromMonotonic(n, k, m, 12),
+            getCountsFromMonotonic(n, k, m, 273481),
         });
+    }
+    
+    private double[] getCountsFromMonotonic(int n, int k, int m, long seed) {
+        return getCountsFromMonotonic(new BinomialDistributedMonotonic(new DefaultTreeRandom(seed), n, k), m);
     }
     
     private double[] getCountsFromMonotonic(Monotonic monotonic, int m) {
@@ -98,16 +120,21 @@ public class QuantityDistributionDisplayer implements Runnable {
         
         double[] result = new double[m];
         
-        for (BigInteger value = BigInteger.ZERO; value.compareTo(imageSize) < 0; value = value.add(BigInteger.ONE)) {
+        BigInteger step = imageSize.compareTo(BigInteger.valueOf(2000)) > 0 ? imageSize.divide(BigInteger.valueOf(2000)): BigInteger.ONE;
+        for (BigInteger value = BigInteger.ZERO; value.compareTo(imageSize) < 0; value = value.add(step)) {
             int count = monotonic.indicesOf(value).getCount().intValue();
             if (count < m) {
-                result[count]++;
+                result[count] += step.intValue();
             }
         }
         return result;
     }
 
     private double[] getCountsFromMeasure(int n, int k, int m) {
+        if (n > 5000) {
+            return new double[m];
+        }
+        
         int[] seeds = new int[] { 0, 15, 432, 7362, 11260, 734652, 6473821, 27348245 };
         double[][] measures = new double[seeds.length][];
         for (int i = 0; i < seeds.length; i++) {
