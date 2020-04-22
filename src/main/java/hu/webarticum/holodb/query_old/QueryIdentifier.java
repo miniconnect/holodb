@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.query;
+package hu.webarticum.holodb.query_old;
 
 import java.util.ArrayList;
 import java.util.Arrays;
