@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.query;
+package hu.webarticum.holodb.query.model;
 
 public interface Literal extends Expression {
 
@@ -9,5 +9,7 @@ public interface Literal extends Expression {
     
     
     public Type getType();
+    
+    // FIXME: Object getValue() ?
     
 }

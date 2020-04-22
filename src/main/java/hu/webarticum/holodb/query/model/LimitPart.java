@@ -1,11 +1,11 @@
-package hu.webarticum.holodb.query;
+package hu.webarticum.holodb.query.model;
 
 import java.math.BigInteger;
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class LimitPart {
+public final class LimitPart {
     
     private final BigInteger from;
     
@@ -17,7 +17,11 @@ public class LimitPart {
     }
 
     public LimitPart(BigInteger from, BigInteger maxCount) {
-        this.from = from;
+        this.from = Objects.requireNonNull(from, "From can not be null");
+        
+        if (maxCount != null && maxCount.signum() == -1) {
+            throw new IllegalArgumentException("Max count can not be negative");
+        }
         this.maxCount = maxCount;
     }
     
@@ -26,6 +30,10 @@ public class LimitPart {
         return from;
     }
 
+    public boolean hasMaxCount() {
+        return (maxCount != null);
+    }
+    
     public BigInteger getMaxCount() {
         return maxCount;
     }

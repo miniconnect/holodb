@@ -1,35 +1,37 @@
-package hu.webarticum.holodb.query;
+package hu.webarticum.holodb.query.model;
 
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class FieldsItem {
+public final class FieldsItem implements Aliasable {
     
     private final Expression expression;
     
-    private final Alias alias;
+    private final String alias;
     
 
     public FieldsItem(Expression expression) {
         this(expression, null);
     }
 
-    public FieldsItem(Expression expression, Alias alias) {
-        this.expression = Objects.requireNonNull(expression);
-        this.alias = Objects.requireNonNull(alias);
+    public FieldsItem(Expression expression, String alias) {
+        this.expression = Objects.requireNonNull(expression, "Expression can not be null");
+        this.alias = alias;
     }
     
     
     public Expression getExpression() {
         return expression;
     }
-    
+
+    @Override
     public boolean hasAlias() {
         return (alias != null);
     }
-    
-    public Alias getAlias() {
+
+    @Override
+    public String getAlias() {
         return alias;
     }
     

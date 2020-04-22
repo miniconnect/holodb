@@ -1,8 +1,8 @@
-package hu.webarticum.holodb.query;
+package hu.webarticum.holodb.query.model;
 
 import java.util.Objects;
 
-public class HavingPart {
+public final class HavingPart {
 
     private final Expression condition;
     

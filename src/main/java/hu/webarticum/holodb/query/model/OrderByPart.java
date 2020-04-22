@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.query;
+package hu.webarticum.holodb.query.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,17 +8,17 @@ import java.util.List;
 
 import org.apache.commons.collections4.iterators.UnmodifiableIterator;
 
-public class GroupByPart implements Iterable<Expression> {
+public final class OrderByPart implements Iterable<OrderByItem> {
 
-    private final List<Expression> items = new ArrayList<>();
+    private final List<OrderByItem> items;
     
     
-    public GroupByPart(Expression... items) {
+    public OrderByPart(OrderByItem... items) {
         this(Arrays.asList(items));
     }
 
-    public GroupByPart(Collection<Expression> items) {
-        items.addAll(items);
+    public OrderByPart(Collection<OrderByItem> items) {
+        this.items = new ArrayList<>(items);
     }
     
     
@@ -26,16 +26,16 @@ public class GroupByPart implements Iterable<Expression> {
         return items.size();
     }
     
-    public Expression at(int index) {
+    public OrderByItem at(int index) {
         return items.get(index);
     }
 
-    public List<Expression> toList() {
+    public List<OrderByItem> toList() {
         return new ArrayList<>(items);
     }
 
     @Override
-    public Iterator<Expression> iterator() {
+    public Iterator<OrderByItem> iterator() {
         return UnmodifiableIterator.unmodifiableIterator(items.iterator());
     }
     
@@ -46,11 +46,11 @@ public class GroupByPart implements Iterable<Expression> {
     
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof GroupByPart)) {
+        if (!(obj instanceof OrderByPart)) {
             return false;
         }
         
-        return items.equals(((GroupByPart) obj).items);
+        return items.equals(((OrderByPart) obj).items);
     }
     
 }

@@ -1,24 +1,25 @@
-package hu.webarticum.holodb.query;
+package hu.webarticum.holodb.query.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.collections4.iterators.UnmodifiableIterator;
 
-public class OrderByPart implements Iterable<OrderByItem> {
+public final class GroupByPart implements Iterable<Expression> {
 
-    private final List<OrderByItem> items = new ArrayList<>();
+    private final List<Expression> items;
     
     
-    public OrderByPart(OrderByItem... items) {
-        this(Arrays.asList(items));
+    public GroupByPart(Expression... items) {
+        this(items == null ? null : Arrays.asList(items));
     }
 
-    public OrderByPart(Collection<OrderByItem> items) {
-        items.addAll(items);
+    public GroupByPart(Collection<Expression> items) {
+        this.items = new ArrayList<>(Objects.requireNonNull(items, "Collection of groupings can not be null"));
     }
     
     
@@ -26,16 +27,16 @@ public class OrderByPart implements Iterable<OrderByItem> {
         return items.size();
     }
     
-    public OrderByItem at(int index) {
+    public Expression at(int index) {
         return items.get(index);
     }
 
-    public List<OrderByItem> toList() {
+    public List<Expression> toList() {
         return new ArrayList<>(items);
     }
 
     @Override
-    public Iterator<OrderByItem> iterator() {
+    public Iterator<Expression> iterator() {
         return UnmodifiableIterator.unmodifiableIterator(items.iterator());
     }
     
@@ -46,11 +47,11 @@ public class OrderByPart implements Iterable<OrderByItem> {
     
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof OrderByPart)) {
+        if (!(obj instanceof GroupByPart)) {
             return false;
         }
         
-        return items.equals(((OrderByPart) obj).items);
+        return items.equals(((GroupByPart) obj).items);
     }
     
 }

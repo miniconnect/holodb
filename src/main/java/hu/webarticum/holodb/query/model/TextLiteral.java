@@ -1,8 +1,8 @@
-package hu.webarticum.holodb.query;
+package hu.webarticum.holodb.query.model;
 
 import java.util.Objects;
 
-public class TextLiteral implements Literal {
+public final class TextLiteral implements Literal {
 
     private final String text;
     

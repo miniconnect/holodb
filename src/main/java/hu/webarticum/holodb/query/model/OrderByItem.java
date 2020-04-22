@@ -1,10 +1,10 @@
-package hu.webarticum.holodb.query;
+package hu.webarticum.holodb.query.model;
 
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class OrderByItem {
+public final class OrderByItem {
 
     public enum Direction {
         ASC,

@@ -1,24 +1,25 @@
-package hu.webarticum.holodb.query;
+package hu.webarticum.holodb.query.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.collections4.iterators.UnmodifiableIterator;
 
-public class FieldsPart implements Iterable<FieldsItem> {
+public final class FieldsPart implements Iterable<FieldsItem> {
 
-    private final List<FieldsItem> items = new ArrayList<>();
+    private final List<FieldsItem> items;
     
     
     public FieldsPart(FieldsItem... items) {
-        this(Arrays.asList(items));
+        this(items == null ? null : Arrays.asList(items));
     }
 
     public FieldsPart(Collection<FieldsItem> items) {
-        items.addAll(items);
+        this.items = new ArrayList<>(Objects.requireNonNull(items, "Collection of fields can not be null"));
     }
     
     
