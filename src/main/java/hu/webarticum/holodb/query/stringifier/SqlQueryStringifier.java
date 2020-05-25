@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.query.stringify;
+package hu.webarticum.holodb.query.stringifier;
 
 public class SqlQueryStringifier {
 

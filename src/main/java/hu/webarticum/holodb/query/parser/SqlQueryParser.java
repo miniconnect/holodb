@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.query.parse;
+package hu.webarticum.holodb.query.parser;
 
 public class SqlQueryParser {
 

@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.query.analyze;
+package hu.webarticum.holodb.query.analyzer;
 
 import hu.webarticum.holodb.query.model.Query;
 
