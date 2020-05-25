@@ -9,42 +9,42 @@ public final class TreeRandomUtil {
     }
     
 
-    public static boolean getBoolean(TreeRandom treeRandom) {
+    public static boolean fetchBoolean(TreeRandom treeRandom) {
         byte[] bytes = treeRandom.getBytes(1);
         return ((bytes[0] & 1) > 0);
     }
 
-    public static byte getByte(TreeRandom treeRandom) {
+    public static byte fetchByte(TreeRandom treeRandom) {
         byte[] bytes = treeRandom.getBytes(1);
         return bytes[0];
     }
 
-    public static char getChar(TreeRandom treeRandom) {
+    public static char fetchChar(TreeRandom treeRandom) {
         byte[] bytes = treeRandom.getBytes(2);
         return ByteBuffer.wrap(bytes).getChar();
     }
 
-    public static short getShort(TreeRandom treeRandom) {
+    public static short fetchShort(TreeRandom treeRandom) {
         byte[] bytes = treeRandom.getBytes(2);
         return ByteBuffer.wrap(bytes).getShort();
     }
 
-    public static int getInt(TreeRandom treeRandom) {
+    public static int fetchInt(TreeRandom treeRandom) {
         byte[] bytes = treeRandom.getBytes(4);
         return ByteBuffer.wrap(bytes).getInt();
     }
 
-    public static long getLong(TreeRandom treeRandom) {
+    public static long fetchLong(TreeRandom treeRandom) {
         byte[] bytes = treeRandom.getBytes(8);
         return ByteBuffer.wrap(bytes).getLong();
     }
 
-    public static float getFloat(TreeRandom treeRandom) {
+    public static float fetchFloat(TreeRandom treeRandom) {
         byte[] bytes = treeRandom.getBytes(4);
         return ByteBuffer.wrap(bytes).getFloat();
     }
 
-    public static double getDouble(TreeRandom treeRandom) {
+    public static double fetchDouble(TreeRandom treeRandom) {
         byte[] bytes = treeRandom.getBytes(8);
         return ByteBuffer.wrap(bytes).getDouble();
     }

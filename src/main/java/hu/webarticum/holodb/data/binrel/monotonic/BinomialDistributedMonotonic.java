@@ -114,7 +114,7 @@ public class BinomialDistributedMonotonic implements Monotonic {
         BigInteger imageFirstLength = imageSplitPoint.subtract(imageRange.getFrom());
         double probability = imageFirstLength.doubleValue() / imageRange.getLength().doubleValue();
         BinomialDistribution binomialDistribution = new BinomialDistribution(range.getLength().intValue(), probability);
-        long seed = TreeRandomUtil.getLong(treeRandom.sub(imageSplitPoint));
+        long seed = TreeRandomUtil.fetchLong(treeRandom.sub(imageSplitPoint));
         binomialDistribution.reseedRandomGenerator(seed);
         BigInteger relativeSplitPoint = BigInteger.valueOf(binomialDistribution.sample());
         return range.getFrom().add(relativeSplitPoint);
