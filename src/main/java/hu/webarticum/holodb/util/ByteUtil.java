@@ -6,7 +6,14 @@ public final class ByteUtil {
 
     private ByteUtil() {
     }
+
     
+    public static byte[] intToBytes(int number) {
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+        buffer.putInt(number);
+        return buffer.array();
+    }
+
     public static byte[] longToBytes(long number) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.putLong(number);
@@ -32,16 +39,18 @@ public final class ByteUtil {
         return buffer.getLong();
     }
     
-    public static String bytesToString(byte[] bytes) {
+    public static String bytesToBinaryString(byte[] bytes) {
         StringBuilder resultBuilder = new StringBuilder();
         for (int i = 0; i < bytes.length; i++) {
-            resultBuilder.append('|');
-            resultBuilder.append(byteToString(bytes[i]));
+            if (i > 0) {
+                resultBuilder.append(' ');
+            }
+            resultBuilder.append(byteToBinaryString(bytes[i]));
         }
         return resultBuilder.toString();
     }
     
-    public static String byteToString(byte b) {
+    public static String byteToBinaryString(byte b) {
         String unpadded = Integer.toString(Byte.toUnsignedInt(b), 2);
         
         int remainingLength = 8 - unpadded.length();
@@ -56,6 +65,23 @@ public final class ByteUtil {
         resultBuilder.append(unpadded);
         
         return resultBuilder.toString();
+    }
+
+    public static String bytesToHexadecimalString(byte[] bytes) {
+        StringBuilder resultBuilder = new StringBuilder();
+        for (int i = 0; i < bytes.length; i++) {
+            if (i > 0) {
+                resultBuilder.append(' ');
+            }
+            resultBuilder.append(byteToHexadecimalString(bytes[i]));
+        }
+        return resultBuilder.toString();
+    }
+
+    public static String byteToHexadecimalString(byte b) {
+        String leftDigit = Integer.toHexString(Byte.toUnsignedInt(b) / 16);
+        String rightDigit = Integer.toHexString(Byte.toUnsignedInt(b) % 16);
+        return leftDigit + rightDigit;
     }
     
 }

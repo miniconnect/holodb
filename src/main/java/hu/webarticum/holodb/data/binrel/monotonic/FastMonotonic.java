@@ -11,6 +11,10 @@ public class FastMonotonic implements Monotonic {
     
     private final BigInteger imageSize;
     
+
+    public FastMonotonic(long size, long imageSize) {
+        this(BigInteger.valueOf(size), BigInteger.valueOf(imageSize));
+    }
     
     public FastMonotonic(BigInteger size, BigInteger imageSize) {
         this.size = size;

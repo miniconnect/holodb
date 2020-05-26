@@ -2,18 +2,15 @@ package hu.webarticum.holodb.data.random;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Random;
+import java.util.function.BiFunction;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
-import hu.webarticum.holodb.util.ByteUtil;
+import hu.webarticum.holodb.data.hasher.FastHasher;
+import hu.webarticum.holodb.data.hasher.Hasher;
 import hu.webarticum.holodb.util.bitsource.BitSource;
-import hu.webarticum.holodb.util.bitsource.JavaRandomByteSource;
+import hu.webarticum.holodb.util.bitsource.ByteSource;
+import hu.webarticum.holodb.util.bitsource.FastByteSource;
 
-public class DefaultTreeRandom implements TreeRandom {
+public class HasherTreeRandom implements TreeRandom {
 
     private static final int RANDOM_NUMBER_MAX_RETRIES = 15;
 
@@ -26,31 +23,81 @@ public class DefaultTreeRandom implements TreeRandom {
     
     private final byte[] bytes;
     
-    private final Mac mac;
+    private final Hasher hasher;
+    
+    private final BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory;
     
 
-    public DefaultTreeRandom(long seed) {
+    public HasherTreeRandom() {
+        this(0L);
+    }
+
+    public HasherTreeRandom(long seed) {
         this(BigInteger.valueOf(seed));
     }
-    
-    public DefaultTreeRandom(BigInteger seed) {
+
+    public HasherTreeRandom(BigInteger seed) {
         this(seed.toByteArray());
     }
-    
-    public DefaultTreeRandom(byte[] seed) {
-        this(cleanBytes(seed), buildMac(seed));
-    }
-    
-    private DefaultTreeRandom(byte[] bytes, Mac mac) {
-        this.bytes = bytes;
-        this.mac = mac;
+
+    public HasherTreeRandom(String seed) {
+        this(seed.getBytes());
     }
 
-
-    @Override
-    public TreeRandom sub(BigInteger number) {
-        return sub(number.toByteArray());
+    public HasherTreeRandom(byte[] seed) {
+        this(seed, createDefaultHasher());
     }
+    
+    public HasherTreeRandom(Hasher hasher) {
+        this(0L, hasher);
+    }
+
+    public HasherTreeRandom(long seed, Hasher hasher) {
+        this(BigInteger.valueOf(seed), hasher);
+    }
+
+    public HasherTreeRandom(BigInteger seed, Hasher hasher) {
+        this(seed.toByteArray(), hasher);
+    }
+
+    public HasherTreeRandom(String seed, Hasher hasher) {
+        this(seed.getBytes(), hasher);
+    }
+    
+    public HasherTreeRandom(byte[] seed, Hasher hasher) {
+        this(seed, hasher, createDefaultAdditionalByteSourceFactory());
+    }
+
+    public HasherTreeRandom(long seed, Hasher hasher, BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory) {
+        this(BigInteger.valueOf(seed), hasher, additionalByteSourceFactory);
+    }
+
+    public HasherTreeRandom(BigInteger seed, Hasher hasher, BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory) {
+        this(seed.toByteArray(), hasher, additionalByteSourceFactory);
+    }
+
+    public HasherTreeRandom(String seed, Hasher hasher, BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory) {
+        this(seed.getBytes(), hasher, additionalByteSourceFactory);
+    }
+    
+    public HasherTreeRandom(byte[] seed, Hasher hasher, BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory) {
+        this(seed, hasher, additionalByteSourceFactory, true);
+    }
+    
+    private HasherTreeRandom(byte[] bytes, Hasher hasher, BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory, boolean cleanBytes) {
+        this.bytes = cleanBytes ? cleanBytes(bytes) : bytes;
+        this.hasher = hasher;
+        this.additionalByteSourceFactory = additionalByteSourceFactory;
+    }
+
+    private static Hasher createDefaultHasher() {
+        return new FastHasher();
+    }
+
+    private static BiFunction<byte[], byte[], ByteSource> createDefaultAdditionalByteSourceFactory() {
+        return (treeBytes, hashBytes) -> new FastByteSource(hashBytes[0]);
+    }
+
 
     @Override
     public TreeRandom sub(byte... bytes) {
@@ -59,7 +106,7 @@ public class DefaultTreeRandom implements TreeRandom {
         System.arraycopy(this.bytes, 0, bytesForSub, 0, this.bytes.length);
         bytesForSub[this.bytes.length] = SEPARATOR;
         System.arraycopy(cleanSubBytes, 0, bytesForSub, this.bytes.length + 1, cleanSubBytes.length);
-        return new DefaultTreeRandom(bytesForSub, mac);
+        return new HasherTreeRandom(bytesForSub, hasher, additionalByteSourceFactory, false);
     }
 
     @Override
@@ -100,22 +147,6 @@ public class DefaultTreeRandom implements TreeRandom {
     }
 
     
-    private static Mac buildMac(byte[] bytes) {
-        try {
-            return buildMacThrows(bytes);
-        } catch (InvalidKeyException | NoSuchAlgorithmException e) {
-            // never occurs
-            throw new RuntimeException(); // NOSONAR
-        }
-    }
-    
-    private static Mac buildMacThrows(byte[] bytes) throws NoSuchAlgorithmException, InvalidKeyException {
-        Mac mac = Mac.getInstance("HmacSHA256");
-        SecretKeySpec key = new SecretKeySpec(bytes, "RawBytes");
-        mac.init(key);
-        return mac;
-    }
-
     private static byte[] cleanBytes(byte[] bytes) {
         ByteArrayOutputStream bytesBuilder = new ByteArrayOutputStream(bytes.length);
         for (byte b : bytes) {
@@ -133,9 +164,8 @@ public class DefaultTreeRandom implements TreeRandom {
     }
     
     private BitSource createBitSource() {
-        byte[] macBytes = mac.doFinal(bytes);
-        Random random = new Random(ByteUtil.firstBytesToLong(macBytes));
-        return new BitSource(macBytes, new JavaRandomByteSource(random));
+        byte[] hashBytes = hasher.hash(bytes);
+        return new BitSource(hashBytes, additionalByteSourceFactory.apply(bytes, hashBytes));
     }
 
 }

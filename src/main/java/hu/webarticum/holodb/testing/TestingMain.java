@@ -4,7 +4,9 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 import hu.webarticum.holodb.data.binrel.monotonic.BinomialDistributedMonotonic;
-import hu.webarticum.holodb.data.random.DefaultTreeRandom;
+import hu.webarticum.holodb.data.hasher.Sha256MacHasher;
+import hu.webarticum.holodb.data.random.HasherTreeRandom;
+import hu.webarticum.holodb.data.random.TreeRandom;
 import hu.webarticum.holodb.data.selection.Range;
 public class TestingMain {
 
@@ -13,12 +15,13 @@ public class TestingMain {
         testDistribution();
     }
     
-
+    
     private static void testBinomialDistributedMonotonic() {
         long size = 90;
         long imageSize = 10;
         for (int seed = 0; seed < 3; seed++) {
-            BinomialDistributedMonotonic monotonic = new BinomialDistributedMonotonic(new DefaultTreeRandom(seed), size, imageSize);
+            TreeRandom treeRandom = new HasherTreeRandom(new Sha256MacHasher());
+            BinomialDistributedMonotonic monotonic = new BinomialDistributedMonotonic(treeRandom, size, imageSize);
             for (int i = 0; i < size; i++) {
                 System.out.print(monotonic.at(BigInteger.valueOf(i)) + " ");
             }
@@ -45,13 +48,16 @@ public class TestingMain {
     }
 
     public static void testDistribution() {
+        long start = System.currentTimeMillis();
         new QuantityDistributionDisplayer().run();
+        long end = System.currentTimeMillis();
+        System.out.println(String.format("Elapsed: %f", (end - start) / 1000.0));
     }
     
     public static void testTreeRandom() {
         int high = 14;
-        DefaultTreeRandom random1 = new DefaultTreeRandom(BigInteger.valueOf(2376482));
-        DefaultTreeRandom random2 = new DefaultTreeRandom(BigInteger.valueOf(423853));
+        TreeRandom random1 = new HasherTreeRandom(2376482L);
+        TreeRandom random2 = new HasherTreeRandom(423853L);
         int[] counts1 = new int[high];
         int[] counts2 = new int[high];
         for (long i = 0; i < 10000; i++) {

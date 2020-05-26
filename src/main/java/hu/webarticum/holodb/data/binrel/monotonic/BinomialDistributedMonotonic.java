@@ -10,6 +10,7 @@ import hu.webarticum.holodb.data.random.TreeRandom;
 import hu.webarticum.holodb.data.random.TreeRandomUtil;
 import hu.webarticum.holodb.data.selection.Range;
 
+// FIXME: this is too slow (try approximating with normal/Poisson distribution)
 public class BinomialDistributedMonotonic implements Monotonic {
 
     private final TreeRandom treeRandom;

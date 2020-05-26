@@ -21,7 +21,8 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import hu.webarticum.holodb.data.binrel.monotonic.BinomialDistributedMonotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.Monotonic;
-import hu.webarticum.holodb.data.random.DefaultTreeRandom;
+import hu.webarticum.holodb.data.random.HasherTreeRandom;
+import hu.webarticum.holodb.data.random.TreeRandom;
 
 public class QuantityDistributionDisplayer implements Runnable {
     
@@ -52,7 +53,7 @@ public class QuantityDistributionDisplayer implements Runnable {
         gridPanel.add(createQuantityChartPanel(503000, 79200));
         gridPanel.add(createQuantityChartPanel(1080000, 115000));
         gridPanel.add(createQuantityChartPanel(1567000, 232100));
-        gridPanel.add(createQuantityChartPanel(70000000, 9321000));
+        gridPanel.add(createQuantityChartPanel(69500000, 9327000));
         long millis2 = System.currentTimeMillis();
 
         JLabel infoLabel = new JLabel(String.format("Collected in: %d milliseconds", millis2 - millis1));
@@ -112,7 +113,11 @@ public class QuantityDistributionDisplayer implements Runnable {
     }
     
     private double[] getCountsFromMonotonic(int n, int k, int m, long seed) {
-        return getCountsFromMonotonic(new BinomialDistributedMonotonic(new DefaultTreeRandom(seed), n, k), m);
+        return getCountsFromMonotonic(new BinomialDistributedMonotonic(buildTreeRandom(seed), n, k), m);
+    }
+    
+    private TreeRandom buildTreeRandom(long seed) {
+        return new HasherTreeRandom(seed);
     }
     
     private double[] getCountsFromMonotonic(Monotonic monotonic, int m) {
