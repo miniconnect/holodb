@@ -8,13 +8,38 @@ import hu.webarticum.holodb.data.hasher.Sha256MacHasher;
 import hu.webarticum.holodb.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.data.random.TreeRandom;
 import hu.webarticum.holodb.data.selection.Range;
+import hu.webarticum.holodb.util.bitsource.ByteSource;
+import hu.webarticum.holodb.util.bitsource.FastByteSource;
+import hu.webarticum.holodb.util.bitsource.JavaRandomByteSource;
 public class TestingMain {
 
     public static void main(String[] args) throws Exception {
         //testBinomialDistributedMonotonic();
-        testDistribution();
+        //testDistribution();
+        testByteSources();
     }
     
+    
+    private static void testByteSources() {
+        ByteSource[] byteSources = new ByteSource[] {
+                () -> (byte) 0,
+                new FastByteSource(),
+                new JavaRandomByteSource(),
+        };
+        
+        for (ByteSource byteSource : byteSources) {
+            System.out.println(byteSource.getClass().getSimpleName() + ":");
+            for (int i = 0; i < 3; i++) {
+                long start = System.currentTimeMillis();
+                for (long j = 0; j < 1000000000L; j++) {
+                    byteSource.next();
+                }
+                long end = System.currentTimeMillis();
+                System.out.println(((end - start) / 1000d));
+            }
+            System.out.println("----------------------");
+        }
+    }
     
     private static void testBinomialDistributedMonotonic() {
         long size = 90;

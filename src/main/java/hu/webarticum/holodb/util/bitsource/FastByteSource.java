@@ -1,10 +1,8 @@
 package hu.webarticum.holodb.util.bitsource;
 
-import hu.webarticum.holodb.util.ByteUtil;
-
 public class FastByteSource implements ByteSource {
 
-    private static int STEP = 17 * 31 * 43;
+    private static final int STEP = 17 * 31 * 43;
     
     
     private byte stateByte;
@@ -21,7 +19,7 @@ public class FastByteSource implements ByteSource {
     
     @Override
     public byte next() {
-        stateByte = (byte) ((((int) stateByte) + STEP) % 256);
+        stateByte = (byte) (((int) stateByte) + STEP);
         return stateByte;
     }
     
