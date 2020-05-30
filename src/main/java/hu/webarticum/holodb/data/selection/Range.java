@@ -62,7 +62,7 @@ public class Range implements Selection {
 
     @Override
     public boolean isEmpty() {
-        return getCount().equals(BigInteger.ZERO);
+        return until.equals(from);
     }
 
     @Override
