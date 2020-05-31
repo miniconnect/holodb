@@ -2,6 +2,7 @@ package hu.webarticum.holodb.util;
 
 import java.nio.ByteBuffer;
 
+// TODO: create tests
 public final class ByteUtil {
 
     private ByteUtil() {

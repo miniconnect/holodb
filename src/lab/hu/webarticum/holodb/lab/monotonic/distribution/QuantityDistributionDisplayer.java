@@ -1,10 +1,11 @@
-package hu.webarticum.holodb.testing;
+package hu.webarticum.holodb.lab.monotonic.distribution;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.math.BigInteger;
 import java.util.Random;
+import java.util.function.BiFunction;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,12 +20,17 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import hu.webarticum.holodb.data.binrel.monotonic.BinomialDistributedMonotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.Monotonic;
-import hu.webarticum.holodb.data.random.HasherTreeRandom;
-import hu.webarticum.holodb.data.random.TreeRandom;
 
 public class QuantityDistributionDisplayer implements Runnable {
+    
+    private final BiFunction<Integer, Integer, Monotonic> monotonicFactory;
+    
+    
+    public QuantityDistributionDisplayer(BiFunction<Integer, Integer, Monotonic> monotonicFactory) {
+        this.monotonicFactory = monotonicFactory;
+    }
+    
     
     @Override
     public void run() {
@@ -105,19 +111,15 @@ public class QuantityDistributionDisplayer implements Runnable {
     }
 
     private double[] getCountsFromMonotonics(int n, int k, int m) {
-        return getAvgs(new double[][] {
-            getCountsFromMonotonic(n, k, m, 0),
-            getCountsFromMonotonic(n, k, m, 12),
-            getCountsFromMonotonic(n, k, m, 273481),
-        });
+        return getCountsFromMonotonic(n, k, m);
     }
     
-    private double[] getCountsFromMonotonic(int n, int k, int m, long seed) {
-        return getCountsFromMonotonic(new BinomialDistributedMonotonic(buildTreeRandom(seed), n, k), m);
+    private double[] getCountsFromMonotonic(int n, int k, int m) {
+        return getCountsFromMonotonic(buildMonotonic(n, k), m);
     }
-    
-    private TreeRandom buildTreeRandom(long seed) {
-        return new HasherTreeRandom(seed);
+
+    private Monotonic buildMonotonic(int n, int k) {
+        return monotonicFactory.apply(n, k);
     }
     
     private double[] getCountsFromMonotonic(Monotonic monotonic, int m) {

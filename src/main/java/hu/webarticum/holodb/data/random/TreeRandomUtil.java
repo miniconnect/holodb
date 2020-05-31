@@ -44,9 +44,27 @@ public final class TreeRandomUtil {
         return ByteBuffer.wrap(bytes).getFloat();
     }
 
+    // FIXME: bias?
+    public static float fetchSmallFloat(TreeRandom treeRandom) {
+        int intValue = fetchInt(treeRandom);
+        if (intValue == Integer.MIN_VALUE) {
+            return 0f;
+        }
+        return Math.abs(intValue) / (float) Integer.MAX_VALUE;
+    }
+    
     public static double fetchDouble(TreeRandom treeRandom) {
         byte[] bytes = treeRandom.getBytes(8);
         return ByteBuffer.wrap(bytes).getDouble();
+    }
+
+    // FIXME: bias?
+    public static double fetchSmallDouble(TreeRandom treeRandom) {
+        long longValue = fetchLong(treeRandom);
+        if (longValue == Long.MIN_VALUE) {
+            return 0L;
+        }
+        return Math.abs(longValue) / (double) Long.MAX_VALUE;
     }
     
 }

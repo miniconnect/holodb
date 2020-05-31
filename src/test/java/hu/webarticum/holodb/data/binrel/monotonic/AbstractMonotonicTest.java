@@ -32,7 +32,7 @@ public abstract class AbstractMonotonicTest<T extends Monotonic> {
             }
         }
     }
-
+    
     @Test
     void testLargeInstancesPartially() {
         BigInteger from = new BigInteger("87495827938452954757483254");
@@ -81,6 +81,7 @@ public abstract class AbstractMonotonicTest<T extends Monotonic> {
             Range indexRange = monotonic.indicesOf(value);
             if (!indexRange.isEmpty()) {
                 rangeMap2.put(value, indexRange);
+                System.out.println(String.format("%d: %s", value, indexRange));
             }
         }
 

@@ -6,7 +6,7 @@ import java.util.function.BiFunction;
 
 import hu.webarticum.holodb.data.hasher.FastHasher;
 import hu.webarticum.holodb.data.hasher.Hasher;
-import hu.webarticum.holodb.util.bitsource.BitSource;
+import hu.webarticum.holodb.util.bitsource.ByteSourceBitSource;
 import hu.webarticum.holodb.util.bitsource.ByteSource;
 import hu.webarticum.holodb.util.bitsource.FastByteSource;
 
@@ -131,7 +131,7 @@ public class HasherTreeRandom implements TreeRandom {
         }
         int bitCountOfFactor = factor.bitCount();
         
-        BitSource bitSource = createBitSource();
+        ByteSourceBitSource bitSource = createBitSource();
         
         BigInteger partition = exponentOfTwo > 0 ? new BigInteger(bitSource.fetch(exponentOfTwo)) : BigInteger.ZERO;
         BigInteger offset = BigInteger.ZERO;
@@ -163,9 +163,9 @@ public class HasherTreeRandom implements TreeRandom {
         return bytesBuilder.toByteArray();
     }
     
-    private BitSource createBitSource() {
+    private ByteSourceBitSource createBitSource() {
         byte[] hashBytes = hasher.hash(bytes);
-        return new BitSource(hashBytes, additionalByteSourceFactory.apply(bytes, hashBytes));
+        return new ByteSourceBitSource(hashBytes, additionalByteSourceFactory.apply(bytes, hashBytes));
     }
 
 }

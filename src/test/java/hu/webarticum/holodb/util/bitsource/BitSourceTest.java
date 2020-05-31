@@ -8,7 +8,7 @@ class BitSourceTest {
 
     @Test
     void testEmpty1() {
-        BitSource bitSource = createEmpty();
+        ByteSourceBitSource bitSource = createEmpty();
         assertThat(bitSource.fetch(3)).isEqualTo(new byte[] { 0 });
         assertThat(bitSource.fetch(8)).isEqualTo(new byte[] { 0 });
         assertThat(bitSource.fetch(11)).isEqualTo(new byte[] { 0, 0 });
@@ -17,7 +17,7 @@ class BitSourceTest {
 
     @Test
     void testEmpty2() {
-        BitSource bitSource = createEmpty();
+        ByteSourceBitSource bitSource = createEmpty();
         assertThat(bitSource.fetch(8)).isEqualTo(new byte[] { 0 });
         assertThat(bitSource.fetch(8)).isEqualTo(new byte[] { 0 });
         assertThat(bitSource.fetch(16)).isEqualTo(new byte[] { 0, 0 });
@@ -27,7 +27,7 @@ class BitSourceTest {
     
     @Test
     void testWithInitialBuffer1() {
-        BitSource bitSource = createWithInitialBuffer();
+        ByteSourceBitSource bitSource = createWithInitialBuffer();
         assertThat(bitSource.fetch(3)).isEqualTo(new byte[] { 0b010 });
         assertThat(bitSource.fetch(7)).isEqualTo(new byte[] { 0b1010111 });
         assertThat(bitSource.fetch(10)).isEqualTo(new byte[] { 0b11, (byte) 0b11110000 });
@@ -36,7 +36,7 @@ class BitSourceTest {
 
     @Test
     void testWithInitialBuffer2() {
-        BitSource bitSource = createWithInitialBuffer();
+        ByteSourceBitSource bitSource = createWithInitialBuffer();
         assertThat(bitSource.fetch(2)).isEqualTo(new byte[] { 0b01 });
         assertThat(bitSource.fetch(2)).isEqualTo(new byte[] { 0b01 });
         assertThat(bitSource.fetch(18)).isEqualTo(new byte[] { 0b01, 0b01111111, (byte) 0b11000000 });
@@ -45,7 +45,7 @@ class BitSourceTest {
 
     @Test
     void testWithByteSource1() {
-        BitSource bitSource = createWithByteSource();
+        ByteSourceBitSource bitSource = createWithByteSource();
         assertThat(bitSource.fetch(3)).isEqualTo(new byte[] { 0b000 });
         assertThat(bitSource.fetch(4)).isEqualTo(new byte[] { 0b0101 });
         assertThat(bitSource.fetch(5)).isEqualTo(new byte[] { 0b00001 });
@@ -54,7 +54,7 @@ class BitSourceTest {
 
     @Test
     void testWithByteSource2() {
-        BitSource bitSource = createWithByteSource();
+        ByteSourceBitSource bitSource = createWithByteSource();
         assertThat(bitSource.fetch(9)).isEqualTo(new byte[] { 0, 0b00010100 });
         assertThat(bitSource.fetch(19)).isEqualTo(new byte[] { 0b001, 0b01000001, (byte) 0b11100010 });
         assertThat(bitSource.fetch(2)).isEqualTo(new byte[] { 0b10 });
@@ -62,7 +62,7 @@ class BitSourceTest {
 
     @Test
     void testWithInitialBufferAndByteSource1() {
-        BitSource bitSource = createWithInitialBufferAndByteSource();
+        ByteSourceBitSource bitSource = createWithInitialBufferAndByteSource();
         assertThat(bitSource.fetch(4)).isEqualTo(new byte[] { 0b0101 });
         assertThat(bitSource.fetch(9)).isEqualTo(new byte[] { 0, (byte) 0b10111111 });
         assertThat(bitSource.fetch(6)).isEqualTo(new byte[] { 0b111000 });
@@ -71,7 +71,7 @@ class BitSourceTest {
 
     @Test
     void testWithInitialBufferAndByteSource2() {
-        BitSource bitSource = createWithInitialBufferAndByteSource();
+        ByteSourceBitSource bitSource = createWithInitialBufferAndByteSource();
         assertThat(bitSource.fetch(3)).isEqualTo(new byte[] { 0b010 });
         assertThat(bitSource.fetch(13)).isEqualTo(new byte[] { 0b10101, (byte) 0b11111111 });
         assertThat(bitSource.fetch(5)).isEqualTo(new byte[] { 0b00001 });
@@ -80,7 +80,7 @@ class BitSourceTest {
 
     @Test
     void testWithInitialBufferAndByteSource3() {
-        BitSource bitSource = createWithInitialBufferAndByteSource();
+        ByteSourceBitSource bitSource = createWithInitialBufferAndByteSource();
         assertThat(bitSource.fetch(21)).isEqualTo(new byte[] { 0b01010, (byte) 0b10111111, (byte) 0b11100001 });
         assertThat(bitSource.fetch(16)).isEqualTo(new byte[] { 0b01000010, (byte) 0b10000011 });
         assertThat(bitSource.fetch(15)).isEqualTo(new byte[] { 0b1100010, (byte) 0b10000011 });
@@ -90,27 +90,27 @@ class BitSourceTest {
 
     @Test
     void testWithInitialBufferAndByteSource4() {
-        BitSource bitSource = createWithInitialBufferAndByteSource();
+        ByteSourceBitSource bitSource = createWithInitialBufferAndByteSource();
         assertThat(bitSource.fetch(5)).isEqualTo(new byte[] { 0b01010 });
         assertThat(bitSource.fetch(66)).isEqualTo(new byte[] {
                 0b10, (byte) 0b11111111, (byte) 0b10000101, 0b00001010,
                 0b00001111, 0b00010100, 0b00011001, 0b00011110, 0b00100011 });
     }
     
-    private BitSource createEmpty() {
-        return new BitSource(new byte[0]);
+    private ByteSourceBitSource createEmpty() {
+        return new ByteSourceBitSource(new byte[0]);
     }
 
-    private BitSource createWithInitialBuffer() {
-        return new BitSource(createBuffer());
+    private ByteSourceBitSource createWithInitialBuffer() {
+        return new ByteSourceBitSource(createBuffer());
     }
 
-    private BitSource createWithByteSource() {
-        return new BitSource(createByteSource());
+    private ByteSourceBitSource createWithByteSource() {
+        return new ByteSourceBitSource(createByteSource());
     }
     
-    private BitSource createWithInitialBufferAndByteSource() {
-        return new BitSource(createBuffer(), createByteSource());
+    private ByteSourceBitSource createWithInitialBufferAndByteSource() {
+        return new ByteSourceBitSource(createBuffer(), createByteSource());
     }
 
     private byte[] createBuffer() {

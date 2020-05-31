@@ -8,11 +8,11 @@ public class JavaRandomByteSource implements ByteSource {
     
     
     public JavaRandomByteSource() {
-        this(new Random());
+        this(0);
     }
-    
-    public JavaRandomByteSource(Random random) {
-        this.random = random;
+
+    public JavaRandomByteSource(long seed) {
+        this.random = new Random(seed);
     }
     
     
