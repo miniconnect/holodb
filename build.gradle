@@ -24,7 +24,7 @@ dependencies {
 sourceSets {
     lab {
         java {
-            srcDirs = ['src/lab']
+            srcDirs = ['src/demo/java']
         }
     }
 }
