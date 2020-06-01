@@ -17,7 +17,12 @@ import hu.webarticum.holodb.lab.util.MutableHolder;
 
 public class MonotonicDistributionMain {
 
+    public static final String TITLE = "Monotonic distribution";
+    
+    
     public static void main(String[] args) {
+        CommandLineUtil.printTitle(TITLE);
+        
         MutableHolder<TreeRandom> treeRandomHolder = new MutableHolder<>();
 
         Pair<Integer, BiFunction<Integer, Integer, Monotonic>> monotonicUserSelection = CommandLineUtil.readOption("Monotonic implementation", Arrays.asList(

@@ -4,8 +4,10 @@ public class FastByteSource implements ByteSource {
 
     private static final int MULITPLIER = 1234567;
 
+    private static final int COUNTER_START = 63;
+
     
-    private int counter = 0;
+    private int counter = COUNTER_START;
     
     private byte stateByte;
     

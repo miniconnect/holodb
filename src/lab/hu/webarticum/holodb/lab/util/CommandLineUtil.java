@@ -34,7 +34,8 @@ public class CommandLineUtil {
     }
 
     public static int readIntBetween(String message, int min, int highExclusive) {
-        return readData(message, value -> {
+        String fullMessage = String.format("%s %d..%d", message, min, highExclusive - 1);
+        return readData(fullMessage, value -> {
             int number = Integer.parseInt(value);
             if (number < min || number >= highExclusive) {
                 throw new IllegalArgumentException(String.format(
@@ -75,9 +76,9 @@ public class CommandLineUtil {
             try {
                 data = converter.convert(value);
             } catch (ArithmeticException | IllegalArgumentException e) {
-                System.err.println("Invalid input"); // NOSONAR
+                System.out.println(e.getMessage()); // NOSONAR
             } catch (Exception e) {
-                System.err.println("Unknown error while interpreting user input"); // NOSONAR
+                System.out.println("Unknown error while interpreting user input"); // NOSONAR
                 e.printStackTrace(); // NOSONAR
             }
         }
@@ -87,14 +88,28 @@ public class CommandLineUtil {
     public static String readLine() throws IOException {
         return new BufferedReader(new InputStreamReader(System.in)).readLine();
     }
+
+    public static void printTitle(String title) {
+        System.out.println(); // NOSONAR
+        printRepeated('=', title.length() + 6);
+        System.out.println(); // NOSONAR
+        System.out.println(String.format("#  %s  #", title)); // NOSONAR
+        printRepeated('=', title.length() + 6);
+        System.out.println(); // NOSONAR
+        System.out.println(); // NOSONAR
+    }
     
     public static void printSeparator() {
         System.out.println(); // NOSONAR
-        for (int i = 0; i < 100; i++) {
-            System.out.print('='); // NOSONAR
+        printRepeated('=', 100);
+        System.out.println(); // NOSONAR
+        System.out.println(); // NOSONAR
+    }
+
+    public static void printRepeated(char c, int width) {
+        for (int i = 0; i < width; i++) {
+            System.out.print(c); // NOSONAR
         }
-        System.out.println(); // NOSONAR
-        System.out.println(); // NOSONAR
     }
     
     

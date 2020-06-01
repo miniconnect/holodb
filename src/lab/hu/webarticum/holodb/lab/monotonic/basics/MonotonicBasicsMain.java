@@ -20,7 +20,12 @@ import hu.webarticum.holodb.lab.util.MutableHolder;
 
 public class MonotonicBasicsMain {
 
+    public static final String TITLE = "Monotonic basic demo";
+    
+
     public static void main(String[] args) {
+        CommandLineUtil.printTitle(TITLE);
+        
         MutableHolder<TreeRandom> treeRandomHolder = new MutableHolder<>();
         MutableHolder<Integer> sizeHolder = new MutableHolder<>();
         MutableHolder<Integer> imageSizeHolder = new MutableHolder<>();
