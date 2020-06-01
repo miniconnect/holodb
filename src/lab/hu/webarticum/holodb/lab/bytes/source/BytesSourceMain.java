@@ -18,9 +18,12 @@ import hu.webarticum.holodb.util.bitsource.FastByteSource;
 public class BytesSourceMain {
 
     public static void main(String[] args) throws IOException {
+        int previewSize = CommandLineUtil.readInt("Preview size");
+        int dumpSize = CommandLineUtil.readInt("Dump size");
+        
         ByteSource byteSource = new FastByteSource();
         
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < previewSize; i++) {
             byte b = byteSource.next();
             System.out.println( // NOSONAR
                     ByteUtil.byteToBinaryString(b) + "  " +
@@ -34,12 +37,12 @@ public class BytesSourceMain {
         
         File tmpFile = File.createTempFile("bytes-", ".dat");
         OutputStream out = new FileOutputStream(tmpFile); // NOSONAR
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < dumpSize; i++) {
             out.write(byteSource.next());
         }
         out.close();
 
-        Process process = new ProcessBuilder().command("ent", tmpFile.getAbsolutePath()).start();
+        Process process = new ProcessBuilder().command("ent", "-c", tmpFile.getAbsolutePath()).start();
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
         String line;

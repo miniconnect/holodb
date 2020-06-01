@@ -1,6 +1,7 @@
 package hu.webarticum.holodb.util;
 
 import java.nio.ByteBuffer;
+import java.util.BitSet;
 
 // TODO: create tests
 public final class ByteUtil {
@@ -83,6 +84,23 @@ public final class ByteUtil {
         String leftDigit = Integer.toHexString(Byte.toUnsignedInt(b) / 16);
         String rightDigit = Integer.toHexString(Byte.toUnsignedInt(b) % 16);
         return leftDigit + rightDigit;
+    }
+
+    public static int getClosestSetBit(BitSet bitSet, int index) {
+        if (bitSet.get(index)) {
+            return index;
+        }
+
+        int nextIndex = bitSet.nextSetBit(index);
+        int previousIndex = bitSet.previousSetBit(index);
+        
+        if (nextIndex == (-1)) {
+            return previousIndex;
+        } else if (previousIndex == (-1)) {
+            return nextIndex;
+        } else {
+            return (index - previousIndex > nextIndex - index) ? nextIndex : previousIndex;
+        }
     }
     
 }
