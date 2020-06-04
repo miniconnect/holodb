@@ -103,4 +103,29 @@ public final class ByteUtil {
         }
     }
     
+    public static void fillBytesFrom(byte[] target, byte[] source) {
+        int targetLength = target.length;
+        int sourceLength = source.length;
+        
+        if (sourceLength == 0 || targetLength == 0) {
+            return;
+        }
+        
+        int commonLength = targetLength < sourceLength ? targetLength : sourceLength;
+        System.arraycopy(source, 0, target, 0, commonLength);
+        
+        if (targetLength > sourceLength) {
+            int times = targetLength / sourceLength;
+            for (int i = 1; i < times; i++) {
+                int start = i * sourceLength;
+                System.arraycopy(source, 0, target, start, sourceLength);
+            }
+            int end = sourceLength * times;
+            int tailLength = targetLength - end;
+            if (tailLength > 0) {
+                System.arraycopy(source, 0, target, end, tailLength);
+            }
+        }
+    }
+    
 }

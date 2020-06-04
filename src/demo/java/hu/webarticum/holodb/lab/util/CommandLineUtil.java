@@ -33,8 +33,17 @@ public class CommandLineUtil {
         return readData(message, Integer::parseInt);
     }
 
+    public static int readIntAtLeast(String message, int min) {
+        return readIntBetween(message, min, Integer.MAX_VALUE);
+    }
+    
     public static int readIntBetween(String message, int min, int highExclusive) {
-        String fullMessage = String.format("%s %d..%d", message, min, highExclusive - 1);
+        String fullMessage;
+        if (highExclusive == Integer.MAX_VALUE) {
+            fullMessage = String.format("%s (>= %d)", message, min);
+        } else {
+            fullMessage = String.format("%s %d..%d", message, min, highExclusive - 1);
+        }
         return readData(fullMessage, value -> {
             int number = Integer.parseInt(value);
             if (number < min || number >= highExclusive) {

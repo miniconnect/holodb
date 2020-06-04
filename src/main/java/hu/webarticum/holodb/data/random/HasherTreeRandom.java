@@ -4,11 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.util.function.BiFunction;
 
+import hu.webarticum.holodb.data.bitsource.ByteSource;
+import hu.webarticum.holodb.data.bitsource.ByteSourceBitSource;
+import hu.webarticum.holodb.data.bitsource.FastByteSource;
 import hu.webarticum.holodb.data.hasher.FastHasher;
 import hu.webarticum.holodb.data.hasher.Hasher;
-import hu.webarticum.holodb.util.bitsource.ByteSourceBitSource;
-import hu.webarticum.holodb.util.bitsource.ByteSource;
-import hu.webarticum.holodb.util.bitsource.FastByteSource;
 
 public class HasherTreeRandom implements TreeRandom {
 

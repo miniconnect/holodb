@@ -1,8 +1,11 @@
-package hu.webarticum.holodb.util.bitsource;
+package hu.webarticum.holodb.data.bitsource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
+
+import hu.webarticum.holodb.data.bitsource.ByteSource;
+import hu.webarticum.holodb.data.bitsource.ByteSourceBitSource;
 
 class BitSourceTest {
 

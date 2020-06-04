@@ -13,12 +13,12 @@ import java.util.function.Supplier;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
+import hu.webarticum.holodb.data.bitsource.ByteSource;
+import hu.webarticum.holodb.data.bitsource.FastByteSource;
+import hu.webarticum.holodb.data.bitsource.JavaRandomByteSource;
 import hu.webarticum.holodb.lab.util.CommandLineUtil;
 import hu.webarticum.holodb.lab.util.MutableHolder;
 import hu.webarticum.holodb.util.ByteUtil;
-import hu.webarticum.holodb.util.bitsource.ByteSource;
-import hu.webarticum.holodb.util.bitsource.FastByteSource;
-import hu.webarticum.holodb.util.bitsource.JavaRandomByteSource;
 
 public class BytesSourceDemoMain {
 

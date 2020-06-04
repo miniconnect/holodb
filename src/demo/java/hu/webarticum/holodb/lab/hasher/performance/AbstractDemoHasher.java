@@ -1,39 +1,16 @@
-package hu.webarticum.holodb.data.hasher;
+package hu.webarticum.holodb.lab.hasher.performance;
 
 import java.util.Arrays;
 
-import hu.webarticum.holodb.util.ByteUtil;
+import hu.webarticum.holodb.data.hasher.Hasher;
 
-public class FastHasher implements Hasher {
-
-    private static Hasher keyHasher;
-    
+public abstract class AbstractDemoHasher implements Hasher {
 
     private final byte[] key;
     
-
-    public FastHasher() {
-        this(8);
-    }
     
-    public FastHasher(int hashLength) {
-        this(new byte[0], hashLength);
-    }
-    
-    public FastHasher(byte[] key, int hashLength) {
-        if (hashLength < 1) {
-            throw new IllegalArgumentException("Hash length must be positive");
-        }
-        
-        this.key = new byte[hashLength];
-        ByteUtil.fillBytesFrom(this.key, getKeyHasher().hash(key));
-    }
-
-    private static Hasher getKeyHasher() {
-        if (keyHasher == null) {
-            keyHasher = new Sha256MacHasher();
-        }
-        return keyHasher;
+    protected AbstractDemoHasher(byte[] key) {
+        this.key = key;
     }
     
 

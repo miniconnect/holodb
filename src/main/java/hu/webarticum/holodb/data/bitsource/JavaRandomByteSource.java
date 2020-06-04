@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.util.bitsource;
+package hu.webarticum.holodb.data.bitsource;
 
 import java.util.Random;
 

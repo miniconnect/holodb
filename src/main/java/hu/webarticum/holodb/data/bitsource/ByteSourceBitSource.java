@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.util.bitsource;
+package hu.webarticum.holodb.data.bitsource;
 
 // TODO: 1 byte cache only?
 public class ByteSourceBitSource implements BitSource {

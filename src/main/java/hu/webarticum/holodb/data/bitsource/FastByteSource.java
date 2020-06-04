@@ -1,8 +1,8 @@
-package hu.webarticum.holodb.util.bitsource;
+package hu.webarticum.holodb.data.bitsource;
 
 public class FastByteSource implements ByteSource {
 
-    private static final int MULITPLIER = 1234567;
+    private static final int MULITPLIER = 31;
 
     private static final int COUNTER_START = 63;
 
