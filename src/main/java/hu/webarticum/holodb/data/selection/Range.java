@@ -18,6 +18,14 @@ public class Range implements Selection {
         this.until = until;
     }
 
+    public static Range until(long until) {
+        return fromUntil(0, until);
+    }
+
+    public static Range until(BigInteger until) {
+        return fromUntil(BigInteger.ZERO, until);
+    }
+    
     public static Range fromUntil(long from, long until) {
         return fromUntil(BigInteger.valueOf(from), BigInteger.valueOf(until));
     }
