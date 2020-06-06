@@ -9,6 +9,6 @@ public interface Monotonic extends Function {
 
     public Range indicesOf(BigInteger value);
 
-    public BigInteger imageSize(); // FIXME name?
+    public BigInteger imageSize();
     
 }
