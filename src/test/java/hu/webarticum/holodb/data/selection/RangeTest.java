@@ -1,7 +1,7 @@
 package hu.webarticum.holodb.data.selection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -12,23 +12,10 @@ import org.junit.jupiter.api.Test;
 class RangeTest {
 
     @Test
-    void testInvalidUntil() {
-        try {
-            Range.fromUntil(big(10), big(2));
-            fail("Until must not be larger than from");
-        } catch (IllegalArgumentException e) {
-            // pass
-        }
-    }
-
-    @Test
-    void testInvalidLength() {
-        try {
-            Range.fromLength(big(10), big(-7));
-            fail("Length must not be negative");
-        } catch (IllegalArgumentException e) {
-            // pass
-        }
+    void testInvalidParameters() {
+        assertThatThrownBy(() -> Range.fromUntil(big(10), big(2))).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> Range.fromUntil(big(-1), big(-7))).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> Range.fromUntil(big(10), big(-7))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

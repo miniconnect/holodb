@@ -48,8 +48,8 @@ public abstract class AbstractMonotonicTest<T extends Monotonic> {
     }
 
     private void checkSize(Monotonic monotonic, BigInteger size, BigInteger imageSize) {
-        assertThat(monotonic.size()).as("monotonic size").isEqualTo(size);
-        assertThat(monotonic.imageSize()).as("monotonic image size").isEqualTo(imageSize);
+        assertThat(monotonic).extracting(Monotonic::size).as("monotonic size").isEqualTo(size);
+        assertThat(monotonic).extracting(Monotonic::imageSize).as("monotonic image size").isEqualTo(imageSize);
     }
     
     private void checkMonotonic(Monotonic monotonic) {
@@ -81,7 +81,6 @@ public abstract class AbstractMonotonicTest<T extends Monotonic> {
             Range indexRange = monotonic.indicesOf(value);
             if (!indexRange.isEmpty()) {
                 rangeMap2.put(value, indexRange);
-                System.out.println(String.format("%d: %s", value, indexRange));
             }
         }
 

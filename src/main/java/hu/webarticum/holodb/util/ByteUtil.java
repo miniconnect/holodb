@@ -3,7 +3,6 @@ package hu.webarticum.holodb.util;
 import java.nio.ByteBuffer;
 import java.util.BitSet;
 
-// TODO: create tests
 public final class ByteUtil {
 
     private ByteUtil() {

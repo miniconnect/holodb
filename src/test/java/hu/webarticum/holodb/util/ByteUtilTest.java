@@ -10,6 +10,77 @@ import org.junit.jupiter.api.Test;
 public class ByteUtilTest {
 
     @Test
+    void testIntToBytes() {
+        assertThat(0).extracting(ByteUtil::intToBytes).isEqualTo(b(0, 0, 0, 0));
+        assertThat(1).extracting(ByteUtil::intToBytes).isEqualTo(b(0, 0, 0, 1));
+        assertThat(43).extracting(ByteUtil::intToBytes).isEqualTo(b(0, 0, 0, 43));
+        assertThat(256).extracting(ByteUtil::intToBytes).isEqualTo(b(0, 0, 1, 0));
+        assertThat(13191175).extracting(ByteUtil::intToBytes).isEqualTo(b(0, 201, 72, 7));
+        assertThat(-1).extracting(ByteUtil::intToBytes).isEqualTo(b(255, 255, 255, 255));
+        assertThat(-78238062).extracting(ByteUtil::intToBytes).isEqualTo(b(251, 86, 46, 146));
+    }
+
+    @Test
+    void testLongToBytes() {
+        assertThat(0L).extracting(ByteUtil::longToBytes).isEqualTo(b(0, 0, 0, 0, 0, 0, 0, 0));
+        assertThat(1L).extracting(ByteUtil::longToBytes).isEqualTo(b(0, 0, 0, 0, 0, 0, 0, 1));
+        assertThat(117L).extracting(ByteUtil::longToBytes).isEqualTo(b(0, 0, 0, 0, 0, 0, 0, 117));
+        assertThat(256L).extracting(ByteUtil::longToBytes).isEqualTo(b(0, 0, 0, 0, 0, 0, 1, 0));
+        assertThat(13191175L).extracting(ByteUtil::longToBytes).isEqualTo(b(0, 0, 0, 0, 0, 201, 72, 7));
+        assertThat(878981819498590340L).extracting(ByteUtil::longToBytes).isEqualTo(b(12, 50, 197, 78, 203, 61, 112, 132));
+        assertThat(-1L).extracting(ByteUtil::longToBytes).isEqualTo(b(255, 255, 255, 255, 255, 255, 255, 255));
+        assertThat(-78238062L).extracting(ByteUtil::longToBytes).isEqualTo(b(255, 255, 255, 255, 251, 86, 46, 146));
+        assertThat(-2653304120892283044L).extracting(ByteUtil::longToBytes).isEqualTo(b(219, 45, 145, 245, 185, 34, 167, 92));
+    }
+    
+    @Test
+    void testFirstBytesToLong() {
+        assertThat(ByteUtil.firstBytesToLong(b(0, 0, 0, 0, 0, 1))).isEqualTo(65536L);
+        assertThat(ByteUtil.firstBytesToLong(b(0, 0, 0, 0, 0, 201, 72, 7, 45, 31, 122, 255, 1, 0, 1))).isEqualTo(13191175L);
+        assertThat(ByteUtil.firstBytesToLong(b(12, 50, 197, 78, 203, 61, 112, 132, 32, 45, 174, 63))).isEqualTo(878981819498590340L);
+        assertThat(ByteUtil.firstBytesToLong(b(219, 45, 145, 245, 185, 34, 167, 92, 99, 192, 3, 204))).isEqualTo(-2653304120892283044L);
+    }
+
+    @Test
+    void testBytesToLong() {
+        assertThat(ByteUtil.bytesToLong(b(0, 0, 0, 0, 0, 201, 72, 7))).isEqualTo(13191175L);
+        assertThat(ByteUtil.bytesToLong(b(12, 50, 197, 78, 203, 61, 112, 132))).isEqualTo(878981819498590340L);
+        assertThat(ByteUtil.bytesToLong(b(219, 45, 145, 245, 185, 34, 167, 92))).isEqualTo(-2653304120892283044L);
+    }
+    
+    @Test
+    void testBytesToBinaryString() {
+        assertThat(ByteUtil.bytesToBinaryString(b())).isEqualTo("");
+        assertThat(ByteUtil.bytesToBinaryString(b(15))).isEqualTo("00001111");
+        assertThat(ByteUtil.bytesToBinaryString(b(43, 125))).isEqualTo("00101011 01111101");
+        assertThat(ByteUtil.bytesToBinaryString("apple".getBytes(StandardCharsets.UTF_8))).isEqualTo("01100001 01110000 01110000 01101100 01100101");
+    }
+
+    @Test
+    void testByteToBinaryString() {
+        assertThat(ByteUtil.byteToBinaryString((byte) 0)).isEqualTo("00000000");
+        assertThat(ByteUtil.byteToBinaryString((byte) 17)).isEqualTo("00010001");
+        assertThat(ByteUtil.byteToBinaryString((byte) 125)).isEqualTo("01111101");
+        assertThat(ByteUtil.byteToBinaryString((byte) 255)).isEqualTo("11111111");
+    }
+
+    @Test
+    void testBytesToHexadecimalString() {
+        assertThat(ByteUtil.bytesToHexadecimalString(b())).isEqualToIgnoringCase("");
+        assertThat(ByteUtil.bytesToHexadecimalString(b(15))).isEqualToIgnoringCase("0F");
+        assertThat(ByteUtil.bytesToHexadecimalString(b(43, 125))).isEqualToIgnoringCase("2B 7D");
+        assertThat(ByteUtil.bytesToHexadecimalString("apple".getBytes(StandardCharsets.UTF_8))).isEqualToIgnoringCase("61 70 70 6C 65");
+    }
+
+    @Test
+    void testByteToHexadecimalString() {
+        assertThat(ByteUtil.byteToHexadecimalString((byte) 0)).isEqualToIgnoringCase("00");
+        assertThat(ByteUtil.byteToHexadecimalString((byte) 17)).isEqualToIgnoringCase("11");
+        assertThat(ByteUtil.byteToHexadecimalString((byte) 125)).isEqualToIgnoringCase("7D");
+        assertThat(ByteUtil.byteToHexadecimalString((byte) 255)).isEqualToIgnoringCase("FF");
+    }
+    
+    @Test
     void testGetClosestSetBit() {
         assertThat(ByteUtil.getClosestSetBit(buildBitSet(), 0)).isEqualTo(-1);
         assertThat(ByteUtil.getClosestSetBit(buildBitSet(), 2)).isEqualTo(-1);
@@ -57,6 +128,14 @@ public class ByteUtilTest {
     
     private byte[] b(String content) {
         return content.getBytes(StandardCharsets.UTF_8);
+    }
+
+    private byte[] b(int... byteNumbers) {
+        byte[] result = new byte[byteNumbers.length];
+        for (int i = 0; i < byteNumbers.length; i++) {
+            result[i] = (byte) byteNumbers[i];
+        }
+        return result;
     }
     
 }
