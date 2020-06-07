@@ -45,7 +45,7 @@ public class HasherTreeRandom implements TreeRandom {
     }
 
     public HasherTreeRandom(byte[] seed) {
-        this(seed, createDefaultHasher());
+        this(seed, createDefaultHasher(seed));
     }
     
     public HasherTreeRandom(Hasher hasher) {
@@ -90,8 +90,8 @@ public class HasherTreeRandom implements TreeRandom {
         this.additionalByteSourceFactory = additionalByteSourceFactory;
     }
 
-    private static Hasher createDefaultHasher() {
-        return new FastHasher();
+    private static Hasher createDefaultHasher(byte[] seed) {
+        return new FastHasher(seed);
     }
 
     private static BiFunction<byte[], byte[], ByteSource> createDefaultAdditionalByteSourceFactory() {

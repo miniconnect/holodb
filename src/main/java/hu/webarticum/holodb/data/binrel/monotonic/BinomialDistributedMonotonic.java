@@ -13,6 +13,8 @@ public class BinomialDistributedMonotonic extends AbstractCachingRecursiveMonoto
 
     private static final int DEFAULT_CACHE_DEPTH = 10;
     
+    private static final BigInteger BINOMIAL_MAX_LENGTH = BigInteger.valueOf(1000L);
+    
     
     private final TreeRandom treeRandom;
 
@@ -36,7 +38,7 @@ public class BinomialDistributedMonotonic extends AbstractCachingRecursiveMonoto
         BigInteger length = range.getLength();
         
         BigInteger splitPoint;
-        if (length.compareTo(BigInteger.valueOf(100000L)) > 0) {
+        if (length.compareTo(BINOMIAL_MAX_LENGTH) > 0) {
             splitPoint = splitFast(range, imageSplitPoint);
         } else if (length.equals(BigInteger.ZERO)) {
             splitPoint = range.getFrom();
@@ -58,7 +60,11 @@ public class BinomialDistributedMonotonic extends AbstractCachingRecursiveMonoto
     private BigInteger splitBinomial(Range range, Range imageRange, BigInteger imageSplitPoint) {
         BigInteger imageFirstLength = imageSplitPoint.subtract(imageRange.getFrom());
         double probability = MathUtil.divideBigIntegers(imageFirstLength, imageRange.getLength());
-        BinomialDistribution binomialDistribution = new BinomialDistribution(range.getLength().intValue(), probability);
+        
+        // we use splitBinomial() only for smaller ranges (<= BINOMIAL_MAX_LENGTH), int is suitable to store their length
+        int rangeIntLength = range.getLength().intValue();
+        
+        BinomialDistribution binomialDistribution = new BinomialDistribution(rangeIntLength, probability);
         long seed = TreeRandomUtil.fetchLong(treeRandom.sub(imageSplitPoint));
         binomialDistribution.reseedRandomGenerator(seed);
         BigInteger relativeSplitPoint = BigInteger.valueOf(binomialDistribution.sample());

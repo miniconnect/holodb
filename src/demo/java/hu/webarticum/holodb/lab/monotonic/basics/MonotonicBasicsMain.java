@@ -10,7 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import hu.webarticum.holodb.data.binrel.monotonic.BinomialDistributedMonotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.FastMonotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.Monotonic;
-import hu.webarticum.holodb.data.binrel.monotonic.TestMonotonic;
+import hu.webarticum.holodb.data.binrel.monotonic.ExperimentalMonotonic;
 import hu.webarticum.holodb.data.hasher.Sha256MacHasher;
 import hu.webarticum.holodb.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.data.random.TreeRandom;
@@ -33,7 +33,7 @@ public class MonotonicBasicsMain {
         Pair<Integer, Supplier<Monotonic>> monotonicUserSelection = CommandLineUtil.readOption("Monotonic implementation", Arrays.asList(
                 Pair.of(BinomialDistributedMonotonic.class.getSimpleName(), () -> new BinomialDistributedMonotonic(
                         treeRandomHolder.get(), sizeHolder.get(), imageSizeHolder.get())),
-                Pair.of(TestMonotonic.class.getSimpleName(), () -> new TestMonotonic(treeRandomHolder.get(), sizeHolder.get(), imageSizeHolder.get())),
+                Pair.of(ExperimentalMonotonic.class.getSimpleName(), () -> new ExperimentalMonotonic(treeRandomHolder.get(), sizeHolder.get(), imageSizeHolder.get())),
                 Pair.of(FastMonotonic.class.getSimpleName(), () -> new FastMonotonic(sizeHolder.get(), imageSizeHolder.get()))
                 ));
         int monotonicIndex = monotonicUserSelection.getLeft();

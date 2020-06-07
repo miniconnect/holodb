@@ -10,7 +10,7 @@ import hu.webarticum.holodb.data.selection.Range;
 import hu.webarticum.holodb.util.MathUtil;
 
 // TODO: review, optimize, rename
-public class TestMonotonic extends AbstractCachingRecursiveMonotonic {
+public class ExperimentalMonotonic extends AbstractCachingRecursiveMonotonic {
 
     private static final int DEFAULT_CACHE_DEPTH = 10;
     
@@ -18,15 +18,15 @@ public class TestMonotonic extends AbstractCachingRecursiveMonotonic {
     private final TreeRandom treeRandom;
 
     
-    public TestMonotonic(TreeRandom treeRandom, long size, long imageSize) {
+    public ExperimentalMonotonic(TreeRandom treeRandom, long size, long imageSize) {
         this(treeRandom, BigInteger.valueOf(size), BigInteger.valueOf(imageSize));
     }
 
-    public TestMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize) {
+    public ExperimentalMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize) {
         this(treeRandom, size, imageSize, DEFAULT_CACHE_DEPTH);
     }
     
-    public TestMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize, int cacheDepth) {
+    public ExperimentalMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize, int cacheDepth) {
         super(size, imageSize, cacheDepth);
         this.treeRandom = treeRandom;
     }

@@ -2,13 +2,16 @@ package hu.webarticum.holodb.lab.monotonic.distribution;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
+import java.util.function.LongFunction;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import hu.webarticum.holodb.data.binrel.monotonic.BinomialDistributedMonotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.FastMonotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.Monotonic;
-import hu.webarticum.holodb.data.binrel.monotonic.TestMonotonic;
+import hu.webarticum.holodb.data.binrel.monotonic.ExperimentalMonotonic;
+import hu.webarticum.holodb.data.hasher.FastHasher;
+import hu.webarticum.holodb.data.hasher.Hasher;
 import hu.webarticum.holodb.data.hasher.Sha256MacHasher;
 import hu.webarticum.holodb.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.data.random.TreeRandom;
@@ -25,18 +28,23 @@ public class MonotonicDistributionMain {
         
         MutableHolder<TreeRandom> treeRandomHolder = new MutableHolder<>();
 
-        Pair<Integer, BiFunction<Integer, Integer, Monotonic>> monotonicUserSelection = CommandLineUtil.readOption("Monotonic implementation", Arrays.asList(
-                Pair.of(BinomialDistributedMonotonic.class.getSimpleName(), (n, k) -> new BinomialDistributedMonotonic(treeRandomHolder.get(), n, k)),
-                Pair.of(TestMonotonic.class.getSimpleName(), (n, k) -> new TestMonotonic(treeRandomHolder.get(), n, k)),
-                Pair.of(FastMonotonic.class.getSimpleName(), FastMonotonic::new)
-                ));
-        int monotonicIndex = monotonicUserSelection.getLeft();
-        BiFunction<Integer, Integer, Monotonic> monotonicFactory = monotonicUserSelection.getRight();
+        BiFunction<Integer, Integer, Monotonic> monotonicFactory = CommandLineUtil.<BiFunction<Integer, Integer, Monotonic>>readOption(
+                "Monotonic implementation", Arrays.asList(
+                        Pair.of(BinomialDistributedMonotonic.class.getSimpleName(), (n, k) ->
+                                new BinomialDistributedMonotonic(treeRandomHolder.get(), n, k)),
+                        Pair.of(ExperimentalMonotonic.class.getSimpleName(), (n, k) -> new ExperimentalMonotonic(treeRandomHolder.get(), n, k)),
+                        Pair.of(FastMonotonic.class.getSimpleName(), FastMonotonic::new)
+                        )).getRight();
+
+        LongFunction<Hasher> hasherFactory = CommandLineUtil.<LongFunction<Hasher>>readOption(
+                "Hasher implementation", Arrays.asList(
+                        Pair.of(Sha256MacHasher.class.getSimpleName(), Sha256MacHasher::new),
+                        Pair.of(FastHasher.class.getSimpleName(), FastHasher::new)
+                        )).getRight();
         
-        if (monotonicIndex != 2) {
-            long seed = CommandLineUtil.readLong("Seed");
-            treeRandomHolder.set(new HasherTreeRandom(seed, new Sha256MacHasher()));
-        }
+        long seed = CommandLineUtil.readLong("Seed");
+        Hasher hasher = hasherFactory.apply(seed);
+        treeRandomHolder.set(new HasherTreeRandom(seed, hasher));
 
         new QuantityDistributionDisplayer(monotonicFactory).run();
     }

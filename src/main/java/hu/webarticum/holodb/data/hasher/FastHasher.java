@@ -1,11 +1,16 @@
 package hu.webarticum.holodb.data.hasher;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import hu.webarticum.holodb.util.ByteUtil;
 
 public class FastHasher implements Hasher {
 
+    private static final int DEFAULT_HASH_LENGTH = 8;
+    
+    
     private static Hasher keyHasher;
     
 
@@ -13,16 +18,40 @@ public class FastHasher implements Hasher {
     
 
     public FastHasher() {
-        this(8);
+        this(0L);
+    }
+
+    public FastHasher(long key) {
+        this(ByteUtil.longToBytes(key));
+    }
+
+    public FastHasher(BigInteger key) {
+        this(key.toByteArray());
+    }
+
+    public FastHasher(String key) {
+        this(key.getBytes(StandardCharsets.UTF_8));
     }
     
-    public FastHasher(int hashLength) {
-        this(new byte[0], hashLength);
+    public FastHasher(byte[] key) {
+        this(key, DEFAULT_HASH_LENGTH);
+    }
+    
+    public FastHasher(long key, int hashLength) {
+        this(ByteUtil.longToBytes(key), hashLength);
+    }
+
+    public FastHasher(BigInteger key, int hashLength) {
+        this(key.toByteArray(), hashLength);
+    }
+
+    public FastHasher(String key, int hashLength) {
+        this(key.getBytes(StandardCharsets.UTF_8), hashLength);
     }
     
     public FastHasher(byte[] key, int hashLength) {
         if (hashLength < 1) {
-            throw new IllegalArgumentException("Hash length must be positive");
+            throw new IllegalArgumentException(String.format("Hash length must be positive, %d given", hashLength));
         }
         
         this.key = new byte[hashLength];

@@ -60,6 +60,9 @@ public class QuantityDistributionDisplayer implements Runnable {
         gridPanel.add(createQuantityChartPanel(1080000, 115000));
         gridPanel.add(createQuantityChartPanel(1567000, 232100));
         gridPanel.add(createQuantityChartPanel(69500000, 9327000));
+        gridPanel.add(createQuantityChartPanel(120000000, 74950000));
+        gridPanel.add(createQuantityChartPanel(240000000, 93348200));
+        gridPanel.add(createQuantityChartPanel(780000000, 102574200));
         long millis2 = System.currentTimeMillis();
 
         JLabel infoLabel = new JLabel(String.format("Collected in: %d milliseconds", millis2 - millis1));
@@ -167,12 +170,11 @@ public class QuantityDistributionDisplayer implements Runnable {
     }
 
     private double[] getCountsFromFormula(int n, int k, int m) {
-        BinomialDistribution binomialDistribution = new BinomialDistribution(n, 1d / k);
+        BinomialDistribution binomialDistribution = new BinomialDistribution(null, n, 1d / k);
         double[] quantityCounts = new double[m];
         for (int i = 0; i < m; i++) {
             quantityCounts[i] = binomialDistribution.probability(i) * k;
         }
-        binomialDistribution.reseedRandomGenerator(1);
         return quantityCounts;
     }
 

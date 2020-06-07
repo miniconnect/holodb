@@ -11,17 +11,16 @@ class FastHasherTest {
 
     @Test
     void testIllegalConstructorParameters() {
-        assertThatThrownBy(() -> new FastHasher(-5)).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> new FastHasher(0)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new FastHasher(new byte[1], -5)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new FastHasher(new byte[1], 0)).isInstanceOf(IllegalArgumentException.class);
         new FastHasher(new byte[0], 10);
     }
 
     @Test
     void testHashSize() {
-        assertThat(new FastHasher(7).hash(b("1234"))).hasSize(7);
-        assertThat(new FastHasher(16).hash(b("463723"))).hasSize(16);
         assertThat(new FastHasher(b("2468"), 8).hash(b("275837423"))).hasSize(8);
         assertThat(new FastHasher(b("987654"), 19).hash(b("859328438594352"))).hasSize(19);
+        assertThat(new FastHasher(b("1234"), 257).hash(b("76543"))).hasSize(257);
     }
 
     
