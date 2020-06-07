@@ -5,14 +5,14 @@ import java.math.BigInteger;
 import hu.webarticum.holodb.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.data.random.TreeRandom;
 
-public class BinomialDistributedMonotonicTest extends AbstractMonotonicTest<BinomialDistributedMonotonic> {
+public class SamplerBinomialMonotonicTest extends AbstractMonotonicTest<SamplerBinomialMonotonic> {
 
     private TreeRandom treeRandom = new HasherTreeRandom();
     
     
     @Override
-    protected BinomialDistributedMonotonic create(BigInteger size, BigInteger imageSize) {
-        return new BinomialDistributedMonotonic(treeRandom, size, imageSize);
+    protected SamplerBinomialMonotonic create(BigInteger size, BigInteger imageSize) {
+        return new SamplerBinomialMonotonic(treeRandom, size, imageSize);
     }
     
 }

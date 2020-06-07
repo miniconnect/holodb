@@ -7,7 +7,9 @@ import java.util.function.Supplier;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import hu.webarticum.holodb.data.binrel.monotonic.BinomialDistributedMonotonic;
+import hu.webarticum.holodb.data.binrel.monotonic.SamplerBinomialMonotonic;
+import hu.webarticum.holodb.data.distribution.ApacheCommonsBinomialSampler;
+import hu.webarticum.holodb.data.distribution.FastSampler;
 import hu.webarticum.holodb.data.binrel.monotonic.FastMonotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.Monotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.ExperimentalMonotonic;
@@ -27,17 +29,29 @@ public class MonotonicBasicsMain {
         CommandLineUtil.printTitle(TITLE);
         
         MutableHolder<TreeRandom> treeRandomHolder = new MutableHolder<>();
+        MutableHolder<SamplerBinomialMonotonic.SamplerFactory> samplerFactoryHolder = new MutableHolder<>();
         MutableHolder<Integer> sizeHolder = new MutableHolder<>();
         MutableHolder<Integer> imageSizeHolder = new MutableHolder<>();
         
         Pair<Integer, Supplier<Monotonic>> monotonicUserSelection = CommandLineUtil.readOption("Monotonic implementation", Arrays.asList(
-                Pair.of(BinomialDistributedMonotonic.class.getSimpleName(), () -> new BinomialDistributedMonotonic(
-                        treeRandomHolder.get(), sizeHolder.get(), imageSizeHolder.get())),
+                Pair.of(SamplerBinomialMonotonic.class.getSimpleName(), () -> new SamplerBinomialMonotonic(
+                        treeRandomHolder.get(), samplerFactoryHolder.get(), sizeHolder.get(), imageSizeHolder.get())),
                 Pair.of(ExperimentalMonotonic.class.getSimpleName(), () -> new ExperimentalMonotonic(treeRandomHolder.get(), sizeHolder.get(), imageSizeHolder.get())),
                 Pair.of(FastMonotonic.class.getSimpleName(), () -> new FastMonotonic(sizeHolder.get(), imageSizeHolder.get()))
                 ));
         int monotonicIndex = monotonicUserSelection.getLeft();
         Supplier<Monotonic> monotonicFactory = monotonicUserSelection.getRight();
+
+        if (monotonicIndex == 0) {
+            samplerFactoryHolder.set(CommandLineUtil.<SamplerBinomialMonotonic.SamplerFactory>readOption(
+                    "Sampler implementation", Arrays.asList(
+                            Pair.of(ApacheCommonsBinomialSampler.class.getSimpleName(), (seed, size, probability) ->
+                                    new ApacheCommonsBinomialSampler(seed, size.intValue(), probability)),
+                            Pair.of(FastSampler.class.getSimpleName(), (seed, size, probability) ->
+                                    new FastSampler(size))
+                            )).getRight());
+
+        }
         
         int size = CommandLineUtil.readInt("Monotonic size");
         sizeHolder.set(size);
