@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.lab.monotonic.distribution;
+package hu.webarticum.holodb.demo.monotonic.distribution;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

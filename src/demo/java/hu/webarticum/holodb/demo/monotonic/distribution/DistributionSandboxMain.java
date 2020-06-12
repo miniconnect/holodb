@@ -1,9 +1,11 @@
-package hu.webarticum.holodb.lab.monotonic.distribution;
+package hu.webarticum.holodb.demo.monotonic.distribution;
+
+import java.util.Random;
 
 import org.apache.commons.math3.distribution.BinomialDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
-import hu.webarticum.holodb.lab.util.CommandLineUtil;
+import hu.webarticum.holodb.demo.util.CommandLineUtil;
 
 public class DistributionSandboxMain {
 
@@ -11,6 +13,19 @@ public class DistributionSandboxMain {
     
     
     public static void main(String[] args) {
+        
+        Random random = new Random(0);
+        for (int i = 0; i < 100; i++) {
+            double U = random.nextDouble();
+            double V = random.nextDouble();
+            double S = (U * U) + (V * V);
+            double X = U * Math.sqrt(-2 * Math.log(S) / S);
+            double Y = V * Math.sqrt(-2 * Math.log(S) / S);
+            System.out.println(String.format("%.5f   %.5f", X, Y));
+        }
+        
+        System.exit(0);
+        
         CommandLineUtil.printTitle(TITLE);
         
         int n = 100;

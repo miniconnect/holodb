@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.lab.bytesource.demo;
+package hu.webarticum.holodb.demo.bytesource.demo;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,8 +16,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import hu.webarticum.holodb.data.bitsource.ByteSource;
 import hu.webarticum.holodb.data.bitsource.FastByteSource;
 import hu.webarticum.holodb.data.bitsource.JavaRandomByteSource;
-import hu.webarticum.holodb.lab.util.CommandLineUtil;
-import hu.webarticum.holodb.lab.util.MutableHolder;
+import hu.webarticum.holodb.demo.util.CommandLineUtil;
+import hu.webarticum.holodb.demo.util.MutableHolder;
 import hu.webarticum.holodb.util.ByteUtil;
 
 public class BytesSourceDemoMain {

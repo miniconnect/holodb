@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.lab.monotonic.distribution;
+package hu.webarticum.holodb.demo.monotonic.distribution;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
@@ -8,17 +8,17 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import hu.webarticum.holodb.data.binrel.monotonic.SamplerBinomialMonotonic;
 import hu.webarticum.holodb.data.distribution.ApacheCommonsBinomialSampler;
+import hu.webarticum.holodb.data.distribution.ExperimentalSampler;
 import hu.webarticum.holodb.data.distribution.FastSampler;
 import hu.webarticum.holodb.data.binrel.monotonic.FastMonotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.Monotonic;
-import hu.webarticum.holodb.data.binrel.monotonic.ExperimentalMonotonic;
 import hu.webarticum.holodb.data.hasher.FastHasher;
 import hu.webarticum.holodb.data.hasher.Hasher;
 import hu.webarticum.holodb.data.hasher.Sha256MacHasher;
 import hu.webarticum.holodb.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.data.random.TreeRandom;
-import hu.webarticum.holodb.lab.util.CommandLineUtil;
-import hu.webarticum.holodb.lab.util.MutableHolder;
+import hu.webarticum.holodb.demo.util.CommandLineUtil;
+import hu.webarticum.holodb.demo.util.MutableHolder;
 
 public class MonotonicDistributionMain {
 
@@ -35,7 +35,6 @@ public class MonotonicDistributionMain {
                 "Monotonic implementation", Arrays.asList(
                         Pair.of(SamplerBinomialMonotonic.class.getSimpleName(), (n, k) ->
                                 new SamplerBinomialMonotonic(treeRandomHolder.get(), samplerFactoryHolder.get(), n, k)),
-                        Pair.of(ExperimentalMonotonic.class.getSimpleName(), (n, k) -> new ExperimentalMonotonic(treeRandomHolder.get(), n, k)),
                         Pair.of(FastMonotonic.class.getSimpleName(), FastMonotonic::new)
                         ));
         int monotonicIndex = monotonicUserSelection.getLeft();
@@ -46,10 +45,10 @@ public class MonotonicDistributionMain {
                     "Sampler implementation", Arrays.asList(
                             Pair.of(ApacheCommonsBinomialSampler.class.getSimpleName(), (seed, size, probability) ->
                                     new ApacheCommonsBinomialSampler(seed, size.intValue(), probability)),
+                            Pair.of(FastSampler.class.getSimpleName(), ExperimentalSampler::new),
                             Pair.of(FastSampler.class.getSimpleName(), (seed, size, probability) ->
                                     new FastSampler(size))
                             )).getRight());
-
         }
         
         LongFunction<Hasher> hasherFactory = CommandLineUtil.<LongFunction<Hasher>>readOption(

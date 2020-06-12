@@ -15,12 +15,14 @@ public class SamplerBinomialMonotonic extends AbstractCachingRecursiveMonotonic 
     
     private static final int DEFAULT_CACHE_DEPTH = 10;
     
-    private static final BigInteger SAMPLER_MAX_LENGTH = BigInteger.valueOf(1000L);
+    private static final BigInteger DEFAULT_SAMPLER_MAX_LENGTH = BigInteger.valueOf(1000L);
     
     
     private final TreeRandom treeRandom;
     
     private final SamplerFactory samplerFactory;
+    
+    private final BigInteger samplerMaxLength;
 
     
     public SamplerBinomialMonotonic(TreeRandom treeRandom, long size, long imageSize) {
@@ -41,10 +43,17 @@ public class SamplerBinomialMonotonic extends AbstractCachingRecursiveMonotonic 
 
     public SamplerBinomialMonotonic(
             TreeRandom treeRandom, SamplerFactory samplerFactory, BigInteger size, BigInteger imageSize, int cacheDepth) {
+        this(treeRandom, samplerFactory, size, imageSize, cacheDepth, DEFAULT_SAMPLER_MAX_LENGTH);
+    }
+    
+    public SamplerBinomialMonotonic(
+            TreeRandom treeRandom, SamplerFactory samplerFactory,
+            BigInteger size, BigInteger imageSize, int cacheDepth, BigInteger samplerMaxLength) {
         
         super(size, imageSize, cacheDepth);
         this.treeRandom = treeRandom;
         this.samplerFactory = samplerFactory;
+        this.samplerMaxLength = samplerMaxLength;
     }
     
     
@@ -52,8 +61,13 @@ public class SamplerBinomialMonotonic extends AbstractCachingRecursiveMonotonic 
     protected BigInteger splitCacheable(Range range, Range imageRange, BigInteger imageSplitPoint, int level) {
         BigInteger length = range.getLength();
         
+        // TODO: create standalone SamplerFactory interface
+        // FIXME: functional lambda?
+        // TODO: SamplerFactory::isFast()
+        // TODO: SamplerFactory::isBig()
+        
         BigInteger splitPoint;
-        if (length.compareTo(SAMPLER_MAX_LENGTH) > 0) {
+        if (length.compareTo(samplerMaxLength) > 0) {
             splitPoint = splitFast(range, imageSplitPoint);
         } else if (length.equals(BigInteger.ZERO)) {
             splitPoint = range.getFrom();

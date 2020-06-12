@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.lab.hasher.performance;
+package hu.webarticum.holodb.demo.hasher.performance;
 
 import hu.webarticum.holodb.util.ByteUtil;
 import hu.webarticum.holodb.util.ObjectUtil;

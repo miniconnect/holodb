@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.lab.monotonic.basics;
+package hu.webarticum.holodb.demo.monotonic.basics;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -9,16 +9,16 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import hu.webarticum.holodb.data.binrel.monotonic.SamplerBinomialMonotonic;
 import hu.webarticum.holodb.data.distribution.ApacheCommonsBinomialSampler;
+import hu.webarticum.holodb.data.distribution.ExperimentalSampler;
 import hu.webarticum.holodb.data.distribution.FastSampler;
 import hu.webarticum.holodb.data.binrel.monotonic.FastMonotonic;
 import hu.webarticum.holodb.data.binrel.monotonic.Monotonic;
-import hu.webarticum.holodb.data.binrel.monotonic.ExperimentalMonotonic;
 import hu.webarticum.holodb.data.hasher.Sha256MacHasher;
 import hu.webarticum.holodb.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.data.random.TreeRandom;
 import hu.webarticum.holodb.data.selection.Range;
-import hu.webarticum.holodb.lab.util.CommandLineUtil;
-import hu.webarticum.holodb.lab.util.MutableHolder;
+import hu.webarticum.holodb.demo.util.CommandLineUtil;
+import hu.webarticum.holodb.demo.util.MutableHolder;
 
 public class MonotonicBasicsMain {
 
@@ -36,7 +36,6 @@ public class MonotonicBasicsMain {
         Pair<Integer, Supplier<Monotonic>> monotonicUserSelection = CommandLineUtil.readOption("Monotonic implementation", Arrays.asList(
                 Pair.of(SamplerBinomialMonotonic.class.getSimpleName(), () -> new SamplerBinomialMonotonic(
                         treeRandomHolder.get(), samplerFactoryHolder.get(), sizeHolder.get(), imageSizeHolder.get())),
-                Pair.of(ExperimentalMonotonic.class.getSimpleName(), () -> new ExperimentalMonotonic(treeRandomHolder.get(), sizeHolder.get(), imageSizeHolder.get())),
                 Pair.of(FastMonotonic.class.getSimpleName(), () -> new FastMonotonic(sizeHolder.get(), imageSizeHolder.get()))
                 ));
         int monotonicIndex = monotonicUserSelection.getLeft();
@@ -47,10 +46,10 @@ public class MonotonicBasicsMain {
                     "Sampler implementation", Arrays.asList(
                             Pair.of(ApacheCommonsBinomialSampler.class.getSimpleName(), (seed, size, probability) ->
                                     new ApacheCommonsBinomialSampler(seed, size.intValue(), probability)),
+                            Pair.of(FastSampler.class.getSimpleName(), ExperimentalSampler::new),
                             Pair.of(FastSampler.class.getSimpleName(), (seed, size, probability) ->
                                     new FastSampler(size))
                             )).getRight());
-
         }
         
         int size = CommandLineUtil.readInt("Monotonic size");

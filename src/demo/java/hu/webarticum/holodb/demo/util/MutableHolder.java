@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.lab.util;
+package hu.webarticum.holodb.demo.util;
 
 public class MutableHolder<T> {
     

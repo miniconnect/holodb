@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.lab.util;
+package hu.webarticum.holodb.demo.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;

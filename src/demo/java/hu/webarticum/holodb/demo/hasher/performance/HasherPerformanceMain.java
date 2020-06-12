@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.lab.hasher.performance;
+package hu.webarticum.holodb.demo.hasher.performance;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import hu.webarticum.holodb.data.hasher.Hasher;
 import hu.webarticum.holodb.data.hasher.Sha256MacHasher;
-import hu.webarticum.holodb.lab.util.CommandLineUtil;
+import hu.webarticum.holodb.demo.util.CommandLineUtil;
 
 public class HasherPerformanceMain {
 

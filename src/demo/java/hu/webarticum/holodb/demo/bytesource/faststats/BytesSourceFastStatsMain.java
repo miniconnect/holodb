@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.lab.bytesource.faststats;
+package hu.webarticum.holodb.demo.bytesource.faststats;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 import hu.webarticum.holodb.data.bitsource.ByteSource;
 import hu.webarticum.holodb.data.bitsource.FastByteSource;
-import hu.webarticum.holodb.lab.util.CommandLineUtil;
+import hu.webarticum.holodb.demo.util.CommandLineUtil;
 
 public class BytesSourceFastStatsMain {
 
