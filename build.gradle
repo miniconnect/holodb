@@ -1,30 +1,41 @@
 plugins {
     id 'java-library'
+    id 'me.champeau.gradle.jmh' version '0.5.0'
 }
 
 repositories {
     jcenter()
 }
 
+sourceSets {
+    lab {
+        java {
+            srcDirs = ['src/lab/java']
+        }
+    }
+}
+
 dependencies {
+    implementation 'org.apache.openjpa:openjpa:3.1.0'
+    implementation 'org.apache.commons:commons-lang3:3.0'
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    
+    // FIXME
+    implementation 'jfree:jfreechart:1.0.13'
+    implementation 'org.openjdk.jmh:jmh-core:1.23'
+    implementation 'org.openjdk.jmh:jmh-generator-annprocess:1.23'
+    
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
     testImplementation 'org.junit.platform:junit-platform-launcher:1.4.1'
     testImplementation 'org.assertj:assertj-core:3.12.2'
     
-    implementation 'org.apache.openjpa:openjpa:3.1.0'
-    implementation 'org.apache.commons:commons-lang3:3.0'
-    implementation 'org.apache.commons:commons-math3:3.6.1'
-    implementation 'org.apache.commons:commons-collections4:4.4'
+    labImplementation sourceSets.main.output
+    labImplementation 'jfree:jfreechart:1.0.13'
     
-    implementation 'jfree:jfreechart:1.0.13'
-}
-
-sourceSets {
-    lab {
-        java {
-            srcDirs = ['src/demo/java']
-        }
-    }
+    jmhImplementation sourceSets.main.output
+    jmhImplementation 'org.openjdk.jmh:jmh-core:1.23'
+    jmhImplementation 'org.openjdk.jmh:jmh-generator-annprocess:1.23'
 }
