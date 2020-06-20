@@ -14,7 +14,7 @@ public class MonotonicValueSource<T> implements SortedValueSource<T> {
     
     public MonotonicValueSource(SortedValueSource<T> baseSource, Monotonic monotonic) {
         if (!monotonic.imageSize().equals(baseSource.size())) {
-            throw new IllegalArgumentException("Image size must be equal to size of base source");
+            throw new IllegalArgumentException("Image size must be equal to the size of base source");
         }
         
         this.baseSource = baseSource;
