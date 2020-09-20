@@ -1,7 +1,9 @@
 package hu.webarticum.holodb.core.query.parser;
 
-public class SqlQueryParser {
+import hu.webarticum.holodb.core.query.model.Query;
 
-    // TODO
+public interface SqlQueryParser {
+
+    public Query parse(String sql);
     
 }

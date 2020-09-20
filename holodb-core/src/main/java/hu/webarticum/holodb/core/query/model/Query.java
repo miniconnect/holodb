@@ -20,10 +20,16 @@ public final class Query {
     
     private final LimitPart limitPart;
     
-    // FIXME: lazy?
-    private final int hashCode;
+    private boolean hashCodeCalculated = false;
+    
+    private int hashCode;
     
 
+    // FIXME
+    public Query() {
+        this((FieldsPart) null);
+    }
+    
     public Query(FieldsPart fieldsPart) {
         this(fieldsPart, null, null, null, null, null, null);
     }
@@ -50,7 +56,6 @@ public final class Query {
         this.havingPart = havingPart;
         this.orderByPart = orderByPart;
         this.limitPart = limitPart;
-        this.hashCode = calculateHashCode();
     }
 
     
@@ -112,7 +117,23 @@ public final class Query {
     
     @Override
     public int hashCode() {
+        if (!hashCodeCalculated) {
+            hashCode = calculateHashCode();
+            hashCodeCalculated = true;
+        }
         return hashCode;
+    }
+
+    private int calculateHashCode() {
+        return new HashCodeBuilder()
+                .append(fieldsPart)
+                .append(fromPart)
+                .append(wherePart)
+                .append(groupByPart)
+                .append(havingPart)
+                .append(orderByPart)
+                .append(limitPart)
+                .build();
     }
     
     @Override
@@ -139,21 +160,11 @@ public final class Query {
     
     @Override
     public String toString() {
+        
         // FIXME
         // new SqlQueryStringifier(...).xxxx(...)
-        return null;
+        return "SELECT \"lorem\" FROM \"ipsum\"";
+        
     }
 
-    private int calculateHashCode() {
-        return new HashCodeBuilder()
-                .append(fieldsPart)
-                .append(fromPart)
-                .append(wherePart)
-                .append(groupByPart)
-                .append(havingPart)
-                .append(orderByPart)
-                .append(limitPart)
-                .build();
-    }
-    
 }
