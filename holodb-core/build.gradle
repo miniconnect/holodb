@@ -13,6 +13,12 @@ sourceSets {
             srcDirs = ['src/lab/java']
         }
     }
+    
+    ng {
+        java {
+            srcDirs = ['src/ng/java']
+        }
+    }
 }
 
 dependencies {
@@ -22,6 +28,7 @@ dependencies {
     implementation 'org.apache.commons:commons-collections4:4.4'
     
     // FIXME
+    implementation 'dk.brics.automaton:automaton:1.11-8'
     implementation 'jfree:jfreechart:1.0.13'
     implementation 'org.openjdk.jmh:jmh-core:1.23'
     implementation 'org.openjdk.jmh:jmh-generator-annprocess:1.23'
