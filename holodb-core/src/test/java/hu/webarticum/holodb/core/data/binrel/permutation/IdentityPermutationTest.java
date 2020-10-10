@@ -7,7 +7,6 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.IdentityPermutation;
-import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.selection.Range;
 
 public class IdentityPermutationTest extends AbstractPermutationTest<IdentityPermutation> {

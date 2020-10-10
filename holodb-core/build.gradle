@@ -16,7 +16,7 @@ sourceSets {
     
     ng {
         java {
-            srcDirs = ['src/ng/java']
+            srcDirs = ['src/xxx/java']
         }
     }
 }

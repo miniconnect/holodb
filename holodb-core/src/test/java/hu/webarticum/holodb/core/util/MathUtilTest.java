@@ -8,8 +8,6 @@ import java.math.BigInteger;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 
-import hu.webarticum.holodb.core.util.MathUtil;
-
 public class MathUtilTest {
 
     @Test

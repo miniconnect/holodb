@@ -64,7 +64,7 @@ public class Range implements Selection {
     }
 
     @Override
-    public BigInteger getCount() {
+    public BigInteger size() {
         return getLength();
     }
 
@@ -75,7 +75,7 @@ public class Range implements Selection {
 
     @Override
     public BigInteger at(BigInteger index) {
-        if (index.signum() < 0 || index.compareTo(getCount()) >= 0) {
+        if (index.signum() < 0 || index.compareTo(size()) >= 0) {
             throw new IndexOutOfBoundsException("Index out of bounds: " + index);
         }
         

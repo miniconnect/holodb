@@ -7,9 +7,6 @@ import java.util.BitSet;
 
 import org.junit.jupiter.api.Test;
 
-import hu.webarticum.holodb.core.util.ByteUtil;
-import hu.webarticum.holodb.core.util.ObjectUtil;
-
 public class ByteUtilTest {
 
     @Test

@@ -7,8 +7,6 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 
-import hu.webarticum.holodb.core.data.hasher.FastHasher;
-
 class FastHasherTest {
 
     @Test

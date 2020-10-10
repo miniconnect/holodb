@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 public interface Selection extends Iterable<BigInteger> {
 
-    public BigInteger getCount();
+    public BigInteger size();
 
     public boolean isEmpty();
 

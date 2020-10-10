@@ -132,7 +132,7 @@ public class QuantityDistributionDisplayer implements Runnable {
         
         BigInteger step = imageSize.compareTo(BigInteger.valueOf(2000)) > 0 ? imageSize.divide(BigInteger.valueOf(2000)): BigInteger.ONE;
         for (BigInteger value = BigInteger.ZERO; value.compareTo(imageSize) < 0; value = value.add(step)) {
-            int count = monotonic.indicesOf(value).getCount().intValue();
+            int count = monotonic.indicesOf(value).size().intValue();
             if (count < m) {
                 result[count] += step.intValue();
             }

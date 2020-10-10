@@ -9,8 +9,6 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
-import hu.webarticum.holodb.core.data.selection.Range;
-
 class RangeTest {
 
     @Test

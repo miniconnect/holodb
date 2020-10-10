@@ -6,8 +6,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.Test;
 
-import hu.webarticum.holodb.core.util.ObjectUtil;
-
 public class ObjectUtilTest {
 
     @Test

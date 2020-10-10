@@ -4,9 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-import hu.webarticum.holodb.core.data.bitsource.ByteSource;
-import hu.webarticum.holodb.core.data.bitsource.ByteSourceBitSource;
-
 class BitSourceTest {
 
     @Test
