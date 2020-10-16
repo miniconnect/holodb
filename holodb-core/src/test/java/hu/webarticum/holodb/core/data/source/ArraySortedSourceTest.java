@@ -64,6 +64,36 @@ class ArraySortedSourceTest {
     }
 
     @Test
+    void testFindBetweenSameExclusive() {
+        Range range = createSource().findBetween("banana", false, "banana", false);
+        assertThat(range).isEqualTo(Range.fromUntil(1, 1));
+    }
+
+    @Test
+    void testFindBetweenMinGreater() {
+        Range range = createSource().findBetween("pear", true, "banana", true);
+        assertThat(range).isEqualTo(Range.fromUntil(4, 4));
+    }
+
+    @Test
+    void testFindBetweenFromNull() {
+        Range range = createSource().findBetween(null, true, "pear", true);
+        assertThat(range).isEqualTo(Range.fromUntil(0, 5));
+    }
+
+    @Test
+    void testFindBetweenUntilNull() {
+        Range range = createSource().findBetween("apple", false, null, true);
+        assertThat(range).isEqualTo(Range.fromUntil(1, 6));
+    }
+
+    @Test
+    void testFindBetweenFromNullUntilNull() {
+        Range range = createSource().findBetween(null, true, null, true);
+        assertThat(range).isEqualTo(Range.fromUntil(0, 6));
+    }
+
+    @Test
     void testFindBetweenEmpty() {
         Range range = createSource().findBetween("cherry", true, "kiwi", false);
         assertThat(range).isEqualTo(Range.fromUntil(2, 2));

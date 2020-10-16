@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.simplemodel;
+package hu.webarticum.holodb.core.lab.testimpl.simple;
 
 import java.math.BigInteger;
 import java.util.List;

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 
-public abstract class AbstractPermutationTest<T extends Permutation> {
+abstract class AbstractPermutationTest<T extends Permutation> {
 
     protected abstract T create(BigInteger size);
 

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
 import hu.webarticum.holodb.core.data.selection.Range;
 
-public abstract class AbstractMonotonicTest<T extends Monotonic> {
+abstract class AbstractMonotonicTest<T extends Monotonic> {
 
     protected abstract T create(BigInteger size, BigInteger imageSize);
 
@@ -52,8 +52,13 @@ public abstract class AbstractMonotonicTest<T extends Monotonic> {
         assertThat(monotonic).extracting(Monotonic::size).as("monotonic size").isEqualTo(size);
         assertThat(monotonic).extracting(Monotonic::imageSize).as("monotonic image size").isEqualTo(imageSize);
     }
-    
+
     private void checkMonotonic(Monotonic monotonic) {
+        checkValueRanges(monotonic);
+        checkRangeRanges(monotonic);
+    }
+    
+    private void checkValueRanges(Monotonic monotonic) {
         BigInteger size = monotonic.size();
         BigInteger imageSize = monotonic.imageSize();
         
@@ -88,10 +93,47 @@ public abstract class AbstractMonotonicTest<T extends Monotonic> {
         assertThat(rangeMap1).as("ranges from full scan compared to queried index ranges").isEqualTo(rangeMap2);
     }
 
+    private void checkRangeRanges(Monotonic monotonic) {
+        Range fromEmptyActual = monotonic.indicesOf(Range.empty(BigInteger.ZERO));
+        assertThat(fromEmptyActual).isEqualTo(Range.empty(BigInteger.ZERO));
+
+        BigInteger imageSize = monotonic.imageSize();
+        BigInteger size = monotonic.size();
+        
+        if (imageSize.signum() == 1) {
+            Range untilEmptyActual = monotonic.indicesOf(Range.empty(imageSize));
+            assertThat(untilEmptyActual).isEqualTo(Range.empty(size));
+            
+            Range fromUntilActual = monotonic.indicesOf(Range.fromUntil(BigInteger.ZERO, imageSize));
+            assertThat(fromUntilActual).isEqualTo(Range.fromUntil(BigInteger.ZERO, size));
+            
+            if (imageSize.compareTo(BigInteger.ONE) > 0) {
+                BigInteger midValue = imageSize.divide(BigInteger.TWO);
+                BigInteger midIndex = monotonic.indicesOf(midValue).from();
+                Range untilActual = monotonic.indicesOf(Range.fromUntil(BigInteger.ZERO, midValue));
+                Range untilExpected = Range.fromUntil(BigInteger.ZERO, midIndex);
+                assertThat(untilActual).isEqualTo(untilExpected);
+
+                Range midEmptyActual = monotonic.indicesOf(Range.fromSize(midValue, BigInteger.ZERO));
+                Range midEmptyExpected = Range.fromSize(midIndex, BigInteger.ZERO);
+                assertThat(midEmptyActual).isEqualTo(midEmptyExpected);
+
+                if (imageSize.compareTo(BigInteger.TWO) > 0) {
+                    Range firstRange = monotonic.indicesOf(Range.fromSize(BigInteger.ZERO, BigInteger.ONE));
+                    BigInteger lastValue = imageSize.subtract(BigInteger.ONE);
+                    Range lastRange = monotonic.indicesOf(Range.fromSize(lastValue, BigInteger.ONE));
+
+                    Range midActual = monotonic.indicesOf(Range.fromUntil(BigInteger.ONE, lastValue));
+                    Range midExpected = Range.fromUntil(firstRange.until(), lastRange.from());
+                    assertThat(midActual).isEqualTo(midExpected);
+                }
+            }
+        }
+    }
+
     private void checkProbablyMonotonic(Monotonic monotonic) {
         BigInteger size = monotonic.size();
         BigInteger imageSize = monotonic.imageSize();
-        
         
         BigInteger step = size.divide(BigInteger.valueOf(20));
 

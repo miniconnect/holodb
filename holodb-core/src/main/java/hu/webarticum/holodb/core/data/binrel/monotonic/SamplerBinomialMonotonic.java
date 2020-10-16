@@ -59,7 +59,7 @@ public class SamplerBinomialMonotonic extends AbstractCachingRecursiveMonotonic 
     
     @Override
     protected BigInteger splitCacheable(Range range, Range imageRange, BigInteger imageSplitPoint, int level) {
-        BigInteger length = range.getLength();
+        BigInteger length = range.size();
         
         // TODO: create standalone SamplerFactory interface
         // FIXME: functional lambda?
@@ -70,7 +70,7 @@ public class SamplerBinomialMonotonic extends AbstractCachingRecursiveMonotonic 
         if (length.compareTo(samplerMaxLength) > 0) {
             splitPoint = splitFast(range, imageSplitPoint);
         } else if (length.equals(BigInteger.ZERO)) {
-            splitPoint = range.getFrom();
+            splitPoint = range.from();
         } else {
             splitPoint = splitWithSampler(range, imageRange, imageSplitPoint);
         }
@@ -81,18 +81,18 @@ public class SamplerBinomialMonotonic extends AbstractCachingRecursiveMonotonic 
     private BigInteger splitFast(Range range, BigInteger imageSplitPoint) {
         BigInteger rangeLength = BigInteger.TEN;
         BigInteger rangeSplitPoint = treeRandom.sub(imageSplitPoint).getNumber(rangeLength);
-        BigInteger relativeFixedPoint = range.getLength().divide(BigInteger.TWO);
+        BigInteger relativeFixedPoint = range.size().divide(BigInteger.TWO);
         BigInteger relativeSplitPoint = relativeFixedPoint.subtract(rangeLength.divide(BigInteger.TWO)).add(rangeSplitPoint);
-        return range.getFrom().add(relativeSplitPoint);
+        return range.from().add(relativeSplitPoint);
     }
 
     private BigInteger splitWithSampler(Range range, Range imageRange, BigInteger imageSplitPoint) {
-        BigInteger imageFirstLength = imageSplitPoint.subtract(imageRange.getFrom());
-        double probability = MathUtil.divideBigIntegers(imageFirstLength, imageRange.getLength());
+        BigInteger imageFirstLength = imageSplitPoint.subtract(imageRange.from());
+        double probability = MathUtil.divideBigIntegers(imageFirstLength, imageRange.size());
         long seed = TreeRandomUtil.fetchLong(treeRandom.sub(imageSplitPoint));
-        Sampler sampler = samplerFactory.create(seed, range.getLength(), probability);
+        Sampler sampler = samplerFactory.create(seed, range.size(), probability);
         BigInteger relativeSplitPoint = sampler.sample();
-        return range.getFrom().add(relativeSplitPoint);
+        return range.from().add(relativeSplitPoint);
     }
     
     

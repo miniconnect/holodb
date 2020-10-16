@@ -8,4 +8,9 @@ public interface Index<T> {
             T minValue, boolean minInclusive,
             T maxValue, boolean maxInclusive);
     
+    
+    public default Selection find(T value) {
+        return findBetween(value, true, value, true);
+    }
+    
 }

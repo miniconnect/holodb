@@ -61,7 +61,7 @@ class MonotonicSourceTest {
             for (int i = 0; i < values.length; i++) {
                 int cmp = BigInteger.valueOf(values[i]).compareTo(value);
                 if (cmp > 0) {
-                    return Range.fromLength(i, 0);
+                    return Range.fromSize(i, 0);
                 } else if (cmp == 0) {
                     from = i;
                     break;

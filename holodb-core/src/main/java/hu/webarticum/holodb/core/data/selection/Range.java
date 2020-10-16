@@ -1,8 +1,6 @@
 package hu.webarticum.holodb.core.data.selection;
 
 import java.math.BigInteger;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -18,6 +16,15 @@ public class Range implements Selection {
         this.until = until;
     }
 
+    
+    public static Range empty(long position) {
+        return empty(BigInteger.valueOf(position));
+    }
+    
+    public static Range empty(BigInteger position) {
+        return fromSize(position, BigInteger.ZERO);
+    }
+    
     public static Range until(long until) {
         return fromUntil(0, until);
     }
@@ -38,34 +45,30 @@ public class Range implements Selection {
         return new Range(from, until);
     }
 
-    public static Range fromLength(long from, long until) {
-        return fromLength(BigInteger.valueOf(from), BigInteger.valueOf(until));
+    public static Range fromSize(long from, long size) {
+        return fromSize(BigInteger.valueOf(from), BigInteger.valueOf(size));
     }
 
-    public static Range fromLength(BigInteger from, long length) {
-        return fromLength(from, BigInteger.valueOf(length));
+    public static Range fromSize(BigInteger from, long size) {
+        return fromSize(from, BigInteger.valueOf(size));
     }
     
-    public static Range fromLength(BigInteger from, BigInteger length) {
-        return fromUntil(from, from.add(length));
+    public static Range fromSize(BigInteger from, BigInteger size) {
+        return fromUntil(from, from.add(size));
     }
     
 
-    public BigInteger getFrom() {
+    public BigInteger from() {
         return from;
     }
 
-    public BigInteger getUntil() {
+    public BigInteger until() {
         return until;
-    }
-
-    public BigInteger getLength() {
-        return until.subtract(from);
     }
 
     @Override
     public BigInteger size() {
-        return getLength();
+        return until.subtract(from);
     }
 
     @Override
@@ -105,35 +108,6 @@ public class Range implements Selection {
     @Override
     public String toString() {
         return String.format("[%d, %d)", from, until);
-    }
-    
-    @Override
-    public Iterator<BigInteger> iterator() {
-        return new RangeIterator();
-    }
-    
-    
-    private class RangeIterator implements Iterator<BigInteger> {
-
-        private BigInteger counter = from;
-        
-        
-        @Override
-        public boolean hasNext() {
-            return (counter.compareTo(until) < 0);
-        }
-
-        @Override
-        public BigInteger next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-            
-            BigInteger result = counter;
-            counter = counter.add(BigInteger.ONE);
-            return result;
-        }
-        
     }
     
 }

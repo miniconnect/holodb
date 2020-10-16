@@ -8,11 +8,11 @@ public class PermutationUtil {
     }
     
     
-    public static Permutation resize(Permutation base, BigInteger size) {
+    public static Permutation resized(Permutation base, BigInteger size) {
         if (base instanceof ResizablePermutation) {
             return ((ResizablePermutation) base).resize(size);
         } else if (base instanceof PermutationExtender || base instanceof PermutationReducer) {
-            return resize(((PermutationDecorator) base), size);
+            return resized(((PermutationDecorator) base), size);
         }
         
         int cmp = size.compareTo(base.size());

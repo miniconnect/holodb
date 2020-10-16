@@ -71,24 +71,34 @@ public class ArraySortedSource<T extends Comparable<T>> implements SortedSource<
     @Override
     public Range find(T value) {
         int position = Arrays.binarySearch(values, value);
-        return position >= 0 ? Range.fromLength(position, 1) : Range.fromLength(-1 - position, 0);
+        return position >= 0 ? Range.fromSize(position, 1) : Range.fromSize((-1 - position), 0);
     }
 
     @Override
     public Range findBetween(T minValue, boolean minInclusive, T maxValue, boolean maxInclusive) {
-        int cmp = minValue.compareTo(maxValue);
-        if (cmp == 0) {
-            if (!minInclusive && !maxInclusive) {
-                throw new IllegalArgumentException("The single value can not be included and excluded at the same time");
+        if (minValue != null && maxValue != null) {
+            int cmp = minValue.compareTo(maxValue);
+            if (cmp > 0 || (cmp == 0 && !minInclusive && !maxInclusive)) {
+                return Range.empty(find(minValue).from());
             }
-        } else if (cmp > 0) {
-            throw new IllegalArgumentException("minValue can not be larger than maxValue");
         }
         
-        Range minRange = find(minValue);
-        BigInteger from = minInclusive ? minRange.getFrom() : minRange.getUntil();
-        Range maxRange = find(maxValue);
-        BigInteger until = maxInclusive ? maxRange.getUntil() : maxRange.getFrom();
+        BigInteger from;
+        if (minValue != null) {
+            Range minRange = find(minValue);
+            from = minInclusive ? minRange.from() : minRange.until();
+        } else {
+            from = BigInteger.ZERO;
+        }
+        
+        BigInteger until;
+        if (maxValue != null) {
+            Range maxRange = find(maxValue);
+            until = maxInclusive ? maxRange.until() : maxRange.from();
+        } else {
+            until = BigInteger.valueOf(values.length);
+        }
+        
         return Range.fromUntil(from, until);
     }
 

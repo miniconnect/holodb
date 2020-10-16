@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.simplemodel;
+package hu.webarticum.holodb.core.lab.testimpl.simple;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -11,6 +11,11 @@ import hu.webarticum.holodb.core.model.Table;
 public class SimpleSchema implements Schema {
 
     private final Map<String, Table> tables = new LinkedHashMap<>();
+    
+    
+    public void addTable(String name, Table table) {
+        tables.put(name, table);
+    }
     
     
     @Override

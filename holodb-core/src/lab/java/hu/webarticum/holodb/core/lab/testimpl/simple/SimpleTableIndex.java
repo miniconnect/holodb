@@ -1,6 +1,7 @@
-package hu.webarticum.holodb.simplemodel;
+package hu.webarticum.holodb.core.lab.testimpl.simple;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -10,18 +11,18 @@ import hu.webarticum.holodb.core.model.TableIndex;
 
 public class SimpleTableIndex implements TableIndex {
     
-    private final List<String> columnNames;
-    
     private final IndexedSource<?> source;
     
+    private final List<String> columnNames;
     
-    public SimpleTableIndex(String columnName, IndexedSource<?> source) {
-        this(List.of(columnName), source);
+    
+    public SimpleTableIndex(IndexedSource<?> source, String... columnNames) {
+        this(source, Arrays.asList(columnNames));
     }
 
-    public SimpleTableIndex(Collection<String> columnNames, IndexedSource<?> source) {
-        this.columnNames = new ArrayList<>(columnNames);
+    public SimpleTableIndex(IndexedSource<?> source, Collection<String> columnNames) {
         this.source = source;
+        this.columnNames = new ArrayList<>(columnNames);
     }
     
 
@@ -42,5 +43,5 @@ public class SimpleTableIndex implements TableIndex {
         
         return (Index<T>) source;
     }
-
+    
 }

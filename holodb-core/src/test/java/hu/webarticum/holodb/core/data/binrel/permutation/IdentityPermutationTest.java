@@ -7,9 +7,8 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.IdentityPermutation;
-import hu.webarticum.holodb.core.data.selection.Range;
 
-public class IdentityPermutationTest extends AbstractPermutationTest<IdentityPermutation> {
+class IdentityPermutationTest extends AbstractPermutationTest<IdentityPermutation> {
 
     @Override
     protected IdentityPermutation create(BigInteger size) {
@@ -17,7 +16,7 @@ public class IdentityPermutationTest extends AbstractPermutationTest<IdentityPer
     }
     
     @Test
-    public void testIdentity() {
+    void testIdentity() {
         int[] sizes = new int[] { 1, 2, 3, 4, 5, 10, 20, 100, 341 };
         for (int size : sizes) {
             checkIdentity(create(BigInteger.valueOf(size)));
@@ -25,7 +24,7 @@ public class IdentityPermutationTest extends AbstractPermutationTest<IdentityPer
     }
 
     @Test
-    public void testProbablyIdentity() {
+    void testProbablyIdentity() {
         BigInteger[] sizes = new BigInteger[] {
             new BigInteger("23645728345"),
             new BigInteger("7016384293457234"),
@@ -38,8 +37,11 @@ public class IdentityPermutationTest extends AbstractPermutationTest<IdentityPer
     }
 
     private void checkIdentity(Permutation permutation) {
-        Range range = Range.fromLength(BigInteger.ZERO, permutation.size());
-        for (BigInteger index : range) {
+        BigInteger size = permutation.size();
+        for (
+                BigInteger index = BigInteger.ZERO;
+                index.compareTo(size) < 0;
+                index = index.add(BigInteger.ONE)) {
             BigInteger value = permutation.at(index);
             assertThat(value).isEqualTo(index);
         }
@@ -49,7 +51,10 @@ public class IdentityPermutationTest extends AbstractPermutationTest<IdentityPer
         int numberOfTests = 20;
         BigInteger size = permutation.size();
         BigInteger step = size.divide(BigInteger.valueOf(numberOfTests));
-        for (BigInteger index = BigInteger.ZERO; index.compareTo(size) < 0; index = index.add(step)) {
+        for (
+                BigInteger index = BigInteger.ZERO;
+                index.compareTo(size) < 0;
+                index = index.add(step)) {
             BigInteger value = permutation.at(index);
             assertThat(value).isEqualTo(index);
         }

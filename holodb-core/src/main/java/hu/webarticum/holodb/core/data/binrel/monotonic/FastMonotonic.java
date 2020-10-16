@@ -36,6 +36,11 @@ public class FastMonotonic implements Monotonic {
     public Range indicesOf(BigInteger value) {
         return Range.fromUntil(calculateFrom(value), calculateFrom(value.add(BigInteger.ONE)));
     }
+
+    @Override
+    public Range indicesOf(Range range) {
+        return Range.fromUntil(calculateFrom(range.from()), calculateFrom(range.until()));
+    }
     
     private BigInteger calculateFrom(BigInteger value) {
         BigInteger product = value.multiply(size);

@@ -29,18 +29,18 @@ public abstract class AbstractRecursiveMonotonic implements Monotonic {
 
     @Override
     public BigInteger at(BigInteger index) {
-        Range range = Range.fromLength(BigInteger.ZERO, size);
-        Range imageRange = Range.fromLength(BigInteger.ZERO, imageSize);
+        Range range = Range.fromSize(BigInteger.ZERO, size);
+        Range imageRange = Range.fromSize(BigInteger.ZERO, imageSize);
         int level = 0;
-        while (imageRange.getLength().compareTo(BigInteger.ONE) > 0) {
-            BigInteger imageSplitPoint = imageRange.getFrom().add(imageRange.getUntil()).divide(BigInteger.TWO);
+        while (imageRange.size().compareTo(BigInteger.ONE) > 0) {
+            BigInteger imageSplitPoint = imageRange.from().add(imageRange.until()).divide(BigInteger.TWO);
             BigInteger splitPoint = split(range, imageRange, imageSplitPoint, level);
             if (splitPoint.compareTo(index) > 0) {
-                range = Range.fromUntil(range.getFrom(), splitPoint);
-                imageRange = Range.fromUntil(imageRange.getFrom(), imageSplitPoint);
+                range = Range.fromUntil(range.from(), splitPoint);
+                imageRange = Range.fromUntil(imageRange.from(), imageSplitPoint);
             } else {
-                range = Range.fromUntil(splitPoint, range.getUntil());
-                imageRange = Range.fromUntil(imageSplitPoint, imageRange.getUntil());
+                range = Range.fromUntil(splitPoint, range.until());
+                imageRange = Range.fromUntil(imageSplitPoint, imageRange.until());
             }
             level++;
         }
@@ -49,18 +49,18 @@ public abstract class AbstractRecursiveMonotonic implements Monotonic {
 
     @Override
     public Range indicesOf(BigInteger value) {
-        Range range = Range.fromLength(BigInteger.ZERO, size);
-        Range imageRange = Range.fromLength(BigInteger.ZERO, imageSize);
+        Range range = Range.fromSize(BigInteger.ZERO, size);
+        Range imageRange = Range.fromSize(BigInteger.ZERO, imageSize);
         int level = 0;
-        while (imageRange.getLength().compareTo(BigInteger.ONE) > 0) {
-            BigInteger imageSplitPoint = imageRange.getFrom().add(imageRange.getUntil()).divide(BigInteger.TWO);
+        while (imageRange.size().compareTo(BigInteger.ONE) > 0) {
+            BigInteger imageSplitPoint = imageRange.from().add(imageRange.until()).divide(BigInteger.TWO);
             BigInteger splitPoint = split(range, imageRange, imageSplitPoint, level);
             if (imageSplitPoint.compareTo(value) > 0) {
-                range = Range.fromUntil(range.getFrom(), splitPoint);
-                imageRange = Range.fromUntil(imageRange.getFrom(), imageSplitPoint);
+                range = Range.fromUntil(range.from(), splitPoint);
+                imageRange = Range.fromUntil(imageRange.from(), imageSplitPoint);
             } else {
-                range = Range.fromUntil(splitPoint, range.getUntil());
-                imageRange = Range.fromUntil(imageSplitPoint, imageRange.getUntil());
+                range = Range.fromUntil(splitPoint, range.until());
+                imageRange = Range.fromUntil(imageSplitPoint, imageRange.until());
             }
             level++;
         }

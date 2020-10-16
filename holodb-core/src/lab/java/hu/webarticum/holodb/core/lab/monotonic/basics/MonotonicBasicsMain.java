@@ -76,8 +76,8 @@ public class MonotonicBasicsMain {
         }
         for (int i = 0; i < imageSize; i++) {
             Range range = monotonic.indicesOf(BigInteger.valueOf(i));
-            int from = range.getFrom().intValue();
-            int until = range.getUntil().intValue();
+            int from = range.from().intValue();
+            int until = range.until().intValue();
             if (!range.isEmpty()) {
                 System.out.println(); // NOSONAR
                 for (int j = 0; j < from; j++) {

@@ -39,18 +39,16 @@ public class MonotonicSource<T> implements SortedSource<T> {
 
     @Override
     public Range find(T value) {
-        return adaptRange(baseSource.find(value));
+        return monotonic.indicesOf(baseSource.find(value));
     }
 
     @Override
-    public Range findBetween(T minValue, boolean minInclusive, T maxValue, boolean maxInclusive) {
-        return adaptRange(baseSource.findBetween(minValue, minInclusive, maxValue, maxInclusive));
+    public Range findBetween(
+            T minValue, boolean minInclusive,
+            T maxValue, boolean maxInclusive) {
+        
+        return monotonic.indicesOf(baseSource.findBetween(
+                minValue, minInclusive, maxValue, maxInclusive));
     }
     
-    private Range adaptRange(Range baseRange) {
-        Range fromRange = monotonic.indicesOf(baseRange.getFrom());
-        Range toRange = baseRange.isEmpty() ? fromRange : monotonic.indicesOf(baseRange.getUntil().subtract(BigInteger.ONE));
-        return Range.fromUntil(fromRange.getFrom(), toRange.getUntil());
-    }
-
 }
