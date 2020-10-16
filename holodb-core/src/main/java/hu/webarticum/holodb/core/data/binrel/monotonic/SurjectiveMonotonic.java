@@ -8,7 +8,7 @@ import hu.webarticum.holodb.core.data.random.TreeRandomUtil;
 import hu.webarticum.holodb.core.data.selection.Range;
 import hu.webarticum.holodb.core.util.MathUtil;
 
-public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
+public class SurjectiveMonotonic extends AbstractCachingRecursiveMonotonic {
 
     private static final SamplerFactory DEFAULT_SAMPLER_FACTORY = SamplerFactory.DEFAULT;
     
@@ -24,35 +24,42 @@ public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
     private final BigInteger samplerMaxLength;
 
     
-    public BinomialMonotonic(TreeRandom treeRandom, long size, long imageSize) {
+    public SurjectiveMonotonic(TreeRandom treeRandom, long size, long imageSize) {
         this(treeRandom, BigInteger.valueOf(size), BigInteger.valueOf(imageSize));
     }
 
-    public BinomialMonotonic(TreeRandom treeRandom, SamplerFactory samplerFactory, long size, long imageSize) {
+    public SurjectiveMonotonic(TreeRandom treeRandom, SamplerFactory samplerFactory, long size, long imageSize) {
         this(treeRandom, samplerFactory, BigInteger.valueOf(size), BigInteger.valueOf(imageSize), DEFAULT_CACHE_DEPTH);
     }
 
-    public BinomialMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize) {
+    public SurjectiveMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize) {
         this(treeRandom, size, imageSize, DEFAULT_CACHE_DEPTH);
     }
 
-    public BinomialMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize, int cacheDepth) {
+    public SurjectiveMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize, int cacheDepth) {
         this(treeRandom, DEFAULT_SAMPLER_FACTORY, size, imageSize, cacheDepth);
     }
 
-    public BinomialMonotonic(
+    public SurjectiveMonotonic(
             TreeRandom treeRandom, SamplerFactory samplerFactory, BigInteger size, BigInteger imageSize, int cacheDepth) {
         this(treeRandom, samplerFactory, size, imageSize, cacheDepth, DEFAULT_SAMPLER_MAX_LENGTH);
     }
     
-    public BinomialMonotonic(
+    public SurjectiveMonotonic(
             TreeRandom treeRandom, SamplerFactory samplerFactory,
             BigInteger size, BigInteger imageSize, int cacheDepth, BigInteger samplerMaxLength) {
         
-        super(size, imageSize, cacheDepth);
+        super(checkSize(size, imageSize), imageSize, cacheDepth);
         this.treeRandom = treeRandom;
         this.samplerFactory = samplerFactory;
         this.samplerMaxLength = samplerMaxLength;
+    }
+    
+    private static BigInteger checkSize(BigInteger size, BigInteger imageSize) {
+        if (size.compareTo(imageSize) < 0) {
+            throw new IllegalArgumentException("size must not be less then imageSize");
+        }
+        return size;
     }
     
     
@@ -66,12 +73,13 @@ public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
         // TODO: SamplerFactory::isBig()
         
         BigInteger splitPoint;
+        Range rangeToSplit = Range.fromUntil(
+                range.from().add(imageSplitPoint.subtract(imageRange.from())),
+                range.until().subtract(imageRange.until().subtract(imageSplitPoint)));
         if (length.compareTo(samplerMaxLength) > 0) {
-            splitPoint = splitFast(range, imageSplitPoint);
-        } else if (length.equals(BigInteger.ZERO)) {
-            splitPoint = range.from();
+            splitPoint = splitFast(rangeToSplit, imageSplitPoint);
         } else {
-            splitPoint = splitWithSampler(range, imageRange, imageSplitPoint);
+            splitPoint = splitWithSampler(rangeToSplit, imageRange, imageSplitPoint);
         }
         
         return splitPoint;
@@ -94,5 +102,4 @@ public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
         return range.from().add(relativeSplitPoint);
     }
     
-
 }

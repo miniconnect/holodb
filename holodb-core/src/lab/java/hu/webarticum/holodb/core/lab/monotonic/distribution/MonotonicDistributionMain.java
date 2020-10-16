@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import hu.webarticum.holodb.core.data.binrel.monotonic.FastMonotonic;
 import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
+import hu.webarticum.holodb.core.data.binrel.monotonic.SamplerFactory;
 import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
 import hu.webarticum.holodb.core.data.distribution.ApacheCommonsBinomialSampler;
 import hu.webarticum.holodb.core.data.distribution.ExperimentalSampler;
@@ -29,7 +30,7 @@ public class MonotonicDistributionMain {
         CommandLineUtil.printTitle(TITLE);
 
         MutableHolder<TreeRandom> treeRandomHolder = new MutableHolder<>();
-        MutableHolder<BinomialMonotonic.SamplerFactory> samplerFactoryHolder = new MutableHolder<>();
+        MutableHolder<SamplerFactory> samplerFactoryHolder = new MutableHolder<>();
 
         Pair<Integer, BiFunction<Integer, Integer, Monotonic>> monotonicUserSelection = CommandLineUtil.readOption(
                 "Monotonic implementation", Arrays.asList(
@@ -41,7 +42,7 @@ public class MonotonicDistributionMain {
         BiFunction<Integer, Integer, Monotonic> monotonicFactory = monotonicUserSelection.getRight();
         
         if (monotonicIndex == 0) {
-            samplerFactoryHolder.set(CommandLineUtil.<BinomialMonotonic.SamplerFactory>readOption(
+            samplerFactoryHolder.set(CommandLineUtil.<SamplerFactory>readOption(
                     "Sampler implementation", Arrays.asList(
                             Pair.of(ApacheCommonsBinomialSampler.class.getSimpleName(), (seed, size, probability) ->
                                     new ApacheCommonsBinomialSampler(seed, size.intValue(), probability)),
