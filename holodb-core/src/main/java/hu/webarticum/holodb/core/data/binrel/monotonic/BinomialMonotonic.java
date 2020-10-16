@@ -9,7 +9,7 @@ import hu.webarticum.holodb.core.data.random.TreeRandomUtil;
 import hu.webarticum.holodb.core.data.selection.Range;
 import hu.webarticum.holodb.core.util.MathUtil;
 
-public class SamplerBinomialMonotonic extends AbstractCachingRecursiveMonotonic {
+public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
 
     private static final SamplerFactory DEFAULT_SAMPLER_FACTORY = new DefaultSamplerFactory();
     
@@ -25,28 +25,28 @@ public class SamplerBinomialMonotonic extends AbstractCachingRecursiveMonotonic 
     private final BigInteger samplerMaxLength;
 
     
-    public SamplerBinomialMonotonic(TreeRandom treeRandom, long size, long imageSize) {
+    public BinomialMonotonic(TreeRandom treeRandom, long size, long imageSize) {
         this(treeRandom, BigInteger.valueOf(size), BigInteger.valueOf(imageSize));
     }
 
-    public SamplerBinomialMonotonic(TreeRandom treeRandom, SamplerFactory samplerFactory, long size, long imageSize) {
+    public BinomialMonotonic(TreeRandom treeRandom, SamplerFactory samplerFactory, long size, long imageSize) {
         this(treeRandom, samplerFactory, BigInteger.valueOf(size), BigInteger.valueOf(imageSize), DEFAULT_CACHE_DEPTH);
     }
 
-    public SamplerBinomialMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize) {
+    public BinomialMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize) {
         this(treeRandom, size, imageSize, DEFAULT_CACHE_DEPTH);
     }
 
-    public SamplerBinomialMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize, int cacheDepth) {
+    public BinomialMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize, int cacheDepth) {
         this(treeRandom, DEFAULT_SAMPLER_FACTORY, size, imageSize, cacheDepth);
     }
 
-    public SamplerBinomialMonotonic(
+    public BinomialMonotonic(
             TreeRandom treeRandom, SamplerFactory samplerFactory, BigInteger size, BigInteger imageSize, int cacheDepth) {
         this(treeRandom, samplerFactory, size, imageSize, cacheDepth, DEFAULT_SAMPLER_MAX_LENGTH);
     }
     
-    public SamplerBinomialMonotonic(
+    public BinomialMonotonic(
             TreeRandom treeRandom, SamplerFactory samplerFactory,
             BigInteger size, BigInteger imageSize, int cacheDepth, BigInteger samplerMaxLength) {
         
