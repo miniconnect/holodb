@@ -1,8 +1,10 @@
 package hu.webarticum.holodb.core.data.selection;
 
 import java.math.BigInteger;
+import java.util.Iterator;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
+import hu.webarticum.holodb.core.util.IteratorAdapter;
 
 public class PermutatedSelection implements Selection {
     
@@ -35,6 +37,11 @@ public class PermutatedSelection implements Selection {
     @Override
     public boolean contains(BigInteger value) {
         return baseSelection.contains(permutation.at(value));
+    }
+    
+    @Override
+    public Iterator<BigInteger> iterator() {
+        return new IteratorAdapter<>(baseSelection.iterator(), this::at);
     }
     
 }

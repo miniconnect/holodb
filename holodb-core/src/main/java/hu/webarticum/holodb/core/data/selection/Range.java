@@ -1,6 +1,8 @@
 package hu.webarticum.holodb.core.data.selection;
 
 import java.math.BigInteger;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -89,6 +91,11 @@ public class Range implements Selection {
     public boolean contains(BigInteger value) {
         return (value.compareTo(from) >= 0 && value.compareTo(until) < 0);
     }
+    
+    @Override
+    public Iterator<BigInteger> iterator() {
+        return new RangeIterator();
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -108,6 +115,30 @@ public class Range implements Selection {
     @Override
     public String toString() {
         return String.format("[%d, %d)", from, until);
+    }
+    
+
+    private class RangeIterator implements Iterator<BigInteger> {
+
+        private BigInteger counter = from;
+        
+        
+        @Override
+        public boolean hasNext() {
+            return (counter.compareTo(until) < 0);
+        }
+
+        @Override
+        public BigInteger next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            
+            BigInteger result = counter;
+            counter = counter.add(BigInteger.ONE);
+            return result;
+        }
+        
     }
     
 }
