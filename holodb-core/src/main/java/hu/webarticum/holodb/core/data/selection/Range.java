@@ -2,6 +2,7 @@ package hu.webarticum.holodb.core.data.selection;
 
 import java.math.BigInteger;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -121,23 +122,28 @@ public class Range implements Selection {
 
         private BigInteger counter = from;
         
+        private boolean hasNext = checkNext();
+        
         
         @Override
         public boolean hasNext() {
-            return (counter.compareTo(until) < 0);
+            return hasNext;
         }
 
         @Override
         public BigInteger next() {
-            
-            // FIXME: unnecessary overhead
-            //if (!hasNext()) {
-            //    throw new NoSuchElementException();
-            //}
+            if (!hasNext) {
+                throw new NoSuchElementException();
+            }
             
             BigInteger result = counter;
             counter = counter.add(BigInteger.ONE);
+            hasNext = checkNext();
             return result;
+        }
+
+        private boolean checkNext() {
+            return (counter.compareTo(until) < 0);
         }
         
     }

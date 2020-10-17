@@ -63,7 +63,7 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
 
     private void checkSize(Monotonic monotonic, BigInteger size, BigInteger imageSize) {
         assertThat(monotonic.size()).as("monotonic size").isEqualTo(size);
-        assertThat(monotonic.size()).as("monotonic image size").isEqualTo(imageSize);
+        assertThat(monotonic.imageSize()).as("monotonic image size").isEqualTo(imageSize);
     }
 
     private void checkMonotonic(Monotonic monotonic) {

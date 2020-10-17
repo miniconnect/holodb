@@ -2,6 +2,7 @@ package hu.webarticum.holodb.core.data.binrel.core;
 
 import java.math.BigInteger;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public  class FunctionIterator implements Iterator<BigInteger> {
 
@@ -12,27 +13,35 @@ public  class FunctionIterator implements Iterator<BigInteger> {
     
     private BigInteger counter = BigInteger.ZERO;
     
+    private boolean hasNext;
+    
     
     public FunctionIterator(Function function) {
         this.function = function;
         this.size = function.size();
+        this.hasNext = checkNext();
     }
     
     
     @Override
     public boolean hasNext() {
-        return (counter.compareTo(size) < 0);
+        return hasNext;
     }
 
     @Override
     public BigInteger next() {
-
-        // FIXME: unnecessary overhead
-        //if (!hasNext()) {
-        //    throw new NoSuchElementException();
-        //}
+        if (!hasNext) {
+            throw new NoSuchElementException();
+        }
         
-        return function.at(counter);
+        BigInteger result = function.at(counter);
+        counter = counter.add(BigInteger.ONE);
+        hasNext = checkNext();
+        return result;
+    }
+    
+    private boolean checkNext() {
+        return (counter.compareTo(size) < 0);
     }
     
 }
