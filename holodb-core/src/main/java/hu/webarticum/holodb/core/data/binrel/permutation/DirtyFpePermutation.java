@@ -21,6 +21,14 @@ import javax.crypto.spec.SecretKeySpec;
 public class DirtyFpePermutation implements Permutation {
     
     private static final BigInteger MAX_PRIME = BigInteger.valueOf(65535);
+
+    /**
+     * According to a paper by Rogaway, Bellare, etc, the min safe number
+     * of rounds to use for FPE is 2+log_a(b). If a >= b then log_a(b) &lt;= 1
+     * so 3 rounds is safe. The FPE factorization routine should always
+     * return a >= b, so just confirm that and return 3.
+     */
+    private static final int ROUNDS = 3;
     
     
     private Mac mac;
@@ -29,16 +37,10 @@ public class DirtyFpePermutation implements Permutation {
     
     private final BigInteger size;
     
-    private final BigInteger a, b;
-
-    /**
-     * According to a paper by Rogaway, Bellare, etc, the min safe number
-     * of rounds to use for FPE is 2+log_a(b). If a >= b then log_a(b) &lt;= 1
-     * so 3 rounds is safe. The FPE factorization routine should always
-     * return a >= b, so just confirm that and return 3.
-     */
-    private final int rounds = 3;
+    private final BigInteger a;
     
+    private final BigInteger b;
+
     
     public DirtyFpePermutation(byte[] key, BigInteger size) {
         this.size = size;
@@ -85,7 +87,7 @@ public class DirtyFpePermutation implements Permutation {
     @Override
     public BigInteger at(BigInteger index) {
         BigInteger result = index;
-        for (int i = 0; i != rounds; i++) {
+        for (int i = 0; i != ROUNDS; i++) {
             result = runEncryptionRound(result, i);
         }
         return result;
@@ -95,7 +97,6 @@ public class DirtyFpePermutation implements Permutation {
         try {
             return runEncryptionRoundUnwrapped(value, round);
         } catch (IOException e) {
-            // XXX
             throw new IllegalStateException("Encryption failed");
         }
     }
@@ -112,8 +113,8 @@ public class DirtyFpePermutation implements Permutation {
     @Override
     public BigInteger indexOf(BigInteger value) {
         BigInteger result = value;
-        for (int i = 0; i != rounds; i++) {
-            result = runDecryptionRound(result, rounds - i - 1);
+        for (int i = 0; i != ROUNDS; i++) {
+            result = runDecryptionRound(result, ROUNDS - i - 1);
         }
         return result;
     }
@@ -122,7 +123,6 @@ public class DirtyFpePermutation implements Permutation {
         try {
             return runDecryptionRoundUnwrapped(value, round);
         } catch (IOException e) {
-            // XXX
             throw new IllegalStateException("Decryption failed");
         }
     }

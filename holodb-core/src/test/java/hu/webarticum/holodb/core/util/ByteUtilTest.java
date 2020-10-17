@@ -11,26 +11,26 @@ class ByteUtilTest {
 
     @Test
     void testIntToBytes() {
-        assertThat(0).extracting(ByteUtil::intToBytes).isEqualTo(b(0, 0, 0, 0));
-        assertThat(1).extracting(ByteUtil::intToBytes).isEqualTo(b(0, 0, 0, 1));
-        assertThat(43).extracting(ByteUtil::intToBytes).isEqualTo(b(0, 0, 0, 43));
-        assertThat(256).extracting(ByteUtil::intToBytes).isEqualTo(b(0, 0, 1, 0));
-        assertThat(13191175).extracting(ByteUtil::intToBytes).isEqualTo(b(0, 201, 72, 7));
-        assertThat(-1).extracting(ByteUtil::intToBytes).isEqualTo(b(255, 255, 255, 255));
-        assertThat(-78238062).extracting(ByteUtil::intToBytes).isEqualTo(b(251, 86, 46, 146));
+        assertThat(ByteUtil.intToBytes(0)).isEqualTo(b(0, 0, 0, 0));
+        assertThat(ByteUtil.intToBytes(1)).isEqualTo(b(0, 0, 0, 1));
+        assertThat(ByteUtil.intToBytes(43)).isEqualTo(b(0, 0, 0, 43));
+        assertThat(ByteUtil.intToBytes(256)).isEqualTo(b(0, 0, 1, 0));
+        assertThat(ByteUtil.intToBytes(13191175)).isEqualTo(b(0, 201, 72, 7));
+        assertThat(ByteUtil.intToBytes(-1)).isEqualTo(b(255, 255, 255, 255));
+        assertThat(ByteUtil.intToBytes(-78238062)).isEqualTo(b(251, 86, 46, 146));
     }
 
     @Test
     void testLongToBytes() {
-        assertThat(0L).extracting(ByteUtil::longToBytes).isEqualTo(b(0, 0, 0, 0, 0, 0, 0, 0));
-        assertThat(1L).extracting(ByteUtil::longToBytes).isEqualTo(b(0, 0, 0, 0, 0, 0, 0, 1));
-        assertThat(117L).extracting(ByteUtil::longToBytes).isEqualTo(b(0, 0, 0, 0, 0, 0, 0, 117));
-        assertThat(256L).extracting(ByteUtil::longToBytes).isEqualTo(b(0, 0, 0, 0, 0, 0, 1, 0));
-        assertThat(13191175L).extracting(ByteUtil::longToBytes).isEqualTo(b(0, 0, 0, 0, 0, 201, 72, 7));
-        assertThat(878981819498590340L).extracting(ByteUtil::longToBytes).isEqualTo(b(12, 50, 197, 78, 203, 61, 112, 132));
-        assertThat(-1L).extracting(ByteUtil::longToBytes).isEqualTo(b(255, 255, 255, 255, 255, 255, 255, 255));
-        assertThat(-78238062L).extracting(ByteUtil::longToBytes).isEqualTo(b(255, 255, 255, 255, 251, 86, 46, 146));
-        assertThat(-2653304120892283044L).extracting(ByteUtil::longToBytes).isEqualTo(b(219, 45, 145, 245, 185, 34, 167, 92));
+        assertThat(ByteUtil.longToBytes(0L)).isEqualTo(b(0, 0, 0, 0, 0, 0, 0, 0));
+        assertThat(ByteUtil.longToBytes(1L)).isEqualTo(b(0, 0, 0, 0, 0, 0, 0, 1));
+        assertThat(ByteUtil.longToBytes(117L)).isEqualTo(b(0, 0, 0, 0, 0, 0, 0, 117));
+        assertThat(ByteUtil.longToBytes(256L)).isEqualTo(b(0, 0, 0, 0, 0, 0, 1, 0));
+        assertThat(ByteUtil.longToBytes(13191175L)).isEqualTo(b(0, 0, 0, 0, 0, 201, 72, 7));
+        assertThat(ByteUtil.longToBytes(878981819498590340L)).isEqualTo(b(12, 50, 197, 78, 203, 61, 112, 132));
+        assertThat(ByteUtil.longToBytes(-1L)).isEqualTo(b(255, 255, 255, 255, 255, 255, 255, 255));
+        assertThat(ByteUtil.longToBytes(-78238062L)).isEqualTo(b(255, 255, 255, 255, 251, 86, 46, 146));
+        assertThat(ByteUtil.longToBytes(-2653304120892283044L)).isEqualTo(b(219, 45, 145, 245, 185, 34, 167, 92));
     }
     
     @Test
@@ -50,7 +50,7 @@ class ByteUtilTest {
     
     @Test
     void testBytesToBinaryString() {
-        assertThat(ByteUtil.bytesToBinaryString(b())).isEqualTo("");
+        assertThat(ByteUtil.bytesToBinaryString(b())).isEmpty();
         assertThat(ByteUtil.bytesToBinaryString(b(15))).isEqualTo("00001111");
         assertThat(ByteUtil.bytesToBinaryString(b(43, 125))).isEqualTo("00101011 01111101");
         assertThat(ByteUtil.bytesToBinaryString("apple".getBytes(StandardCharsets.UTF_8))).isEqualTo("01100001 01110000 01110000 01101100 01100101");

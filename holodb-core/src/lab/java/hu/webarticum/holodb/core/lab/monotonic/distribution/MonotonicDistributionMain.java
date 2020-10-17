@@ -11,7 +11,6 @@ import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
 import hu.webarticum.holodb.core.data.binrel.monotonic.SamplerFactory;
 import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
 import hu.webarticum.holodb.core.data.distribution.ApacheCommonsBinomialSampler;
-import hu.webarticum.holodb.core.data.distribution.ExperimentalSampler;
 import hu.webarticum.holodb.core.data.distribution.FastSampler;
 import hu.webarticum.holodb.core.data.hasher.FastHasher;
 import hu.webarticum.holodb.core.data.hasher.Hasher;
@@ -46,7 +45,6 @@ public class MonotonicDistributionMain {
                     "Sampler implementation", Arrays.asList(
                             Pair.of(ApacheCommonsBinomialSampler.class.getSimpleName(), (seed, size, probability) ->
                                     new ApacheCommonsBinomialSampler(seed, size.intValue(), probability)),
-                            Pair.of(FastSampler.class.getSimpleName(), ExperimentalSampler::new),
                             Pair.of(FastSampler.class.getSimpleName(), (seed, size, probability) ->
                                     new FastSampler(size))
                             )).getRight());

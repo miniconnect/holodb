@@ -23,8 +23,8 @@ class ArraySortedSourceTest {
         assertThat(source).extracting(s -> s.get(big(3))).as("at 3").isEqualTo("orange");
         assertThat(source).extracting(s -> s.get(big(4))).as("at 4").isEqualTo("pear");
         assertThat(source).extracting(s -> s.get(big(5))).as("at 5").isEqualTo("watermelon");
-        assertThatThrownBy(() -> source.get(big(-1))).isInstanceOf(ArrayIndexOutOfBoundsException.class);
-        assertThatThrownBy(() -> source.get(big(6))).isInstanceOf(ArrayIndexOutOfBoundsException.class);
+        assertThatThrownBy(() -> source.get(big(-1))).isInstanceOf(ArrayIndexOutOfBoundsException.class); // NOSONAR
+        assertThatThrownBy(() -> source.get(big(6))).isInstanceOf(ArrayIndexOutOfBoundsException.class); // NOSONAR
     }
 
     @Test

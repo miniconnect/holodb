@@ -16,12 +16,12 @@ public class DistributionSandboxMain {
         
         Random random = new Random(0);
         for (int i = 0; i < 100; i++) {
-            double U = random.nextDouble();
-            double V = random.nextDouble();
-            double S = (U * U) + (V * V);
-            double X = U * Math.sqrt(-2 * Math.log(S) / S);
-            double Y = V * Math.sqrt(-2 * Math.log(S) / S);
-            System.out.println(String.format("%.5f   %.5f", X, Y));
+            double u = random.nextDouble();
+            double v = random.nextDouble();
+            double s = (u * u) + (v * v);
+            double x = u * Math.sqrt(-2 * Math.log(s) / s);
+            double y = v * Math.sqrt(-2 * Math.log(s) / s);
+            System.out.println(String.format("%.5f   %.5f", x, y)); // NOSONAR
         }
         
         System.exit(0);

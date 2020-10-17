@@ -62,7 +62,7 @@ public class SimpleMain {
                 (i, s) -> new FastMonotonic(s, i),
                 s -> new DirtyFpePermutation("lastname-key".getBytes(StandardCharsets.UTF_8), s));
         SimpleColumn lastNameColumn = new SimpleColumn(lastNameSource);
-        table.addColumn("lastname", lastNameColumn);
+        table.addColumn("lastname", lastNameColumn); // NOSONAR
         table.addIndex(lastNameSource, "lastname");
 
         IndexedSource<String> firstNameSource = new SimpleIndexedSource<>(
@@ -77,7 +77,7 @@ public class SimpleMain {
                 (i, s) -> new FastMonotonic(s, i),
                 s -> new DirtyFpePermutation("firstname-key".getBytes(StandardCharsets.UTF_8), s));
         SimpleColumn firstNameColumn = new SimpleColumn(firstNameSource);
-        table.addColumn("firstname", firstNameColumn);
+        table.addColumn("firstname", firstNameColumn); // NOSONAR
         table.addIndex(firstNameSource, "firstname");
 
         IndexedSource<Optional<String>> citySource = new SimpleNullableIndexedSource<>(
@@ -135,8 +135,8 @@ public class SimpleMain {
     }
     
     private static void printTitle(String title) {
-        System.out.println();
-        System.out.println(String.format("| # %s |", title));
+        System.out.println(); // NOSONAR
+        System.out.println(String.format("| # %s |", title)); // NOSONAR
     }
     
     private static Map<String, Integer> calculateColumnWidths(Table table) {
@@ -151,7 +151,7 @@ public class SimpleMain {
                 try {
                     valueLength = fetchValueAsString(source, i).length();
                 } catch (Exception e) {
-                    System.out.println(source.size() + " / " + i);
+                    System.out.println(source.size() + " / " + i); // NOSONAR
                     throw e;
                 }
                 if (valueLength > columnWidth) {
@@ -165,44 +165,44 @@ public class SimpleMain {
     }
     
     private static void dumpHeader(Table table, Map<String, Integer> columnWidths) {
-        System.out.print(CELL_SEP_CHAR);
+        System.out.print(CELL_SEP_CHAR); // NOSONAR
         for (String columnName : table.columnNames()) {
             int columnWidth = columnWidths.get(columnName);
             dumpValue(columnName, columnWidth);
-            System.out.print(CELL_SEP_CHAR);
+            System.out.print(CELL_SEP_CHAR); // NOSONAR
         }
-        System.out.println();
+        System.out.println(); // NOSONAR
     }
 
     private static void dumpRow(Table table, int index, Map<String, Integer> columnWidths) {
-        System.out.print(CELL_SEP_CHAR);
+        System.out.print(CELL_SEP_CHAR); // NOSONAR
         for (String columnName : table.columnNames()) {
             Source<?> source = table.column(columnName).source();
             String value = fetchValueAsString(source, index);
             int columnWidth = columnWidths.get(columnName);
             dumpValue(value, columnWidth);
-            System.out.print(CELL_SEP_CHAR);
+            System.out.print(CELL_SEP_CHAR); // NOSONAR
         }
-        System.out.println();
+        System.out.println(); // NOSONAR
     }
     
     private static void drawRowLine(Table table, Map<String, Integer> columnWidths) {
-        System.out.print(ROWLINE_SEP_CHAR);
+        System.out.print(ROWLINE_SEP_CHAR); // NOSONAR
         for (String columnName : table.columnNames()) {
             int columnWidth = columnWidths.get(columnName);
             int lineWidth = columnWidth + 2;
             for (int i = 0; i < lineWidth; i++) {
-                System.out.print(ROWLINE_CHAR);
+                System.out.print(ROWLINE_CHAR); // NOSONAR
             }
-            System.out.print(ROWLINE_SEP_CHAR);
+            System.out.print(ROWLINE_SEP_CHAR); // NOSONAR
         }
-        System.out.println();
+        System.out.println(); // NOSONAR
     }
 
     private static void dumpValue(Object value, int width) {
         String strValue = value.toString();
         String format = String.format(" %%%ds ", width);
-        System.out.print(String.format(format, strValue));
+        System.out.print(String.format(format, strValue)); // NOSONAR
     }
 
     private static String fetchValueAsString(Source<?> source, int index) {
