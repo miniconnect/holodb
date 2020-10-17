@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
 
-public class DirtyFpePermutationTest extends AbstractPermutationTest<DirtyFpePermutation> {
+class DirtyFpePermutationTest extends AbstractPermutationTest<DirtyFpePermutation> {
 
     private final byte[] key = "0123456789".getBytes();
     

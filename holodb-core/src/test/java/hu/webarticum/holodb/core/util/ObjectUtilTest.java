@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.Test;
 
-public class ObjectUtilTest {
+class ObjectUtilTest {
 
     @Test
     void testApply() {

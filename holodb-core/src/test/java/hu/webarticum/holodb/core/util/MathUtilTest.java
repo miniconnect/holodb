@@ -8,7 +8,7 @@ import java.math.BigInteger;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 
-public class MathUtilTest {
+class MathUtilTest {
 
     @Test
     void testDivideBigIntegers() {

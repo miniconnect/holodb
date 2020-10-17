@@ -7,7 +7,7 @@ import java.util.BitSet;
 
 import org.junit.jupiter.api.Test;
 
-public class ByteUtilTest {
+class ByteUtilTest {
 
     @Test
     void testIntToBytes() {
