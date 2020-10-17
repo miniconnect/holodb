@@ -23,7 +23,6 @@ import hu.webarticum.holodb.core.model.TableIndex;
 
 public class SimpleMain {
 
-    
     private static final char ROWLINE_CHAR = '-';
 
     private static final char ROWLINE_SEP_CHAR = '+';

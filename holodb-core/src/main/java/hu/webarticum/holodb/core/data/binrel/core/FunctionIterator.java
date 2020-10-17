@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public  class FunctionIterator implements Iterator<BigInteger> {
+public class FunctionIterator implements Iterator<BigInteger> {
 
     private final Function function;
     

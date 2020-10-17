@@ -9,6 +9,7 @@ public interface Function extends Iterable<BigInteger> {
     
     public BigInteger at(BigInteger index);
     
+    
     @Override
     public default Iterator<BigInteger> iterator() {
         return new FunctionIterator(this);
