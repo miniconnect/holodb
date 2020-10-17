@@ -34,8 +34,7 @@ public class BytesSourceFastStatsMain {
     private static final Pattern ENT_COMPRESS_PATTERN = Pattern.compile(" file by (\\-?[0-9\\.]+) percent.");
     
 
-    // FIXME: sonar complexity?
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException { // NOSONAR: complexity is OK
         CommandLineUtil.printTitle(TITLE);
         
         int dumpSize = CommandLineUtil.readIntBetween("Dump size", 1, 10000001);
