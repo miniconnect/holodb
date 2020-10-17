@@ -76,21 +76,18 @@ public class SurjectiveMonotonic extends AbstractCachingRecursiveMonotonic {
         Range rangeToSplit = Range.fromUntil(
                 range.from().add(imageSplitPoint.subtract(imageRange.from())),
                 range.until().subtract(imageRange.until().subtract(imageSplitPoint)));
+        
         if (length.compareTo(samplerMaxLength) > 0) {
-            splitPoint = splitFast(rangeToSplit, imageSplitPoint);
+            splitPoint = splitFast(rangeToSplit);
         } else {
             splitPoint = splitWithSampler(rangeToSplit, imageRange, imageSplitPoint);
         }
-        
+
         return splitPoint;
     }
 
-    private BigInteger splitFast(Range range, BigInteger imageSplitPoint) {
-        BigInteger rangeLength = BigInteger.TEN;
-        BigInteger rangeSplitPoint = treeRandom.sub(imageSplitPoint).getNumber(rangeLength);
-        BigInteger relativeFixedPoint = range.size().divide(BigInteger.TWO);
-        BigInteger relativeSplitPoint = relativeFixedPoint.subtract(rangeLength.divide(BigInteger.TWO)).add(rangeSplitPoint);
-        return range.from().add(relativeSplitPoint);
+    private BigInteger splitFast(Range range) {
+        return range.from().add(range.size().divide(BigInteger.TWO));
     }
 
     private BigInteger splitWithSampler(Range range, Range imageRange, BigInteger imageSplitPoint) {

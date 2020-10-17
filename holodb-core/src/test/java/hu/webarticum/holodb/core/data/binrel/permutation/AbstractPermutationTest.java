@@ -44,7 +44,7 @@ abstract class AbstractPermutationTest<T extends Permutation> {
 
 
     private void checkSize(Permutation permutation, BigInteger size) {
-        assertThat(permutation).extracting(Permutation::size).as("permutation size").isEqualTo(size);
+        assertThat(permutation.size()).as("permutation size").isEqualTo(size);
     }
 
     private void checkPermutation(Permutation permutation) {

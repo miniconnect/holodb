@@ -15,6 +15,10 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
 
     protected abstract T create(BigInteger size, BigInteger imageSize);
 
+    protected boolean isNarrowingEnabled() {
+        return true;
+    }
+    
     
     @Test
     void testEmpty() {
@@ -23,10 +27,15 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
 
     @Test
     void testSmallInstancesCompletely() {
-        for (long i = 7; i <= 50; i += 3) {
-            for (long j = 4; j <= 50; j += 3) {
-                BigInteger size = BigInteger.valueOf(i);
-                BigInteger imageSize = BigInteger.valueOf(j);
+        long innerTo = 50;
+        long outerFrom = 4;
+        long outerTo = isNarrowingEnabled() ? innerTo : 40;
+        long step = 3;
+        for (long i = outerFrom; i < outerTo; i += step) {
+            long innerFrom = isNarrowingEnabled() ? outerFrom : i;
+            for (long j = innerFrom; j < innerTo; j += step) {
+                BigInteger imageSize = BigInteger.valueOf(i);
+                BigInteger size = BigInteger.valueOf(j);
                 Monotonic monotonic = create(size, imageSize);
                 checkSize(monotonic, size, imageSize);
                 checkMonotonic(monotonic);
@@ -36,11 +45,15 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
     
     @Test
     void testLargeInstancesPartially() {
-        BigInteger from = new BigInteger("87495827938452954757483254");
-        BigInteger until = new BigInteger("123252453566234501434504213");
+        BigInteger innerTo = new BigInteger("123252453566234501434504213");
+        BigInteger outerFrom = new BigInteger("87495827938452954757483254");
+        BigInteger outerTo = isNarrowingEnabled() ?
+                innerTo :
+                new BigInteger("102729083749083816548294783");
         BigInteger step = new BigInteger("6344583456194523561031234");
-        for (BigInteger size = from; size.compareTo(until) < 0; size = size.add(step)) {
-            for (BigInteger imageSize = from; imageSize.compareTo(until) < 0; imageSize = imageSize.add(step)) {
+        for (BigInteger imageSize = outerFrom; imageSize.compareTo(outerTo) <= 0; imageSize = imageSize.add(step)) {
+            BigInteger innerFrom = isNarrowingEnabled() ? outerFrom : imageSize;
+            for (BigInteger size = innerFrom; size.compareTo(innerTo) <= 0; size = size.add(step)) {
                 Monotonic monotonic = create(size, imageSize);
                 checkSize(monotonic, size, imageSize);
                 checkProbablyMonotonic(monotonic);
@@ -49,8 +62,8 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
     }
 
     private void checkSize(Monotonic monotonic, BigInteger size, BigInteger imageSize) {
-        assertThat(monotonic).extracting(Monotonic::size).as("monotonic size").isEqualTo(size);
-        assertThat(monotonic).extracting(Monotonic::imageSize).as("monotonic image size").isEqualTo(imageSize);
+        assertThat(monotonic.size()).as("monotonic size").isEqualTo(size);
+        assertThat(monotonic.size()).as("monotonic image size").isEqualTo(imageSize);
     }
 
     private void checkMonotonic(Monotonic monotonic) {
