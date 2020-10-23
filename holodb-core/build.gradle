@@ -3,9 +3,19 @@ plugins {
     id 'me.champeau.gradle.jmh' version '0.5.0'
 }
 
+group 'hu.webarticum.holodb'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
 repositories {
     jcenter()
 }
+
+configurations {
+    jmh
+    lab
+}
+
 
 sourceSets {
     lab {
@@ -13,29 +23,12 @@ sourceSets {
             srcDirs = ['src/lab/java']
         }
     }
-    
-    ng {
-        java {
-            srcDirs = ['src/xxx/java']
-        }
-    }
 }
 
 dependencies {
-    implementation 'org.apache.openjpa:openjpa:3.1.0'
     implementation 'org.apache.commons:commons-lang3:3.0'
     implementation 'org.apache.commons:commons-math3:3.6.1'
-    implementation 'org.apache.commons:commons-collections4:4.4'
     
-    // XXX
-    implementation 'mysql:mysql-connector-java:8.0.21'
-    runtime 'mysql:mysql-connector-java:8.0.21'
-    
-    // FIXME
-    implementation 'dk.brics.automaton:automaton:1.11-8'
-    implementation 'jfree:jfreechart:1.0.13'
-    implementation 'org.openjdk.jmh:jmh-core:1.23'
-    implementation 'org.openjdk.jmh:jmh-generator-annprocess:1.23'
     
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.2'
@@ -43,10 +36,25 @@ dependencies {
     testImplementation 'org.junit.platform:junit-platform-launcher:1.4.1'
     testImplementation 'org.assertj:assertj-core:3.12.2'
     
+    
+    lab 'dk.brics.automaton:automaton:1.11-8'
+    lab 'jfree:jfreechart:1.0.13'
+    
     labImplementation sourceSets.main.output
-    labImplementation 'jfree:jfreechart:1.0.13'
+    labImplementation configurations.lab
 
+
+    jmh 'org.openjdk.jmh:jmh-core:1.23'
+    jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.23'
+    
     jmhImplementation sourceSets.main.output
-    jmhImplementation 'org.openjdk.jmh:jmh-core:1.23'
-    jmhImplementation 'org.openjdk.jmh:jmh-generator-annprocess:1.23'
+    jmhImplementation configurations.jmh
 }
+
+eclipse {
+    classpath {
+        plusConfigurations.add configurations.lab
+        plusConfigurations.add configurations.jmh
+    }
+}
+
