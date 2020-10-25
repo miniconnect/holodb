@@ -43,8 +43,8 @@ public class LabMain {
             if (first) {
                 StringBuilder lineBuilder = new StringBuilder();
                 for (String key : rowData.keySet()) {
-                    System.out.print(String.format("| %-20s ", key));
-                    lineBuilder.append("+----------------------");
+                    System.out.print(String.format("| %-24s ", key));
+                    lineBuilder.append("+--------------------------");
                 }
                 System.out.println("|");
                 lineBuilder.append("+");
@@ -53,7 +53,7 @@ public class LabMain {
             }
             
             for (Object value : rowData.values()) {
-                System.out.print(String.format("| %-20s ", value));
+                System.out.print(String.format("| %-24s ", value));
             }
             System.out.println("|");
         }

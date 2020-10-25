@@ -1,2 +1,6 @@
 
 rootProject.name = 'holodb-query'
+
+// FIXME
+include ':holodb-core'
+project(':holodb-core').projectDir = new File('../holodb-core')

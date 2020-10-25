@@ -20,6 +20,8 @@ sourceSets {
 }
 
 dependencies {
+    implementation project(':holodb-core')
+    
 	antlr 'org.antlr:antlr4:4.8'
     
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'

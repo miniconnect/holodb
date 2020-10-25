@@ -1,5 +1,6 @@
 package hu.webarticum.holodb.query.dummy;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,7 +13,12 @@ import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 
+import hu.webarticum.holodb.core.data.hasher.FastHasher;
+import hu.webarticum.holodb.core.data.hasher.Hasher;
+import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
+import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.holodb.query.common.Result;
 import hu.webarticum.holodb.query.common.ResultRow;
 import hu.webarticum.holodb.query.common.SqlExecutor;
@@ -20,19 +26,37 @@ import hu.webarticum.holodb.query.grammar.SelectLexer;
 import hu.webarticum.holodb.query.grammar.SelectParser;
 import hu.webarticum.holodb.query.grammar.SelectParser.AliasableCountContext;
 import hu.webarticum.holodb.query.grammar.SelectParser.AtomicConditionContext;
+import hu.webarticum.holodb.query.grammar.SelectParser.AtomicExpressionContext;
 import hu.webarticum.holodb.query.grammar.SelectParser.BinaryConditionContext;
 import hu.webarticum.holodb.query.grammar.SelectParser.CompoundableNameContext;
+import hu.webarticum.holodb.query.grammar.SelectParser.DecimalLiteralContext;
 import hu.webarticum.holodb.query.grammar.SelectParser.ExpressionContext;
+import hu.webarticum.holodb.query.grammar.SelectParser.IntegerLiteralContext;
 import hu.webarticum.holodb.query.grammar.SelectParser.SelectQueryContext;
 import hu.webarticum.holodb.query.grammar.SelectParser.SelectableItemContext;
 import hu.webarticum.holodb.query.grammar.SelectParser.SimpleAtomicConditionContext;
+import hu.webarticum.holodb.query.grammar.SelectParser.StringLiteralContext;
 import hu.webarticum.holodb.query.grammar.SelectParser.WherePartContext;
 import hu.webarticum.holodb.query.grammar.SelectParser.WildcardedContext;
 import hu.webarticum.holodb.query.util.GrammarUtil;
 
+// TODO: more sophisticated version with more realistic results (date/time, order by etc.)
 public class DummySqlExecutor implements SqlExecutor {
     
     private static final Pattern ID_FIELD_PATTERN = Pattern.compile("(?:(?:^|_)[iI][dD]|Id)$");
+    
+    private static final Pattern INTEGER_FUNC_PATTERN = Pattern.compile(
+            "^LEN(?:GTH)$|^COUNT$"); // NOSONAR
+    
+    private static final Pattern STRING_FUNC_PATTERN = Pattern.compile(
+            "(?:^|_)SUBSTR(?:ING)(?:_|$)|(?:^|_)CONCAT$"); // NOSONAR
+    
+    private static final Set<Class<?>> LITERAL_TYPES = new HashSet<>();
+    static{
+        LITERAL_TYPES.add(IntegerLiteralContext.class);
+        LITERAL_TYPES.add(DecimalLiteralContext.class);
+        LITERAL_TYPES.add(StringLiteralContext.class);
+    }
     
     private static final String WILDCARD_NAME = "any";
     
@@ -43,6 +67,13 @@ public class DummySqlExecutor implements SqlExecutor {
     private static final int GROUP_SIZE = 10;
     
     private static final int FILTERED_GROUP_SIZE = 5;
+    
+    private static final int INTEGER_BOUND = 7200;
+    
+    private static final int FRACTION_BOUND = 100;
+    
+    
+    private final TreeRandom treeRandom = new HasherTreeRandom();
     
 
     @Override
@@ -87,7 +118,7 @@ public class DummySqlExecutor implements SqlExecutor {
         
         Function<Integer, ResultRow> rowFactory = isCount ?
                 createCountRowFactory(context, groupSize) :
-                createNormalRowFactory(context, groupSize);
+                createNormalRowFactory(context);
         
         return new DummyResult(new DummyResultSet(size, rowFactory));
     }
@@ -126,7 +157,7 @@ public class DummySqlExecutor implements SqlExecutor {
         return ID_FIELD_PATTERN.matcher(fieldName).find();
     }
     
-    private Function<Integer, ResultRow> createNormalRowFactory(SelectQueryContext context, int groupSize) {
+    private Function<Integer, ResultRow> createNormalRowFactory(SelectQueryContext context) {
         Map<String, Function<Integer, Object>> valueFactoryMap = new LinkedHashMap<>();
         Set<String> names = new HashSet<>();
         
@@ -164,7 +195,8 @@ public class DummySqlExecutor implements SqlExecutor {
         
         for (SelectableItemContext itemContext : items) {
             String name = extractNormalName(itemContext, existingNames);
-            Function<Integer, Object> valueFactory = createNormalValueFactory(itemContext, selectQueryContext);
+            Function<Integer, Object> valueFactory =
+                    createNormalValueFactory(name, itemContext, selectQueryContext);
             valueFactoryMap.put(name, valueFactory);
             existingNames.add(name);
         }
@@ -206,10 +238,10 @@ public class DummySqlExecutor implements SqlExecutor {
 
     // TODO: refactory, simplify, improve
     private Function<Integer, Object> createNormalValueFactory(
-            SelectableItemContext itemContext, SelectQueryContext select) {
+            String columnName, SelectableItemContext itemContext, SelectQueryContext select) {
         
         if (itemContext.wildcarded() != null) {
-            return i -> "wildcarded value"; // FIXME
+            return i -> generateString(WILDCARD_NAME, i);
         }
         
         String baseTableName = GrammarUtil.extractName(select.fromPart().aliasableName());
@@ -218,7 +250,7 @@ public class DummySqlExecutor implements SqlExecutor {
         if (
                 expressionContext.atomicExpression() == null ||
                 expressionContext.atomicExpression().compoundableName() == null) {
-            return i -> "expression"; // FIXME
+            return generateExpressionValueFactory(expressionContext, columnName);
         }
         
         CompoundableNameContext compoundableNameContext = expressionContext.atomicExpression().compoundableName();
@@ -263,12 +295,86 @@ public class DummySqlExecutor implements SqlExecutor {
                 }
             }
         }
-        
+
         if (ID_FIELD_PATTERN.matcher(fieldName).find()) {
-            return i -> BigInteger.valueOf(i * 3 + 1); // FIXME
+            return this::generateId;
         }
         
-        return i -> "any value " + i; // FIXME
+        return i -> generateString(fieldName, i);
+    }
+
+    private BigInteger generateId(int i) {
+        return BigInteger.valueOf((i * 3) + 1L);
+    }
+    
+    private Function<Integer, Object> generateExpressionValueFactory(
+            ExpressionContext expressionContext, String name) {
+        
+        AtomicExpressionContext atomicExpression = expressionContext.atomicExpression();
+        if (atomicExpression != null) {
+            if (atomicExpression.literal() != null) {
+                Object value = GrammarUtil.evaluateLiteral(expressionContext.atomicExpression().literal());
+                return i -> value;
+            } else if (atomicExpression.function() != null) {
+                String functionUpperName = atomicExpression.function().simpleName().getText().toUpperCase();
+                if (INTEGER_FUNC_PATTERN.matcher(functionUpperName).find()) {
+                    return i -> generateInteger(name, i);
+                } else if (STRING_FUNC_PATTERN.matcher(functionUpperName).find()) {
+                    return i -> generateString(name, i);
+                }
+            }
+        }
+        
+        Set<Class<?>> literalTypes = detectLiteralTypes(expressionContext);
+        
+        if (literalTypes.contains(StringLiteralContext.class)) {
+            return i -> this.generateString(name, i);
+        } else if (literalTypes.contains(DecimalLiteralContext.class)) {
+            return i -> this.generateDecimal(name, i);
+        } else if (literalTypes.contains(IntegerLiteralContext.class)) {
+            return i -> this.generateInteger(name, i);
+        } else {
+            return i -> this.generateString(name, i);
+        }
+    }
+    
+    private Set<Class<?>> detectLiteralTypes(ParseTree tree) {
+        Set<Class<?>> result = new HashSet<>();
+        
+        if (LITERAL_TYPES.contains(tree.getClass())) {
+            result.add(tree.getClass());
+        } else {
+            int count = tree.getChildCount();
+            for (int i = 0; i < count; i++) {
+                result.addAll(detectLiteralTypes(tree.getChild(i)));
+            }
+        }
+        
+        return result;
+    }
+
+    private BigInteger generateInteger(String name, int i) {
+        return treeRandom.sub(i).sub(name).getNumber(BigInteger.valueOf(INTEGER_BOUND));
+    }
+
+    private BigDecimal generateDecimal(String name, int i) {
+        BigInteger wholePart = treeRandom.sub(i).sub(name).sub(0).getNumber(BigInteger.valueOf(INTEGER_BOUND));
+        BigInteger fractionNumeratorPart = treeRandom.sub(i).sub(name).sub(1).getNumber(BigInteger.valueOf(FRACTION_BOUND));
+        BigDecimal fractionPart = new BigDecimal(fractionNumeratorPart).divide(BigDecimal.valueOf(FRACTION_BOUND));
+        return new BigDecimal(wholePart).add(fractionPart);
+    }
+
+    private String generateString(String name, int i) {
+        int length = 5;
+        char[] availableChars = "abcdefghijklmnopqrstuvwxyz012345".toCharArray();
+        byte[] sourceBytes = treeRandom.sub(i).sub(name).getBytes(length);
+        char[] resultChars = new char[length];
+        for (int j = 0; j < length; j++) {
+            int charIndex = Byte.toUnsignedInt(sourceBytes[j]) / 8;
+            resultChars[j] = availableChars[charIndex];
+        }
+        return new String(resultChars);
+        
     }
     
     private Function<Integer, Object> createCountValueFactory(int groupSize) {
