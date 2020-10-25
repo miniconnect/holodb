@@ -97,6 +97,10 @@ public class FastHasher implements Hasher {
             }
         }
         
+        for (int i = keyLength - 3; i >= 0; i--) {
+            result[i] ^= result[i + 1] ^ result[keyLength - 1];
+        }
+        
         return result;
     }
     
