@@ -3,14 +3,14 @@ package hu.webarticum.holodb.query.lab;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-
-import hu.webarticum.holodb.query.grammar.SimpleSelectLexer;
-import hu.webarticum.holodb.query.grammar.SimpleSelectParser;
-import hu.webarticum.holodb.query.grammar.SimpleSelectParser.SelectQueryContext;
+import hu.webarticum.holodb.query.common.Result;
+import hu.webarticum.holodb.query.common.ResultRow;
+import hu.webarticum.holodb.query.common.ResultSet;
+import hu.webarticum.holodb.query.common.SqlExecutor;
+import hu.webarticum.holodb.query.dummy.DummySqlExecutor;
 
 public class LabMain {
 
@@ -26,12 +26,41 @@ public class LabMain {
             sql = sqlReader.lines().collect(Collectors.joining("\n"));
         }
         
-        SimpleSelectLexer lexer = new SimpleSelectLexer(CharStreams.fromString(sql));
-        SimpleSelectParser parser = new SimpleSelectParser(new CommonTokenStream(lexer));
-        //parser.addParseListener(new SimpleSelectCompilerListener());
-        SelectQueryContext context = parser.selectQuery();
+        SqlExecutor sqlExecutor = new DummySqlExecutor();
+        Result result = sqlExecutor.execute(sql);
         
-       System.out.println(context.selectPart().selectableItem().size());
+        if (result.hasResultSet()) {
+            dumpResultSet(result.resultSet());
+        } else {
+            System.out.println("No result set");
+        }
     }
+    
+    private static void dumpResultSet(ResultSet resultSet) {
+        boolean first = true;
+        for (ResultRow row : resultSet) {
+            Map<String, Object> rowData = row.data();
+            if (first) {
+                StringBuilder lineBuilder = new StringBuilder();
+                for (String key : rowData.keySet()) {
+                    System.out.print(String.format("| %-20s ", key));
+                    lineBuilder.append("+----------------------");
+                }
+                System.out.println("|");
+                lineBuilder.append("+");
+                System.out.println(lineBuilder);
+                first = false;
+            }
+            
+            for (Object value : rowData.values()) {
+                System.out.print(String.format("| %-20s ", value));
+            }
+            System.out.println("|");
+        }
+        if (first) {
+            System.out.println("No data found!");
+        }
+    }
+    
     
 }

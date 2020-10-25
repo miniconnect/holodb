@@ -4,6 +4,11 @@ import org.hibernate.dialect.Dialect;
 
 public class HoloHibernateDialect extends Dialect {
 
-    // TODO
+    public HoloHibernateDialect() {
+        super();
+        
+        // TODO
+        
+    }
     
 }

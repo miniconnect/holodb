@@ -4,3 +4,9 @@
 /SimpleSelectLexer.tokens
 /SimpleSelectListener.java
 /SimpleSelectParser.java
+/Select.tokens
+/SelectBaseListener.java
+/SelectLexer.java
+/SelectLexer.tokens
+/SelectListener.java
+/SelectParser.java

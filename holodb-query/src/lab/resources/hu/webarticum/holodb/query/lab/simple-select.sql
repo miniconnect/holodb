@@ -1,7 +1,3 @@
-SELECT col1, CONCAT((col2 + 4) * 5, 'alma')
+SELECT id, col1, SUBSTR(col1, 3, 4), CONCAT((col2 + 4) * 5, 'alma') AS xpr
 FROM table1
-LEFT JOIN table2 t2 ON t1.t2_id = t2.id
-WHERE t1.col1 IS NOT NULL
-ORDER BY col2 ASC, col3, col4 DESC
-LIMIT 10
-OFFSET 50
+WHERE id=2

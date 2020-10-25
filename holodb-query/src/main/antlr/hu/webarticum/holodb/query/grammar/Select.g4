@@ -1,4 +1,4 @@
-grammar SimpleSelect;
+grammar Select;
 
 @header {
     package hu.webarticum.holodb.query.grammar;
@@ -10,23 +10,34 @@ selectQuery:
     fromPart
     joinPart?
     wherePart?
+    groupByPart?
     orderPart?
+    havingPart?
     limitPart?
     offsetPart?
 ;
 
 
-selectPart: SELECT (count | selectableItem (COMMA selectableItem)*);
+selectPart: SELECT (countSelection | normalSelection);
+normalSelection: selectableItem (COMMA selectableItem)*;
+countSelection: beforeSelection aliasableCount afterSelection;
+beforeSelection: (selectableItem COMMA)*;
+afterSelection: (COMMA selectableItem)*;
 selectableItem: aliasableExpression | wildcarded;
 aliasableExpression: expression alias?;
+aliasableCount: count alias?;
 count: COUNT PAR_LEFT MUL PAR_RIGHT;
-wildcarded: (name DOT)? MUL;
+wildcarded: (parentName=name DOT)? MUL;
 fromPart: FROM aliasableName;
-joinPart: LEFT JOIN aliasableName ON compoundName REL_EQ compoundName;
-wherePart: WHERE atomicCondition (whereAndConnections | whereOrConnections);
+joinPart: joinItem+;
+joinItem: (innerJoin | leftJoin) aliasableName ON compoundName REL_EQ compoundName;
+innerJoin: INNER? JOIN;
+leftJoin: LEFT JOIN;
+wherePart: WHERE atomicCondition (whereAndConnections | whereOrConnections)?;
 whereAndConnections: (AND atomicCondition)*;
 whereOrConnections: (OR atomicCondition)*;
-simpleCondition: name relationOperator literal;
+groupByPart: GROUP BY compoundableName (COMMA compoundableName)*;
+havingPart: HAVING expression;
 orderPart: ORDER BY orderItem (COMMA orderItem)*;
 orderItem: compoundableName (ASC | DESC)?;
 limitPart: LIMIT integerLiteral;
@@ -62,15 +73,14 @@ isNotNullExpression: atomicExpression IS NOT NULL;
 betweenExpression: atomicExpression BETWEEN atomicExpression AND atomicExpression;
 atomicExpression: literal | compoundableName | function | PAR_LEFT expression PAR_RIGHT;
 
-aliasableCompoundableName: compoundableName alias?;
 aliasableName: name alias?;
 alias: (AS name | simpleName);
 literal: decimalLiteral | integerLiteral | stringLiteral;
 decimalLiteral: LIT_DECIMAL;
 integerLiteral: LIT_INTEGER;
 stringLiteral: LIT_STRING;
-compoundableName: (compoundName | name); 
-compoundName: name DOT name; 
+compoundableName: (parentName=name DOT)? selfName=name; 
+compoundName: parentName=name DOT selfName=name; 
 name: quotedName | simpleName;
 quotedName: QUOTEDNAME;
 simpleName: SIMPLENAME;
@@ -85,6 +95,7 @@ SELECT: S E L E C T;
 COUNT: C O U N T;
 AS: A S;
 FROM: F R O M;
+INNER: I N N E R;
 LEFT: L E F T;
 JOIN: J O I N;
 ON: O N;
@@ -95,8 +106,10 @@ NULL: N U L L;
 BETWEEN: B E T W E E N;
 AND: A N D;
 OR: O R;
-ORDER: O R D E R;
+GROUP: G R O U P;
 BY: B Y;
+HAVING: H A V I N G;
+ORDER: O R D E R;
 ASC: A S C;
 DESC: D E S C;
 LIMIT: L I M I T;
