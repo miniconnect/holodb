@@ -21,11 +21,11 @@ dependencies {
     implementation 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final'
     implementation 'org.hibernate:hibernate-entitymanager:5.4.17.Final'
     
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
-    testImplementation 'org.junit.platform:junit-platform-launcher:1.4.1'
-    testImplementation 'org.assertj:assertj-core:3.12.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.7.1'
+    testImplementation 'org.assertj:assertj-core:3.19.0'
     
     labImplementation sourceSets.main.output
 }
