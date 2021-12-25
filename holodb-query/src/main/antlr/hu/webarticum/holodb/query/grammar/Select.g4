@@ -80,7 +80,7 @@ decimalLiteral: LIT_DECIMAL;
 integerLiteral: LIT_INTEGER;
 stringLiteral: LIT_STRING;
 compoundableName: (parentName=name DOT)? selfName=name; 
-compoundName: parentName=name DOT selfName=name; 
+compoundName: parentName=name DOT selfName=name;
 name: quotedName | simpleName;
 quotedName: QUOTEDNAME;
 simpleName: SIMPLENAME;
