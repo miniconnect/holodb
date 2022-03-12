@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.core.data.binrel.core;
+package hu.webarticum.holodb.core.data.binrel;
 
 import java.math.BigInteger;
 import java.util.Iterator;

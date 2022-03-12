@@ -3,7 +3,7 @@ package hu.webarticum.holodb.core.data.binrel.permutation;
 
 import java.math.BigInteger;
 
-import hu.webarticum.holodb.core.data.binrel.core.Function;
+import hu.webarticum.holodb.core.data.binrel.Function;
 
 public interface Permutation extends Function {
 
@@ -15,7 +15,14 @@ public interface Permutation extends Function {
     }
     
     public default Permutation resized(BigInteger size) {
-        return PermutationUtil.resized(this, size);
+        int cmp = size.compareTo(size());
+        if (cmp > 0) {
+            return new PermutationExtender(this, size);
+        } else if (cmp < 0) {
+            return new PermutationReducer(this, size);
+        } else {
+            return this;
+        }
     }
 
 }

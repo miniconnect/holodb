@@ -2,7 +2,7 @@ package hu.webarticum.holodb.core.data.binrel.permutation;
 
 import java.math.BigInteger;
 
-public class IdentityPermutation implements ResizablePermutation {
+public class IdentityPermutation implements Permutation {
 
     private final BigInteger size;
     
@@ -28,7 +28,7 @@ public class IdentityPermutation implements ResizablePermutation {
     }
 
     @Override
-    public ResizablePermutation resize(BigInteger size) {
+    public IdentityPermutation resized(BigInteger size) {
         return new IdentityPermutation(size);
     }
 

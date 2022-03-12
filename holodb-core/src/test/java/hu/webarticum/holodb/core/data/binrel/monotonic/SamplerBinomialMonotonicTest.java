@@ -2,7 +2,6 @@ package hu.webarticum.holodb.core.data.binrel.monotonic;
 
 import java.math.BigInteger;
 
-import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
 

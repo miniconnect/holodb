@@ -105,15 +105,20 @@ class ByteUtilTest {
 
     @Test
     void testFillBytesFrom() {
-        assertThat(ObjectUtil.apply(b(""), bytes -> ByteUtil.fillBytesFrom(bytes, b("")))).isEqualTo(b(""));
-        assertThat(ObjectUtil.apply(b(""), bytes -> ByteUtil.fillBytesFrom(bytes, b("abc")))).isEqualTo(b(""));
-        assertThat(ObjectUtil.apply(b("0123"), bytes -> ByteUtil.fillBytesFrom(bytes, b("")))).isEqualTo(b("0123"));
-        assertThat(ObjectUtil.apply(b("0123"), bytes -> ByteUtil.fillBytesFrom(bytes, b("a")))).isEqualTo(b("aaaa"));
-        assertThat(ObjectUtil.apply(b("0123"), bytes -> ByteUtil.fillBytesFrom(bytes, b("ab")))).isEqualTo(b("abab"));
-        assertThat(ObjectUtil.apply(b("0123"), bytes -> ByteUtil.fillBytesFrom(bytes, b("abc")))).isEqualTo(b("abca"));
-        assertThat(ObjectUtil.apply(b("0123"), bytes -> ByteUtil.fillBytesFrom(bytes, b("abcd")))).isEqualTo(b("abcd"));
-        assertThat(ObjectUtil.apply(b("0123"), bytes -> ByteUtil.fillBytesFrom(bytes, b("abcde")))).isEqualTo(b("abcd"));
-        assertThat(ObjectUtil.apply(b("0123"), bytes -> ByteUtil.fillBytesFrom(bytes, b("abcdef")))).isEqualTo(b("abcd"));
+        assertThat(applyFillBytesFrom(b(""), b(""))).isEqualTo(b(""));
+        assertThat(applyFillBytesFrom(b(""), b("abc"))).isEqualTo(b(""));
+        assertThat(applyFillBytesFrom(b("0123"), b(""))).isEqualTo(b("0123"));
+        assertThat(applyFillBytesFrom(b("0123"), b("a"))).isEqualTo(b("aaaa"));
+        assertThat(applyFillBytesFrom(b("0123"), b("ab"))).isEqualTo(b("abab"));
+        assertThat(applyFillBytesFrom(b("0123"), b("abc"))).isEqualTo(b("abca"));
+        assertThat(applyFillBytesFrom(b("0123"), b("abcd"))).isEqualTo(b("abcd"));
+        assertThat(applyFillBytesFrom(b("0123"), b("abcde"))).isEqualTo(b("abcd"));
+        assertThat(applyFillBytesFrom(b("0123"), b("abcdef"))).isEqualTo(b("abcd"));
+    }
+    
+    private byte[] applyFillBytesFrom(byte[] target, byte[] source) {
+        ByteUtil.fillBytesFrom(target, source);
+        return target;
     }
 
     

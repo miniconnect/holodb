@@ -1,12 +1,17 @@
 package hu.webarticum.holodb.core.lab.hasher.performance;
 
 import hu.webarticum.holodb.core.util.ByteUtil;
-import hu.webarticum.holodb.core.util.ObjectUtil;
 
 class SingleHasher extends AbstractDemoHasher {
     
     public SingleHasher(byte[] key, int hashSize) {
-        super(ObjectUtil.apply(new byte[hashSize], data -> ByteUtil.fillBytesFrom(data, key)));
+        super(buildKey(key, hashSize));
     }
 
+    private static byte[] buildKey(byte[] key, int hashSize) {
+        byte[] data = new byte[hashSize];
+        ByteUtil.fillBytesFrom(data, key);
+        return data;
+    }
+    
 }

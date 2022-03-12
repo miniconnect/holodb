@@ -6,8 +6,6 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
-import hu.webarticum.holodb.core.data.binrel.permutation.IdentityPermutation;
-
 class IdentityPermutationTest extends AbstractPermutationTest<IdentityPermutation> {
 
     @Override

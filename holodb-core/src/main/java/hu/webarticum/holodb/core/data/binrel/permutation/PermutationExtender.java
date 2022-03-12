@@ -45,4 +45,9 @@ public class PermutationExtender implements PermutationDecorator {
         return base;
     }
 
+    @Override
+    public Permutation resized(BigInteger size) {
+        return base.resized(size);
+    }
+    
 }

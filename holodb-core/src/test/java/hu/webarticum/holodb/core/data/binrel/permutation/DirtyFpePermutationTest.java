@@ -2,8 +2,6 @@ package hu.webarticum.holodb.core.data.binrel.permutation;
 
 import java.math.BigInteger;
 
-import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
-
 class DirtyFpePermutationTest extends AbstractPermutationTest<DirtyFpePermutation> {
 
     private final byte[] key = "0123456789".getBytes();

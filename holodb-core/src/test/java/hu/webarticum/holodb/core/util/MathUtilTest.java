@@ -26,11 +26,4 @@ class MathUtilTest {
                 .isInstanceOf(RuntimeException.class);
     }
 
-    @Test
-    void testScaleBigInteger() {
-        assertThat(MathUtil.scaleBigInteger(BigInteger.valueOf(1000), 2d)).isEqualTo(BigInteger.valueOf(2000));
-        assertThat(MathUtil.scaleBigInteger(BigInteger.valueOf(77), 0.4d)).isEqualTo(BigInteger.valueOf(30));
-        assertThat(MathUtil.scaleBigInteger(new BigInteger("23642834762384"), 2.35)).isEqualTo(new BigInteger("55560661691602"));
-    }
-    
 }
