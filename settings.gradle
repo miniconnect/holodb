@@ -1,0 +1,8 @@
+rootProject.name = 'holodb'
+
+include 'app'
+include 'core'
+
+rootProject.children.each { project ->
+    project.projectDir = new File(settingsDir, "projects/${project.name}")
+}

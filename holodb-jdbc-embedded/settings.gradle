@@ -1,9 +1,0 @@
-
-rootProject.name = 'holodb-jdbc-embedded'
-
-// FIXME
-include ':holodb-core'
-project(':holodb-core').projectDir = new File('../holodb-core')
-
-include ':holodb-query'
-project(':holodb-query').projectDir = new File('../holodb-query')

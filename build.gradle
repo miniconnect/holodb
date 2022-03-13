@@ -1,0 +1,46 @@
+description = "HoloDB - instant random relational data"
+
+defaultTasks "build"
+
+allprojects {
+    group "hu.webarticum.holodb"
+    version '0.1.0-SNAPSHOT'
+    
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    afterEvaluate {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+        
+        if (sourceSets.hasProperty("lab")) {
+            task execLab(type: JavaExec) {
+                group = 'Execution'
+                description = 'Run lab demo main class'
+                classpath = sourceSets.lab.runtimeClasspath
+                mainClass = System.getProperty("lab.exec.main.class")
+                standardInput = System.in
+            }
+        }
+        
+        test {
+            useJUnitPlatform()
+            testLogging {
+                events "failed"
+                showExceptions true
+                exceptionFormat "full"
+                showCauses true
+                showStackTraces true
+                showStandardStreams false
+            }
+        }
+        
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << '-Xlint:unchecked'
+            options.deprecation = true
+        }
+    }
+}
