@@ -8,11 +8,14 @@ allprojects {
     
     repositories {
         mavenCentral()
+        mavenLocal()
     }
 }
 
 subprojects {
-    afterEvaluate {
+	apply plugin: 'maven-publish'
+	
+    plugins.withType(JavaPlugin) {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
         
