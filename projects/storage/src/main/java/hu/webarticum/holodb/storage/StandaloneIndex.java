@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.core.storage;
+package hu.webarticum.holodb.storage;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.rdmsframework.storage.TableSelection;

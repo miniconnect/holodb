@@ -1,11 +1,9 @@
 plugins {
     id 'java-library'
-    id 'application'
     id 'eclipse'
-    id("com.github.johnrengelman.shadow") version "7.1.1"
 }
 
-description "HoloDB standalone app"
+description "MiniBase storage implementation"
 
 sourceSets {
     lab {
@@ -21,18 +19,11 @@ configurations {
 
 dependencies {
     implementation project(':core')
-    implementation project(':storage')
-    implementation 'hu.webarticum.miniconnect:messenger:0.1.0-SNAPSHOT'
     implementation 'hu.webarticum.miniconnect:rdbms-framework:0.1.0-SNAPSHOT'
-    implementation 'hu.webarticum.miniconnect:server:0.1.0-SNAPSHOT'
     
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
     testImplementation 'org.junit.platform:junit-platform-launcher:1.7.1'
     testImplementation 'org.assertj:assertj-core:3.19.0'
-}
-
-application {
-    mainClass = 'hu.webarticum.holodb.app.launch.HolodbAppMain'
 }

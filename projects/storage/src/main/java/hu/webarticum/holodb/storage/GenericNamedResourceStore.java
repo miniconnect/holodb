@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.core.storage;
+package hu.webarticum.holodb.storage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
