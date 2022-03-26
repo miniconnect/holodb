@@ -25,7 +25,9 @@ dependencies {
     implementation 'hu.webarticum.miniconnect:messenger:0.1.0-SNAPSHOT'
     implementation 'hu.webarticum.miniconnect:rdbms-framework:0.1.0-SNAPSHOT'
     implementation 'hu.webarticum.miniconnect:server:0.1.0-SNAPSHOT'
-    
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.2'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
