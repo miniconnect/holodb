@@ -14,13 +14,13 @@ public class GenericNamedResourceStore<T extends NamedResource> implements Named
     
     private final ImmutableList<String> names;
 
-    private final Map<String, T> resourceMap;
+    private final Map<String, T> resourcesByName;
     
     
     private GenericNamedResourceStore(
             ImmutableList<String> names, Map<String, T> resourceMap) {
         this.names = names;
-        this.resourceMap = resourceMap;
+        this.resourcesByName = resourceMap;
     }
     
     @SafeVarargs
@@ -51,13 +51,18 @@ public class GenericNamedResourceStore<T extends NamedResource> implements Named
     }
 
     @Override
+    public ImmutableList<T> resources() {
+        return ImmutableList.fromCollection(resourcesByName.values());
+    }
+
+    @Override
     public boolean contains(String name) {
-        return resourceMap.containsKey(name);
+        return resourcesByName.containsKey(name);
     }
 
     @Override
     public T get(String name) {
-        return resourceMap.get(name);
+        return resourcesByName.get(name);
     }
 
 }
