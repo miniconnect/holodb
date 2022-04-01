@@ -1,10 +1,8 @@
 package hu.webarticum.holodb.storage;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,14 +42,14 @@ public class HoloTable implements Table {
             ImmutableMap<String, Source<?>> singleColumnSources,
             ImmutableMap<ImmutableList<String>, Source<? extends ImmutableList<?>>>
                     multiColumnSources,
-            ImmutableMap<ImmutableList<String>, StandaloneIndex> indexes) {
+            NamedResourceStore<TableIndex> indexStore) {
         checkSources(
                 size,
                 columnNames,
                 columnDefinitions,
                 singleColumnSources,
                 multiColumnSources,
-                indexes);
+                indexStore);
         this.name = name;
         this.size = size;
         this.columnNames = columnNames;
@@ -59,7 +57,7 @@ public class HoloTable implements Table {
         this.multiColumnSourceMap = buildMultiColumnSourceMap(multiColumnSources);
         this.columnStore = buildColumnStore(
                 columnNames, columnDefinitions, singleColumnSources, multiColumnSources);
-        this.indexStore = buildIndexStore(indexes);
+        this.indexStore = indexStore;
     }
     
     private static void checkSources(
@@ -69,7 +67,7 @@ public class HoloTable implements Table {
             ImmutableMap<String, Source<?>> singleColumnSources,
             ImmutableMap<ImmutableList<String>, Source<? extends ImmutableList<?>>>
                     multiColumnSources,
-            ImmutableMap<ImmutableList<String>, StandaloneIndex> indexes) {
+            NamedResourceStore<TableIndex> indexStore) {
         int width = columnNames.size();
         int numberOfColumnDefinitions = columnDefinitions.size();
         if (numberOfColumnDefinitions != width) {
@@ -99,8 +97,8 @@ public class HoloTable implements Table {
         }
         checkSizes(singleColumnSources, size);
         checkSizes(multiColumnSources, size);
-        for (ImmutableList<String> indexColumnNames : indexes.keySet()) {
-            for (String columnName : indexColumnNames) {
+        for (TableIndex tableIndex : indexStore.resources()) {
+            for (String columnName : tableIndex.columnNames()) {
                 if (!columnNames.contains(columnName)) {
                     throw new IllegalArgumentException("Unexpected index column: " + columnName);
                 }
@@ -138,30 +136,6 @@ public class HoloTable implements Table {
             }
         }
         return ImmutableMap.fromMap(resultBuilder);
-    }
-
-    private static NamedResourceStore<TableIndex> buildIndexStore(
-            ImmutableMap<ImmutableList<String>, StandaloneIndex> indexes) {
-        List<TableIndex> tableIndexes = new ArrayList<>();
-        Set<String> indexNames = new HashSet<>();
-        for (Map.Entry<ImmutableList<String>, StandaloneIndex> entry : indexes.entrySet()) {
-            ImmutableList<String> columnNames = entry.getKey();
-            StandaloneIndex standaloneIndex = entry.getValue();
-            String indexName = addIndexName(columnNames, indexNames);
-            TableIndex index = new HoloTableIndex(indexName, columnNames, standaloneIndex);
-            tableIndexes.add(index);
-        }
-        return GenericNamedResourceStore.from(tableIndexes);
-    }
-
-    private static String addIndexName(ImmutableList<String> columnNames, Set<String> indexNames) {
-        String baseIndexName = String.join("_", columnNames);
-        String indexName = baseIndexName;
-        for (int i = 2; indexNames.contains(indexName); i++) {
-            indexName = baseIndexName + "_" + i;
-        }
-        indexNames.add(indexName);
-        return indexName;
     }
 
     private static NamedResourceStore<Column> buildColumnStore(
