@@ -9,7 +9,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import hu.webarticum.holodb.app.config.HoloConfig;
+import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
+import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.holodb.core.data.source.ArraySortedSource;
+import hu.webarticum.holodb.core.data.source.RangeSource;
+import hu.webarticum.holodb.core.data.source.Source;
+import hu.webarticum.holodb.storage.HoloSimpleSource;
 import hu.webarticum.holodb.storage.HoloTable;
 import hu.webarticum.miniconnect.api.MiniSessionManager;
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -21,7 +26,6 @@ import hu.webarticum.miniconnect.rdmsframework.engine.impl.SimpleEngine;
 import hu.webarticum.miniconnect.rdmsframework.execution.QueryExecutor;
 import hu.webarticum.miniconnect.rdmsframework.execution.SqlParser;
 import hu.webarticum.miniconnect.rdmsframework.execution.simple.SimpleQueryExecutor;
-import hu.webarticum.miniconnect.rdmsframework.execution.simple.SimpleSelectExecutor;
 import hu.webarticum.miniconnect.rdmsframework.query.AntlrSqlParser;
 import hu.webarticum.miniconnect.rdmsframework.session.FrameworkSessionManager;
 import hu.webarticum.miniconnect.rdmsframework.storage.Schema;
@@ -76,17 +80,32 @@ public class HolodbServerMain {
         }
     }
 
+    // FIXME
     public static StorageAccess createStorageAccess() {
         SimpleStorageAccess storageAccess =  new SimpleStorageAccess();
         SimpleResourceManager<Schema> schemaManager = storageAccess.schemas();
         SimpleSchema schema = new SimpleSchema("default");
         schemaManager.register(schema);
         SimpleResourceManager<Table> tableManager = schema.tables();
+        BigInteger size = BigInteger.valueOf(100);
+        TreeRandom rootRandom = new HasherTreeRandom("some-key-23874328");
+
+        Source<String> labelSource = new HoloSimpleSource<>(
+                rootRandom.sub("col-id"),
+                new ArraySortedSource<>("First", "Second", "Third"),
+                size);
+        Source<String> descriptionSource = new HoloSimpleSource<>(
+                rootRandom.sub("col-description"),
+                new ArraySortedSource<>("Lorem", "Ipsum", "Dolor"),
+                size);
+        Source<Integer> levelSource = new HoloSimpleSource<>(
+                rootRandom.sub("col-level"),
+                new ArraySortedSource<>(1, 2, 3, 4, 5),
+                size);
         
-        // FIXME
         Table table = new HoloTable(
                 "data",
-                BigInteger.valueOf(3L),
+                size,
                 ImmutableList.of("id", "label", "description", "level"),
                 ImmutableList.of(
                         new SimpleColumnDefinition(BigInteger.class, false),
@@ -94,11 +113,10 @@ public class HolodbServerMain {
                         new SimpleColumnDefinition(String.class, false),
                         new SimpleColumnDefinition(Integer.class, true)),
                 ImmutableMap.of(
-                        "id", new ArraySortedSource<>(
-                                BigInteger.ONE, BigInteger.TWO, BigInteger.TEN),
-                        "label", new ArraySortedSource<>("First", "Second", "Third"),
-                        "description", new ArraySortedSource<>("Lorem", "Ipsum", "Dolor"),
-                        "level", new ArraySortedSource<>(3, 5, 2)),
+                        "id", new RangeSource(BigInteger.ONE, size),
+                        "label", labelSource,
+                        "description", descriptionSource,
+                        "level", levelSource),
                 ImmutableMap.empty(),
                 new EmptyNamedResourceStore<>());
         
