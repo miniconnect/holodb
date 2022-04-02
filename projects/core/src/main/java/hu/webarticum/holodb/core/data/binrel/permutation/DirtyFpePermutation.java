@@ -3,6 +3,7 @@ package hu.webarticum.holodb.core.data.binrel.permutation;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 
 import javax.crypto.Mac;
@@ -41,6 +42,10 @@ public class DirtyFpePermutation implements Permutation {
     
     private final BigInteger b;
 
+
+    public DirtyFpePermutation(String key, BigInteger size) {
+        this(key.getBytes(StandardCharsets.UTF_8), size);
+    }
     
     public DirtyFpePermutation(byte[] key, BigInteger size) {
         this.size = size;
