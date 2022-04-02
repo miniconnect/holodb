@@ -31,5 +31,10 @@ public class PermutationInverter implements PermutationDecorator {
     public Permutation getBase() {
         return base;
     }
+    
+    @Override
+    public Permutation inverted() {
+        return base;
+    }
 
 }
