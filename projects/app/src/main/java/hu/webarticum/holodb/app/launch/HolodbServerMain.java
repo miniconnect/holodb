@@ -4,15 +4,22 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.math.BigInteger;
+import java.util.Collection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import hu.webarticum.holodb.app.config.HoloConfig;
+import hu.webarticum.holodb.app.config.HoloConfigColumn;
+import hu.webarticum.holodb.app.config.HoloConfigColumn.ColumnMode;
+import hu.webarticum.holodb.app.config.HoloConfigSchema;
+import hu.webarticum.holodb.app.config.HoloConfigTable;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.holodb.core.data.source.UniqueSource;
+import hu.webarticum.holodb.core.data.source.FixedSource;
 import hu.webarticum.holodb.core.data.source.RangeSource;
+import hu.webarticum.holodb.core.data.source.SortedSource;
 import hu.webarticum.holodb.core.data.source.Source;
 import hu.webarticum.holodb.storage.HoloSimpleSource;
 import hu.webarticum.holodb.storage.HoloTable;
@@ -28,6 +35,7 @@ import hu.webarticum.miniconnect.rdmsframework.execution.SqlParser;
 import hu.webarticum.miniconnect.rdmsframework.execution.simple.SimpleQueryExecutor;
 import hu.webarticum.miniconnect.rdmsframework.query.AntlrSqlParser;
 import hu.webarticum.miniconnect.rdmsframework.session.FrameworkSessionManager;
+import hu.webarticum.miniconnect.rdmsframework.storage.ColumnDefinition;
 import hu.webarticum.miniconnect.rdmsframework.storage.Schema;
 import hu.webarticum.miniconnect.rdmsframework.storage.StorageAccess;
 import hu.webarticum.miniconnect.rdmsframework.storage.Table;
@@ -48,14 +56,12 @@ public class HolodbServerMain {
         HoloConfig config = loadConfig(args);
         SqlParser sqlParser = new AntlrSqlParser();
         QueryExecutor queryExecutor = new SimpleQueryExecutor();
-        StorageAccess storageAccess = createStorageAccess();
+        StorageAccess storageAccess = createStorageAccess(config);
         try (Engine engine = new SimpleEngine(sqlParser, queryExecutor, storageAccess)) {
             MiniSessionManager sessionManager = new FrameworkSessionManager(engine);
             Messenger messenger = new SessionManagerMessenger(sessionManager);
             try (MessengerServer server = new MessengerServer(messenger, SERVER_PORT)) {
-                
                 System.out.println("Listen on " + SERVER_PORT);
-                // FIXME
                 server.listen();
             }
         }
@@ -80,48 +86,95 @@ public class HolodbServerMain {
         }
     }
 
-    // FIXME
-    public static StorageAccess createStorageAccess() {
+    public static StorageAccess createStorageAccess(HoloConfig config) {
         SimpleStorageAccess storageAccess =  new SimpleStorageAccess();
         SimpleResourceManager<Schema> schemaManager = storageAccess.schemas();
-        SimpleSchema schema = new SimpleSchema("default");
-        schemaManager.register(schema);
-        SimpleResourceManager<Table> tableManager = schema.tables();
-        BigInteger size = BigInteger.valueOf(100);
-        TreeRandom rootRandom = new HasherTreeRandom("some-key-23874328");
-
+        TreeRandom rootRandom = new HasherTreeRandom(config.seed());
+        for (HoloConfigSchema schemaConfig : config.schemas()) {
+            String schemaName = schemaConfig.name();
+            TreeRandom schemaRandom = rootRandom.sub("schema-" + schemaName);
+            SimpleSchema schema = new SimpleSchema(schemaName);
+            schemaManager.register(schema);
+            SimpleResourceManager<Table> tableManager = schema.tables();
+            for (HoloConfigTable tableConfig : schemaConfig.tables()) {
+                Table table = createTable(schemaRandom, tableConfig);
+                tableManager.register(table);
+            }
+        }
+        return storageAccess;
+    }
+    
+    private static Table createTable(TreeRandom schemaRandom, HoloConfigTable tableConfig) {
+        BigInteger tableSize = tableConfig.size();
+        String tableName = tableConfig.name();
+        TreeRandom tableRandom = schemaRandom.sub("table-" + tableName);
+        ImmutableList<HoloConfigColumn> columnConfigs =
+                ImmutableList.fromCollection(tableConfig.columns());
+        ImmutableList<String> columnNames = columnConfigs.map(HoloConfigColumn::name);
+        ImmutableList<ColumnDefinition> columnDefinitions =
+                columnConfigs.map(c -> new SimpleColumnDefinition(c.type(), false));
+        ImmutableMap<String, Source<?>> columnSources = columnConfigs
+                .assign(c -> createColumnSource(tableRandom, tableSize, c))
+                .map(HoloConfigColumn::name, s -> s);
+        
+        /*
         Source<String> labelSource = new HoloSimpleSource<>(
                 rootRandom.sub("col-id"),
                 new UniqueSource<>("First", "Second", "Third"),
-                size);
+                tableSize);
         Source<String> descriptionSource = new HoloSimpleSource<>(
                 rootRandom.sub("col-description"),
                 new UniqueSource<>("Lorem", "Ipsum", "Dolor"),
-                size);
+                tableSize);
         Source<Integer> levelSource = new HoloSimpleSource<>(
                 rootRandom.sub("col-level"),
                 new UniqueSource<>(1, 2, 3, 4, 5),
-                size);
+                tableSize);
+        */
         
-        Table table = new HoloTable(
-                "data",
-                size,
-                ImmutableList.of("id", "label", "description", "level"),
-                ImmutableList.of(
-                        new SimpleColumnDefinition(BigInteger.class, false),
-                        new SimpleColumnDefinition(String.class, false),
-                        new SimpleColumnDefinition(String.class, false),
-                        new SimpleColumnDefinition(Integer.class, true)),
-                ImmutableMap.of(
-                        "id", new RangeSource(BigInteger.ONE, size),
-                        "label", labelSource,
-                        "description", descriptionSource,
-                        "level", levelSource),
+        return new HoloTable(
+                tableName,
+                tableSize,
+                columnNames,
+                columnDefinitions,
+                columnSources,
                 ImmutableMap.empty(),
                 new EmptyNamedResourceStore<>());
-        
-        tableManager.register(table);
-        return storageAccess;
+    }
+    
+    private static Source<?> createColumnSource(
+            TreeRandom tableRandom, BigInteger tableSize, HoloConfigColumn columnConfig) {
+        ColumnMode columnMode = columnConfig.mode();
+        if (columnMode == ColumnMode.DEFAULT) {
+            SortedSource<?> baseSource =
+                    createUniqueSource(columnConfig.type(), columnConfig.values());
+            TreeRandom columnRandom = tableRandom.sub("col-" + columnConfig.name());
+            return new HoloSimpleSource<>(columnRandom, baseSource, tableSize);
+        } else if (columnMode == ColumnMode.COUNTER) {
+            return new RangeSource(BigInteger.ONE, tableSize);
+        } else if (columnMode == ColumnMode.FIXED) {
+            return createFixedSource(columnConfig.type(), columnConfig.values());
+        } else {
+            throw new IllegalArgumentException("Invalid column mode: " + columnMode);
+        }
+    }
+
+    private static UniqueSource<?> createUniqueSource(Class<?> type, Collection<?> values) {
+        try {
+            return UniqueSource.class.getConstructor(Class.class, Collection.class)
+                    .newInstance(type, values);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    private static FixedSource<?> createFixedSource(Class<?> type, Collection<?> values) {
+        try {
+            return FixedSource.class.getConstructor(Class.class, Collection.class)
+                    .newInstance(type, values);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
     }
     
 }

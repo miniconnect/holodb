@@ -49,12 +49,8 @@ public class PermutationComparisonMain {
         Map<String, Function<BigInteger, Permutation>> result = new LinkedHashMap<>();
         
         // TODO
-        result.put("lorem", s -> new DirtyFpePermutation("1234", s));
-        result.put("hello-world", s -> new DirtyFpePermutation("xxx", s));
-        result.put("akdfj", s -> new DirtyFpePermutation("sdf", s));
-        result.put("1234k2", s -> new DirtyFpePermutation("asfgasfgf", s));
-        result.put("4k23j4k", s -> new DirtyFpePermutation("....", s));
-        result.put("23k4j", s -> new DirtyFpePermutation("---", s));
+        result.put("FPE1", s -> new DirtyFpePermutation("1234", s));
+        result.put("FPE2", s -> new DirtyFpePermutation("lorem", s));
         
         return result;
     }
