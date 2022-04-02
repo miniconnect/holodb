@@ -49,4 +49,15 @@ class PermutatedSourceTest {
         assertThat(permutatedValues).containsExactly("c", "a", "d", "b");
     }
 
+    @Test
+    void testMultiGet() {
+        Permutation permutation = MockPermutation.of(1, 3, 0, 4, 2);
+        Source<String> source = new FixedSource<>("a", "a", "b", "b", "b");
+        PermutatedSource<String> permutatedSource =
+                new PermutatedSource<>(source, permutation);
+        ImmutableList<String> permutatedValues =
+                ImmutableList.fromIterable(Range.until(source.size())).map(permutatedSource::get);
+        assertThat(permutatedValues).containsExactly("a", "b", "a", "b", "b");
+    }
+
 }
