@@ -25,7 +25,7 @@ class MonotonicSourceTest {
     
     private MonotonicSource<String> createBaseSource() {
         SortedSet<String> values = new TreeSet<>(Arrays.asList("apple", "banana", "kiwi", "orange", "pear", "watermelon"));
-        SortedSource<String> baseSource = new ArraySortedSource<>(String.class, values);
+        SortedSource<String> baseSource = new UniqueSource<>(String.class, values);
         Monotonic monotonic = new MockMonotonic(new long[] { 0, 1, 1, 3, 4, 4, 4, 5 }, 6);
         return new MonotonicSource<String>(baseSource, monotonic);
     }

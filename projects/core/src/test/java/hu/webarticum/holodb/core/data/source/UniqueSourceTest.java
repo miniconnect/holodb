@@ -11,11 +11,11 @@ import org.junit.jupiter.api.Test;
 
 import hu.webarticum.holodb.core.data.selection.Range;
 
-class ArraySortedSourceTest {
+class UniqueSourceTest {
 
     @Test
     void testValues() {
-        ArraySortedSource<String> source = createSource();
+        UniqueSource<String> source = createSource();
         assertThat(source).extracting(Source::size).as("size").isEqualTo(BigInteger.valueOf(6));
         assertThat(source).extracting(s -> s.get(big(0))).as("at 0").isEqualTo("apple");
         assertThat(source).extracting(s -> s.get(big(1))).as("at 1").isEqualTo("banana");
@@ -101,13 +101,13 @@ class ArraySortedSourceTest {
 
     @Test
     void testSort() {
-        ArraySortedSource<String> source = new ArraySortedSource<>("cherry", "apple", "cherry", "orange", "kiwi");
+        UniqueSource<String> source = new UniqueSource<>("cherry", "apple", "cherry", "orange", "kiwi");
         assertThat(source.size()).isEqualTo(BigInteger.valueOf(4));
         assertThat(source.get(BigInteger.valueOf(2))).isEqualTo("kiwi");
     }
     
-    private static ArraySortedSource<String> createSource() {
-        return new ArraySortedSource<>(String.class, new TreeSet<>(Arrays.asList("apple", "banana", "kiwi", "orange", "pear", "watermelon")));
+    private static UniqueSource<String> createSource() {
+        return new UniqueSource<>(String.class, new TreeSet<>(Arrays.asList("apple", "banana", "kiwi", "orange", "pear", "watermelon")));
     }
 
     private static BigInteger big(int value) {

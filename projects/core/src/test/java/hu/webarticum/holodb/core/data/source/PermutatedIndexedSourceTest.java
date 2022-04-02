@@ -18,7 +18,7 @@ class PermutatedIndexedSourceTest {
     @Test
     void testUnmatchingSize() {
         Permutation permutation = MockPermutation.of(1, 0, 3);
-        IndexedSource<String> source = new ArraySortedSource<>("lorem", "ipsum");
+        IndexedSource<String> source = new UniqueSource<>("lorem", "ipsum");
         assertThatThrownBy(() -> new PermutatedIndexedSource<>(source, permutation))
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -26,7 +26,7 @@ class PermutatedIndexedSourceTest {
     @Test
     void testType() {
         Permutation permutation = MockPermutation.of(0);
-        IndexedSource<String> source = new ArraySortedSource<>("xxx");
+        IndexedSource<String> source = new UniqueSource<>("xxx");
         PermutatedIndexedSource<String> permutatedSource =
                 new PermutatedIndexedSource<>(source, permutation);
         assertThat(permutatedSource.type()).isEqualTo(String.class);
@@ -35,7 +35,7 @@ class PermutatedIndexedSourceTest {
     @Test
     void testSize() {
         Permutation permutation = MockPermutation.of(1, 0);
-        IndexedSource<String> source = new ArraySortedSource<>("aaa", "bbb");
+        IndexedSource<String> source = new UniqueSource<>("aaa", "bbb");
         PermutatedIndexedSource<String> permutatedSource =
                 new PermutatedIndexedSource<>(source, permutation);
         assertThat(permutatedSource.size()).isEqualTo(2);
@@ -44,7 +44,7 @@ class PermutatedIndexedSourceTest {
     @Test
     void testGet() {
         Permutation permutation = MockPermutation.of(2, 0, 3, 1);
-        IndexedSource<String> source = new ArraySortedSource<>("a", "b", "c", "d");
+        IndexedSource<String> source = new UniqueSource<>("a", "b", "c", "d");
         PermutatedIndexedSource<String> permutatedSource =
                 new PermutatedIndexedSource<>(source, permutation);
         ImmutableList<String> permutatedValues =
@@ -55,7 +55,7 @@ class PermutatedIndexedSourceTest {
     @Test
     void testFind() {
         Permutation permutation = MockPermutation.of(2, 0, 3, 1);
-        IndexedSource<String> source = new ArraySortedSource<>("a", "b", "c", "d");
+        IndexedSource<String> source = new UniqueSource<>("a", "b", "c", "d");
         PermutatedIndexedSource<String> permutatedSource =
                 new PermutatedIndexedSource<>(source, permutation);
         Selection selection = permutatedSource.find("b");
@@ -65,7 +65,7 @@ class PermutatedIndexedSourceTest {
     @Test
     void testFindBetween() {
         Permutation permutation = MockPermutation.of(2, 1, 3, 0);
-        IndexedSource<String> source = new ArraySortedSource<>("a", "b", "c", "d");
+        IndexedSource<String> source = new UniqueSource<>("a", "b", "c", "d");
         PermutatedIndexedSource<String> permutatedSource =
                 new PermutatedIndexedSource<>(source, permutation);
         Selection selection = permutatedSource.findBetween("c", true, "x", false);

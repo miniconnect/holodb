@@ -11,7 +11,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import hu.webarticum.holodb.app.config.HoloConfig;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
-import hu.webarticum.holodb.core.data.source.ArraySortedSource;
+import hu.webarticum.holodb.core.data.source.UniqueSource;
 import hu.webarticum.holodb.core.data.source.RangeSource;
 import hu.webarticum.holodb.core.data.source.Source;
 import hu.webarticum.holodb.storage.HoloSimpleSource;
@@ -92,15 +92,15 @@ public class HolodbServerMain {
 
         Source<String> labelSource = new HoloSimpleSource<>(
                 rootRandom.sub("col-id"),
-                new ArraySortedSource<>("First", "Second", "Third"),
+                new UniqueSource<>("First", "Second", "Third"),
                 size);
         Source<String> descriptionSource = new HoloSimpleSource<>(
                 rootRandom.sub("col-description"),
-                new ArraySortedSource<>("Lorem", "Ipsum", "Dolor"),
+                new UniqueSource<>("Lorem", "Ipsum", "Dolor"),
                 size);
         Source<Integer> levelSource = new HoloSimpleSource<>(
                 rootRandom.sub("col-level"),
-                new ArraySortedSource<>(1, 2, 3, 4, 5),
+                new UniqueSource<>(1, 2, 3, 4, 5),
                 size);
         
         Table table = new HoloTable(

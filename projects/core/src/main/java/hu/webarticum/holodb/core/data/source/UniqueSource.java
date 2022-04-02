@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 import hu.webarticum.holodb.core.data.selection.Range;
 
-public class ArraySortedSource<T extends Comparable<T>> implements SortedSource<T> {
+public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
 
     private Class<T> type;
 
@@ -18,26 +18,19 @@ public class ArraySortedSource<T extends Comparable<T>> implements SortedSource<
     
 
     @SuppressWarnings("unchecked")
-    public ArraySortedSource(T... values) {
+    public UniqueSource(T... values) {
         this((Class<T>) values.getClass().getComponentType(), Arrays.asList(values));
     }
     
-    public ArraySortedSource(Class<T> type, Collection<T> values) {
+    public UniqueSource(Class<T> type, Collection<T> values) {
         this(type, toSortedSet(values));
     }
     
-    private ArraySortedSource(Class<T> type, SortedSet<T> set) {
+    private UniqueSource(Class<T> type, SortedSet<T> set) {
         this.type = type;
-        int size = set.size();
-        this.length = BigInteger.valueOf(size);
-        this.values = new Object[size];
-        int i = 0;
-        for (T value : set) {
-            this.values[i] = value;
-            i++;
-        }
+        this.length = BigInteger.valueOf(set.size());
+        this.values = set.toArray();
     }
-    
     
     private static <T> SortedSet<T> toSortedSet(Collection<T> values) {
         if (values instanceof SortedSet) {
