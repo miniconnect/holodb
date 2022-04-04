@@ -25,7 +25,7 @@ public class HoloTable implements Table {
     
     private final ImmutableList<String> columnNames;
     
-    private final ImmutableMap<String, Source<?>> singleColumnSources;
+    private final ImmutableMap<String, ? extends Source<?>> singleColumnSources;
     
     private final ImmutableMap<String, MultiColumnSourceEntry> multiColumnSourceMap;
     
@@ -38,9 +38,9 @@ public class HoloTable implements Table {
             String name,
             BigInteger size,
             ImmutableList<String> columnNames,
-            ImmutableList<ColumnDefinition> columnDefinitions,
-            ImmutableMap<String, Source<?>> singleColumnSources,
-            ImmutableMap<ImmutableList<String>, Source<? extends ImmutableList<?>>>
+            ImmutableList<? extends ColumnDefinition> columnDefinitions,
+            ImmutableMap<String, ? extends Source<?>> singleColumnSources,
+            ImmutableMap<ImmutableList<String>, ? extends Source<? extends ImmutableList<?>>>
                     multiColumnSources,
             NamedResourceStore<TableIndex> indexStore) {
         checkSources(
@@ -63,9 +63,9 @@ public class HoloTable implements Table {
     private static void checkSources(
             BigInteger size,
             ImmutableList<String> columnNames,
-            ImmutableList<ColumnDefinition> columnDefinitions,
-            ImmutableMap<String, Source<?>> singleColumnSources,
-            ImmutableMap<ImmutableList<String>, Source<? extends ImmutableList<?>>>
+            ImmutableList<? extends ColumnDefinition> columnDefinitions,
+            ImmutableMap<String, ? extends Source<?>> singleColumnSources,
+            ImmutableMap<ImmutableList<String>, ? extends Source<? extends ImmutableList<?>>>
                     multiColumnSources,
             NamedResourceStore<TableIndex> indexStore) {
         int width = columnNames.size();
@@ -122,10 +122,10 @@ public class HoloTable implements Table {
     }
 
     private static ImmutableMap<String, MultiColumnSourceEntry> buildMultiColumnSourceMap(
-            ImmutableMap<ImmutableList<String>, Source<? extends ImmutableList<?>>>
+            ImmutableMap<ImmutableList<String>, ? extends Source<? extends ImmutableList<?>>>
                     multiColumnSources) {
         Map<String, MultiColumnSourceEntry> resultBuilder = new HashMap<>();
-        for (Map.Entry<ImmutableList<String>, Source<? extends ImmutableList<?>>> entry :
+        for (Map.Entry<ImmutableList<String>, ? extends Source<? extends ImmutableList<?>>> entry :
                 multiColumnSources.entrySet()) {
             ImmutableList<String> columnNames = entry.getKey();
             Source<? extends ImmutableList<?>> source = entry.getValue();
@@ -140,12 +140,12 @@ public class HoloTable implements Table {
 
     private static NamedResourceStore<Column> buildColumnStore(
             ImmutableList<String> columnNames,
-            ImmutableList<ColumnDefinition> columnDefinitions,
-            ImmutableMap<String, Source<?>> singleColumnSources,
-            ImmutableMap<ImmutableList<String>, Source<? extends ImmutableList<?>>>
+            ImmutableList<? extends ColumnDefinition> columnDefinitions,
+            ImmutableMap<String, ? extends Source<?>> singleColumnSources,
+            ImmutableMap<ImmutableList<String>, ? extends Source<? extends ImmutableList<?>>>
                     multiColumnSources) {
         Column[] columns = new Column[columnNames.size()];
-        for (Map.Entry<String, Source<?>> entry : singleColumnSources.entrySet()) {
+        for (Map.Entry<String, ? extends Source<?>> entry : singleColumnSources.entrySet()) {
             String columnName = entry.getKey();
             Source<?> source = entry.getValue();
             int columnIndex = columnNames.indexOf(columnName);
@@ -153,7 +153,7 @@ public class HoloTable implements Table {
             Column column = new HoloSimpleColumn(columnName, columnDefinition, source);
             columns[columnIndex] = column;
         }
-        for (Map.Entry<ImmutableList<String>, Source<? extends ImmutableList<?>>> entry :
+        for (Map.Entry<ImmutableList<String>, ? extends Source<? extends ImmutableList<?>>> entry :
                 multiColumnSources.entrySet()) {
             ImmutableList<String> sourceColumnNames = entry.getKey();
             Source<? extends ImmutableList<?>> source = entry.getValue();

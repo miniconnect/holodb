@@ -5,9 +5,10 @@ import hu.webarticum.holodb.core.data.selection.Range;
 public interface SortedSource<T> extends IndexedSource<T> {
 
     @Override
-    public Range find(T value);
+    public Range find(Object value);
 
     @Override
-    public Range findBetween(T minValue, boolean minInclusive, T maxValue, boolean maxInclusive);
+    public Range findBetween(
+            Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive);
     
 }

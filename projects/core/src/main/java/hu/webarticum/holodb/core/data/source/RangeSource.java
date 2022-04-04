@@ -51,7 +51,7 @@ public class RangeSource implements SortedSource<BigInteger> {
 
 
     @Override
-    public Range find(BigInteger value) {
+    public Range find(Object value) {
         
         // TODO
         return null;
@@ -60,7 +60,8 @@ public class RangeSource implements SortedSource<BigInteger> {
 
 
     @Override
-    public Range findBetween(BigInteger minValue, boolean minInclusive, BigInteger maxValue, boolean maxInclusive) {
+    public Range findBetween(
+            Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
         
         // TODO
         return null;

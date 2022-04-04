@@ -62,15 +62,17 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
     }
 
     @Override
-    public Range find(T value) {
+    public Range find(Object value) {
         int position = Arrays.binarySearch(values, value);
         return position >= 0 ? Range.fromSize(position, 1) : Range.fromSize((-1 - position), 0);
     }
 
     @Override
-    public Range findBetween(T minValue, boolean minInclusive, T maxValue, boolean maxInclusive) {
+    public Range findBetween(
+            Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
         if (minValue != null && maxValue != null) {
-            int cmp = minValue.compareTo(maxValue);
+            @SuppressWarnings("unchecked")
+            int cmp = ((T) minValue).compareTo((T) maxValue);
             if (cmp > 0 || (cmp == 0 && !minInclusive && !maxInclusive)) {
                 return Range.empty(find(minValue).from());
             }

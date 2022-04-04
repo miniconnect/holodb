@@ -11,6 +11,7 @@ import hu.webarticum.holodb.core.data.source.MonotonicSource;
 import hu.webarticum.holodb.core.data.source.PermutatedIndexedSource;
 import hu.webarticum.holodb.core.data.source.SortedSource;
 import hu.webarticum.holodb.core.data.source.Source;
+import hu.webarticum.miniconnect.rdmsframework.storage.TableIndex;
 
 public class HoloSimpleSource<T> implements Source<T> {
     
@@ -39,6 +40,10 @@ public class HoloSimpleSource<T> implements Source<T> {
     @Override
     public T get(BigInteger index) {
         return indexedSource.get(index);
+    }
+    
+    public TableIndex createIndex(String indexName, String columnName) {
+        return new IndexTableIndex(indexName, columnName, indexedSource);
     }
 
 }

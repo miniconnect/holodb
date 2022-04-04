@@ -29,7 +29,8 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
     
 
     @Override
-    public Selection findBetween(T minValue, boolean minInclusive, T maxValue, boolean maxInclusive) {
+    public Selection findBetween(
+            Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
         Selection baseSelection =
                 baseSource.findBetween(minValue, minInclusive, maxValue, maxInclusive);
         return new PermutatedSelection(baseSelection, permutation);

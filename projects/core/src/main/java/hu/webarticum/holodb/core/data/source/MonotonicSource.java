@@ -38,15 +38,13 @@ public class MonotonicSource<T> implements SortedSource<T> {
     }
 
     @Override
-    public Range find(T value) {
+    public Range find(Object value) {
         return monotonic.indicesOf(baseSource.find(value));
     }
 
     @Override
     public Range findBetween(
-            T minValue, boolean minInclusive,
-            T maxValue, boolean maxInclusive) {
-        
+            Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
         return monotonic.indicesOf(baseSource.findBetween(
                 minValue, minInclusive, maxValue, maxInclusive));
     }

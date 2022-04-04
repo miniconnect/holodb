@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -21,6 +24,7 @@ import hu.webarticum.holodb.core.data.source.FixedSource;
 import hu.webarticum.holodb.core.data.source.RangeSource;
 import hu.webarticum.holodb.core.data.source.SortedSource;
 import hu.webarticum.holodb.core.data.source.Source;
+import hu.webarticum.holodb.storage.GenericNamedResourceStore;
 import hu.webarticum.holodb.storage.HoloSimpleSource;
 import hu.webarticum.holodb.storage.HoloTable;
 import hu.webarticum.miniconnect.api.MiniSessionManager;
@@ -36,10 +40,11 @@ import hu.webarticum.miniconnect.rdmsframework.execution.simple.SimpleQueryExecu
 import hu.webarticum.miniconnect.rdmsframework.query.AntlrSqlParser;
 import hu.webarticum.miniconnect.rdmsframework.session.FrameworkSessionManager;
 import hu.webarticum.miniconnect.rdmsframework.storage.ColumnDefinition;
+import hu.webarticum.miniconnect.rdmsframework.storage.NamedResourceStore;
 import hu.webarticum.miniconnect.rdmsframework.storage.Schema;
 import hu.webarticum.miniconnect.rdmsframework.storage.StorageAccess;
 import hu.webarticum.miniconnect.rdmsframework.storage.Table;
-import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.EmptyNamedResourceStore;
+import hu.webarticum.miniconnect.rdmsframework.storage.TableIndex;
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleColumnDefinition;
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleResourceManager;
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleSchema;
@@ -116,22 +121,7 @@ public class HolodbServerMain {
         ImmutableMap<String, Source<?>> columnSources = columnConfigs
                 .assign(c -> createColumnSource(tableRandom, tableSize, c))
                 .map(HoloConfigColumn::name, s -> s);
-        
-        /*
-        Source<String> labelSource = new HoloSimpleSource<>(
-                rootRandom.sub("col-id"),
-                new UniqueSource<>("First", "Second", "Third"),
-                tableSize);
-        Source<String> descriptionSource = new HoloSimpleSource<>(
-                rootRandom.sub("col-description"),
-                new UniqueSource<>("Lorem", "Ipsum", "Dolor"),
-                tableSize);
-        Source<Integer> levelSource = new HoloSimpleSource<>(
-                rootRandom.sub("col-level"),
-                new UniqueSource<>(1, 2, 3, 4, 5),
-                tableSize);
-        */
-        
+        NamedResourceStore<TableIndex> indexStore = createIndexStore(columnSources);
         return new HoloTable(
                 tableName,
                 tableSize,
@@ -139,7 +129,7 @@ public class HolodbServerMain {
                 columnDefinitions,
                 columnSources,
                 ImmutableMap.empty(),
-                new EmptyNamedResourceStore<>());
+                indexStore);
     }
     
     private static Source<?> createColumnSource(
@@ -176,5 +166,21 @@ public class HolodbServerMain {
             throw new IllegalArgumentException(e);
         }
     }
-    
+
+    // FIXME: index for COUNTER/RangeSource etc. too
+    private static NamedResourceStore<TableIndex> createIndexStore(
+            ImmutableMap<String, Source<?>> columnSources) {
+        List<TableIndex> tableIndexes = new ArrayList<>();
+        for (Map.Entry<String, Source<?>> entry : columnSources.entrySet()) {
+            Source<?> source = entry.getValue();
+            if (source instanceof HoloSimpleSource) {
+                String columnName = entry.getKey();
+                TableIndex tableIndex = ((HoloSimpleSource<?>) source)
+                        .createIndex("idx_" + columnName, columnName);
+                tableIndexes.add(tableIndex);
+            }
+        }
+        return GenericNamedResourceStore.from(tableIndexes);
+    }
+
 }
