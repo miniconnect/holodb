@@ -10,6 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
+import hu.webarticum.holodb.core.data.binrel.permutation.ModuloPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.source.FixedSource;
@@ -21,7 +22,7 @@ public class PermutationComparisonMain {
     public static void main(String[] args) throws IOException {
         System.out.print("Characters: ");
         String line = new BufferedReader(new InputStreamReader(System.in)).readLine();
-
+        
         int lineLength = line.length();
         FixedSource<Character> source = new FixedSource<>(
                 Character.class,
@@ -32,7 +33,7 @@ public class PermutationComparisonMain {
         
         System.out.println();
         int maxLength =
-                permutationFactories.keySet().stream().mapToInt(n -> n.length()).max().orElse(0);
+                permutationFactories.keySet().stream().mapToInt(String::length).max().orElse(0);
         for (Map.Entry<String, Function<BigInteger, Permutation>> entry : permutationFactories.entrySet()) {
             String name = entry.getKey();
             Function<BigInteger, Permutation> factory = entry.getValue();
@@ -52,6 +53,8 @@ public class PermutationComparisonMain {
         // TODO
         result.put("FPE1", s -> new DirtyFpePermutation(new HasherTreeRandom("lorem"), s));
         result.put("FPE2", s -> new DirtyFpePermutation(new HasherTreeRandom("ipsum"), s));
+        result.put("MP1", s -> new ModuloPermutation(new HasherTreeRandom("abc"), s));
+        result.put("MP2", s -> new ModuloPermutation(new HasherTreeRandom("def"), s));
         
         return result;
     }

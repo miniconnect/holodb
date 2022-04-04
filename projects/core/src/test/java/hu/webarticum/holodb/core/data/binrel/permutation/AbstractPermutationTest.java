@@ -69,7 +69,7 @@ abstract class AbstractPermutationTest<T extends Permutation> {
             BigInteger value = permutation.at(index);
             values.add(value);
             assertThat(value).as("value range").isBetween(BigInteger.ZERO, max);
-            assertThat(permutation.indexOf(value)).as("fetched index").isEqualTo(index);
+            assertThat(permutation.indexOf(value)).as("fetched index " + value + " at " + index + " / " + size).isEqualTo(index);
         }
         assertThat(values).as("collected values").hasSize(numberOfTests);
     }
