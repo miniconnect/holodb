@@ -22,7 +22,7 @@ public class HoloSimpleSource<T> implements Source<T> {
         MonotonicSource<T> monotonicSource = new MonotonicSource<>(
                 baseSource,
                 new BinomialMonotonic(treeRandom.sub("monotonic"), size, baseSource.size()));
-        Permutation permutation = new DirtyFpePermutation("permutation", size);
+        Permutation permutation = new DirtyFpePermutation(treeRandom.sub("permutation"), size);
         this.indexedSource = new PermutatedIndexedSource<>(monotonicSource, permutation);
     }
     

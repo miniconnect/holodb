@@ -3,11 +3,12 @@ package hu.webarticum.holodb.core.data.binrel.permutation;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+import hu.webarticum.holodb.core.data.random.TreeRandom;
 
 /**
  * Generic Z_n FPE encryption, FE1 scheme
@@ -43,13 +44,10 @@ public class DirtyFpePermutation implements Permutation {
     private final BigInteger b;
 
 
-    public DirtyFpePermutation(String key, BigInteger size) {
-        this(key.getBytes(StandardCharsets.UTF_8), size);
-    }
-    
-    public DirtyFpePermutation(byte[] key, BigInteger size) {
+    public DirtyFpePermutation(TreeRandom treeRandom, BigInteger size) {
         this.size = size;
         
+        byte[] key = treeRandom.getBytes(16);
         mac = createMacInstance(key);
         
         byte[] sizeBytes = size.toByteArray();

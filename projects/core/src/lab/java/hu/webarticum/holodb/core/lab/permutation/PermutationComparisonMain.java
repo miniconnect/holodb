@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
+import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.source.FixedSource;
 import hu.webarticum.holodb.core.data.source.PermutatedSource;
 import hu.webarticum.holodb.core.data.source.Source;
@@ -49,8 +50,8 @@ public class PermutationComparisonMain {
         Map<String, Function<BigInteger, Permutation>> result = new LinkedHashMap<>();
         
         // TODO
-        result.put("FPE1", s -> new DirtyFpePermutation("1234", s));
-        result.put("FPE2", s -> new DirtyFpePermutation("lorem", s));
+        result.put("FPE1", s -> new DirtyFpePermutation(new HasherTreeRandom("lorem"), s));
+        result.put("FPE2", s -> new DirtyFpePermutation(new HasherTreeRandom("ipsum"), s));
         
         return result;
     }
