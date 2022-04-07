@@ -55,8 +55,7 @@ public class HoloTable implements Table {
         this.columnNames = columnNames;
         this.singleColumnSources = singleColumnSources;
         this.multiColumnSourceMap = buildMultiColumnSourceMap(multiColumnSources);
-        this.columnStore = buildColumnStore(
-                columnNames, columnDefinitions, singleColumnSources, multiColumnSources);
+        this.columnStore = buildColumnStore(columnNames, columnDefinitions);
         this.indexStore = indexStore;
     }
     
@@ -140,32 +139,14 @@ public class HoloTable implements Table {
 
     private static NamedResourceStore<Column> buildColumnStore(
             ImmutableList<String> columnNames,
-            ImmutableList<? extends ColumnDefinition> columnDefinitions,
-            ImmutableMap<String, ? extends Source<?>> singleColumnSources,
-            ImmutableMap<ImmutableList<String>, ? extends Source<? extends ImmutableList<?>>>
-                    multiColumnSources) {
-        Column[] columns = new Column[columnNames.size()];
-        for (Map.Entry<String, ? extends Source<?>> entry : singleColumnSources.entrySet()) {
-            String columnName = entry.getKey();
-            Source<?> source = entry.getValue();
-            int columnIndex = columnNames.indexOf(columnName);
-            ColumnDefinition columnDefinition = columnDefinitions.get(columnIndex);
-            Column column = new HoloSimpleColumn(columnName, columnDefinition, source);
-            columns[columnIndex] = column;
-        }
-        for (Map.Entry<ImmutableList<String>, ? extends Source<? extends ImmutableList<?>>> entry :
-                multiColumnSources.entrySet()) {
-            ImmutableList<String> sourceColumnNames = entry.getKey();
-            Source<? extends ImmutableList<?>> source = entry.getValue();
-            int sourceWidth = sourceColumnNames.size();
-            for (int i = 0; i < sourceWidth; i++) {
-                String columnName = sourceColumnNames.get(i);
-                int columnIndex = columnNames.indexOf(columnName);
-                ColumnDefinition columnDefinition = columnDefinitions.get(columnIndex);
-                Column column = new HoloPositionedColumn(columnName, columnDefinition, source, i);
-                columns[columnIndex] = column;
-            }
-            
+            ImmutableList<? extends ColumnDefinition> columnDefinitions) {
+        int size = columnNames.size();
+        Column[] columns = new Column[size];
+        for (int i = 0; i < size; i++) {
+            String columnName = columnNames.get(i);
+            ColumnDefinition columnDefinition = columnDefinitions.get(i);
+            Column column = new HoloSimpleColumn(columnName, columnDefinition);
+            columns[i] = column;
         }
         return GenericNamedResourceStore.of(columns);
     }
