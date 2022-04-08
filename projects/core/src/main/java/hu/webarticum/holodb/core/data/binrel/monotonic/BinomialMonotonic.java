@@ -80,8 +80,8 @@ public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
     private BigInteger splitFast(Range range, BigInteger imageSplitPoint) {
         BigInteger rangeLength = BigInteger.TEN;
         BigInteger rangeSplitPoint = treeRandom.sub(imageSplitPoint).getNumber(rangeLength);
-        BigInteger relativeFixedPoint = range.size().divide(BigInteger.TWO);
-        BigInteger relativeSplitPoint = relativeFixedPoint.subtract(rangeLength.divide(BigInteger.TWO)).add(rangeSplitPoint);
+        BigInteger relativeFixedPoint = range.size().divide(BigInteger.valueOf(2L));
+        BigInteger relativeSplitPoint = relativeFixedPoint.subtract(rangeLength.divide(BigInteger.valueOf(2L))).add(rangeSplitPoint);
         return range.from().add(relativeSplitPoint);
     }
 

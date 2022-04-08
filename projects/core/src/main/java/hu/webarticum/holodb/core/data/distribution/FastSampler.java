@@ -11,7 +11,7 @@ public class FastSampler implements Sampler {
     
     public FastSampler(BigInteger size) {
         this.size = size;
-        this.sample = size.divide(BigInteger.TWO);
+        this.sample = size.divide(BigInteger.valueOf(2L));
     }
     
     

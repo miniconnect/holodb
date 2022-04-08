@@ -120,7 +120,7 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
             assertThat(fromUntilActual).isEqualTo(Range.fromUntil(BigInteger.ZERO, size));
             
             if (imageSize.compareTo(BigInteger.ONE) > 0) {
-                BigInteger midValue = imageSize.divide(BigInteger.TWO);
+                BigInteger midValue = imageSize.divide(BigInteger.valueOf(2L));
                 BigInteger midIndex = monotonic.indicesOf(midValue).from();
                 Range untilActual = monotonic.indicesOf(Range.fromUntil(BigInteger.ZERO, midValue));
                 Range untilExpected = Range.fromUntil(BigInteger.ZERO, midIndex);
@@ -130,7 +130,7 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
                 Range midEmptyExpected = Range.fromSize(midIndex, BigInteger.ZERO);
                 assertThat(midEmptyActual).isEqualTo(midEmptyExpected);
 
-                if (imageSize.compareTo(BigInteger.TWO) > 0) {
+                if (imageSize.compareTo(BigInteger.valueOf(2L)) > 0) {
                     Range firstRange = monotonic.indicesOf(Range.fromSize(BigInteger.ZERO, BigInteger.ONE));
                     BigInteger lastValue = imageSize.subtract(BigInteger.ONE);
                     Range lastRange = monotonic.indicesOf(Range.fromSize(lastValue, BigInteger.ONE));

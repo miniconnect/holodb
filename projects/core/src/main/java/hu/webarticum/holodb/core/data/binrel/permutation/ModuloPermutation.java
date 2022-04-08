@@ -33,7 +33,7 @@ public class ModuloPermutation implements Permutation {
     }
 
     private static BigInteger calculatePrime(BigInteger size, BigInteger diff) {
-        BigInteger p = diff.divide(BigInteger.TWO).add(diff.divide(BigInteger.valueOf(4L)));
+        BigInteger p = diff.divide(BigInteger.valueOf(2L)).add(diff.divide(BigInteger.valueOf(4L)));
         while (!size.gcd(p).equals(BigInteger.ONE)) {
             p = p.nextProbablePrime();
         }

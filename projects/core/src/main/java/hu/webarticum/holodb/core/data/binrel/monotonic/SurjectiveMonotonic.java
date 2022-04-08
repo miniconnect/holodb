@@ -87,7 +87,7 @@ public class SurjectiveMonotonic extends AbstractCachingRecursiveMonotonic {
     }
 
     private BigInteger splitFast(Range range) {
-        return range.from().add(range.size().divide(BigInteger.TWO));
+        return range.from().add(range.size().divide(BigInteger.valueOf(2L)));
     }
 
     private BigInteger splitWithSampler(Range range, Range imageRange, BigInteger imageSplitPoint) {
