@@ -4,32 +4,17 @@ import java.math.BigInteger;
 import java.util.Iterator;
 
 import hu.webarticum.holodb.core.data.selection.Selection;
-import hu.webarticum.miniconnect.rdmsframework.storage.OrderKey;
 import hu.webarticum.miniconnect.rdmsframework.storage.TableSelection;
 
 public class SelectionTableSelection implements TableSelection {
     
     private final Selection selection;
     
-    private final OrderKey ascOrderKey;
-    
-    private final OrderKey descOrderKey;
-    
     private final boolean ascOrder;
     
 
     public SelectionTableSelection(Selection selection, boolean ascOrder) {
-        this(selection, OrderKey.adHoc(), OrderKey.adHoc(), ascOrder);
-    }
-    
-    public SelectionTableSelection(
-            Selection selection,
-            OrderKey ascOrderKey,
-            OrderKey descOrderKey,
-            boolean ascOrder) {
         this.selection = selection;
-        this.ascOrderKey = ascOrderKey;
-        this.descOrderKey = descOrderKey;
         this.ascOrder = ascOrder;
     }
 
@@ -49,13 +34,8 @@ public class SelectionTableSelection implements TableSelection {
     }
 
     @Override
-    public OrderKey orderKey() {
-        return ascOrder ? ascOrderKey : descOrderKey;
-    }
-
-    @Override
     public TableSelection reversed() {
-        return new SelectionTableSelection(selection, ascOrderKey, descOrderKey, !ascOrder);
+        return new SelectionTableSelection(selection, !ascOrder);
     }
     
 }
