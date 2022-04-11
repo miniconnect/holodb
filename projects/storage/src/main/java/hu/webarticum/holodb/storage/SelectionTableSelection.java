@@ -33,8 +33,7 @@ public class SelectionTableSelection implements TableSelection {
         return selection.contains(rowIndex);
     }
 
-    @Override
-    public TableSelection reversed() {
+    public SelectionTableSelection reversed() {
         return new SelectionTableSelection(selection, !ascOrder);
     }
     
