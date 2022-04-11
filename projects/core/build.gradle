@@ -19,6 +19,7 @@ configurations {
 }
 
 dependencies {
+    implementation 'hu.webarticum.miniconnect:util:0.1.0-SNAPSHOT'
     implementation 'hu.webarticum.miniconnect:rdbms-framework:0.1.0-SNAPSHOT'
     implementation 'org.apache.commons:commons-lang3:3.0'
     implementation 'org.apache.commons:commons-math3:3.6.1'

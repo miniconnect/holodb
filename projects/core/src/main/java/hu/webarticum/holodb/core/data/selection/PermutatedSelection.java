@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.Iterator;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
-import hu.webarticum.holodb.core.util.IteratorAdapter;
+import hu.webarticum.miniconnect.util.IteratorAdapter;
 
 public class PermutatedSelection implements Selection {
     
