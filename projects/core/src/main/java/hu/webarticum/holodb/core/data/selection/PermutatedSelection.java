@@ -41,7 +41,7 @@ public class PermutatedSelection implements Selection {
     
     @Override
     public Iterator<BigInteger> iterator() {
-        return new IteratorAdapter<>(baseSelection.iterator(), permutation::at);
+        return new IteratorAdapter<>(baseSelection.iterator(), permutation::indexOf);
     }
     
 }
