@@ -10,6 +10,8 @@ public class HoloConfigTable {
 
     private final String name;
     
+    private final boolean writeable;
+    
     private final BigInteger size;
 
     private final List<HoloConfigColumn> columns;
@@ -17,9 +19,11 @@ public class HoloConfigTable {
     
     public HoloConfigTable(
             @JsonProperty("name") String name,
+            @JsonProperty("writeable") boolean writeable,
             @JsonProperty("size") BigInteger size,
             @JsonProperty("columns") List<HoloConfigColumn> columns) {
         this.name = name;
+        this.writeable = writeable;
         this.size = size;
         this.columns = new ArrayList<>(columns);
     }
@@ -29,6 +33,10 @@ public class HoloConfigTable {
         return name;
     }
 
+    public boolean writeable() {
+        return writeable;
+    }
+    
     public BigInteger size() {
         return size;
     }

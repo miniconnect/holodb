@@ -45,6 +45,7 @@ import hu.webarticum.miniconnect.rdmsframework.storage.Schema;
 import hu.webarticum.miniconnect.rdmsframework.storage.StorageAccess;
 import hu.webarticum.miniconnect.rdmsframework.storage.Table;
 import hu.webarticum.miniconnect.rdmsframework.storage.TableIndex;
+import hu.webarticum.miniconnect.rdmsframework.storage.impl.diff.DiffTable;
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleColumnDefinition;
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleResourceManager;
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleSchema;
@@ -122,7 +123,7 @@ public class HolodbServerMain {
                 .assign(c -> createColumnSource(tableRandom, tableSize, c))
                 .map(HoloConfigColumn::name, s -> s);
         NamedResourceStore<TableIndex> indexStore = createIndexStore(columnSources);
-        return new HoloTable(
+        Table table = new HoloTable(
                 tableName,
                 tableSize,
                 columnNames,
@@ -130,6 +131,10 @@ public class HolodbServerMain {
                 columnSources,
                 ImmutableMap.empty(),
                 indexStore);
+        if (tableConfig.writeable()) {
+            table = new DiffTable(table);
+        }
+        return table;
     }
     
     private static Source<?> createColumnSource(
