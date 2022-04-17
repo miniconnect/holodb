@@ -10,27 +10,16 @@ public class RangeSource implements SortedSource<BigInteger> {
     
     private final BigInteger size;
     
-    private final BigInteger step;
-    
 
     public RangeSource(BigInteger size) {
         this(BigInteger.ZERO, size);
     }
     
     public RangeSource(BigInteger from, BigInteger size) {
-        this(from, size, BigInteger.ONE);
-    }
-    
-    public RangeSource(BigInteger from, BigInteger size, BigInteger step) {
-        if (step.signum() != 1) {
-            throw new IllegalArgumentException("step must be positive");
-        }
-        
         this.from = from;
         this.size = size;
-        this.step = step;
     }
-
+    
 
     @Override
     public Class<BigInteger> type() {
@@ -46,26 +35,40 @@ public class RangeSource implements SortedSource<BigInteger> {
 
     @Override
     public BigInteger get(BigInteger index) {
-        return from.add(step.multiply(index));
+        return from.add(index);
     }
 
 
     @Override
     public Range find(Object value) {
-        
-        // TODO
-        return null;
-        
+        return findBetween(value, true, value, true);
     }
 
 
     @Override
     public Range findBetween(
             Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
+        BigInteger until = from.add(size);
         
-        // TODO
-        return null;
+        BigInteger queryMin = (BigInteger) minValue;
+        BigInteger queryFrom = minInclusive ? queryMin : queryMin.add(BigInteger.ONE);
+        queryFrom = keepBetween(queryFrom, from, until);
         
+        BigInteger queryMax = (BigInteger) maxValue;
+        BigInteger queryUntil = maxInclusive ? queryMax.add(BigInteger.ONE) : queryMax;
+        queryUntil = keepBetween(queryUntil, from, until);
+        
+        return Range.fromUntil(queryFrom.subtract(from), queryUntil.subtract(from));
+    }
+    
+    private BigInteger keepBetween(BigInteger value, BigInteger min, BigInteger max) {
+        if (value.compareTo(min) < 0) {
+            return min;
+        } else if (value.compareTo(max) > 0) {
+            return max;
+        } else {
+            return value;
+        }
     }
     
 }

@@ -21,12 +21,15 @@ import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.holodb.core.data.source.UniqueSource;
 import hu.webarticum.holodb.core.data.source.FixedSource;
+import hu.webarticum.holodb.core.data.source.Index;
+import hu.webarticum.holodb.core.data.source.IndexedSource;
 import hu.webarticum.holodb.core.data.source.RangeSource;
 import hu.webarticum.holodb.core.data.source.SortedSource;
 import hu.webarticum.holodb.core.data.source.Source;
 import hu.webarticum.holodb.storage.GenericNamedResourceStore;
 import hu.webarticum.holodb.storage.HoloSimpleSource;
 import hu.webarticum.holodb.storage.HoloTable;
+import hu.webarticum.holodb.storage.IndexTableIndex;
 import hu.webarticum.miniconnect.api.MiniSessionManager;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.ImmutableMap;
@@ -172,16 +175,19 @@ public class HolodbServerMain {
         }
     }
 
-    // FIXME: index for COUNTER/RangeSource etc. too
     private static NamedResourceStore<TableIndex> createIndexStore(
             ImmutableMap<String, Source<?>> columnSources) {
         List<TableIndex> tableIndexes = new ArrayList<>();
         for (Map.Entry<String, Source<?>> entry : columnSources.entrySet()) {
+            String columnName = entry.getKey();
+            String indexName = "idx_" + columnName;
             Source<?> source = entry.getValue();
             if (source instanceof HoloSimpleSource) {
-                String columnName = entry.getKey();
                 TableIndex tableIndex = ((HoloSimpleSource<?>) source)
-                        .createIndex("idx_" + columnName, columnName);
+                        .createIndex(indexName, columnName);
+                tableIndexes.add(tableIndex);
+            } else if (source instanceof IndexedSource) {
+                TableIndex tableIndex = new IndexTableIndex(indexName, columnName, (Index) source);
                 tableIndexes.add(tableIndex);
             }
         }
