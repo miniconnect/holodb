@@ -1,0 +1,28 @@
+seed: 2346237
+schemas:
+  - name: default
+    tables:
+      - name: first
+        writeable: true
+        size: 22
+        columns:
+          - name: id
+            type: 'java.math.BigInteger'
+            mode: COUNTER
+          - name: label
+            type: 'java.lang.String'
+            values: ['Lorem', 'Ipsum', 'Dolor', 'Sit', 'Amet', 'Hello', 'World']
+          - name: level
+            type: 'java.lang.Integer'
+            values: [1, 2, 3, 4, 5]
+      - name: second
+        size: 4
+        columns:
+          - name: id
+            type: 'java.math.BigInteger'
+            mode: COUNTER
+          - name: number
+            type: 'java.lang.Integer'
+            mode: FIXED
+            values: [2, 4, 6, 8]
+

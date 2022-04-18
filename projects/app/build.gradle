@@ -2,10 +2,12 @@ plugins {
     id 'java-library'
     id 'application'
     id 'eclipse'
-    id("com.github.johnrengelman.shadow") version "7.1.1"
+    id 'com.google.cloud.tools.jib' version '3.2.1'
 }
 
 description "HoloDB standalone app"
+
+ext.mainClass = 'hu.webarticum.holodb.app.launch.HolodbServerMain'
 
 sourceSets {
     lab {
@@ -36,5 +38,17 @@ dependencies {
 }
 
 application {
-    mainClass = 'hu.webarticum.holodb.app.launch.HolodbAppMain'
+    mainClass = project.ext.mainClass
+    System.out.println(project.ext.mainClass);
+}
+
+jib {
+    to {
+        image = 'miniconnect/holodb'
+    }
+    container {
+        ports = ['3430']
+        args = ['/app/config.yaml']
+        mainClass = project.ext.mainClass
+    }
 }
