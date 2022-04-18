@@ -26,6 +26,7 @@ dependencies {
     implementation project(':storage')
     implementation 'hu.webarticum.miniconnect:messenger:0.1.0-SNAPSHOT'
     implementation 'hu.webarticum.miniconnect:rdbms-framework:0.1.0-SNAPSHOT'
+    implementation 'hu.webarticum.miniconnect:record:0.1.0-SNAPSHOT'
     implementation 'hu.webarticum.miniconnect:server:0.1.0-SNAPSHOT'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.13.2'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2'
@@ -45,6 +46,7 @@ application {
 jib {
     to {
         image = 'miniconnect/holodb'
+        tags = [version, 'latest']
     }
     container {
         ports = ['3430']

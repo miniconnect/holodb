@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -53,6 +54,8 @@ import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleColumnD
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleResourceManager;
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleSchema;
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleStorageAccess;
+import hu.webarticum.miniconnect.record.converter.Converter;
+import hu.webarticum.miniconnect.record.converter.DefaultConverter;
 import hu.webarticum.miniconnect.server.MessengerServer;
 import hu.webarticum.miniconnect.server.ServerConstants;
 
@@ -65,7 +68,8 @@ public class HolodbServerMain {
         HoloConfig config = loadConfig(args);
         SqlParser sqlParser = new AntlrSqlParser();
         QueryExecutor queryExecutor = new SimpleQueryExecutor();
-        StorageAccess storageAccess = createStorageAccess(config);
+        Converter converter = new DefaultConverter();
+        StorageAccess storageAccess = createStorageAccess(config, converter);
         try (Engine engine = new SimpleEngine(sqlParser, queryExecutor, storageAccess)) {
             MiniSessionManager sessionManager = new FrameworkSessionManager(engine);
             Messenger messenger = new SessionManagerMessenger(sessionManager);
@@ -95,7 +99,7 @@ public class HolodbServerMain {
         }
     }
 
-    public static StorageAccess createStorageAccess(HoloConfig config) {
+    public static StorageAccess createStorageAccess(HoloConfig config, Converter converter) {
         SimpleStorageAccess storageAccess =  new SimpleStorageAccess();
         SimpleResourceManager<Schema> schemaManager = storageAccess.schemas();
         TreeRandom rootRandom = new HasherTreeRandom(config.seed());
@@ -106,14 +110,17 @@ public class HolodbServerMain {
             schemaManager.register(schema);
             SimpleResourceManager<Table> tableManager = schema.tables();
             for (HoloConfigTable tableConfig : schemaConfig.tables()) {
-                Table table = createTable(schemaRandom, tableConfig);
+                Table table = createTable(tableConfig, schemaRandom, converter);
                 tableManager.register(table);
             }
         }
         return storageAccess;
     }
     
-    private static Table createTable(TreeRandom schemaRandom, HoloConfigTable tableConfig) {
+    private static Table createTable(
+            HoloConfigTable tableConfig,
+            TreeRandom schemaRandom,
+            Converter converter) {
         BigInteger tableSize = tableConfig.size();
         String tableName = tableConfig.name();
         TreeRandom tableRandom = schemaRandom.sub("table-" + tableName);
@@ -123,7 +130,7 @@ public class HolodbServerMain {
         ImmutableList<ColumnDefinition> columnDefinitions =
                 columnConfigs.map(c -> new SimpleColumnDefinition(c.type(), false));
         ImmutableMap<String, Source<?>> columnSources = columnConfigs
-                .assign(c -> createColumnSource(tableRandom, tableSize, c))
+                .assign(c -> createColumnSource(c, tableRandom, converter, tableSize))
                 .map(HoloConfigColumn::name, s -> s);
         NamedResourceStore<TableIndex> indexStore = createIndexStore(columnSources);
         Table table = new HoloTable(
@@ -141,11 +148,17 @@ public class HolodbServerMain {
     }
     
     private static Source<?> createColumnSource(
-            TreeRandom tableRandom, BigInteger tableSize, HoloConfigColumn columnConfig) {
+            HoloConfigColumn columnConfig,
+            TreeRandom tableRandom,
+            Converter converter,
+            BigInteger tableSize) {
         ColumnMode columnMode = columnConfig.mode();
+        Class<?> columnClazz = columnConfig.type();
+        List<Object> values = columnConfig.values().stream()
+                .map(v -> converter.convert(v, columnClazz))
+                .collect(Collectors.toList());
         if (columnMode == ColumnMode.DEFAULT) {
-            SortedSource<?> baseSource =
-                    createUniqueSource(columnConfig.type(), columnConfig.values());
+            SortedSource<?> baseSource = createUniqueSource(columnClazz, values);
             TreeRandom columnRandom = tableRandom.sub("col-" + columnConfig.name());
             return new HoloSimpleSource<>(columnRandom, baseSource, tableSize);
         } else if (columnMode == ColumnMode.COUNTER) {
