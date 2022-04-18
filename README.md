@@ -6,7 +6,7 @@ Relational database seemingly filled with random data.
 
 ## A holographic database
 
-HoloDB is a storage engine for the `rdbms-framework`,
+HoloDB is a storage implementation of [miniconnect](https://github.com/miniconnect/miniconnect),
 which introduces the concept of *holographic databases*.
 
 It provides an arbitrarily large database filled with constrained random data.
