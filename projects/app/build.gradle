@@ -47,6 +47,10 @@ jib {
     to {
         image = 'miniconnect/holodb'
         tags = [version, 'latest']
+        auth {
+            username = findProperty('dockerHubUsername') ?: ''
+            password = findProperty('dockerHubPassword') ?: ''
+        }
     }
     container {
         ports = ['3430']
