@@ -1,29 +1,16 @@
 # HoloDB
 
-Relational database seemingly filled with random data.
+**Relational database - seemingly filled with random data.**
 
-> :construction: This project is in an incubating state. See [TODOs](./TODO.md).
+HoloDB is a [miniconnect](https://github.com/miniconnect/miniconnect) storage implementation,
+which introduces the concept of *holographic relational databases*.
 
-## A holographic database
-
-HoloDB is a storage implementation of [miniconnect](https://github.com/miniconnect/miniconnect),
-which introduces the concept of *holographic databases*.
-
-It provides an arbitrarily large database filled with constrained random data.
-Parameters and constraints can be specified in a configuration file.
-Initialization ("filling" with data) of the tables is a no-op.
-Query results are calculated on-the-fly.
-Value providers are encouraged to calculate any single field of a column
-practically in `O(1)`, but at most in `O(log(tableSize))` time.
-
-As initialization is a no-op, it's particularly suitable for testing
-and, in the case of a read-only database,
-flexible orchestration, replication like a static content.
+An arbitrarily large database is up in a fraction of a second, only a config file is required.
 
 ## Use with Docker
 
 HoloDB is available on [DockerHub](https://hub.docker.com/r/miniconnect/holodb).
-You just need a Dockerfile with a configuration file:
+You just need a configuration file (YAML, by default), and a Dockerfile like this:
 
 ```dockerfile
 FROM miniconnect/holodb:latest
@@ -32,3 +19,132 @@ COPY config.yaml /app/config.yaml
 ```
 
 For a working example see the `example` folder.
+
+## Configuration
+
+In `config.yaml` you can specify the structure of your data (schemas, tables, columns, data):
+
+```yaml
+seed: 98765
+schemas:
+  - name: my_schema
+    tables:
+      - name: my_table
+        writeable: true
+        size: 150
+        columns:
+          - name: id
+            type: 'java.math.BigInteger'
+            mode: COUNTER
+          - name: name
+            type: 'java.lang.String'
+            values: ['Some name', 'Other name', 'Some other']
+```
+
+The `seed` option sets a random seed with which you can vary the content of the database.
+
+If `writeable` option is set to true, then an additional layer
+will be added over the read-only table,
+which accepts and stores insertions, updates, and deletions,
+and it gives the effect that the table is writeable.
+
+Currently, there are three possible values of the `mode` option:
+
+- `DEFAULT`: the column will be filled up randomly with the values specified in `values`
+- `COUNTER`: column values will be ascending integers starting from 1
+- `FIXED`: the values will be the same and in the same order as specified in `values`
+
+`DEFAULT` and `COUNTER` columns are reverse-indexed
+and can be queried efficiently even in case of very large table sizes.
+For `FIXED` columns, the size of `values` must be equal to the size of the table
+(recommended for smaller tables only).
+
+## Run queries
+
+You can connect to a holodb database via [miniconnect](https://github.com/miniconnect/miniconnect).
+
+From code, you can open a miniconnect session like this:
+
+```java
+
+try (ClientMessenger clientMessenger = new ClientMessenger(host, port)) {
+    MiniSessionManager sessionManager = new MessengerSessionManager(clientMessenger);
+    try (MiniSession session = sessionManager.openSession()) {
+        // ...
+    }
+}
+```
+
+If you want to use JDBC, you can wrap the miniconnect session in a JDBC adapter:
+
+```java
+Connection connection = new MiniJdbcConnection(session, null);
+// ...
+```
+
+Note: one of the major goals of miniconnect is
+to relieve the pains of JDBC users and implementors.
+For more information see its repo.
+
+There is also a
+(miniconnect REPL)[https://github.com/miniconnect/miniconnect/tree/master/projects/repl].
+Just type the host and port, and execute your queries:
+
+```
+Host [localhost]: 
+Port [3430]: 
+
+Welcome in miniConnect SQL REPL!
+
+SQL > USE my_schema
+
+  Result contains no rows!
+
+SQL > SELECT * FROM my_table ORDER BY id LIMIT 7
+
+  +----+------------+
+  | id | name       |
+  +----+------------+
+  |  1 | Some name  |
+  |  2 | Some other |
+  |  3 | Some other |
+  |  4 | Some name  |
+  |  5 | Other name |
+  |  6 | Some name  |
+  |  7 | Other name |
+  +----+------------+
+
+SQL > SELECT * FROM my_table WHERE name = 'Some name' ORDER BY id LIMIT 5
+
+  +----+-----------+
+  | id | name      |
+  +----+-----------+
+  |  1 | Some name |
+  |  4 | Some name |
+  |  6 | Some name |
+  |  8 | Some name |
+  | 20 | Some name |
+  +----+-----------+
+
+SQL > exit
+
+Bye-bye!
+```
+
+## Holographic databases
+
+Holographic databases store no real data and calculate field values and reverse-indexes on-the-fly.
+Nonetheless, you as a user experience a consistent, searchable (and optionally writable) database.
+Such a database consumes little memory (even for large "data"), and needs near-zero startup time.
+Additionally, by changing the root seed the entire dataset can be shuffled (also a near-no-op).
+
+So, HoloDB provides an arbitrarily large relational database filled with constrained random data.
+Parameters and constraints can be specified in a configuration file.
+Initialization ("filling" with data) of the tables is a no-op.
+Query results are calculated on-the-fly.
+Value providers are encouraged to calculate any single field of a column
+practically in `O(1)`, but at most in `O(log(tableSize))` time.
+
+As initialization is a no-op, it's particularly suitable for testing
+and, in the case of a read-only database,
+flexible orchestration, replication like some static content.
