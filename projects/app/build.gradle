@@ -40,7 +40,6 @@ dependencies {
 
 application {
     mainClass = project.ext.mainClass
-    System.out.println(project.ext.mainClass);
 }
 
 jib {
