@@ -1,10 +1,24 @@
+plugins {
+    id 'com.palantir.git-version' version '0.14.0'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
+}
+
 description = "HoloDB - instant random relational data"
 
-defaultTasks "build"
+def scmUrl = 'https://github.com/miniconnect/holodb.git'
+def websiteUrl = scmUrl.replaceAll(/\.git$/, "");
+
+defaultTasks 'build'
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
 
 allprojects {
-    group "hu.webarticum.holodb"
-    version '0.1.0-SNAPSHOT'
+    group = 'hu.webarticum.holodb'
+    version gitVersion().replaceAll(/^v|\.dirty$/, '')
     
     repositories {
         mavenCentral()
@@ -13,13 +27,15 @@ allprojects {
 }
 
 subprojects {
-	apply plugin: 'maven-publish'
-	
-    plugins.withType(JavaPlugin) {
+    apply plugin: 'java'
+    apply plugin: 'signing'
+    apply plugin: 'maven-publish'
+
+    afterEvaluate {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
         
-        if (sourceSets.hasProperty("lab")) {
+        if (sourceSets.hasProperty('lab')) {
             task execLab(type: JavaExec) {
                 group = 'Execution'
                 description = 'Run lab demo main class'
@@ -29,12 +45,17 @@ subprojects {
             }
         }
         
+        java {
+            withJavadocJar()
+            withSourcesJar()
+        }
+        
         test {
             useJUnitPlatform()
             testLogging {
-                events "failed"
+                events 'failed'
                 showExceptions true
-                exceptionFormat "full"
+                exceptionFormat 'full'
                 showCauses true
                 showStackTraces true
                 showStandardStreams false
@@ -45,5 +66,50 @@ subprojects {
             options.compilerArgs << '-Xlint:unchecked'
             options.deprecation = true
         }
+        
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    from components.java
+                }
+            }
+        }
+        
+        project.plugins.withType(MavenPublishPlugin).all {
+            PublishingExtension publishing = project.extensions.getByType(PublishingExtension)
+            publishing.publications.withType(MavenPublication).all { mavenPublication ->
+                mavenPublication.pom {
+                    name = project.name
+                    description = project.description
+                    url = websiteUrl
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution = 'repo'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:' + scmUrl
+                        developerConnection = 'scm:git:' + scmUrl
+                        url = scmUrl
+                    }
+                    developers {
+                        developer {
+                            id = 'davidsusu'
+                            name = 'Dávid Horváth'
+                            email = 'horvath@webarticum.hu'
+                        }
+                    }
+                }
+            }
+        }
+        
+        signing {
+            required { true }
+            sign configurations.archives
+            sign publishing.publications.mavenJava
+        }
+        
     }
 }
