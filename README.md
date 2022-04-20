@@ -87,7 +87,7 @@ to relieve the pains of JDBC users and implementors.
 For more information see its repo.
 
 There is also a
-(miniconnect REPL)[https://github.com/miniconnect/miniconnect/tree/master/projects/repl].
+[miniconnect REPL](https://github.com/miniconnect/miniconnect/tree/master/projects/repl).
 Just type the host and port, and execute your queries:
 
 ```
