@@ -6,6 +6,11 @@ import hu.webarticum.holodb.core.data.distribution.ApacheCommonsBinomialSampler;
 import hu.webarticum.holodb.core.data.distribution.Sampler;
 
 public interface SamplerFactory {
+
+    // FIXME: functional lambda?
+    // TODO: SamplerFactory::isFast()
+    // TODO: SamplerFactory::isBig()
+    
     
     public static final SamplerFactory DEFAULT = (seed, size, probability) ->
             new ApacheCommonsBinomialSampler(seed, size.intValue(), probability);

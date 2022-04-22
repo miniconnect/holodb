@@ -28,20 +28,31 @@ public class SurjectiveMonotonic extends AbstractCachingRecursiveMonotonic {
         this(treeRandom, BigInteger.valueOf(size), BigInteger.valueOf(imageSize));
     }
 
-    public SurjectiveMonotonic(TreeRandom treeRandom, SamplerFactory samplerFactory, long size, long imageSize) {
-        this(treeRandom, samplerFactory, BigInteger.valueOf(size), BigInteger.valueOf(imageSize), DEFAULT_CACHE_DEPTH);
+    public SurjectiveMonotonic(
+            TreeRandom treeRandom, SamplerFactory samplerFactory, long size, long imageSize) {
+        this(
+                treeRandom,
+                samplerFactory,
+                BigInteger.valueOf(size),
+                BigInteger.valueOf(imageSize),
+                DEFAULT_CACHE_DEPTH);
     }
 
     public SurjectiveMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize) {
         this(treeRandom, size, imageSize, DEFAULT_CACHE_DEPTH);
     }
 
-    public SurjectiveMonotonic(TreeRandom treeRandom, BigInteger size, BigInteger imageSize, int cacheDepth) {
+    public SurjectiveMonotonic(
+            TreeRandom treeRandom, BigInteger size, BigInteger imageSize, int cacheDepth) {
         this(treeRandom, DEFAULT_SAMPLER_FACTORY, size, imageSize, cacheDepth);
     }
 
     public SurjectiveMonotonic(
-            TreeRandom treeRandom, SamplerFactory samplerFactory, BigInteger size, BigInteger imageSize, int cacheDepth) {
+            TreeRandom treeRandom,
+            SamplerFactory samplerFactory,
+            BigInteger size,
+            BigInteger imageSize,
+            int cacheDepth) {
         this(treeRandom, samplerFactory, size, imageSize, cacheDepth, DEFAULT_SAMPLER_MAX_LENGTH);
     }
     
@@ -64,14 +75,9 @@ public class SurjectiveMonotonic extends AbstractCachingRecursiveMonotonic {
     
     
     @Override
-    protected BigInteger splitCacheable(Range range, Range imageRange, BigInteger imageSplitPoint, int level) {
+    protected BigInteger splitCacheable(
+            Range range, Range imageRange, BigInteger imageSplitPoint, int level) {
         BigInteger length = range.size();
-        
-        // TODO: create standalone SamplerFactory interface
-        // FIXME: functional lambda?
-        // TODO: SamplerFactory::isFast()
-        // TODO: SamplerFactory::isBig()
-        
         BigInteger splitPoint;
         Range rangeToSplit = Range.fromUntil(
                 range.from().add(imageSplitPoint.subtract(imageRange.from())),

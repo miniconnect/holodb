@@ -21,18 +21,15 @@ import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class MonotonicBenchmark {
     
-    
-    // TODO ...
-    
-    
     private Monotonic monotonic;
+    
     
     @Setup
     public void setup() {
         monotonic = new FastMonotonic(BigInteger.valueOf(100000L), BigInteger.valueOf(35000000L));
     }
     
-    // XXX: blackhole is unnecessary in this situation
+    
     @Benchmark
     @Fork(value = 2, warmups = 2)
     public void someBenchmark(Blackhole blackhole) {

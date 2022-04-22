@@ -59,12 +59,6 @@ public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
     @Override
     protected BigInteger splitCacheable(Range range, Range imageRange, BigInteger imageSplitPoint, int level) {
         BigInteger length = range.size();
-        
-        // TODO: create standalone SamplerFactory interface
-        // FIXME: functional lambda?
-        // TODO: SamplerFactory::isFast()
-        // TODO: SamplerFactory::isBig()
-        
         BigInteger splitPoint;
         if (length.compareTo(samplerMaxLength) > 0) {
             splitPoint = splitFast(range, imageSplitPoint);
