@@ -17,8 +17,14 @@ nexusPublishing {
 }
 
 allprojects {
+    def versionMatch = (gitVersion() =~ /^v?(\d+\.\d+\.)(\d+)(.+)$/)[0]
+    def isVersionDirty = !versionMatch[3].isEmpty()
+    def versionPrefix = versionMatch[1]
+    def versionPatch = isVersionDirty ? (Integer.parseInt(versionMatch[2]) + 1) + "" : versionMatch[2];
+    def versionSuffix = isVersionDirty ? "-SNAPSHOT" : ""
+    
     group = 'hu.webarticum.holodb'
-    version gitVersion().replaceAll(/^v|\.dirty$/, '')
+    version versionPrefix + versionPatch + versionSuffix
     
     repositories {
         mavenCentral()
