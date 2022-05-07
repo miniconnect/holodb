@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.Iterator;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
+import hu.webarticum.miniconnect.lang.ReversibleIterable;
 import hu.webarticum.miniconnect.util.IteratorAdapter;
 
 public class PermutatedSelection implements Selection {
@@ -42,6 +43,14 @@ public class PermutatedSelection implements Selection {
     @Override
     public Iterator<BigInteger> iterator() {
         return new IteratorAdapter<>(baseSelection.iterator(), permutation::indexOf);
+    }
+
+    @Override
+    public ReversibleIterable<BigInteger> reverseOrder() {
+        Iterable<BigInteger> reversedBase = baseSelection.reverseOrder();
+        Iterable<BigInteger> permutatedReversed =
+                () -> new IteratorAdapter<>(reversedBase.iterator(), permutation::indexOf);
+        return ReversibleIterable.of(permutatedReversed, this);
     }
     
 }

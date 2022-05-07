@@ -4,7 +4,7 @@ schemas:
     tables:
       - name: first
         writeable: true
-        size: 22
+        size: 32
         columns:
           - name: id
             type: 'java.math.BigInteger'
@@ -15,6 +15,7 @@ schemas:
           - name: level
             type: 'java.lang.Integer'
             values: [1, 2, 3, 4, 5]
+            nullCount: 5
       - name: second
         size: 4
         columns:

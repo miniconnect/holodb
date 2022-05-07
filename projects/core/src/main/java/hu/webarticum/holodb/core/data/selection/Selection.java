@@ -2,7 +2,9 @@ package hu.webarticum.holodb.core.data.selection;
 
 import java.math.BigInteger;
 
-public interface Selection extends Iterable<BigInteger> {
+import hu.webarticum.miniconnect.lang.ReversibleIterable;
+
+public interface Selection extends ReversibleIterable<BigInteger> {
 
     public BigInteger size();
 

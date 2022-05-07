@@ -6,7 +6,12 @@ import java.util.NoSuchElementException;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import hu.webarticum.miniconnect.lang.ReversibleIterable;
+
 public class Range implements Selection {
+    
+    private static final Range EMPTY_INSTANCE = empty(BigInteger.ZERO);
+    
 
     private final BigInteger from;
     
@@ -18,6 +23,10 @@ public class Range implements Selection {
         this.until = until;
     }
 
+
+    public static Range empty() {
+        return EMPTY_INSTANCE;
+    }
     
     public static Range empty(long position) {
         return empty(BigInteger.valueOf(position));
@@ -98,6 +107,11 @@ public class Range implements Selection {
     }
 
     @Override
+    public ReversibleIterable<BigInteger> reverseOrder() {
+        return ReversibleIterable.of(() -> new ReversedRangeIterator(), this);
+    }
+    
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Range)) {
             return false;
@@ -147,5 +161,36 @@ public class Range implements Selection {
         }
         
     }
+
     
+    private class ReversedRangeIterator implements Iterator<BigInteger> {
+
+        private BigInteger counter = until.subtract(BigInteger.ONE);
+        
+        private boolean hasNext = checkNext();
+        
+        
+        @Override
+        public boolean hasNext() {
+            return hasNext;
+        }
+
+        @Override
+        public BigInteger next() {
+            if (!hasNext) {
+                throw new NoSuchElementException();
+            }
+            
+            BigInteger result = counter;
+            counter = counter.subtract(BigInteger.ONE);
+            hasNext = checkNext();
+            return result;
+        }
+
+        private boolean checkNext() {
+            return (counter.compareTo(from) >= 0);
+        }
+        
+    }
+
 }

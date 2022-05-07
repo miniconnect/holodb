@@ -58,6 +58,27 @@ class RangeTest {
                                 "27346871304718347645349017307260")));
     }
 
+    @Test
+    void testReverseOrder() {
+        assertThat(Range.fromUntil(big(0), big(0)).reverseOrder()).containsExactlyElementsOf(Collections.emptyList());
+        assertThat(Range.fromUntil(big(0), big(11)).reverseOrder()).containsExactlyElementsOf(
+                Arrays.asList(bigs(10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)));
+        assertThat(Range.fromUntil(big(9), big(23)).reverseOrder()).containsExactlyElementsOf(
+                Arrays.asList(bigs(22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9)));
+        assertThat(Range
+                .fromUntil(big("27346871304718347645349017307248"), big("27346871304718347645349017307261"))
+                .reverseOrder()
+                ).containsExactlyElementsOf(
+                        Arrays.asList(bigs(
+                                "27346871304718347645349017307260", "27346871304718347645349017307259",
+                                "27346871304718347645349017307258", "27346871304718347645349017307257",
+                                "27346871304718347645349017307256", "27346871304718347645349017307255",
+                                "27346871304718347645349017307254", "27346871304718347645349017307253",
+                                "27346871304718347645349017307252", "27346871304718347645349017307251",
+                                "27346871304718347645349017307250", "27346871304718347645349017307249",
+                                "27346871304718347645349017307248")));
+    }
+
     
     private static BigInteger big(int value) {
         return BigInteger.valueOf(value);

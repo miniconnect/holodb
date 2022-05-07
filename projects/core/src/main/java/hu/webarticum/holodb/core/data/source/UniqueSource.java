@@ -3,6 +3,7 @@ package hu.webarticum.holodb.core.data.source;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -23,13 +24,18 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
     }
     
     public UniqueSource(Class<T> type, Collection<T> values) {
-        this(type, toSortedSet(values));
+        this(type, toSortedSet(checkValues(values)));
     }
     
     private UniqueSource(Class<T> type, SortedSet<T> set) {
         this.type = type;
         this.length = BigInteger.valueOf(set.size());
         this.values = set.toArray();
+    }
+
+    private static <T> Collection<T> checkValues(Collection<T> values) {
+        values.forEach(Objects::requireNonNull);
+        return values;
     }
     
     private static <T> SortedSet<T> toSortedSet(Collection<T> values) {
@@ -97,4 +103,9 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
         return Range.fromUntil(from, until);
     }
 
+    @Override
+    public Range findNulls() {
+        return Range.empty();
+    }
+    
 }

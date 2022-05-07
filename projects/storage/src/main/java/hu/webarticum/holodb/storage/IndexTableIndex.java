@@ -4,8 +4,8 @@ import hu.webarticum.holodb.core.data.selection.Selection;
 import hu.webarticum.holodb.core.data.source.Index;
 import hu.webarticum.miniconnect.rdmsframework.storage.SingleColumnTableIndex;
 import hu.webarticum.miniconnect.rdmsframework.storage.TableSelection;
+import hu.webarticum.miniconnect.rdmsframework.storage.impl.compound.DisjunctUnionTableSelection;
 
-/** TODO: improve this, see {@link Index} */
 public class IndexTableIndex implements SingleColumnTableIndex {
 
     private final String name;
@@ -49,15 +49,32 @@ public class IndexTableIndex implements SingleColumnTableIndex {
             InclusionMode toInclusionMode,
             NullsMode nullsMode,
             SortMode sortMode) {
-        boolean ascOrder =
-                sortMode == SortMode.ASC_NULLS_FIRST ||
-                sortMode == SortMode.ASC_NULLS_LAST;
-        Selection selection = index.findBetween(
+        
+        System.out.println(from + ", " + fromInclusionMode + ", " + to + ", " + toInclusionMode + ", " + nullsMode + ", " + sortMode);
+        
+        Selection mainSelection = index.findBetween(
                 from,
                 fromInclusionMode == InclusionMode.INCLUDE,
                 to,
                 toInclusionMode == InclusionMode.INCLUDE);
-        return new SelectionTableSelection(selection, ascOrder);
+        boolean ascOrder = sortMode.isAsc();
+        boolean nullsFirst = sortMode.isNullsFirst();
+        TableSelection mainTableSelection = new SelectionTableSelection(mainSelection, ascOrder);
+        if (
+                nullsMode == NullsMode.NO_NULLS ||
+                (nullsFirst && from != null) ||
+                (!nullsFirst && to != null)) {
+            return mainTableSelection;
+        }
+        
+        Selection nullsSelection = index.findNulls();
+        TableSelection nullsTableSelection = new SelectionTableSelection(nullsSelection, ascOrder);
+        
+        if (nullsFirst) {
+            return DisjunctUnionTableSelection.of(nullsTableSelection, mainTableSelection);
+        } else {
+            return DisjunctUnionTableSelection.of(mainTableSelection, nullsTableSelection);
+        }
     }
 
 }

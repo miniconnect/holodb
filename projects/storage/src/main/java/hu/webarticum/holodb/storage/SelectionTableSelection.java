@@ -25,7 +25,7 @@ public class SelectionTableSelection implements TableSelection {
 
     @Override
     public Iterator<BigInteger> iterator() {
-        return selection.iterator();
+        return ascOrder ? selection.iterator() : selection.reverseOrder().iterator();
     }
 
     @Override

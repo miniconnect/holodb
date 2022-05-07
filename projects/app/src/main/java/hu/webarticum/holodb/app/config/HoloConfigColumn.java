@@ -1,5 +1,6 @@
 package hu.webarticum.holodb.app.config;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class HoloConfigColumn {
 
     private final ColumnMode mode;
 
+    private final BigInteger nullCount;
+
     private final List<Object> values = new ArrayList<>();
 
     
@@ -23,10 +26,12 @@ public class HoloConfigColumn {
             @JsonProperty("name") String name,
             @JsonProperty("type") Class<?> type,
             @JsonProperty("mode") ColumnMode mode,
+            @JsonProperty("nullCount") BigInteger nullCount,
             @JsonProperty("values") List<Object> values) {
         this.name = name;
         this.type = type;
         this.mode = mode == null ? ColumnMode.DEFAULT : mode;
+        this.nullCount = nullCount == null ? BigInteger.ZERO : nullCount;
         if (values != null) {
             this.values.addAll(values);
         }
@@ -43,6 +48,10 @@ public class HoloConfigColumn {
 
     public ColumnMode mode() {
         return mode;
+    }
+
+    public BigInteger nullCount() {
+        return nullCount;
     }
 
     public List<Object> values() {

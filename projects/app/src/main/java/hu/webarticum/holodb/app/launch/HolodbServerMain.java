@@ -18,12 +18,18 @@ import hu.webarticum.holodb.app.config.HoloConfigColumn;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.ColumnMode;
 import hu.webarticum.holodb.app.config.HoloConfigSchema;
 import hu.webarticum.holodb.app.config.HoloConfigTable;
+import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
+import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
+import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.holodb.core.data.source.UniqueSource;
 import hu.webarticum.holodb.core.data.source.FixedSource;
 import hu.webarticum.holodb.core.data.source.Index;
 import hu.webarticum.holodb.core.data.source.IndexedSource;
+import hu.webarticum.holodb.core.data.source.MonotonicSource;
+import hu.webarticum.holodb.core.data.source.NullPaddedSource;
+import hu.webarticum.holodb.core.data.source.PermutatedIndexedSource;
 import hu.webarticum.holodb.core.data.source.RangeSource;
 import hu.webarticum.holodb.core.data.source.SortedSource;
 import hu.webarticum.holodb.core.data.source.Source;
@@ -128,7 +134,9 @@ public class HolodbServerMain {
                 ImmutableList.fromCollection(tableConfig.columns());
         ImmutableList<String> columnNames = columnConfigs.map(HoloConfigColumn::name);
         ImmutableList<ColumnDefinition> columnDefinitions =
-                columnConfigs.map(c -> new SimpleColumnDefinition(c.type(), false));
+                columnConfigs.map(c -> new SimpleColumnDefinition(
+                        c.type(),
+                        !c.nullCount().equals(tableSize)));
         ImmutableMap<String, Source<?>> columnSources = columnConfigs
                 .assign(c -> createColumnSource(c, tableRandom, converter, tableSize))
                 .map(HoloConfigColumn::name, s -> s);
@@ -158,9 +166,10 @@ public class HolodbServerMain {
                 .map(v -> converter.convert(v, columnClazz))
                 .collect(Collectors.toList());
         if (columnMode == ColumnMode.DEFAULT) {
-            SortedSource<?> baseSource = createUniqueSource(columnClazz, values);
+            UniqueSource<?> baseSource = createUniqueSource(columnClazz, values);
             TreeRandom columnRandom = tableRandom.sub("col-" + columnConfig.name());
-            return new HoloSimpleSource<>(columnRandom, baseSource, tableSize);
+            BigInteger nullCount = columnConfig.nullCount();
+            return createDefaultSource(columnRandom, baseSource, tableSize, nullCount);
         } else if (columnMode == ColumnMode.COUNTER) {
             return new RangeSource(BigInteger.ONE, tableSize);
         } else if (columnMode == ColumnMode.FIXED) {
@@ -179,6 +188,19 @@ public class HolodbServerMain {
         }
     }
 
+    public static <T> IndexedSource<T> createDefaultSource(
+            TreeRandom treeRandom, SortedSource<T> baseSource, BigInteger tableSize, BigInteger nullCount) {
+        BigInteger valueCount = tableSize.subtract(nullCount);
+        SortedSource<T> valueSource = new MonotonicSource<>(
+                baseSource,
+                new BinomialMonotonic(treeRandom.sub("monotonic"), valueCount, baseSource.size()));
+        if (!valueCount.equals(tableSize)) {
+            valueSource = new NullPaddedSource<>(valueSource, tableSize);
+        }
+        Permutation permutation = new DirtyFpePermutation(treeRandom.sub("permutation"), tableSize);
+        return new PermutatedIndexedSource<>(valueSource, permutation);
+    }
+    
     private static FixedSource<?> createFixedSource(Class<?> type, Collection<?> values) {
         try {
             return FixedSource.class.getConstructor(Class.class, Collection.class)

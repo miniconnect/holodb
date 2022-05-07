@@ -17,6 +17,7 @@ class PermutatedSelectionTest {
         Permutation permutation = MockPermutation.of(1, 3, 0, 2, 4);
         PermutatedSelection permutatedSelection = new PermutatedSelection(range, permutation);
         assertThat(permutatedSelection).containsExactly(bigs(3, 0, 2, 4));
+        assertThat(permutatedSelection.reverseOrder()).containsExactly(bigs(4, 2, 0, 3));
     }
 
     private static BigInteger[] bigs(int... values) {

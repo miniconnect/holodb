@@ -48,5 +48,12 @@ public class MonotonicSource<T> implements SortedSource<T> {
         return monotonic.indicesOf(baseSource.findBetween(
                 minValue, minInclusive, maxValue, maxInclusive));
     }
+
+    // FIXME: is MonotonicSource nullable?
+    // FIXME: from size?
+    @Override
+    public Range findNulls() {
+        return Range.empty();
+    }
     
 }

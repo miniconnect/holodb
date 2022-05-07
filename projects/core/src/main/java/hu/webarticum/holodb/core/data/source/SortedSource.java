@@ -10,5 +10,8 @@ public interface SortedSource<T> extends IndexedSource<T> {
     @Override
     public Range findBetween(
             Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive);
-    
+
+    @Override
+    public Range findNulls();
+
 }

@@ -70,5 +70,10 @@ public class RangeSource implements SortedSource<BigInteger> {
             return value;
         }
     }
+
+    @Override
+    public Range findNulls() {
+        return Range.empty();
+    }
     
 }
