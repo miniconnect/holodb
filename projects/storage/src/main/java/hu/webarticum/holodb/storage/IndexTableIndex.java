@@ -2,9 +2,11 @@ package hu.webarticum.holodb.storage;
 
 import hu.webarticum.holodb.core.data.selection.Selection;
 import hu.webarticum.holodb.core.data.source.Index;
+import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.rdmsframework.storage.SingleColumnTableIndex;
 import hu.webarticum.miniconnect.rdmsframework.storage.TableSelection;
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.compound.DisjunctUnionTableSelection;
+import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleSelection;
 
 public class IndexTableIndex implements SingleColumnTableIndex {
 
@@ -49,13 +51,24 @@ public class IndexTableIndex implements SingleColumnTableIndex {
             InclusionMode toInclusionMode,
             NullsMode nullsMode,
             SortMode sortMode) {
+        boolean ascOrder = sortMode.isAsc();
+        boolean nullsFirst = sortMode.isNullsFirst();
+        
+        if (nullsMode == NullsMode.NULLS_ONLY) {
+            if (
+                    (nullsFirst && from == null) ||
+                    (!nullsFirst && to == null)) {
+                return new SelectionTableSelection(index.findNulls(), ascOrder);
+            } else {
+                return new SimpleSelection(ImmutableList.empty());
+            }
+        }
+
         Selection mainSelection = index.findBetween(
                 from,
                 fromInclusionMode == InclusionMode.INCLUDE,
                 to,
                 toInclusionMode == InclusionMode.INCLUDE);
-        boolean ascOrder = sortMode.isAsc();
-        boolean nullsFirst = sortMode.isNullsFirst();
         TableSelection mainTableSelection = new SelectionTableSelection(mainSelection, ascOrder);
         if (
                 nullsMode == NullsMode.NO_NULLS ||
