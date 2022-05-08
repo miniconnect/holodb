@@ -49,9 +49,6 @@ public class IndexTableIndex implements SingleColumnTableIndex {
             InclusionMode toInclusionMode,
             NullsMode nullsMode,
             SortMode sortMode) {
-        
-        System.out.println(from + ", " + fromInclusionMode + ", " + to + ", " + toInclusionMode + ", " + nullsMode + ", " + sortMode);
-        
         Selection mainSelection = index.findBetween(
                 from,
                 fromInclusionMode == InclusionMode.INCLUDE,
