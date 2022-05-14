@@ -45,7 +45,7 @@ import hu.webarticum.miniconnect.messenger.impl.SessionManagerMessenger;
 import hu.webarticum.miniconnect.rdmsframework.engine.Engine;
 import hu.webarticum.miniconnect.rdmsframework.engine.impl.SimpleEngine;
 import hu.webarticum.miniconnect.rdmsframework.execution.QueryExecutor;
-import hu.webarticum.miniconnect.rdmsframework.execution.simple.SimpleQueryExecutor;
+import hu.webarticum.miniconnect.rdmsframework.execution.impl.IntegratedQueryExecutor;
 import hu.webarticum.miniconnect.rdmsframework.parser.AntlrSqlParser;
 import hu.webarticum.miniconnect.rdmsframework.parser.SqlParser;
 import hu.webarticum.miniconnect.rdmsframework.session.FrameworkSessionManager;
@@ -73,7 +73,7 @@ public class HolodbServerMain {
     public static void main(String[] args) {
         HoloConfig config = loadConfig(args);
         SqlParser sqlParser = new AntlrSqlParser();
-        QueryExecutor queryExecutor = new SimpleQueryExecutor();
+        QueryExecutor queryExecutor = new IntegratedQueryExecutor();
         Converter converter = new DefaultConverter();
         StorageAccess storageAccess = createStorageAccess(config, converter);
         try (Engine engine = new SimpleEngine(sqlParser, queryExecutor, storageAccess)) {
