@@ -1,6 +1,7 @@
 package hu.webarticum.holodb.core.data.source;
 
 import java.math.BigInteger;
+import java.util.Comparator;
 
 import hu.webarticum.holodb.core.data.selection.Range;
 
@@ -34,6 +35,11 @@ public class NullPaddedSource<T> implements SortedSource<T> {
     @Override
     public T get(BigInteger index) {
         return index.compareTo(baseSource.size()) < 0 ? baseSource.get(index) : null;
+    }
+
+    @Override
+    public Comparator<?> comparator() {
+        return baseSource.comparator();
     }
 
     @Override

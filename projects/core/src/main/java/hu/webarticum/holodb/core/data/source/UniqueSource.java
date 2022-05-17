@@ -3,19 +3,23 @@ package hu.webarticum.holodb.core.data.source;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import hu.webarticum.holodb.core.data.selection.Range;
+import hu.webarticum.miniconnect.rdmsframework.util.ComparatorUtil;
 
 public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
 
-    private Class<T> type;
+    private final Class<T> type;
 
-    private BigInteger length;
+    private final BigInteger length;
+
+    private final Comparator<T> comparator;
     
-    private Object[] values;
+    private final Object[] values;
     
 
     @SuppressWarnings("unchecked")
@@ -24,29 +28,22 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
     }
     
     public UniqueSource(Class<T> type, Collection<T> values) {
-        this(type, toSortedSet(checkValues(values)));
-    }
-    
-    private UniqueSource(Class<T> type, SortedSet<T> set) {
-        this.type = type;
-        this.length = BigInteger.valueOf(set.size());
-        this.values = set.toArray();
+        this(type, values, null);
     }
 
-    private static <T> Collection<T> checkValues(Collection<T> values) {
+    public UniqueSource(Class<T> type, Collection<T> values, Comparator<T> comparator) {
         values.forEach(Objects::requireNonNull);
-        return values;
+        
+        this.type = type;
+        this.comparator = comparator != null ? comparator : ComparatorUtil.createDefaultComparatorFor(type);
+        this.values = toValueArray(values, this.comparator);
+        this.length = BigInteger.valueOf(this.values.length);
     }
     
-    private static <T> SortedSet<T> toSortedSet(Collection<T> values) {
-        if (values instanceof SortedSet) {
-            SortedSet<T> castedSet = (SortedSet<T>) values;
-            if (castedSet.comparator() == null) {
-                return castedSet;
-            }
-        }
-        
-        return new TreeSet<>(values);
+    private static <T> Object[] toValueArray(Collection<T> values, Comparator<T> comparator) {
+        SortedSet<T> set = new TreeSet<>(comparator);
+        set.addAll(values);
+        return set.toArray();
     }
     
     
@@ -65,6 +62,11 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
         @SuppressWarnings("unchecked")
         T result = (T) values[index.intValue()];
         return result;
+    }
+    
+    @Override
+    public Comparator<T> comparator() {
+        return comparator;
     }
 
     @Override

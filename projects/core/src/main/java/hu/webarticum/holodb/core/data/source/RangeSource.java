@@ -1,6 +1,7 @@
 package hu.webarticum.holodb.core.data.source;
 
 import java.math.BigInteger;
+import java.util.Comparator;
 
 import hu.webarticum.holodb.core.data.selection.Range;
 
@@ -26,24 +27,25 @@ public class RangeSource implements SortedSource<BigInteger> {
         return BigInteger.class;
     }
 
-
     @Override
     public BigInteger size() {
         return size;
     }
 
-
     @Override
     public BigInteger get(BigInteger index) {
         return from.add(index);
     }
-
+    
+    @Override
+    public Comparator<BigInteger> comparator() {
+        return BigInteger::compareTo;
+    }
 
     @Override
     public Range find(Object value) {
         return findBetween(value, true, value, true);
     }
-
 
     @Override
     public Range findBetween(

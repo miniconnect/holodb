@@ -1,6 +1,7 @@
 package hu.webarticum.holodb.core.data.source;
 
 import java.math.BigInteger;
+import java.util.Comparator;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.selection.PermutatedSelection;
@@ -42,6 +43,11 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
     public T get(BigInteger index) {
         BigInteger permutatedIndex = permutation.at(index);
         return baseSource.get(permutatedIndex);
+    }
+    
+    @Override
+    public Comparator<?> comparator() {
+        return baseSource.comparator();
     }
 
     @Override
