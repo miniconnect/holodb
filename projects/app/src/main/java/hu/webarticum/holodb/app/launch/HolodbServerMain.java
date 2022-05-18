@@ -6,6 +6,7 @@ import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -133,13 +134,14 @@ public class HolodbServerMain {
         ImmutableList<HoloConfigColumn> columnConfigs =
                 ImmutableList.fromCollection(tableConfig.columns());
         ImmutableList<String> columnNames = columnConfigs.map(HoloConfigColumn::name);
-        ImmutableList<ColumnDefinition> columnDefinitions =
-                columnConfigs.map(c -> new SimpleColumnDefinition(
-                        c.type(),
-                        !c.nullCount().equals(tableSize)));
         ImmutableMap<String, Source<?>> columnSources = columnConfigs
                 .assign(c -> createColumnSource(c, tableRandom, converter, tableSize))
                 .map(HoloConfigColumn::name, s -> s);
+        ImmutableList<ColumnDefinition> columnDefinitions =
+                columnConfigs.map(c ->  new SimpleColumnDefinition(
+                        c.type(),
+                        !c.nullCount().equals(tableSize),
+                        extractComparator(columnSources.get(c.name()))));
         NamedResourceStore<TableIndex> indexStore = createIndexStore(columnSources);
         Table table = new HoloTable(
                 tableName,
@@ -179,6 +181,15 @@ public class HolodbServerMain {
         }
     }
 
+    private static Comparator<?> extractComparator(Source<?> source) {
+        if (!(source instanceof Index)) {
+            return null;
+        }
+        
+        Index index = (Index) source;
+        return index.comparator();
+    }
+    
     private static UniqueSource<?> createUniqueSource(Class<?> type, Collection<?> values) {
         try {
             return UniqueSource.class.getConstructor(Class.class, Collection.class)
