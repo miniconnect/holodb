@@ -145,7 +145,10 @@ public class HoloTable implements Table {
         for (int i = 0; i < size; i++) {
             String columnName = columnNames.get(i);
             ColumnDefinition columnDefinition = columnDefinitions.get(i);
-            Column column = new HoloSimpleColumn(columnName, columnDefinition);
+            
+            // TODO: add possible values
+            Column column = new HoloSimpleColumn(columnName, columnDefinition, null);
+            
             columns[i] = column;
         }
         return GenericNamedResourceStore.of(columns);
