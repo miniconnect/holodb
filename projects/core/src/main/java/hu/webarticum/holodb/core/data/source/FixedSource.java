@@ -3,6 +3,9 @@ package hu.webarticum.holodb.core.data.source;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
+
+import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class FixedSource<T extends Comparable<T>> implements Source<T> {
 
@@ -42,4 +45,9 @@ public class FixedSource<T extends Comparable<T>> implements Source<T> {
         return result;
     }
 
+    @Override
+    public Optional<ImmutableList<T>> possibleValues() {
+        return Optional.empty();
+    }
+    
 }

@@ -1,8 +1,10 @@
 package hu.webarticum.holodb.core.data.source;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
+import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class PermutatedSource<T> implements Source<T> {
     
@@ -40,6 +42,11 @@ public class PermutatedSource<T> implements Source<T> {
     public T get(BigInteger index) {
         BigInteger permutatedIndex = permutation.at(index);
         return baseSource.get(permutatedIndex);
+    }
+
+    @Override
+    public Optional<ImmutableList<T>> possibleValues() {
+        return baseSource.possibleValues();
     }
 
 }

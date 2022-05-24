@@ -1,6 +1,7 @@
 package hu.webarticum.holodb.storage;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
 import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
@@ -11,6 +12,7 @@ import hu.webarticum.holodb.core.data.source.MonotonicSource;
 import hu.webarticum.holodb.core.data.source.PermutatedIndexedSource;
 import hu.webarticum.holodb.core.data.source.SortedSource;
 import hu.webarticum.holodb.core.data.source.Source;
+import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.rdmsframework.storage.TableIndex;
 
 public class HoloSimpleSource<T> implements Source<T> {
@@ -40,6 +42,11 @@ public class HoloSimpleSource<T> implements Source<T> {
     @Override
     public T get(BigInteger index) {
         return indexedSource.get(index);
+    }
+
+    @Override
+    public Optional<ImmutableList<T>> possibleValues() {
+        return indexedSource.possibleValues();
     }
     
     public TableIndex createIndex(String indexName, String columnName) {

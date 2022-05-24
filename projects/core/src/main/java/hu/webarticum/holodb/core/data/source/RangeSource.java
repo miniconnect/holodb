@@ -2,10 +2,16 @@ package hu.webarticum.holodb.core.data.source;
 
 import java.math.BigInteger;
 import java.util.Comparator;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 import hu.webarticum.holodb.core.data.selection.Range;
+import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class RangeSource implements SortedSource<BigInteger> {
+    
+    private final int MAX_COUNT_OF_POSSIBLE_VALUES = 1000;
+    
     
     private final BigInteger from;
     
@@ -40,6 +46,19 @@ public class RangeSource implements SortedSource<BigInteger> {
     @Override
     public Comparator<BigInteger> comparator() {
         return BigInteger::compareTo;
+    }
+
+    @Override
+    public Optional<ImmutableList<BigInteger>> possibleValues() {
+        if (size.compareTo(BigInteger.valueOf(MAX_COUNT_OF_POSSIBLE_VALUES)) > 0) {
+            return Optional.empty();
+        }
+        
+        ImmutableList<BigInteger> valueList = IntStream
+                .range(0, size.intValueExact())
+                .mapToObj(i -> get(BigInteger.valueOf(i)))
+                .collect(ImmutableList.createCollector());
+        return Optional.of(valueList);
     }
 
     @Override

@@ -5,10 +5,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import hu.webarticum.holodb.core.data.selection.Range;
+import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.rdmsframework.util.ComparatorUtil;
 
 public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
@@ -69,6 +71,13 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
         return comparator;
     }
 
+    @Override
+    public Optional<ImmutableList<T>> possibleValues() {
+        @SuppressWarnings("unchecked")
+        ImmutableList<T> valueList = (ImmutableList<T>) (ImmutableList<?>) ImmutableList.of(values);
+        return Optional.of(valueList);
+    }
+    
     @Override
     public Range find(Object value) {
         int position = Arrays.binarySearch(values, value);

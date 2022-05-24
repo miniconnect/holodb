@@ -2,10 +2,12 @@ package hu.webarticum.holodb.core.data.source;
 
 import java.math.BigInteger;
 import java.util.Comparator;
+import java.util.Optional;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.selection.PermutatedSelection;
 import hu.webarticum.holodb.core.data.selection.Selection;
+import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class PermutatedIndexedSource<T> implements IndexedSource<T> {
     
@@ -48,6 +50,11 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
     @Override
     public Comparator<?> comparator() {
         return baseSource.comparator();
+    }
+
+    @Override
+    public Optional<ImmutableList<T>> possibleValues() {
+        return baseSource.possibleValues();
     }
 
     @Override

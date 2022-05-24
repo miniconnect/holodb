@@ -55,7 +55,7 @@ public class HoloTable implements Table {
         this.columnNames = columnNames;
         this.singleColumnSources = singleColumnSources;
         this.multiColumnSourceMap = buildMultiColumnSourceMap(multiColumnSources);
-        this.columnStore = buildColumnStore(columnNames, columnDefinitions);
+        this.columnStore = buildColumnStore(columnNames, columnDefinitions, singleColumnSources);
         this.indexStore = indexStore;
     }
     
@@ -139,17 +139,18 @@ public class HoloTable implements Table {
 
     private static NamedResourceStore<Column> buildColumnStore(
             ImmutableList<String> columnNames,
-            ImmutableList<? extends ColumnDefinition> columnDefinitions) {
+            ImmutableList<? extends ColumnDefinition> columnDefinitions,
+            ImmutableMap<String, ? extends Source<?>> singleColumnSources) {
         int size = columnNames.size();
         Column[] columns = new Column[size];
         for (int i = 0; i < size; i++) {
             String columnName = columnNames.get(i);
             ColumnDefinition columnDefinition = columnDefinitions.get(i);
-            
-            // TODO: add possible values
-            Column column = new HoloSimpleColumn(columnName, columnDefinition, null);
-            
-            columns[i] = column;
+            Source<?> source = singleColumnSources.get(columnName);
+            ImmutableList<?> possibleValues = source != null ? source.possibleValues().orElse(null) : null;
+            @SuppressWarnings("unchecked")
+            ImmutableList<Object> castedPossibleValues = (ImmutableList<Object>) possibleValues;
+            columns[i] = new HoloSimpleColumn(columnName, columnDefinition, castedPossibleValues);
         }
         return GenericNamedResourceStore.of(columns);
     }
