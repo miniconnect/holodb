@@ -24,6 +24,7 @@ configurations {
 dependencies {
     implementation project(':core')
     implementation project(':storage')
+    implementation project(':values')
     implementation 'hu.webarticum.miniconnect:messenger:0.1.1-SNAPSHOT'
     implementation 'hu.webarticum.miniconnect:rdbms-framework:0.1.1-SNAPSHOT'
     implementation 'hu.webarticum.miniconnect:record:0.1.1-SNAPSHOT'

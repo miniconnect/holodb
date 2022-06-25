@@ -131,7 +131,44 @@ SQL > exit
 Bye-bye!
 ```
 
-## Holographic databases
+## Predefined value sets
+
+You can use predefined value sets too.
+To do this, create a file with one value on each line.
+Make this file available to the java classloader.
+If you use docker, the easiest way to do this is to copy the file into the `/app/resources` directory:
+
+```dockerfile
+FROM miniconnect/holodb:latest
+
+COPY config.yaml /app/config.yaml
+COPY my-values.txt /app/resources/my-values.txt
+```
+
+There are some built-in value set resources too:
+
+- `hu/webarticum/holodb/values/cities.txt`
+- `hu/webarticum/holodb/values/colors.txt`
+- `hu/webarticum/holodb/values/countries.txt`
+- `hu/webarticum/holodb/values/female-forenames.txt`
+- `hu/webarticum/holodb/values/forenames.txt`
+- `hu/webarticum/holodb/values/fruits.txt`
+- `hu/webarticum/holodb/values/log-levels.txt`
+- `hu/webarticum/holodb/values/lorem.txt`
+- `hu/webarticum/holodb/values/male-forenames.txt`
+- `hu/webarticum/holodb/values/months.txt`
+- `hu/webarticum/holodb/values/surnames.txt`
+- `hu/webarticum/holodb/values/weekdays.txt`
+
+You can use a predefined value set resource with the `valuesResource` key in `config.yaml`:
+
+```yaml
+          - name: color
+            type: 'java.lang.String'
+            valuesResource: `hu/webarticum/holodb/values/colors.txt`
+```
+
+## How does it work?
 
 Holographic databases store no real data and calculate field values and reverse-indexes on-the-fly.
 Nonetheless, you as a user experience a consistent, searchable (and optionally writable) database.

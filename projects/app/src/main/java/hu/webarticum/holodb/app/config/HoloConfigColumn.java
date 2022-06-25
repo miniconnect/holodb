@@ -21,13 +21,16 @@ public class HoloConfigColumn {
 
     private final List<Object> values = new ArrayList<>();
 
+    private final String valuesResource;
+
     
     public HoloConfigColumn(
             @JsonProperty("name") String name,
             @JsonProperty("type") Class<?> type,
             @JsonProperty("mode") ColumnMode mode,
             @JsonProperty("nullCount") BigInteger nullCount,
-            @JsonProperty("values") List<Object> values) {
+            @JsonProperty("values") List<Object> values,
+            @JsonProperty("valuesResource") String valuesResource) {
         this.name = name;
         this.type = type;
         this.mode = mode == null ? ColumnMode.DEFAULT : mode;
@@ -35,6 +38,7 @@ public class HoloConfigColumn {
         if (values != null) {
             this.values.addAll(values);
         }
+        this.valuesResource = valuesResource;
     }
     
 
@@ -56,6 +60,10 @@ public class HoloConfigColumn {
 
     public List<Object> values() {
         return new ArrayList<>(values);
+    }
+
+    public String valuesResource() {
+        return valuesResource;
     }
 
 }

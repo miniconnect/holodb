@@ -11,7 +11,10 @@ schemas:
             mode: COUNTER
           - name: label
             type: 'java.lang.String'
-            values: ['Lorem', 'Ipsum', 'Dolor', 'Sit', 'Amet', 'Hello', 'World']
+            valuesResource: 'hu/webarticum/holodb/values/lorem.txt'
+          - name: color
+            type: 'java.lang.String'
+            valuesResource: 'hu/webarticum/holodb/values/colors.txt'
           - name: level
             type: 'java.lang.Integer'
             values: [1, 2, 3, 4, 5]

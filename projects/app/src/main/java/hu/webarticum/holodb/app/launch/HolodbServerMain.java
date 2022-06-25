@@ -1,12 +1,15 @@
 package hu.webarticum.holodb.app.launch;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -105,7 +108,7 @@ public class HolodbServerMain {
             throw new UncheckedIOException(e);
         }
     }
-
+    
     public static StorageAccess createStorageAccess(HoloConfig config, Converter converter) {
         SimpleStorageAccess storageAccess =  new SimpleStorageAccess();
         SimpleResourceManager<Schema> schemaManager = storageAccess.schemas();
@@ -163,12 +166,9 @@ public class HolodbServerMain {
             Converter converter,
             BigInteger tableSize) {
         ColumnMode columnMode = columnConfig.mode();
-        Class<?> columnClazz = columnConfig.type();
-        List<Object> values = columnConfig.values().stream()
-                .map(v -> converter.convert(v, columnClazz))
-                .collect(Collectors.toList());
+        List<Object> values = loadValues(columnConfig, converter);
         if (columnMode == ColumnMode.DEFAULT) {
-            UniqueSource<?> baseSource = createUniqueSource(columnClazz, values);
+            UniqueSource<?> baseSource = createUniqueSource(columnConfig.type(), values);
             TreeRandom columnRandom = tableRandom.sub("col-" + columnConfig.name());
             BigInteger nullCount = columnConfig.nullCount();
             return createDefaultSource(columnRandom, baseSource, tableSize, nullCount);
@@ -181,6 +181,34 @@ public class HolodbServerMain {
         }
     }
 
+    private static List<Object> loadValues(HoloConfigColumn columnConfig, Converter converter) {
+        Class<?> columnClazz = columnConfig.type();
+        String valuesResource = columnConfig.valuesResource();
+        List<Object> rawValues = valuesResource != null ?
+                loadValuesFromResource(valuesResource) :
+                columnConfig.values();
+        return rawValues.stream()
+                .map(v -> converter.convert(v, columnClazz))
+                .collect(Collectors.toList());
+    }
+    
+    private static List<Object> loadValuesFromResource(String resource) {
+        ClassLoader classLoader = HolodbServerMain.class.getClassLoader();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                classLoader.getResourceAsStream(resource)))) {
+            List<Object> values = new LinkedList<>();
+            String value;
+            while ((value = reader.readLine()) != null) {
+                if (!value.isEmpty()) {
+                    values.add(value);
+                }
+            }
+            return values;
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+    
     private static Comparator<?> extractComparator(Source<?> source) {
         if (!(source instanceof Index)) {
             return null;
