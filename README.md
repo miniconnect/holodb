@@ -168,6 +168,30 @@ You can use a predefined value set resource with the `valuesResource` key in `co
             valuesResource: `hu/webarticum/holodb/values/colors.txt`
 ```
 
+If you don't already have a value list, you can retrieve existing data from several sources,
+for example [WikiData](https://www.wikidata.org/),
+[JSONPlaceholder](https://jsonplaceholder.typicode.com/)
+or [Kaggle](https://www.kaggle.com/).
+
+Here is an example, where we get data from WikiData, process it with `jq`, then save it to the docker image.
+To safely achieve this, we use a builder image:
+
+```dockerfile
+FROM dwdraju/alpine-curl-jq:latest AS builder
+RUN curl --get \
+  --data-urlencode 'query=SELECT ?lemma WHERE \
+    { ?lexemeId dct:language wd:Q1860; wikibase:lemma ?lemma. ?lexemeId wikibase:lexicalCategory wd:Q9788 } \
+    ORDER BY ?lemma' \
+  'https://query.wikidata.org/bigdata/namespace/wdq/sparql' \
+  -H 'Accept: application/json' \
+  | jq -r '.results.bindings[].lemma.value' \
+  > en-letters.txt
+
+FROM miniconnect/holodb:latest
+COPY config.yaml /app/config.yaml
+COPY --from=builder /en-letters.txt /app/resources/en-letters.txt
+```
+
 ## How does it work?
 
 Holographic databases store no real data and calculate field values and reverse-indexes on-the-fly.

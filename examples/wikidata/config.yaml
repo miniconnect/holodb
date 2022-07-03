@@ -1,0 +1,18 @@
+seed: 13243546
+schemas:
+  - name: default
+    tables:
+      - name: random_letters
+        writeable: true
+        size: 500
+        columns:
+          - name: id
+            type: 'java.math.BigInteger'
+            mode: COUNTER
+          - name: position
+            type: 'java.math.BigInteger'
+            mode: COUNTER
+          - name: letter
+            type: 'java.lang.String'
+            valuesResource: 'en-letters.txt'
+
