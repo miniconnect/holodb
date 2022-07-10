@@ -165,7 +165,7 @@ You can use a predefined value set resource with the `valuesResource` key in `co
 ```yaml
           - name: color
             type: 'java.lang.String'
-            valuesResource: `hu/webarticum/holodb/values/colors.txt`
+            valuesResource: 'hu/webarticum/holodb/values/colors.txt'
 ```
 
 If you don't already have a value list, you can retrieve existing data from several sources,
