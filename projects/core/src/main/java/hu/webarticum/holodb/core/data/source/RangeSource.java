@@ -10,7 +10,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class RangeSource implements SortedSource<BigInteger> {
     
-    private final int MAX_COUNT_OF_POSSIBLE_VALUES = 1000;
+    private static final int MAX_COUNT_OF_POSSIBLE_VALUES = 1000;
     
     
     private final BigInteger from;
