@@ -20,7 +20,7 @@ public class SelectionSource<T> implements Source<T> {
     
     
     @Override
-    public Class<T> type() {
+    public Class<?> type() {
         return baseSource.type();
     }
     

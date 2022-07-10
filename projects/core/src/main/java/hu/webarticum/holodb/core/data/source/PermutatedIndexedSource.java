@@ -32,7 +32,7 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
     
 
     @Override
-    public Class<T> type() {
+    public Class<?> type() {
         return baseSource.type();
     }
 

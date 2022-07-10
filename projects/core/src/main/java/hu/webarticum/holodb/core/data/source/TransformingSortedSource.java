@@ -12,7 +12,7 @@ public class TransformingSortedSource<T, U> implements SortedSource<U> {
 
     private final SortedSource<T> baseSource;
 
-    private final Class<U> type;
+    private final Class<? extends U> type;
     
     private final Function<U, T> encoder;
     
@@ -23,7 +23,7 @@ public class TransformingSortedSource<T, U> implements SortedSource<U> {
     
     public TransformingSortedSource(
             SortedSource<T> baseSource,
-            Class<U> type,
+            Class<? extends U> type,
             Function<U, T> encoder,
             Function<T, U> decoder) {
         this.baseSource = baseSource;
@@ -67,7 +67,7 @@ public class TransformingSortedSource<T, U> implements SortedSource<U> {
     }
 
     @Override
-    public Class<U> type() {
+    public Class<? extends U> type() {
         return type;
     }
 

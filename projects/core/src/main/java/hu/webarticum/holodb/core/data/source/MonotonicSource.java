@@ -26,7 +26,7 @@ public class MonotonicSource<T> implements SortedSource<T> {
     
     
     @Override
-    public Class<T> type() {
+    public Class<?> type() {
         return baseSource.type();
     }
     

@@ -7,7 +7,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public interface Source<T> {
     
-    public Class<T> type();
+    public Class<?> type();
 
     public BigInteger size();
     

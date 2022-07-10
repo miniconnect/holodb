@@ -29,7 +29,7 @@ public class PermutatedSource<T> implements Source<T> {
     
 
     @Override
-    public Class<T> type() {
+    public Class<?> type() {
         return baseSource.type();
     }
 

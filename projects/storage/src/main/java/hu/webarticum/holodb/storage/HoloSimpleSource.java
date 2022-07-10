@@ -30,7 +30,7 @@ public class HoloSimpleSource<T> implements Source<T> {
     
 
     @Override
-    public Class<T> type() {
+    public Class<?> type() {
         return indexedSource.type();
     }
 
