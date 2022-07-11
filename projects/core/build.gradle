@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'me.champeau.gradle.jmh' version '0.5.0'
+    id 'io.morethan.jmhreport' version '0.9.0'
     id 'eclipse'
 }
 
@@ -41,7 +42,13 @@ dependencies {
 tasks.getByName('jmhJar').doFirst() {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
+
 jmh {
     duplicateClassesStrategy = 'exclude'
+    resultFormat = 'JSON'
 }
 
+jmhReport {
+    jmhResultPath = project.file('build/reports/jmh/results.json')
+    jmhReportOutput = project.file('build/reports/jmh/html')
+}
