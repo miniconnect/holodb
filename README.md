@@ -18,7 +18,9 @@ FROM miniconnect/holodb:latest
 COPY config.yaml /app/config.yaml
 ```
 
-For a working example see the `example` folder.
+For a working example see the `examples` directory:
+
+[https://github.com/miniconnect/holodb/tree/master/examples](https://github.com/miniconnect/holodb/tree/master/examples)
 
 ## Configuration
 
