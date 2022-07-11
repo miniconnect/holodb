@@ -37,6 +37,7 @@ import hu.webarticum.holodb.core.data.source.PermutatedIndexedSource;
 import hu.webarticum.holodb.core.data.source.RangeSource;
 import hu.webarticum.holodb.core.data.source.SortedSource;
 import hu.webarticum.holodb.core.data.source.Source;
+import hu.webarticum.holodb.core.data.source.TransformingSortedSource;
 import hu.webarticum.holodb.storage.GenericNamedResourceStore;
 import hu.webarticum.holodb.storage.HoloSimpleSource;
 import hu.webarticum.holodb.storage.HoloTable;
@@ -166,9 +167,8 @@ public class HolodbServerMain {
             Converter converter,
             BigInteger tableSize) {
         ColumnMode columnMode = columnConfig.mode();
-        List<Object> values = loadValues(columnConfig, converter);
         if (columnMode == ColumnMode.DEFAULT) {
-            UniqueSource<?> baseSource = createUniqueSource(columnConfig.type(), values);
+            SortedSource<?> baseSource = loadBaseSource(columnConfig, converter);
             TreeRandom columnRandom = tableRandom.sub("col-" + columnConfig.name());
             BigInteger nullCount = columnConfig.nullCount();
             return createDefaultSource(columnRandom, baseSource, tableSize, nullCount);
@@ -181,15 +181,49 @@ public class HolodbServerMain {
         }
     }
 
+    private static SortedSource<?> loadBaseSource(HoloConfigColumn columnConfig, Converter converter) {
+        List<BigInteger> valuesRange = columnConfig.valuesRange();
+        if (valuesRange != null) {
+            return loadRangeSource(valuesRange, columnConfig, converter);
+        }
+        
+        List<Object> values = loadValues(columnConfig, converter);
+        return createUniqueSource(columnConfig.type(), values);
+    }
+    
+    private static SortedSource<?> loadRangeSource(
+            List<BigInteger> valuesRange, HoloConfigColumn columnConfig, Converter converter) {
+        Class<?> type = columnConfig.type();
+        BigInteger from = valuesRange.get(0);
+        BigInteger to = valuesRange.get(1);
+        BigInteger size = to.subtract(from).add(BigInteger.ONE);
+        RangeSource rangeSource = new RangeSource(from, size);
+        if (type == BigInteger.class) {
+            return rangeSource;
+        }
+        
+        return new TransformingSortedSource<BigInteger, Object>(
+                rangeSource,
+                type,
+                v -> (BigInteger) converter.convert(v, BigInteger.class),
+                b -> converter.convert(b, type));
+    }
+    
     private static List<Object> loadValues(HoloConfigColumn columnConfig, Converter converter) {
         Class<?> columnClazz = columnConfig.type();
-        String valuesResource = columnConfig.valuesResource();
-        List<Object> rawValues = valuesResource != null ?
-                loadValuesFromResource(valuesResource) :
-                columnConfig.values();
+        List<Object> rawValues = loadRawValues(columnConfig, converter);
         return rawValues.stream()
                 .map(v -> converter.convert(v, columnClazz))
                 .collect(Collectors.toList());
+    }
+    
+    private static List<Object> loadRawValues(HoloConfigColumn columnConfig, Converter converter) {
+        String valuesResource = columnConfig.valuesResource();
+        if (valuesResource != null) {
+            return loadValuesFromResource(valuesResource);
+        }
+        
+        return columnConfig.values();
     }
     
     private static List<Object> loadValuesFromResource(String resource) {

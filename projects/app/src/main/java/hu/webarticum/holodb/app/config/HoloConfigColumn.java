@@ -2,6 +2,7 @@ package hu.webarticum.holodb.app.config;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,6 +24,8 @@ public class HoloConfigColumn {
 
     private final String valuesResource;
 
+    private final List<BigInteger> valuesRange;
+
     
     public HoloConfigColumn(
             @JsonProperty("name") String name,
@@ -30,7 +33,8 @@ public class HoloConfigColumn {
             @JsonProperty("mode") ColumnMode mode,
             @JsonProperty("nullCount") BigInteger nullCount,
             @JsonProperty("values") List<Object> values,
-            @JsonProperty("valuesResource") String valuesResource) {
+            @JsonProperty("valuesResource") String valuesResource,
+            @JsonProperty("valuesRange") List<BigInteger> valuesRange) {
         this.name = name;
         this.type = type;
         this.mode = mode == null ? ColumnMode.DEFAULT : mode;
@@ -39,6 +43,7 @@ public class HoloConfigColumn {
             this.values.addAll(values);
         }
         this.valuesResource = valuesResource;
+        this.valuesRange = valuesRange != null ? new ArrayList<>(valuesRange) : null;
     }
     
 
@@ -59,11 +64,15 @@ public class HoloConfigColumn {
     }
 
     public List<Object> values() {
-        return new ArrayList<>(values);
+        return Collections.unmodifiableList(values);
     }
 
     public String valuesResource() {
         return valuesResource;
+    }
+
+    public List<BigInteger> valuesRange() {
+        return valuesRange != null ? Collections.unmodifiableList(valuesRange) : null;
     }
 
 }
