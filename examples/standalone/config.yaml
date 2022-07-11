@@ -1,0 +1,61 @@
+seed: 2346237
+schemas:
+  - name: economy
+    tables:
+      - name: companies
+        size: 5
+        columns:
+          - name: id
+            type: 'java.math.BigInteger'
+            mode: COUNTER
+          - name: name
+            type: 'java.lang.String'
+            mode: FIXED
+            values:
+                - Fav Fruits Inc.
+                - Fru-fru Sales Inc.
+                - Fructose Palace Inc.
+                - Vega Veterans Inc.
+                - Goods of Nature Inc.
+          - name: headquarters
+            type: 'java.lang.String'
+            valuesResource: 'hu/webarticum/holodb/values/cities.txt'
+      - name: employees
+        size: 100
+        columns:
+          - name: id
+            type: 'java.math.BigInteger'
+            mode: COUNTER
+          - name: company_id
+            type: 'java.math.BigInteger'
+            valuesRange: [1, 5]
+          - name: firstname
+            type: 'java.lang.String'
+            valuesResource: 'hu/webarticum/holodb/values/forenames.txt'
+          - name: lastname
+            type: 'java.lang.String'
+            valuesResource: 'hu/webarticum/holodb/values/surnames.txt'
+          - name: birth_year
+            type: 'java.lang.Integer'
+            valuesRange: [1900, 2020]
+          - name: birth_country
+            type: 'java.lang.String'
+            valuesResource: 'hu/webarticum/holodb/values/countries.txt'
+      - name: sales
+        size: 50
+        columns:
+          - name: id
+            type: 'java.math.BigInteger'
+            mode: COUNTER
+          - name: company_id
+            type: 'java.math.BigInteger'
+            valuesRange: [1, 5]
+          - name: product
+            type: 'java.lang.String'
+            valuesResource: 'hu/webarticum/holodb/values/fruits.txt'
+          - name: color
+            type: 'java.lang.String'
+            valuesResource: 'hu/webarticum/holodb/values/colors.txt'
+          - name: quantity
+            type: 'java.lang.Integer'
+            valuesRange: [100, 500]

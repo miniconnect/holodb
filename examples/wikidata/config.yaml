@@ -1,18 +1,25 @@
-seed: 13243546
+seed: 1647382
 schemas:
-  - name: default
+  - name: society
     tables:
-      - name: random_letters
-        writeable: true
-        size: 500
+      - name: people
+        size: 100
         columns:
           - name: id
             type: 'java.math.BigInteger'
             mode: COUNTER
-          - name: position
-            type: 'java.math.BigInteger'
-            mode: COUNTER
-          - name: letter
+          - name: firstname
             type: 'java.lang.String'
-            valuesResource: 'en-letters.txt'
-
+            valuesResource: 'hu/webarticum/holodb/values/forenames.txt'
+          - name: lastname
+            type: 'java.lang.String'
+            valuesResource: 'hu/webarticum/holodb/values/surnames.txt'
+          - name: birth_year
+            type: 'java.lang.Integer'
+            valuesRange: [1900, 2020]
+          - name: birth_country
+            type: 'java.lang.String'
+            valuesResource: 'hu/webarticum/holodb/values/countries.txt'
+          - name: occupation
+            type: 'java.lang.String'
+            valuesResource: 'professionals.txt'
