@@ -32,7 +32,7 @@ public class PermutatedSelection implements Selection {
 
     @Override
     public BigInteger at(BigInteger index) {
-        return permutation.indexOf(baseSelection.at(index));
+        return permutation.at(baseSelection.at(index));
     }
 
     @Override
@@ -42,14 +42,14 @@ public class PermutatedSelection implements Selection {
     
     @Override
     public Iterator<BigInteger> iterator() {
-        return new IteratorAdapter<>(baseSelection.iterator(), permutation::indexOf);
+        return new IteratorAdapter<>(baseSelection.iterator(), permutation::at);
     }
 
     @Override
     public ReversibleIterable<BigInteger> reverseOrder() {
         Iterable<BigInteger> reversedBase = baseSelection.reverseOrder();
         Iterable<BigInteger> permutatedReversed =
-                () -> new IteratorAdapter<>(reversedBase.iterator(), permutation::indexOf);
+                () -> new IteratorAdapter<>(reversedBase.iterator(), permutation::at);
         return ReversibleIterable.of(permutatedReversed, this);
     }
     
