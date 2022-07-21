@@ -37,7 +37,7 @@ schemas:
             valuesResource: 'hu/webarticum/holodb/values/surnames.txt'
           - name: birth_year
             type: 'java.lang.Integer'
-            valuesRange: [1900, 2020]
+            valuesRange: [1950, 2000]
           - name: birth_country
             type: 'java.lang.String'
             valuesResource: 'hu/webarticum/holodb/values/countries.txt'
