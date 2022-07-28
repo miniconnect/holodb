@@ -46,7 +46,7 @@ class PermutatedSourceTest {
                 new PermutatedSource<>(source, permutation);
         ImmutableList<String> permutatedValues =
                 ImmutableList.fromIterable(Range.until(source.size())).map(permutatedSource::get);
-        assertThat(permutatedValues).containsExactly("c", "a", "d", "b");
+        assertThat(permutatedValues).containsExactly("b", "d", "a", "c");
     }
 
     @Test
@@ -57,7 +57,7 @@ class PermutatedSourceTest {
                 new PermutatedSource<>(source, permutation);
         ImmutableList<String> permutatedValues =
                 ImmutableList.fromIterable(Range.until(source.size())).map(permutatedSource::get);
-        assertThat(permutatedValues).containsExactly("a", "b", "a", "b", "b");
+        assertThat(permutatedValues).containsExactly("b", "a", "b", "a", "b");
     }
 
 }

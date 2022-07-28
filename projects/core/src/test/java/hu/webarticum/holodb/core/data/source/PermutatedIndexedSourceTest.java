@@ -49,7 +49,7 @@ class PermutatedIndexedSourceTest {
                 new PermutatedIndexedSource<>(source, permutation);
         ImmutableList<String> permutatedValues =
                 ImmutableList.fromIterable(Range.until(source.size())).map(permutatedSource::get);
-        assertThat(permutatedValues).containsExactly("c", "a", "d", "b");
+        assertThat(permutatedValues).containsExactly("b", "d", "a", "c");
     }
 
     @Test

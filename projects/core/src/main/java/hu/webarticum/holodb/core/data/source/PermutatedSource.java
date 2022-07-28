@@ -40,7 +40,7 @@ public class PermutatedSource<T> implements Source<T> {
 
     @Override
     public T get(BigInteger index) {
-        BigInteger permutatedIndex = permutation.at(index);
+        BigInteger permutatedIndex = permutation.indexOf(index);
         return baseSource.get(permutatedIndex);
     }
 
