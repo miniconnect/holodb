@@ -67,21 +67,35 @@ public class RangeSource implements SortedSource<BigInteger> {
     }
 
     @Override
-    public Range findBetween(
-            Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
-        BigInteger until = from.add(size);
-        
-        BigInteger queryMin = (BigInteger) minValue;
-        BigInteger queryFrom = minInclusive ? queryMin : queryMin.add(BigInteger.ONE);
-        queryFrom = keepBetween(queryFrom, from, until);
-        
-        BigInteger queryMax = (BigInteger) maxValue;
-        BigInteger queryUntil = maxInclusive ? queryMax.add(BigInteger.ONE) : queryMax;
-        queryUntil = keepBetween(queryUntil, from, until);
-        
+    public Range findBetween(Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
+        BigInteger queryFrom = fromOf(minValue, minInclusive);
+        BigInteger queryUntil = untilOf(maxValue, maxInclusive);
         return Range.fromUntil(queryFrom.subtract(from), queryUntil.subtract(from));
     }
     
+    private BigInteger fromOf(Object minValue, boolean minInclusive) {
+        if (minValue == null) {
+            return from;
+        }
+        
+        BigInteger until = from.add(size);
+        BigInteger queryMin = (BigInteger) minValue;
+        BigInteger queryFrom = minInclusive ? queryMin : queryMin.add(BigInteger.ONE);
+        return keepBetween(queryFrom, from, until);
+    }
+
+    private BigInteger untilOf(Object maxValue, boolean maxInclusive) {
+        BigInteger until = from.add(size);
+        
+        if (maxValue == null) {
+            return until;
+        }
+        
+        BigInteger queryMax = (BigInteger) maxValue;
+        BigInteger queryUntil = maxInclusive ? queryMax.add(BigInteger.ONE) : queryMax;
+        return keepBetween(queryUntil, from, until);
+    }
+
     private BigInteger keepBetween(BigInteger value, BigInteger min, BigInteger max) {
         if (value.compareTo(min) < 0) {
             return min;

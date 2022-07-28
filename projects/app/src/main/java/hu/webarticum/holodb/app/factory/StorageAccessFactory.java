@@ -98,8 +98,7 @@ public class StorageAccessFactory {
         BigInteger tableSize = tableConfig.size();
         String tableName = tableConfig.name();
         TreeRandom tableRandom = schemaRandom.sub("table-" + tableName);
-        ImmutableList<HoloConfigColumn> columnConfigs =
-                ImmutableList.fromCollection(tableConfig.columns());
+        ImmutableList<HoloConfigColumn> columnConfigs = ImmutableList.fromCollection(tableConfig.columns());
         ImmutableList<String> columnNames = columnConfigs.map(HoloConfigColumn::name);
         ImmutableMap<String, Source<?>> columnSources = columnConfigs
                 .assign(c -> createColumnSource(c, tableRandom, converter, tableSize))
