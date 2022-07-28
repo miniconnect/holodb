@@ -13,12 +13,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.mifmif.common.regex.Generex;
+
 import hu.webarticum.holodb.app.config.HoloConfig;
 import hu.webarticum.holodb.app.config.HoloConfigColumn;
 import hu.webarticum.holodb.app.config.HoloConfigSchema;
 import hu.webarticum.holodb.app.config.HoloConfigTable;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.ColumnMode;
 import hu.webarticum.holodb.app.launch.HolodbServerMain;
+import hu.webarticum.holodb.app.misc.GenerexSource;
 import hu.webarticum.holodb.app.misc.StrexSource;
 import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
 import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
@@ -29,12 +32,15 @@ import hu.webarticum.holodb.core.data.source.FixedSource;
 import hu.webarticum.holodb.core.data.source.Index;
 import hu.webarticum.holodb.core.data.source.IndexedSource;
 import hu.webarticum.holodb.core.data.source.MonotonicSource;
+import hu.webarticum.holodb.core.data.source.NullPaddedSortedSource;
 import hu.webarticum.holodb.core.data.source.NullPaddedSource;
 import hu.webarticum.holodb.core.data.source.PermutatedIndexedSource;
+import hu.webarticum.holodb.core.data.source.PermutatedSource;
 import hu.webarticum.holodb.core.data.source.RangeSource;
 import hu.webarticum.holodb.core.data.source.SortedSource;
 import hu.webarticum.holodb.core.data.source.Source;
 import hu.webarticum.holodb.core.data.source.TransformingSortedSource;
+import hu.webarticum.holodb.core.data.source.TransformingSource;
 import hu.webarticum.holodb.core.data.source.UniqueSource;
 import hu.webarticum.holodb.storage.GenericNamedResourceStore;
 import hu.webarticum.holodb.storage.HoloSimpleSource;
@@ -125,10 +131,15 @@ public class StorageAccessFactory {
             BigInteger tableSize) {
         ColumnMode columnMode = columnConfig.mode();
         if (columnMode == ColumnMode.DEFAULT) {
-            SortedSource<?> baseSource = loadBaseSource(columnConfig, converter);
             TreeRandom columnRandom = tableRandom.sub("col-" + columnConfig.name());
             BigInteger nullCount = columnConfig.nullCount();
-            return createDefaultSource(columnRandom, baseSource, tableSize, nullCount);
+            String dynamicPattern =columnConfig.valuesDynamicPattern();
+            if (dynamicPattern == null) {
+                SortedSource<?> baseSource = loadBaseSource(columnConfig, converter);
+                return createDefaultSource(columnRandom, baseSource, tableSize, nullCount);
+            } else {
+                return createDynamicPatternSource(columnConfig, columnRandom, converter, tableSize);
+            }
         } else if (columnMode == ColumnMode.COUNTER) {
             return new RangeSource(BigInteger.ONE, tableSize);
         } else if (columnMode == ColumnMode.FIXED) {
@@ -244,10 +255,35 @@ public class StorageAccessFactory {
                 baseSource,
                 new BinomialMonotonic(treeRandom.sub("monotonic"), valueCount, baseSource.size()));
         if (!valueCount.equals(tableSize)) {
-            valueSource = new NullPaddedSource<>(valueSource, tableSize);
+            valueSource = new NullPaddedSortedSource<>(valueSource, tableSize);
         }
         Permutation permutation = new DirtyFpePermutation(treeRandom.sub("permutation"), tableSize);
         return new PermutatedIndexedSource<>(valueSource, permutation);
+    }
+    
+    private static Source<?> createDynamicPatternSource(
+            HoloConfigColumn columnConfig,
+            TreeRandom columnRandom,
+            Converter converter,
+            BigInteger tableSize) {
+        BigInteger nullCount = columnConfig.nullCount();
+        BigInteger valueCount = tableSize.subtract(nullCount);
+        String dynamicPattern = columnConfig.valuesDynamicPattern();
+        Class<?> type = columnConfig.type();
+        GenerexSource generexSource = new GenerexSource(new Generex(dynamicPattern), columnRandom, valueCount);
+        Source<?> source = generexSource;
+        if (type != String.class) {
+            source = new TransformingSource<String, Object>( // NOSONAR explicit type parameters are necessary
+                    generexSource,
+                    type,
+                    b -> converter.convert(b, type));
+        }
+        if (!nullCount.equals(BigInteger.ZERO)) {
+            source = new NullPaddedSource<>(source, tableSize);
+            Permutation permutation = new DirtyFpePermutation(columnRandom.sub("permutation"), tableSize);
+            source = new PermutatedSource<>(source, permutation);
+        }
+        return source;
     }
     
     private static FixedSource<?> createFixedSource(Class<?> type, Collection<?> values) {

@@ -47,7 +47,7 @@ public class FixedSource<T extends Comparable<T>> implements Source<T> {
 
     @Override
     public Optional<ImmutableList<T>> possibleValues() {
-        return Optional.empty();
+        return Optional.empty(); // FIXME
     }
     
 }

@@ -22,6 +22,7 @@ schemas:
             valuesResource: 'hu/webarticum/holodb/values/cities.txt'
           - name: contact_phone
             type: 'java.lang.String'
+            nullCount: 2
             valuesPattern: '\+1 \d{3}-\d{3}-\d{4}'
       - name: employees
         size: 100
@@ -62,3 +63,7 @@ schemas:
           - name: quantity
             type: 'java.lang.Integer'
             valuesRange: [100, 500]
+          - name: comment
+            type: 'java.lang.String'
+            nullCount: 20
+            valuesDynamicPattern: '(Lorem|Dolor|Amet)( (lorem|ipsum|dolor|sit|amet|consectetur|adipisicing)){2,6}\.'

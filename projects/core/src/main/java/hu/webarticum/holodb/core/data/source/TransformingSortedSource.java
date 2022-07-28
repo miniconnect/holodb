@@ -39,27 +39,6 @@ public class TransformingSortedSource<T, U> implements SortedSource<U> {
         return (a, b) -> baseComparator.compare(encoder.apply(a), encoder.apply(b));
     }
     
-    
-    @Override
-    public Comparator<?> comparator() {
-        return comparator;
-    }
-
-    @Override
-    public Range find(Object value) {
-        @SuppressWarnings("unchecked")
-        Object encodedValue = value != null ? encoder.apply((U) value) : null;
-        return baseSource.find(encodedValue);
-    }
-    
-    @Override
-    public Range findBetween(Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
-        @SuppressWarnings("unchecked")
-        Object encodedMinValue = minValue != null ? encoder.apply((U) minValue) : null;
-        @SuppressWarnings("unchecked")
-        Object encodedMaxValue = maxValue != null ? encoder.apply((U) maxValue) : null;
-        return baseSource.findBetween(encodedMinValue, minInclusive, encodedMaxValue, maxInclusive);
-    }
 
     @Override
     public Range findNulls() {
@@ -88,6 +67,27 @@ public class TransformingSortedSource<T, U> implements SortedSource<U> {
         return encodedPossibleValues.isPresent() ?
                 Optional.of(encodedPossibleValues.get().map(decoder)) :
                 Optional.empty();
+    }
+
+    @Override
+    public Comparator<?> comparator() {
+        return comparator;
+    }
+
+    @Override
+    public Range find(Object value) {
+        @SuppressWarnings("unchecked")
+        Object encodedValue = value != null ? encoder.apply((U) value) : null;
+        return baseSource.find(encodedValue);
+    }
+    
+    @Override
+    public Range findBetween(Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
+        @SuppressWarnings("unchecked")
+        Object encodedMinValue = minValue != null ? encoder.apply((U) minValue) : null;
+        @SuppressWarnings("unchecked")
+        Object encodedMaxValue = maxValue != null ? encoder.apply((U) maxValue) : null;
+        return baseSource.findBetween(encodedMinValue, minInclusive, encodedMaxValue, maxInclusive);
     }
 
 }
