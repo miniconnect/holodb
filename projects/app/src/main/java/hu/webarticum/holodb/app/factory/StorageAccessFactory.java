@@ -163,7 +163,7 @@ public class StorageAccessFactory {
         if (type == BigInteger.class) {
             return rangeSource;
         } else {
-            return new TransformingSortedSource<>(
+            return new TransformingSortedSource<BigInteger, Object>( // NOSONAR explicit type parameters are necessary
                     rangeSource,
                     type,
                     v -> (BigInteger) converter.convert(v, BigInteger.class),
@@ -177,7 +177,7 @@ public class StorageAccessFactory {
         if (type == String.class) {
             return strexSource;
         } else {
-            return new TransformingSortedSource<>(
+            return new TransformingSortedSource<String, Object>( // NOSONAR explicit type parameters are necessary
                     strexSource,
                     type,
                     v -> (String) converter.convert(v, String.class),
