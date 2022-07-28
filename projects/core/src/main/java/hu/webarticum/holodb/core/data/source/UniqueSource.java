@@ -89,7 +89,7 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
             Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
         if (minValue != null && maxValue != null) {
             @SuppressWarnings("unchecked")
-            int cmp = ((T) minValue).compareTo((T) maxValue);
+            int cmp = comparator.compare((T) minValue, (T) maxValue);
             if (cmp > 0 || (cmp == 0 && !minInclusive && !maxInclusive)) {
                 return Range.empty(find(minValue).from());
             }
@@ -108,7 +108,7 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
             Range maxRange = find(maxValue);
             until = maxInclusive ? maxRange.until() : maxRange.from();
         } else {
-            until = BigInteger.valueOf(values.length);
+            until = length;
         }
         
         return Range.fromUntil(from, until);
