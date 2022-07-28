@@ -20,6 +20,9 @@ schemas:
           - name: headquarters
             type: 'java.lang.String'
             valuesResource: 'hu/webarticum/holodb/values/cities.txt'
+          - name: contact_phone
+            type: 'java.lang.String'
+            valuesPattern: '\+1 \d{3}-\d{3}-\d{4}'
       - name: employees
         size: 100
         columns:

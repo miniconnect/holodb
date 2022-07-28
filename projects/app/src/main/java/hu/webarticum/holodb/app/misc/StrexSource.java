@@ -1,0 +1,94 @@
+package hu.webarticum.holodb.app.misc;
+
+import java.math.BigInteger;
+import java.util.Comparator;
+import java.util.Locale;
+import java.util.Optional;
+
+import com.ibm.icu.text.Collator;
+
+import hu.webarticum.holodb.core.data.selection.Range;
+import hu.webarticum.holodb.core.data.source.SortedSource;
+import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.strex.Strex;
+
+// TODO: extract its general part to the core project
+public class StrexSource implements SortedSource<String> {
+
+    private final Strex strex;
+    
+
+    public StrexSource(Strex strex) {
+        this.strex = strex;
+    }
+    
+    
+    @Override
+    public Class<String> type() {
+        return String.class;
+    }
+    
+    @Override
+    public BigInteger size() {
+        return strex.size();
+    }
+
+    @Override
+    public String get(BigInteger index) {
+        return strex.get(index);
+    }
+    
+    @Override
+    public Comparator<String> comparator() {
+        return Collator.getInstance(Locale.US)::compare;
+    }
+
+    @Override
+    public Optional<ImmutableList<String>> possibleValues() {
+        return Optional.empty();
+    }
+    
+    @Override
+    public Range find(Object value) {
+        String stringValue = (String) value;
+        BigInteger position = strex.indexOf(stringValue);
+        return position.compareTo(BigInteger.ZERO) >= 0 ?
+                Range.fromSize(position, BigInteger.ONE) :
+                Range.fromSize(position.negate().subtract(BigInteger.ONE), BigInteger.ZERO);
+    }
+
+    @Override
+    public Range findBetween(
+            Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
+        if (minValue != null && maxValue != null) {
+            int cmp = comparator().compare((String) minValue, (String) maxValue);
+            if (cmp > 0 || (cmp == 0 && !minInclusive && !maxInclusive)) {
+                return Range.empty(find(minValue).from());
+            }
+        }
+        
+        BigInteger from;
+        if (minValue != null) {
+            Range minRange = find(minValue);
+            from = minInclusive ? minRange.from() : minRange.until();
+        } else {
+            from = BigInteger.ZERO;
+        }
+        
+        BigInteger until;
+        if (maxValue != null) {
+            Range maxRange = find(maxValue);
+            until = maxInclusive ? maxRange.until() : maxRange.from();
+        } else {
+            until = size();
+        }
+        
+        return Range.fromUntil(from, until);
+    }
+
+    @Override
+    public Range findNulls() {
+        return Range.empty();
+    }
+    
+}

@@ -19,6 +19,7 @@ import hu.webarticum.holodb.app.config.HoloConfigSchema;
 import hu.webarticum.holodb.app.config.HoloConfigTable;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.ColumnMode;
 import hu.webarticum.holodb.app.launch.HolodbServerMain;
+import hu.webarticum.holodb.app.misc.StrexSource;
 import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
 import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
@@ -53,6 +54,7 @@ import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleResourc
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleSchema;
 import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleStorageAccess;
 import hu.webarticum.miniconnect.record.converter.Converter;
+import hu.webarticum.strex.Strex;
 
 // TODO: split to builder and sub-builders
 public class StorageAccessFactory {
@@ -137,17 +139,18 @@ public class StorageAccessFactory {
     }
 
     private static SortedSource<?> loadBaseSource(HoloConfigColumn columnConfig, Converter converter) {
-        List<BigInteger> valuesRange = columnConfig.valuesRange();
-        if (valuesRange != null) {
-            return loadRangeSource(valuesRange, columnConfig, converter);
+        if (columnConfig.valuesRange() != null) {
+            return loadRangeSource(columnConfig, converter);
+        } else if (columnConfig.valuesPattern() != null) {
+            return loadPatternSource(columnConfig, converter);
         }
         
         List<Object> values = loadValues(columnConfig, converter);
         return createUniqueSource(columnConfig.type(), values);
     }
 
-    private static SortedSource<?> loadRangeSource(
-            List<BigInteger> valuesRange, HoloConfigColumn columnConfig, Converter converter) {
+    private static SortedSource<?> loadRangeSource(HoloConfigColumn columnConfig, Converter converter) {
+        List<BigInteger> valuesRange = columnConfig.valuesRange();
         Class<?> type = columnConfig.type();
         BigInteger from = valuesRange.get(0);
         BigInteger to = valuesRange.get(1);
@@ -157,11 +160,29 @@ public class StorageAccessFactory {
             return rangeSource;
         }
         
-        return new TransformingSortedSource<BigInteger, Object>(
-                rangeSource,
-                type,
-                v -> (BigInteger) converter.convert(v, BigInteger.class),
-                b -> converter.convert(b, type));
+        if (type == BigInteger.class) {
+            return rangeSource;
+        } else {
+            return new TransformingSortedSource<>(
+                    rangeSource,
+                    type,
+                    v -> (BigInteger) converter.convert(v, BigInteger.class),
+                    b -> converter.convert(b, type));
+        }
+    }
+
+    private static SortedSource<?> loadPatternSource(HoloConfigColumn columnConfig, Converter converter) {
+        StrexSource strexSource = new StrexSource(Strex.compile(columnConfig.valuesPattern()));
+        Class<?> type = columnConfig.type();
+        if (type == String.class) {
+            return strexSource;
+        } else {
+            return new TransformingSortedSource<>(
+                    strexSource,
+                    type,
+                    v -> (String) converter.convert(v, String.class),
+                    b -> converter.convert(b, type));
+        }
     }
 
     private static List<Object> loadValues(HoloConfigColumn columnConfig, Converter converter) {

@@ -25,16 +25,19 @@ public class HoloConfigColumn {
     private final String valuesResource;
 
     private final List<BigInteger> valuesRange;
+    
+    private final String valuesPattern;
 
     
-    public HoloConfigColumn(
+    public HoloConfigColumn( // NOSONAR: many parameter is OK
             @JsonProperty("name") String name,
             @JsonProperty("type") Class<?> type,
             @JsonProperty("mode") ColumnMode mode,
             @JsonProperty("nullCount") BigInteger nullCount,
             @JsonProperty("values") List<Object> values,
             @JsonProperty("valuesResource") String valuesResource,
-            @JsonProperty("valuesRange") List<BigInteger> valuesRange) {
+            @JsonProperty("valuesRange") List<BigInteger> valuesRange,
+            @JsonProperty("valuesPattern") String valuesPattern) {
         this.name = name;
         this.type = type;
         this.mode = mode == null ? ColumnMode.DEFAULT : mode;
@@ -44,6 +47,7 @@ public class HoloConfigColumn {
         }
         this.valuesResource = valuesResource;
         this.valuesRange = valuesRange != null ? new ArrayList<>(valuesRange) : null;
+        this.valuesPattern = valuesPattern;
     }
     
 
@@ -73,6 +77,10 @@ public class HoloConfigColumn {
 
     public List<BigInteger> valuesRange() {
         return valuesRange != null ? Collections.unmodifiableList(valuesRange) : null;
+    }
+
+    public String valuesPattern() {
+        return valuesPattern;
     }
 
 }
