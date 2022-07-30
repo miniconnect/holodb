@@ -3,6 +3,7 @@ schemas:
   - name: economy
     tables:
       - name: companies
+        writeable: true
         size: 5
         columns:
           - name: id
@@ -25,6 +26,7 @@ schemas:
             nullCount: 2
             valuesPattern: '\+1 \d{3}-\d{3}-\d{4}'
       - name: employees
+        writeable: true
         size: 100
         columns:
           - name: id
@@ -46,6 +48,7 @@ schemas:
             type: 'java.lang.String'
             valuesResource: 'hu/webarticum/holodb/values/countries.txt'
       - name: sales
+        writeable: true
         size: 50
         columns:
           - name: id
