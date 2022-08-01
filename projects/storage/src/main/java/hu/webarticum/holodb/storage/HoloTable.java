@@ -13,6 +13,7 @@ import hu.webarticum.miniconnect.rdmsframework.storage.Column;
 import hu.webarticum.miniconnect.rdmsframework.storage.ColumnDefinition;
 import hu.webarticum.miniconnect.rdmsframework.storage.NamedResourceStore;
 import hu.webarticum.miniconnect.rdmsframework.storage.Row;
+import hu.webarticum.miniconnect.rdmsframework.storage.Sequence;
 import hu.webarticum.miniconnect.rdmsframework.storage.Table;
 import hu.webarticum.miniconnect.rdmsframework.storage.TableIndex;
 import hu.webarticum.miniconnect.rdmsframework.storage.TablePatch;
@@ -33,8 +34,10 @@ public class HoloTable implements Table {
     
     private final NamedResourceStore<TableIndex> indexStore;
     
+    private final HoloFixedSequence sequence;
     
-    public HoloTable(
+    
+    public HoloTable( // NOSONAR many parameter is OK for now
             String name,
             BigInteger size,
             ImmutableList<String> columnNames,
@@ -42,7 +45,8 @@ public class HoloTable implements Table {
             ImmutableMap<String, ? extends Source<?>> singleColumnSources,
             ImmutableMap<ImmutableList<String>, ? extends Source<? extends ImmutableList<?>>>
                     multiColumnSources,
-            NamedResourceStore<TableIndex> indexStore) {
+            NamedResourceStore<TableIndex> indexStore,
+            BigInteger sequenceValue) {
         checkSources(
                 size,
                 columnNames,
@@ -57,6 +61,7 @@ public class HoloTable implements Table {
         this.multiColumnSourceMap = buildMultiColumnSourceMap(multiColumnSources);
         this.columnStore = buildColumnStore(columnNames, columnDefinitions, singleColumnSources);
         this.indexStore = indexStore;
+        this.sequence = new HoloFixedSequence(sequenceValue);
     }
     
     private static void checkSources(
@@ -205,6 +210,11 @@ public class HoloTable implements Table {
             this.source = source;
         }
         
+    }
+    
+    @Override
+    public Sequence sequence() {
+        return sequence;
     }
     
     

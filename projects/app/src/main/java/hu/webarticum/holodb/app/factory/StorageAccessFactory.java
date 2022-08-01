@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.mifmif.common.regex.Generex;
@@ -103,12 +104,15 @@ public class StorageAccessFactory {
         ImmutableMap<String, Source<?>> columnSources = columnConfigs
                 .assign(c -> createColumnSource(c, tableRandom, converter, tableSize))
                 .map(HoloConfigColumn::name, s -> s);
+        Optional<String> autoIncrementedName = extractAutoIncrementedColumnName(columnConfigs);
         ImmutableList<ColumnDefinition> columnDefinitions =
-                columnConfigs.map(c ->  new SimpleColumnDefinition(
+                columnConfigs.map(c -> new SimpleColumnDefinition(
                         c.type(),
                         !c.nullCount().equals(tableSize),
+                        autoIncrementedName.isPresent() && c.name().equals(autoIncrementedName.get()),
                         extractComparator(columnSources.get(c.name()))));
         NamedResourceStore<TableIndex> indexStore = createIndexStore(columnSources);
+        BigInteger sequenceValue = autoIncrementedName.isPresent() ? tableSize.add(BigInteger.ONE) : BigInteger.ONE;
         Table table = new HoloTable(
                 tableName,
                 tableSize,
@@ -116,11 +120,22 @@ public class StorageAccessFactory {
                 columnDefinitions,
                 columnSources,
                 ImmutableMap.empty(),
-                indexStore);
+                indexStore,
+                sequenceValue);
         if (tableConfig.writeable()) {
             table = new DiffTable(table);
         }
         return table;
+    }
+    
+    private static Optional<String> extractAutoIncrementedColumnName(ImmutableList<HoloConfigColumn> columnConfigs) {
+        for (HoloConfigColumn columnConfig : columnConfigs) {
+            if (columnConfig.mode() == ColumnMode.COUNTER) {
+                return Optional.of(columnConfig.name());
+            }
+        }
+        
+        return Optional.empty();
     }
 
     private static Source<?> createColumnSource(
