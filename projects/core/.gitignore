@@ -1,6 +1,7 @@
 ## build ##
 /bin/
 /build/
+/target/
 /.gradle/
 
 ## editors ##
