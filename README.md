@@ -2,10 +2,17 @@
 
 **Relational database - seemingly filled with random data.**
 
-HoloDB is a [miniconnect](https://github.com/miniconnect/miniconnect) storage implementation,
-which introduces the concept of *holographic relational databases*.
+However, by default, this data does not actually take up any space in memory or on a volume
+(to use an analogy, it is as if the data set is projected as a hologram from a simple configuration).
 
-An arbitrarily large database is up in a fraction of a second, only a config file is required.
+The base layer is an arbitrarily large, read-only data set that is readable and searchable, and yet fully consistent.
+Any pieces of data and index lookups are calculated on-the-fly.
+
+An optional second layer is built on top of this, allowing read-write access
+(stores differences while maintains consistency and searchability).
+
+So, you can start an arbitrarily large database in moments, with minimal effort;
+all you need is a configuration file.
 
 ## Use with Docker
 
@@ -24,7 +31,7 @@ For some self-contained examples see the `examples` directory:
 
 ## Configuration
 
-In `config.yaml` you can specify the structure of your data (schemas, tables, columns, data):
+In `config.yaml` you can specify the structure of your data (schemas, tables, columns, data, etc.):
 
 ```yaml
 seed: 98765
@@ -196,9 +203,9 @@ COPY --from=builder /en-letters.txt /app/resources/en-letters.txt
 
 ## How does it work?
 
-Holographic databases store no real data and calculate field values and reverse-indexes on-the-fly.
+Holographic databases store no real data and calculate field values and reverse indexes on-the-fly.
 Nonetheless, you as a user experience a consistent, searchable (and optionally writable) database.
-Such a database consumes little memory (even for large "data"), and needs near-zero startup time.
+Such a database consumes little memory (even for large "data") and needs near-zero startup time.
 Additionally, by changing the root seed the entire dataset can be shuffled (also a near-no-op).
 
 So, HoloDB provides an arbitrarily large relational database filled with constrained random data.
@@ -208,6 +215,49 @@ Query results are calculated on-the-fly.
 Value providers are encouraged to calculate any single field of a column
 practically in `O(1)`, but at most in `O(log(tableSize))` time.
 
-As initialization is a no-op, it's particularly suitable for testing
+As initialization is a no-op, it's particularly suitable for demonstrations, testing
 and, in the case of a read-only database,
 flexible orchestration, replication like some static content.
+
+## Version table
+
+<table>
+  <thead>
+    <tr>
+      <th>
+        miniconnect-api
+      </th>
+      <th>
+        <a href="https://github.com/miniconnect/miniconnect">miniconnect</a>
+      </th>
+      <th>
+        minibase
+      </th>
+      <th>
+        <a href="https://github.com/miniconnect/holodb">holodb</a>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">---</td>
+      <td><a href="https://github.com/miniconnect/miniconnect#version-020">0.2.0</a></td>
+      <td rowspan="2">---</td>
+      <td><a href="#version-020">0.2.0</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/miniconnect/miniconnect#version-010">0.1.0</a></td>
+      <td><a href="#version-010">0.1.0</a></td>
+    </tr>
+  </tbody>
+</table>
+
+## Changelog
+
+### Version 0.2.0
+
+- TODO
+
+### Version 0.1.0
+
+- TODO
