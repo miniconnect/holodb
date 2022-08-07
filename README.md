@@ -256,8 +256,17 @@ flexible orchestration, replication like some static content.
 
 ### Version 0.2.0
 
-- TODO
+- Add support for regular expression based value generation
+- Add some other configuration possibilities
+- Add proper support for NULL values
+- Improve support for sequences
+- Improve examples
+- Fix many problems
+- and more &hellip;
 
 ### Version 0.1.0
 
-- TODO
+- Data source framework
+- YAML configuration support
+- Docker integration
+- and more &hellip;
