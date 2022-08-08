@@ -25,9 +25,8 @@ FROM miniconnect/holodb:latest
 COPY config.yaml /app/config.yaml
 ```
 
-For some self-contained examples see the `examples` directory:
-
-[https://github.com/miniconnect/holodb/tree/master/examples](https://github.com/miniconnect/holodb/tree/master/examples)
+For some self-contained examples
+[see the examples directory](https://github.com/miniconnect/holodb/tree/master/examples).
 
 ## Configuration
 
@@ -50,23 +49,117 @@ schemas:
             values: ['Some name', 'Other name', 'Some other']
 ```
 
+On the **top level** these keys are supported:
+
+| Key | Type | Description |
+| --- | ---- | ----------- |
+| `seed` | `BigInteger` | global random seed |
+| `schemas` | `List` | list of schemas (see below) |
+
 The `seed` option sets a random seed with which you can vary the content of the database.
+
+For each **schema**, these subkeys are supported:
+
+| Key | Type | Description |
+| --- | ---- | ----------- |
+| `name` | `String` | name of the database schema |
+| `tables` | `List` | list of tables in this schema (see below) |
+
+For each **table**, these subkeys are supported:
+
+| Key | Type | Description |
+| --- | ---- | ----------- |
+| `name` | `String` | name of the database table |
+| `writeable` | `boolean` | writeable or not |
+| `size` | `BigInteger` | number of records in this table |
+| `columns` | `List` | list of columns in this table (see below) |
 
 If `writeable` option is set to true, then an additional layer
 will be added over the read-only table,
 which accepts and stores insertions, updates, and deletions,
 and it gives the effect that the table is writeable.
 
-Currently, there are three possible values of the `mode` option:
+For each **column**, these subkeys are supported:
 
-- `DEFAULT`: the column will be filled up randomly with the values specified in `values`
-- `COUNTER`: column values will be ascending integers starting from 1
-- `FIXED`: the values will be the same and in the same order as specified in `values`
+| Key | Type | Description |
+| --- | ---- | ----------- |
+| `name` | `String` | name of the table column |
+| `type` | `String` (`Class<?>`) | java class name of column type |
+| `mode` | `String` | filling mode: `DEFAULT`, `COUNTER`, or `FIXED` |
+| `nullCount` | `BigInteger` | count of null values (default: `0`) |
+| `values` | `List` | explicit list of possible values |
+| `valuesResource` | `BigInteger` | name of a java resource which contains the values line by line |
+| `valuesRange` | `List<BigInteger>` | start and end value of a numeric value range |
+| `valuesPattern` | `String` | [strex](https://github.com/davidsusu/strex) regex pattern for values (reverse indexed) |
+| `valuesDynamicPattern` | `String` | arbitrary regex pattern for values (not reverse indexed) |
 
-`DEFAULT` and `COUNTER` columns are reverse-indexed
-and can be queried efficiently even in case of very large table sizes.
-For `FIXED` columns, the size of `values` must be equal to the size of the table
-(recommended for smaller tables only).
+A `COUNTER` column will be filled with increasing whole numbers starting from 1.
+Values in a `FIXED` column will not be shuffled.
+`DEFAULT` and `COUNTER` columns are reverse-indexed by default.
+
+Exactly one of `values`, `valuesResource`, `valuesRange`, `valuesPattern`, and `valuesDynamicPattern`
+can be used.
+
+## Predefined value sets
+
+You can use predefined value sets too.
+To do this, create a file with one value on each line.
+Make this file available to the java classloader.
+If you use docker, the easiest way to do this is to copy the file into the `/app/resources` directory:
+
+```dockerfile
+FROM miniconnect/holodb:latest
+
+COPY config.yaml /app/config.yaml
+COPY my-values.txt /app/resources/my-values.txt
+```
+
+There are some built-in value set resources too:
+
+- `hu/webarticum/holodb/values/cities.txt`
+- `hu/webarticum/holodb/values/colors.txt`
+- `hu/webarticum/holodb/values/countries.txt`
+- `hu/webarticum/holodb/values/female-forenames.txt`
+- `hu/webarticum/holodb/values/forenames.txt`
+- `hu/webarticum/holodb/values/fruits.txt`
+- `hu/webarticum/holodb/values/log-levels.txt`
+- `hu/webarticum/holodb/values/lorem.txt`
+- `hu/webarticum/holodb/values/male-forenames.txt`
+- `hu/webarticum/holodb/values/months.txt`
+- `hu/webarticum/holodb/values/surnames.txt`
+- `hu/webarticum/holodb/values/weekdays.txt`
+
+You can use a predefined value set resource with the `valuesResource` key in `config.yaml`:
+
+```yaml
+          - name: color
+            type: 'java.lang.String'
+            valuesResource: 'hu/webarticum/holodb/values/colors.txt'
+```
+
+If you don't already have a value list, you can retrieve existing data from several sources,
+for example [WikiData](https://www.wikidata.org/),
+[JSONPlaceholder](https://jsonplaceholder.typicode.com/)
+or [Kaggle](https://www.kaggle.com/).
+
+Here is an example, where we get data from WikiData, process it with `jq`, then save it to the docker image.
+To safely achieve this, we use a builder image:
+
+```dockerfile
+FROM dwdraju/alpine-curl-jq:latest AS builder
+RUN curl --get \
+  --data-urlencode 'query=SELECT ?lemma WHERE \
+    { ?lexemeId dct:language wd:Q1860; wikibase:lemma ?lemma. ?lexemeId wikibase:lexicalCategory wd:Q9788 } \
+    ORDER BY ?lemma' \
+  'https://query.wikidata.org/bigdata/namespace/wdq/sparql' \
+  -H 'Accept: application/json' \
+  | jq -r '.results.bindings[].lemma.value' \
+  > en-letters.txt
+
+FROM miniconnect/holodb:latest
+COPY config.yaml /app/config.yaml
+COPY --from=builder /en-letters.txt /app/resources/en-letters.txt
+```
 
 ## Run queries
 
@@ -138,67 +231,6 @@ SQL > SELECT * FROM my_table WHERE name = 'Some name' ORDER BY id LIMIT 5
 SQL > exit
 
 Bye-bye!
-```
-
-## Predefined value sets
-
-You can use predefined value sets too.
-To do this, create a file with one value on each line.
-Make this file available to the java classloader.
-If you use docker, the easiest way to do this is to copy the file into the `/app/resources` directory:
-
-```dockerfile
-FROM miniconnect/holodb:latest
-
-COPY config.yaml /app/config.yaml
-COPY my-values.txt /app/resources/my-values.txt
-```
-
-There are some built-in value set resources too:
-
-- `hu/webarticum/holodb/values/cities.txt`
-- `hu/webarticum/holodb/values/colors.txt`
-- `hu/webarticum/holodb/values/countries.txt`
-- `hu/webarticum/holodb/values/female-forenames.txt`
-- `hu/webarticum/holodb/values/forenames.txt`
-- `hu/webarticum/holodb/values/fruits.txt`
-- `hu/webarticum/holodb/values/log-levels.txt`
-- `hu/webarticum/holodb/values/lorem.txt`
-- `hu/webarticum/holodb/values/male-forenames.txt`
-- `hu/webarticum/holodb/values/months.txt`
-- `hu/webarticum/holodb/values/surnames.txt`
-- `hu/webarticum/holodb/values/weekdays.txt`
-
-You can use a predefined value set resource with the `valuesResource` key in `config.yaml`:
-
-```yaml
-          - name: color
-            type: 'java.lang.String'
-            valuesResource: 'hu/webarticum/holodb/values/colors.txt'
-```
-
-If you don't already have a value list, you can retrieve existing data from several sources,
-for example [WikiData](https://www.wikidata.org/),
-[JSONPlaceholder](https://jsonplaceholder.typicode.com/)
-or [Kaggle](https://www.kaggle.com/).
-
-Here is an example, where we get data from WikiData, process it with `jq`, then save it to the docker image.
-To safely achieve this, we use a builder image:
-
-```dockerfile
-FROM dwdraju/alpine-curl-jq:latest AS builder
-RUN curl --get \
-  --data-urlencode 'query=SELECT ?lemma WHERE \
-    { ?lexemeId dct:language wd:Q1860; wikibase:lemma ?lemma. ?lexemeId wikibase:lexicalCategory wd:Q9788 } \
-    ORDER BY ?lemma' \
-  'https://query.wikidata.org/bigdata/namespace/wdq/sparql' \
-  -H 'Accept: application/json' \
-  | jq -r '.results.bindings[].lemma.value' \
-  > en-letters.txt
-
-FROM miniconnect/holodb:latest
-COPY config.yaml /app/config.yaml
-COPY --from=builder /en-letters.txt /app/resources/en-letters.txt
 ```
 
 ## How does it work?
