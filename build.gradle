@@ -41,11 +41,11 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'signing'
     apply plugin: 'maven-publish'
-
+    
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    
     afterEvaluate {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-        
         if (sourceSets.hasProperty('lab')) {
             task execLab(type: JavaExec) {
                 group = 'Execution'
