@@ -122,7 +122,6 @@ public class HoloTable implements Table {
                         size));
             }
         }
-        
     }
 
     private static ImmutableMap<String, MultiColumnSourceEntry> buildMultiColumnSourceMap(
