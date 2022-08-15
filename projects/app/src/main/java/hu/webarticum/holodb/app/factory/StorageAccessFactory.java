@@ -109,6 +109,7 @@ public class StorageAccessFactory {
                 columnConfigs.map(c -> new SimpleColumnDefinition(
                         c.type(),
                         !c.nullCount().equals(tableSize),
+                        c.mode() == ColumnMode.COUNTER,
                         autoIncrementedName.isPresent() && c.name().equals(autoIncrementedName.get()),
                         extractComparator(columnSources.get(c.name()))));
         NamedResourceStore<TableIndex> indexStore = createIndexStore(columnSources);
