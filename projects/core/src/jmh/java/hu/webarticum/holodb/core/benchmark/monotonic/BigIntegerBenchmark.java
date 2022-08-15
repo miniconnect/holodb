@@ -35,10 +35,10 @@ public class BigIntegerBenchmark {
     public void setup() {
         Random random = new Random();
         longValues = new Long[] {
-                random.nextLong(1000L) + 200L,
-                random.nextLong(20L) + 10L,
-                random.nextLong(10000L) + 2000L,
-                random.nextLong(100L) + 50L,
+                random.nextInt(1000) + 200L,
+                random.nextInt(20) + 10L,
+                random.nextInt(10000) + 2000L,
+                random.nextInt(100) + 50L,
         };
         
         bigIntegerValues = new BigInteger[longValues.length];

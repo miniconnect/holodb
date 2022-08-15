@@ -1,7 +1,5 @@
 package hu.webarticum.holodb.app.factory;
 
-import java.util.Objects;
-
 import hu.webarticum.holodb.app.config.HoloConfig;
 import hu.webarticum.miniconnect.rdmsframework.engine.Engine;
 import hu.webarticum.miniconnect.rdmsframework.engine.impl.SimpleEngine;
@@ -56,12 +54,9 @@ public class EngineBuilder {
     
     
     public Engine build() {
-        SqlParser sqlParserToInject = Objects.requireNonNullElseGet(
-                sqlParser, this::buildDefaultSqlParser);
-        QueryExecutor queryExecutorToInject = Objects.requireNonNullElseGet(
-                queryExecutor, this::buildDefaultQueryExecutor);
-        StorageAccess storageAccessToInject = Objects.requireNonNullElseGet(
-                storageAccess, this::buildStorageAccessFromConfig);
+        SqlParser sqlParserToInject = sqlParser != null ? sqlParser : buildDefaultSqlParser();
+        QueryExecutor queryExecutorToInject = queryExecutor != null ? queryExecutor : buildDefaultQueryExecutor();
+        StorageAccess storageAccessToInject = storageAccess != null ? storageAccess : buildStorageAccessFromConfig();
         return new SimpleEngine(sqlParserToInject, queryExecutorToInject, storageAccessToInject);
     }
 
@@ -74,7 +69,7 @@ public class EngineBuilder {
     }
 
     private StorageAccess buildStorageAccessFromConfig() {
-        Converter converterToInject = Objects.requireNonNullElseGet(converter, this:: buildDefaultConverter);
+        Converter converterToInject = converter != null ? converter : buildDefaultConverter();
         return StorageAccessFactory.createStorageAccess(config, converterToInject);
     }
 
