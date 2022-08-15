@@ -30,7 +30,7 @@ dependencies {
     implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:server:${miniConnectVersion}"
     
-    implementation 'hu.webarticum.strex:strex:1.1.0'
+    implementation 'hu.webarticum.strex:strex:1.2.0'
     implementation 'com.github.mifmif:generex:1.0.2'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3'
