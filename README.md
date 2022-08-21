@@ -88,7 +88,7 @@ For each **column**, these subkeys are supported:
 | `mode` | `String` | filling mode (`DEFAULT`, `COUNTER`, `FIXED` or `ENUM`) |
 | `nullCount` | `BigInteger` | count of null values (default: `0`) |
 | `values` | `List` | explicit list of possible values |
-| `valuesResource` | `BigInteger` | name of a java resource which contains the values line by line |
+| `valuesResource` | `String` | name of a java resource which contains the values line by line |
 | `valuesRange` | `List<BigInteger>` | start and end value of a numeric value range |
 | `valuesPattern` | `String` | [strex](https://github.com/davidsusu/strex) regex pattern for values (reverse indexed) |
 | `valuesDynamicPattern` | `String` | arbitrary regex pattern for values (not reverse indexed) |
