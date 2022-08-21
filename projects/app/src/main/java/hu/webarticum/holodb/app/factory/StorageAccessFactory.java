@@ -160,7 +160,7 @@ public class StorageAccessFactory {
             boolean isEnum = (columnMode == ColumnMode.ENUM);
             TreeRandom columnRandom = tableRandom.sub("col-" + columnConfig.name());
             BigInteger nullCount = columnConfig.nullCount();
-            String dynamicPattern =columnConfig.valuesDynamicPattern();
+            String dynamicPattern = columnConfig.valuesDynamicPattern();
             if (dynamicPattern == null) {
                 SortedSource<?> baseSource = loadBaseSource(columnConfig, converter, isEnum);
                 return createDefaultSource(columnRandom, baseSource, tableSize, nullCount);
