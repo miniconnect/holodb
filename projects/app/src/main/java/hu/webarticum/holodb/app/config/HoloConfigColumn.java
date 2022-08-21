@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class HoloConfigColumn {
     
-    public enum ColumnMode { DEFAULT, COUNTER, FIXED }
+    public enum ColumnMode { DEFAULT, COUNTER, FIXED, ENUM }
     
 
     private final String name;

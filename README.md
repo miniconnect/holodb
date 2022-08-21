@@ -85,7 +85,7 @@ For each **column**, these subkeys are supported:
 | --- | ---- | ----------- |
 | `name` | `String` | name of the table column |
 | `type` | `String` (`Class<?>`) | java class name of column type |
-| `mode` | `String` | filling mode: `DEFAULT`, `COUNTER`, or `FIXED` |
+| `mode` | `String` | filling mode (`DEFAULT`, `COUNTER`, `FIXED` or `ENUM`) |
 | `nullCount` | `BigInteger` | count of null values (default: `0`) |
 | `values` | `List` | explicit list of possible values |
 | `valuesResource` | `BigInteger` | name of a java resource which contains the values line by line |
@@ -93,12 +93,23 @@ For each **column**, these subkeys are supported:
 | `valuesPattern` | `String` | [strex](https://github.com/davidsusu/strex) regex pattern for values (reverse indexed) |
 | `valuesDynamicPattern` | `String` | arbitrary regex pattern for values (not reverse indexed) |
 
-A `COUNTER` column will be filled with increasing whole numbers starting from 1.
-Values in a `FIXED` column will not be shuffled.
-`DEFAULT` and `COUNTER` columns are reverse-indexed by default.
+The meaning of these `mode` values:
 
-Exactly one of `values`, `valuesResource`, `valuesRange`, `valuesPattern`, and `valuesDynamicPattern`
+| Mode | Description |
+| ---- | ----------- |
+| `DEFAULT` | randomly distributed, non-unique values, indexed (except in case of `valuesDynamicPattern` used) |
+| `COUNTER` | fill with increasing whole numbers starting from `1`, unique, indexed (good choice for ID columns) |
+| `FIXED` | values will not be shuffled, the count of values must be equal to the table size, non-indexed |
+| `ENUM` | similar to `DEFAULT`, but with different proper rules for equality check, sort order and insertion/update |
+
+In the case of writable tables, if other than the `ENUM` mode is used,
+users can also put values ​​different from the initial ones.
+
+For specifying the possible values in the column one of
+`values`, `valuesResource`, `valuesRange`, `valuesPattern`, and `valuesDynamicPattern`
 can be used.
+In the case of `COUNTER` mode, values will be ignored and should be omitted.
+
 
 ## Predefined value sets
 

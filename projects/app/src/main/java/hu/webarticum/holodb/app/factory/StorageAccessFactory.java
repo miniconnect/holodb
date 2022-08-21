@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -102,7 +103,7 @@ public class StorageAccessFactory {
         ImmutableList<HoloConfigColumn> columnConfigs = ImmutableList.fromCollection(tableConfig.columns());
         ImmutableList<String> columnNames = columnConfigs.map(HoloConfigColumn::name);
         ImmutableMap<String, Source<?>> columnSources = columnConfigs
-                .assign(c -> createColumnSource(c, tableRandom, converter, tableSize))
+                .assign(c -> createColumnSource(c, tableName, tableRandom, converter, tableSize))
                 .map(HoloConfigColumn::name, s -> s);
         Optional<String> autoIncrementedName = extractAutoIncrementedColumnName(columnConfigs);
         ImmutableList<ColumnDefinition> columnDefinitions =
@@ -111,6 +112,7 @@ public class StorageAccessFactory {
                         !c.nullCount().equals(tableSize),
                         c.mode() == ColumnMode.COUNTER,
                         autoIncrementedName.isPresent() && c.name().equals(autoIncrementedName.get()),
+                        extractEnumValues(c, columnSources.get(c.name())),
                         extractComparator(columnSources.get(c.name()))));
         NamedResourceStore<TableIndex> indexStore = createIndexStore(columnSources);
         BigInteger sequenceValue = autoIncrementedName.isPresent() ? tableSize.add(BigInteger.ONE) : BigInteger.ONE;
@@ -129,6 +131,14 @@ public class StorageAccessFactory {
         return table;
     }
     
+    private static ImmutableList<Object> extractEnumValues(HoloConfigColumn columnConfig, Source<?> source) {
+        if (columnConfig.mode() != ColumnMode.ENUM) {
+            return null;
+        }
+        
+        return source.possibleValues().get().map(v -> v); // NOSONAR must be presented
+    }
+
     private static Optional<String> extractAutoIncrementedColumnName(ImmutableList<HoloConfigColumn> columnConfigs) {
         for (HoloConfigColumn columnConfig : columnConfigs) {
             if (columnConfig.mode() == ColumnMode.COUNTER) {
@@ -141,30 +151,37 @@ public class StorageAccessFactory {
 
     private static Source<?> createColumnSource(
             HoloConfigColumn columnConfig,
+            String tableName,
             TreeRandom tableRandom,
             Converter converter,
             BigInteger tableSize) {
         ColumnMode columnMode = columnConfig.mode();
-        if (columnMode == ColumnMode.DEFAULT) {
+        if (columnMode == ColumnMode.DEFAULT || columnMode == ColumnMode.ENUM) {
+            boolean isEnum = (columnMode == ColumnMode.ENUM);
             TreeRandom columnRandom = tableRandom.sub("col-" + columnConfig.name());
             BigInteger nullCount = columnConfig.nullCount();
             String dynamicPattern =columnConfig.valuesDynamicPattern();
             if (dynamicPattern == null) {
-                SortedSource<?> baseSource = loadBaseSource(columnConfig, converter);
+                SortedSource<?> baseSource = loadBaseSource(columnConfig, converter, isEnum);
                 return createDefaultSource(columnRandom, baseSource, tableSize, nullCount);
-            } else {
+            } else if (!isEnum) {
                 return createDynamicPatternSource(columnConfig, columnRandom, converter, tableSize);
+            } else {
+                throw new IllegalArgumentException(
+                        "ENUM mode can not be used with dynamic column (" +
+                        tableName + "." + columnConfig.name() + ")");
             }
         } else if (columnMode == ColumnMode.COUNTER) {
             return new RangeSource(BigInteger.ONE, tableSize);
         } else if (columnMode == ColumnMode.FIXED) {
             return createFixedSource(columnConfig.type(), columnConfig.values());
         } else {
-            throw new IllegalArgumentException("Invalid column mode: " + columnMode);
+            throw new IllegalArgumentException(
+                    "Invalid column mode: " + columnMode + " (" + tableName + "." + columnConfig.name() + ")");
         }
     }
 
-    private static SortedSource<?> loadBaseSource(HoloConfigColumn columnConfig, Converter converter) {
+    private static SortedSource<?> loadBaseSource(HoloConfigColumn columnConfig, Converter converter, boolean isEnum) {
         if (columnConfig.valuesRange() != null) {
             return loadRangeSource(columnConfig, converter);
         } else if (columnConfig.valuesPattern() != null) {
@@ -172,7 +189,7 @@ public class StorageAccessFactory {
         }
         
         List<Object> values = loadValues(columnConfig, converter);
-        return createUniqueSource(columnConfig.type(), values);
+        return createUniqueSource(columnConfig.type(), values, isEnum);
     }
 
     private static SortedSource<?> loadRangeSource(HoloConfigColumn columnConfig, Converter converter) {
@@ -254,15 +271,45 @@ public class StorageAccessFactory {
         return index.comparator();
     }
 
-    private static UniqueSource<?> createUniqueSource(Class<?> type, Collection<?> values) {
+    private static UniqueSource<?> createUniqueSource(Class<?> type, Collection<?> values, boolean isEnum) {
+        Comparator<?> comparator = isEnum ? createEnumValueComparator(values) : null;
         try {
-            return UniqueSource.class.getConstructor(Class.class, Collection.class)
-                    .newInstance(type, values);
+            return UniqueSource.class
+                    .getConstructor(Class.class, Collection.class, Comparator.class)
+                    .newInstance(type, values, comparator);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
     }
+    
+    private static Comparator<?> createEnumValueComparator(Collection<?> values) {
+        Map<Object, Integer> positionMap = new HashMap<>(values.size());
+        int position = 0;
+        for (Object value : values) {
+            if (positionMap.containsKey(value)) {
+                throw new IllegalArgumentException("Duplicated ENUM value: " + value);
+            }
+            positionMap.put(value, position);
+            position++;
+        }
+        return (v1, v2) -> compareEnumValues(v1, v2, positionMap);
+    }
 
+    private static int compareEnumValues(Object value1, Object value2, Map<Object, Integer> positionMap) {
+        Integer position1 = positionMap.get(value1);
+        Integer position2 = positionMap.get(value2);
+        if (position1 == null) {
+            if (position2 == null) {
+                return 0;
+            } else {
+                return -1;
+            }
+        } else if (position2 == null) {
+            return 1;
+        }
+        return position1.compareTo(position2);
+    }
+    
     private static <T> IndexedSource<T> createDefaultSource(
             TreeRandom treeRandom, SortedSource<T> baseSource, BigInteger tableSize, BigInteger nullCount) {
         BigInteger valueCount = tableSize.subtract(nullCount);

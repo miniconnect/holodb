@@ -13,11 +13,11 @@ schemas:
             type: 'java.lang.String'
             mode: FIXED
             values:
-                - Fav Fruits Inc.
-                - Fru-fru Sales Inc.
-                - Fructose Palace Inc.
-                - Vega Veterans Inc.
-                - Goods of Nature Inc.
+              - Fav Fruits Inc.
+              - Fru-fru Sales Inc.
+              - Fructose Palace Inc.
+              - Vega Veterans Inc.
+              - Goods of Nature Inc.
           - name: headquarters
             type: 'java.lang.String'
             valuesResource: 'hu/webarticum/holodb/values/cities.txt'
@@ -66,6 +66,14 @@ schemas:
           - name: quantity
             type: 'java.lang.Integer'
             valuesRange: [100, 500]
+          - name: quality
+            type: 'java.lang.String'
+            mode: ENUM
+            values:
+              - POOR
+              - AVERAGE
+              - GOOD
+              - EXCELLENT
           - name: comment
             type: 'java.lang.String'
             nullCount: 20
