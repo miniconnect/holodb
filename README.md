@@ -129,7 +129,7 @@ can be used.
 In the case of `COUNTER` mode, values will be ignored and should be omitted.
 
 
-## Predefined value sets
+## Load values from resource
 
 You can use predefined value sets too.
 To do this, create a file with one value on each line.
@@ -206,43 +206,50 @@ For more information see its repo.
 
 There is also a
 [miniconnect REPL](https://github.com/miniconnect/miniconnect/tree/master/projects/repl).
-Just type the host and port, and execute your queries:
+Just type the host and port, and execute your queries xx:
 
 ```
-Host [localhost]: 
-Port [3430]: 
+Welcome in miniConnect SQL REPL! - localhost:3430
 
-Welcome in miniConnect SQL REPL!
+SQL > SHOW SCHEMAS
 
-SQL > USE my_schema
+  Query was successfully executed!
 
-  Result contains no rows!
+  ┌─────────┐
+  │ Schemas │
+  ├─────────┤
+  │ economy │
+  └─────────┘
 
-SQL > SELECT * FROM my_table ORDER BY id LIMIT 7
+SQL > USE economy
 
-  +----+------------+
-  | id | name       |
-  +----+------------+
-  |  1 | Some name  |
-  |  2 | Some other |
-  |  3 | Some other |
-  |  4 | Some name  |
-  |  5 | Other name |
-  |  6 | Some name  |
-  |  7 | Other name |
-  +----+------------+
+  Query was successfully executed!
 
-SQL > SELECT * FROM my_table WHERE name = 'Some name' ORDER BY id LIMIT 5
+SQL > SHOW TABLES
 
-  +----+-----------+
-  | id | name      |
-  +----+-----------+
-  |  1 | Some name |
-  |  4 | Some name |
-  |  6 | Some name |
-  |  8 | Some name |
-  | 20 | Some name |
-  +----+-----------+
+  Query was successfully executed!
+
+  ┌───────────────────┐
+  │ Tables_in_economy │
+  ├───────────────────┤
+  │ companies         │
+  │ employees         │
+  │ sales             │
+  └───────────────────┘
+
+SQL > SELECT * FROM companies
+
+  Query was successfully executed!
+
+  ┌────┬──────────────────────┬──────────────┬─────────────────┐
+  │ id │ name                 │ headquarters │ contact_phone   │
+  ├────┼──────────────────────┼──────────────┼─────────────────┤
+  │  1 │ Fav Fruits Inc.      │ Stockholm    │ [NULL]          │
+  │  2 │ Fru-fru Sales Inc.   │ Tel Aviv     │ +1 143-339-0981 │
+  │  3 │ Fructose Palace Inc. │ Baku         │ +1 295-272-4854 │
+  │  4 │ Vega Veterans Inc.   │ New York     │ +1 413-876-4936 │
+  │  5 │ Goods of Nature Inc. │ Paris        │ [NULL]          │
+  └────┴──────────────────────┴──────────────┴─────────────────┘
 
 SQL > exit
 
