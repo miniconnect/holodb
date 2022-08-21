@@ -242,6 +242,12 @@ public class StorageAccessFactory {
             return loadValuesFromResource(valuesResource);
         }
         
+        String valuesBundle = columnConfig.valuesBundle();
+        if (valuesBundle != null) {
+            String bundleValuesResource = "hu/webarticum/holodb/values/" + valuesBundle + ".txt";
+            return loadValuesFromResource(bundleValuesResource);
+        }
+        
         return columnConfig.values();
     }
     

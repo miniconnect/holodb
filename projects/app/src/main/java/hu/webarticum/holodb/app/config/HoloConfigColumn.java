@@ -24,6 +24,8 @@ public class HoloConfigColumn {
 
     private final String valuesResource;
 
+    private final String valuesBundle;
+
     private final List<BigInteger> valuesRange;
     
     private final String valuesPattern;
@@ -38,6 +40,7 @@ public class HoloConfigColumn {
             @JsonProperty("nullCount") BigInteger nullCount,
             @JsonProperty("values") List<Object> values,
             @JsonProperty("valuesResource") String valuesResource,
+            @JsonProperty("valuesBundle") String valuesBundle,
             @JsonProperty("valuesRange") List<BigInteger> valuesRange,
             @JsonProperty("valuesPattern") String valuesPattern,
             @JsonProperty("valuesDynamicPattern") String valuesDynamicPattern) {
@@ -49,6 +52,7 @@ public class HoloConfigColumn {
             this.values.addAll(values);
         }
         this.valuesResource = valuesResource;
+        this.valuesBundle = valuesBundle;
         this.valuesRange = valuesRange != null ? new ArrayList<>(valuesRange) : null;
         this.valuesPattern = valuesPattern;
         this.valuesDynamicPattern = valuesDynamicPattern;
@@ -77,6 +81,10 @@ public class HoloConfigColumn {
 
     public String valuesResource() {
         return valuesResource;
+    }
+
+    public String valuesBundle() {
+        return valuesBundle;
     }
 
     public List<BigInteger> valuesRange() {

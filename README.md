@@ -89,9 +89,27 @@ For each **column**, these subkeys are supported:
 | `nullCount` | `BigInteger` | count of null values (default: `0`) |
 | `values` | `List` | explicit list of possible values |
 | `valuesResource` | `String` | name of a java resource which contains the values line by line |
+| `valuesBundle` | `String` | short name of a bundled value resource, otherwise similar to `valuesResource` (see below) |
 | `valuesRange` | `List<BigInteger>` | start and end value of a numeric value range |
 | `valuesPattern` | `String` | [strex](https://github.com/davidsusu/strex) regex pattern for values (reverse indexed) |
 | `valuesDynamicPattern` | `String` | arbitrary regex pattern for values (not reverse indexed) |
+
+There are several possible values for `valuesBundle`:
+
+| Bundle name | Description |
+| ----------- | ----------- |
+| `cities` | 100 major world cities |
+| `colors` | 147 color names (from CSS3) |
+| `countries` | 197 country names |
+| `female-forenames` | 100 frequent English female forenames |
+| `forenames` | 100 frequent English forenames (50 female, 50 male) |
+| `fruits` | 26 of the best selling fruits |
+| `log-levels` | 6 standard log levels (from log4j) |
+| `lorem` | 49 lower-case words of the *Lorem ipsum* text |
+| `male-forenames` | 100 frequent English male forenames |
+| `months` | the 12 month names |
+| `surnames` | 100 frequent English surnames |
+| `weekdays` | the names of the 7 days of the week |
 
 The meaning of these `mode` values:
 
@@ -125,28 +143,15 @@ COPY config.yaml /app/config.yaml
 COPY my-values.txt /app/resources/my-values.txt
 ```
 
-There are some built-in value set resources too:
-
-- `hu/webarticum/holodb/values/cities.txt`
-- `hu/webarticum/holodb/values/colors.txt`
-- `hu/webarticum/holodb/values/countries.txt`
-- `hu/webarticum/holodb/values/female-forenames.txt`
-- `hu/webarticum/holodb/values/forenames.txt`
-- `hu/webarticum/holodb/values/fruits.txt`
-- `hu/webarticum/holodb/values/log-levels.txt`
-- `hu/webarticum/holodb/values/lorem.txt`
-- `hu/webarticum/holodb/values/male-forenames.txt`
-- `hu/webarticum/holodb/values/months.txt`
-- `hu/webarticum/holodb/values/surnames.txt`
-- `hu/webarticum/holodb/values/weekdays.txt`
-
 You can use a predefined value set resource with the `valuesResource` key in `config.yaml`:
 
 ```yaml
           - name: color
             type: 'java.lang.String'
-            valuesResource: 'hu/webarticum/holodb/values/colors.txt'
+            valuesResource: 'my-car-brands.txt'
 ```
+
+There are also some bundled value sets ​​that can be set via the `valuesBundle` option (see above).
 
 If you don't already have a value list, you can retrieve existing data from several sources,
 for example [WikiData](https://www.wikidata.org/),
