@@ -29,6 +29,7 @@ dependencies {
     implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:server:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"
     
     implementation 'hu.webarticum.strex:strex:1.2.0'
     implementation 'com.github.mifmif:generex:1.0.2'

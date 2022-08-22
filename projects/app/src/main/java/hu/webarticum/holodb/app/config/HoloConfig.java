@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import hu.webarticum.miniconnect.util.ToStringBuilder;
+
 public class HoloConfig {
 
     private final BigInteger seed;
@@ -27,6 +29,14 @@ public class HoloConfig {
     
     public List<HoloConfigSchema> schemas() {
         return new ArrayList<>(schemas);
+    }
+    
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .add("seed", seed)
+                .add("schemas", schemas)
+                .build();
     }
     
 }

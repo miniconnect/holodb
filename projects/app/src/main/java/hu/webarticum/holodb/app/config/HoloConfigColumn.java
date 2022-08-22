@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import hu.webarticum.miniconnect.util.ToStringBuilder;
+
 public class HoloConfigColumn {
     
     public enum ColumnMode { DEFAULT, COUNTER, FIXED, ENUM }
@@ -105,6 +107,23 @@ public class HoloConfigColumn {
 
     public List<String> valuesForeignColumn() {
         return valuesForeignColumn != null ? Collections.unmodifiableList(valuesForeignColumn) : null;
+    }
+    
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .add("name", name)
+                .add("type", type)
+                .add("mode", mode)
+                .add("nullCount", nullCount)
+                .add("values", values)
+                .add("valuesResource", valuesResource)
+                .add("valuesBundle", valuesBundle)
+                .add("valuesRange", valuesRange)
+                .add("valuesPattern", valuesPattern)
+                .add("valuesDynamicPattern", valuesDynamicPattern)
+                .add("valuesForeignColumn", valuesForeignColumn)
+                .build();
     }
 
 }

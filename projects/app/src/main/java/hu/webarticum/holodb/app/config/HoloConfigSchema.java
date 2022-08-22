@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import hu.webarticum.miniconnect.util.ToStringBuilder;
+
 public class HoloConfigSchema {
 
     private final String name;
@@ -26,6 +28,14 @@ public class HoloConfigSchema {
     
     public List<HoloConfigTable> tables() {
         return new ArrayList<>(tables);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .add("name", name)
+                .add("tables", tables)
+                .build();
     }
     
 }
