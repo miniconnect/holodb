@@ -7,10 +7,8 @@ schemas:
         size: 5
         columns:
           - name: id
-            type: 'java.math.BigInteger'
             mode: COUNTER
           - name: name
-            type: 'java.lang.String'
             mode: FIXED
             values:
               - Fav Fruits Inc.
@@ -19,10 +17,8 @@ schemas:
               - Vega Veterans Inc.
               - Goods of Nature Inc.
           - name: headquarters
-            type: 'java.lang.String'
             valuesBundle: cities
           - name: contact_phone
-            type: 'java.lang.String'
             nullCount: 2
             valuesPattern: '\+1 \d{3}-\d{3}-\d{4}'
       - name: employees
@@ -30,44 +26,34 @@ schemas:
         size: 100
         columns:
           - name: id
-            type: 'java.math.BigInteger'
             mode: COUNTER
           - name: company_id
-            type: 'java.math.BigInteger'
-            valuesRange: [1, 5]
+            valuesForeignColumn: [companies, id]
           - name: firstname
-            type: 'java.lang.String'
             valuesBundle: forenames
           - name: lastname
-            type: 'java.lang.String'
             valuesBundle: surnames
           - name: birth_year
             type: 'java.lang.Integer'
             valuesRange: [1950, 2000]
           - name: birth_country
-            type: 'java.lang.String'
             valuesBundle: countries
       - name: sales
         writeable: true
         size: 50
         columns:
           - name: id
-            type: 'java.math.BigInteger'
             mode: COUNTER
           - name: company_id
-            type: 'java.math.BigInteger'
-            valuesRange: [1, 5]
+            valuesForeignColumn: [companies, id]
           - name: product
-            type: 'java.lang.String'
             valuesBundle: fruits
           - name: color
-            type: 'java.lang.String'
             valuesBundle: colors
           - name: quantity
             type: 'java.lang.Integer'
             valuesRange: [100, 500]
           - name: quality
-            type: 'java.lang.String'
             mode: ENUM
             values:
               - POOR
@@ -75,6 +61,5 @@ schemas:
               - GOOD
               - EXCELLENT
           - name: comment
-            type: 'java.lang.String'
             nullCount: 20
             valuesDynamicPattern: '(Lorem|Dolor|Amet)( (lorem|ipsum|dolor|sit|amet|consectetur|adipisicing)){2,6}\.'

@@ -6,20 +6,15 @@ schemas:
         size: 100
         columns:
           - name: id
-            type: 'java.math.BigInteger'
             mode: COUNTER
           - name: firstname
-            type: 'java.lang.String'
             valuesBundle: forenames
           - name: lastname
-            type: 'java.lang.String'
             valuesBundle: surnames
           - name: birth_year
             type: 'java.lang.Integer'
             valuesRange: [1950, 2000]
           - name: birth_country
-            type: 'java.lang.String'
             valuesBundle: countries
           - name: occupation
-            type: 'java.lang.String'
             valuesResource: 'professionals.txt'

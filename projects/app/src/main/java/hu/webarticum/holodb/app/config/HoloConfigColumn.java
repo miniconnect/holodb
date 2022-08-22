@@ -32,6 +32,8 @@ public class HoloConfigColumn {
     
     private final String valuesDynamicPattern;
 
+    private final List<String> valuesForeignColumn;
+
     
     public HoloConfigColumn( // NOSONAR: many parameter is OK
             @JsonProperty("name") String name,
@@ -43,7 +45,8 @@ public class HoloConfigColumn {
             @JsonProperty("valuesBundle") String valuesBundle,
             @JsonProperty("valuesRange") List<BigInteger> valuesRange,
             @JsonProperty("valuesPattern") String valuesPattern,
-            @JsonProperty("valuesDynamicPattern") String valuesDynamicPattern) {
+            @JsonProperty("valuesDynamicPattern") String valuesDynamicPattern,
+            @JsonProperty("valuesForeignColumn") List<String> valuesForeignColumn) {
         this.name = name;
         this.type = type;
         this.mode = mode == null ? ColumnMode.DEFAULT : mode;
@@ -56,6 +59,7 @@ public class HoloConfigColumn {
         this.valuesRange = valuesRange != null ? new ArrayList<>(valuesRange) : null;
         this.valuesPattern = valuesPattern;
         this.valuesDynamicPattern = valuesDynamicPattern;
+        this.valuesForeignColumn = valuesForeignColumn;
     }
     
 
@@ -97,6 +101,10 @@ public class HoloConfigColumn {
 
     public String valuesDynamicPattern() {
         return valuesDynamicPattern;
+    }
+
+    public List<String> valuesForeignColumn() {
+        return valuesForeignColumn != null ? Collections.unmodifiableList(valuesForeignColumn) : null;
     }
 
 }

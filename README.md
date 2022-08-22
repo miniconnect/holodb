@@ -93,6 +93,36 @@ For each **column**, these subkeys are supported:
 | `valuesRange` | `List<BigInteger>` | start and end value of a numeric value range |
 | `valuesPattern` | `String` | [strex](https://github.com/davidsusu/strex) regex pattern for values (reverse indexed) |
 | `valuesDynamicPattern` | `String` | arbitrary regex pattern for values (not reverse indexed) |
+| `valuesForeignColumn` | `List<String>` | use value set of a foreign `COUNTER` column |
+
+In most cases, `type` can be omitted.
+If the configuration loader cannot guess the type, the startup aborts with an error.
+However, the type can always be overridden (e. g. numbers can be generated using a regular expression).
+
+The meaning of `mode` values:
+
+| Mode | Description |
+| ---- | ----------- |
+| `DEFAULT` | randomly distributed, non-unique values, indexed (except in case of `valuesDynamicPattern` used) |
+| `COUNTER` | fill with increasing whole numbers starting from `1`, unique, indexed (good choice for ID columns) |
+| `FIXED` | values will not be shuffled, the count of values must be equal to the table size, non-indexed |
+| `ENUM` | similar to `DEFAULT`, but with different proper rules for equality check, sort order and insertion/update |
+
+In the case of writable tables, if other than the `ENUM` mode is used,
+users can also put values ​​different from the initial ones.
+
+For specifying the possible values in the column, one of
+`values`, `valuesResource`, `valuesRange`, `valuesPattern`,  `valuesDynamicPattern` and `valuesForeignColumn`
+can be used.
+Currently, for a `FIXED` column, only `values` is supported.
+
+In the case of `COUNTER` mode, values will be ignored and should be omitted.
+The type of a `COUNTER` column is always `java.math.BigInteger`.
+
+If used, the value of `valuesForeignColumn` must be an array of lengths 1, 2, or 3.
+The one-element version contains a column name in the same table.
+The two-element version contains a \[*\<table\>*, *\<column\>*\] pair in the same schema.
+The three-element version contains the \[*\<schema\>*, *\<table\>*, *\<column\>*\] triplet.
 
 There are several possible values for `valuesBundle`:
 
@@ -110,23 +140,6 @@ There are several possible values for `valuesBundle`:
 | `months` | the 12 month names |
 | `surnames` | 100 frequent English surnames |
 | `weekdays` | the names of the 7 days of the week |
-
-The meaning of these `mode` values:
-
-| Mode | Description |
-| ---- | ----------- |
-| `DEFAULT` | randomly distributed, non-unique values, indexed (except in case of `valuesDynamicPattern` used) |
-| `COUNTER` | fill with increasing whole numbers starting from `1`, unique, indexed (good choice for ID columns) |
-| `FIXED` | values will not be shuffled, the count of values must be equal to the table size, non-indexed |
-| `ENUM` | similar to `DEFAULT`, but with different proper rules for equality check, sort order and insertion/update |
-
-In the case of writable tables, if other than the `ENUM` mode is used,
-users can also put values ​​different from the initial ones.
-
-For specifying the possible values in the column one of
-`values`, `valuesResource`, `valuesRange`, `valuesPattern`, and `valuesDynamicPattern`
-can be used.
-In the case of `COUNTER` mode, values will be ignored and should be omitted.
 
 
 ## Load values from resource

@@ -72,13 +72,14 @@ public class StorageAccessFactory {
         SimpleResourceManager<Schema> schemaManager = storageAccess.schemas();
         TreeRandom rootRandom = new HasherTreeRandom(config.seed());
         for (HoloConfigSchema schemaConfig : config.schemas()) {
-            Schema schema = createSchema(schemaConfig, rootRandom, converter);
+            Schema schema = createSchema(config, schemaConfig, rootRandom, converter);
             schemaManager.register(schema);
         }
         return storageAccess;
     }
 
     private static Schema createSchema(
+            HoloConfig config,
             HoloConfigSchema schemaConfig,
             TreeRandom rootRandom,
             Converter converter) {
@@ -87,13 +88,15 @@ public class StorageAccessFactory {
         SimpleSchema schema = new SimpleSchema(schemaName);
         SimpleResourceManager<Table> tableManager = schema.tables();
         for (HoloConfigTable tableConfig : schemaConfig.tables()) {
-            Table table = createTable(tableConfig, schemaRandom, converter);
+            Table table = createTable(config, schemaConfig, tableConfig, schemaRandom, converter);
             tableManager.register(table);
         }
         return schema;
     }
     
     private static Table createTable(
+            HoloConfig config,
+            HoloConfigSchema schemaConfig,
             HoloConfigTable tableConfig,
             TreeRandom schemaRandom,
             Converter converter) {
@@ -103,12 +106,12 @@ public class StorageAccessFactory {
         ImmutableList<HoloConfigColumn> columnConfigs = ImmutableList.fromCollection(tableConfig.columns());
         ImmutableList<String> columnNames = columnConfigs.map(HoloConfigColumn::name);
         ImmutableMap<String, Source<?>> columnSources = columnConfigs
-                .assign(c -> createColumnSource(c, tableName, tableRandom, converter, tableSize))
+                .assign(c -> createColumnSource(config, schemaConfig, tableConfig, c, tableRandom, converter))
                 .map(HoloConfigColumn::name, s -> s);
         Optional<String> autoIncrementedName = extractAutoIncrementedColumnName(columnConfigs);
         ImmutableList<ColumnDefinition> columnDefinitions =
                 columnConfigs.map(c -> new SimpleColumnDefinition(
-                        c.type(),
+                        extractType(c),
                         !c.nullCount().equals(tableSize),
                         c.mode() == ColumnMode.COUNTER,
                         autoIncrementedName.isPresent() && c.name().equals(autoIncrementedName.get()),
@@ -131,6 +134,36 @@ public class StorageAccessFactory {
         return table;
     }
     
+    private static Class<?> extractType(HoloConfigColumn columnConfig) {
+        if (columnConfig.mode() == ColumnMode.COUNTER || columnConfig.valuesForeignColumn() != null) {
+            return BigInteger.class;
+        }
+        
+        Class<?> configType = columnConfig.type();
+        if (configType != null) {
+            return configType;
+        }
+        
+        if (
+                columnConfig.valuesBundle() != null ||
+                columnConfig.valuesResource() != null ||
+                columnConfig.valuesPattern() != null ||
+                columnConfig.valuesDynamicPattern() != null) {
+            return String.class;
+        }
+        
+        if (columnConfig.valuesRange() != null) {
+            return BigInteger.class;
+        }
+
+        List<Object> values = columnConfig.values();
+        if (values != null && !values.isEmpty()) {
+            return values.get(0).getClass();
+        }
+        
+        throw new IllegalArgumentException("Can not guess type for column: " + columnConfig.name());
+    }
+    
     private static ImmutableList<Object> extractEnumValues(HoloConfigColumn columnConfig, Source<?> source) {
         if (columnConfig.mode() != ColumnMode.ENUM) {
             return null;
@@ -150,35 +183,76 @@ public class StorageAccessFactory {
     }
 
     private static Source<?> createColumnSource(
+            HoloConfig config,
+            HoloConfigSchema schemaConfig,
+            HoloConfigTable tableConfig,
             HoloConfigColumn columnConfig,
-            String tableName,
             TreeRandom tableRandom,
-            Converter converter,
-            BigInteger tableSize) {
+            Converter converter) {
         ColumnMode columnMode = columnConfig.mode();
+        BigInteger tableSize = tableConfig.size();
         if (columnMode == ColumnMode.DEFAULT || columnMode == ColumnMode.ENUM) {
             boolean isEnum = (columnMode == ColumnMode.ENUM);
             TreeRandom columnRandom = tableRandom.sub("col-" + columnConfig.name());
-            BigInteger nullCount = columnConfig.nullCount();
-            String dynamicPattern = columnConfig.valuesDynamicPattern();
-            if (dynamicPattern == null) {
+            if (columnConfig.valuesForeignColumn() != null) {
+                return createForeignColumnSource(config, schemaConfig, tableConfig, columnConfig, columnRandom);
+            } else if (columnConfig.valuesDynamicPattern() == null) {
                 SortedSource<?> baseSource = loadBaseSource(columnConfig, converter, isEnum);
-                return createDefaultSource(columnRandom, baseSource, tableSize, nullCount);
+                return createShuffledSource(columnRandom, baseSource, tableSize, columnConfig.nullCount());
             } else if (!isEnum) {
                 return createDynamicPatternSource(columnConfig, columnRandom, converter, tableSize);
             } else {
                 throw new IllegalArgumentException(
                         "ENUM mode can not be used with dynamic column (" +
-                        tableName + "." + columnConfig.name() + ")");
+                        tableConfig.name() + "." + columnConfig.name() + ")");
             }
         } else if (columnMode == ColumnMode.COUNTER) {
             return new RangeSource(BigInteger.ONE, tableSize);
         } else if (columnMode == ColumnMode.FIXED) {
-            return createFixedSource(columnConfig.type(), columnConfig.values());
+            return createFixedSource(extractType(columnConfig), columnConfig.values());
         } else {
             throw new IllegalArgumentException(
-                    "Invalid column mode: " + columnMode + " (" + tableName + "." + columnConfig.name() + ")");
+                    "Invalid column mode: " + columnMode + " (" + tableConfig.name() + "." + columnConfig.name() + ")");
         }
+    }
+
+    private static Source<?> createForeignColumnSource(
+            HoloConfig config,
+            HoloConfigSchema schemaConfig,
+            HoloConfigTable tableConfig,
+            HoloConfigColumn columnConfig,
+            TreeRandom columnRandom) {
+        List<String> valuesForeignColumn = columnConfig.valuesForeignColumn();
+        int size = valuesForeignColumn.size();
+        if (size > 3) {
+            throw new IllegalArgumentException("Too many items for valuesForeignColumn: " + valuesForeignColumn);
+        }
+        String foreignSchemaName = size == 3 ? valuesForeignColumn.get(0) : schemaConfig.name();
+        String foreignTableName = size >= 2 ? valuesForeignColumn.get(size - 2) : tableConfig.name();
+        String foreignColumnName = valuesForeignColumn.get(size - 1);
+        HoloConfigSchema foreignSchemaConfig = config.schemas().stream()
+                .filter(s -> s.name().equals(foreignSchemaName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Schema not found: " + foreignSchemaName));
+        HoloConfigTable foreignTableConfig = foreignSchemaConfig.tables().stream()
+                .filter(s -> s.name().equals(foreignTableName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Table not found: " + foreignTableName));
+        HoloConfigColumn foreignColumnConfig = foreignTableConfig.columns().stream()
+                .filter(s -> s.name().equals(foreignColumnName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Column not found: " + foreignTableName + "." + foreignTableName));
+        
+        if (foreignColumnConfig.mode() != ColumnMode.COUNTER) {
+            throw new IllegalArgumentException();
+        }
+        
+        BigInteger foreignTableSize = foreignTableConfig.size();
+        RangeSource rangeSource = new RangeSource(BigInteger.ONE, foreignTableSize);
+        BigInteger tableSize = tableConfig.size();
+        BigInteger nullCount = columnConfig.nullCount();
+        return createShuffledSource(columnRandom, rangeSource, tableSize, nullCount);
     }
 
     private static SortedSource<?> loadBaseSource(HoloConfigColumn columnConfig, Converter converter, boolean isEnum) {
@@ -189,12 +263,12 @@ public class StorageAccessFactory {
         }
         
         List<Object> values = loadValues(columnConfig, converter);
-        return createUniqueSource(columnConfig.type(), values, isEnum);
+        return createUniqueSource(extractType(columnConfig), values, isEnum);
     }
 
     private static SortedSource<?> loadRangeSource(HoloConfigColumn columnConfig, Converter converter) {
         List<BigInteger> valuesRange = columnConfig.valuesRange();
-        Class<?> type = columnConfig.type();
+        Class<?> type = extractType(columnConfig);
         BigInteger from = valuesRange.get(0);
         BigInteger to = valuesRange.get(1);
         BigInteger size = to.subtract(from).add(BigInteger.ONE);
@@ -216,7 +290,7 @@ public class StorageAccessFactory {
 
     private static SortedSource<?> loadPatternSource(HoloConfigColumn columnConfig, Converter converter) {
         StrexSource strexSource = new StrexSource(Strex.compile(columnConfig.valuesPattern()));
-        Class<?> type = columnConfig.type();
+        Class<?> type = extractType(columnConfig);
         if (type == String.class) {
             return strexSource;
         } else {
@@ -229,7 +303,7 @@ public class StorageAccessFactory {
     }
 
     private static List<Object> loadValues(HoloConfigColumn columnConfig, Converter converter) {
-        Class<?> columnClazz = columnConfig.type();
+        Class<?> columnClazz = extractType(columnConfig);
         List<Object> rawValues = loadRawValues(columnConfig, converter);
         return rawValues.stream()
                 .map(v -> converter.convert(v, columnClazz))
@@ -316,7 +390,7 @@ public class StorageAccessFactory {
         return position1.compareTo(position2);
     }
     
-    private static <T> IndexedSource<T> createDefaultSource(
+    private static <T> IndexedSource<T> createShuffledSource(
             TreeRandom treeRandom, SortedSource<T> baseSource, BigInteger tableSize, BigInteger nullCount) {
         BigInteger valueCount = tableSize.subtract(nullCount);
         SortedSource<T> valueSource = new MonotonicSource<>(
@@ -337,7 +411,7 @@ public class StorageAccessFactory {
         BigInteger nullCount = columnConfig.nullCount();
         BigInteger valueCount = tableSize.subtract(nullCount);
         String dynamicPattern = columnConfig.valuesDynamicPattern();
-        Class<?> type = columnConfig.type();
+        Class<?> type = extractType(columnConfig);
         GenerexSource generexSource = new GenerexSource(new Generex(dynamicPattern), columnRandom, valueCount);
         Source<?> source = generexSource;
         if (type != String.class) {
