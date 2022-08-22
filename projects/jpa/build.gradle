@@ -1,0 +1,20 @@
+plugins {
+    id 'java-library'
+    id 'eclipse'
+}
+
+description "HoloDB JPA loader functionality"
+
+java {
+    registerFeature('runtimeDependencies') {
+        usingSourceSet(sourceSets.main)
+    }
+}
+
+dependencies {
+    implementation project(':app')
+    implementation "hu.webarticum.miniconnect:api:${miniConnectVersion}"
+    
+	runtimeDependenciesImplementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
+    runtimeDependenciesImplementation 'org.hibernate:hibernate-core:5.4.31.Final'
+}
