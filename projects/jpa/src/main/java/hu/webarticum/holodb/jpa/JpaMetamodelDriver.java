@@ -22,6 +22,7 @@ import hu.webarticum.miniconnect.jdbc.provider.DatabaseProvider;
 import hu.webarticum.miniconnect.jdbc.provider.impl.BlanketDatabaseProvider;
 import hu.webarticum.miniconnect.rdmsframework.engine.Engine;
 import hu.webarticum.miniconnect.rdmsframework.engine.impl.LazyStorageEngine;
+import hu.webarticum.miniconnect.rdmsframework.engine.impl.LazyStorageEngine.StorageAccessNotReadyException;
 import hu.webarticum.miniconnect.rdmsframework.execution.QueryExecutor;
 import hu.webarticum.miniconnect.rdmsframework.execution.impl.IntegratedQueryExecutor;
 import hu.webarticum.miniconnect.rdmsframework.parser.AntlrSqlParser;
@@ -104,7 +105,7 @@ public class JpaMetamodelDriver implements Driver {
         // FIXME
         Metamodel metamodel = getMetamodel();
         if (metamodel == null) {
-            throw new IllegalStateException("metamodel is null");
+            throw new StorageAccessNotReadyException();
         }
         String selectedSchemaName = "economy";
         BigInteger seed = BigInteger.valueOf(42L);
