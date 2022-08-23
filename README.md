@@ -144,7 +144,7 @@ There are several possible values for `valuesBundle`:
 
 ## Load values from resource
 
-You can use predefined value sets too.
+You can use custom predefined value sets too.
 To do this, create a file with one value on each line.
 Make this file available to the java classloader.
 If you use docker, the easiest way to do this is to copy the file into the `/app/resources` directory:
@@ -159,12 +159,9 @@ COPY my-values.txt /app/resources/my-values.txt
 You can use a predefined value set resource with the `valuesResource` key in `config.yaml`:
 
 ```yaml
-          - name: color
-            type: 'java.lang.String'
+          - name: car_brand
             valuesResource: 'my-car-brands.txt'
 ```
-
-There are also some bundled value sets ​​that can be set via the `valuesBundle` option (see above).
 
 If you don't already have a value list, you can retrieve existing data from several sources,
 for example [WikiData](https://www.wikidata.org/),
@@ -192,7 +189,7 @@ COPY --from=builder /en-letters.txt /app/resources/en-letters.txt
 
 ## Run queries
 
-You can connect to a holodb database via [miniconnect](https://github.com/miniconnect/miniconnect).
+You can connect to a HoloDB database via [miniconnect](https://github.com/miniconnect/miniconnect).
 
 From code, you can open a miniconnect session like this:
 
@@ -271,7 +268,8 @@ Bye-bye!
 
 ## How does it work?
 
-Holographic databases store no real data and calculate field values and reverse indexes on-the-fly.
+HoloDB introduces the concept of *holographic databases*.
+A holographic database stores no real data and calculates field values and reverse indexes on-the-fly.
 Nonetheless, you as a user experience a consistent, searchable (and optionally writable) database.
 Such a database consumes little memory (even for large "data") and needs near-zero startup time.
 Additionally, by changing the root seed the entire dataset can be shuffled (also a near-no-op).
