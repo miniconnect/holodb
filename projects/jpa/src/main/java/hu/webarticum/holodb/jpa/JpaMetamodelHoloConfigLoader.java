@@ -6,6 +6,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -56,7 +57,7 @@ public class JpaMetamodelHoloConfigLoader {
         String schemaName = selectedSchemaName; // TODO
         String tableName;
         boolean writeable = true; // TODO
-        BigInteger tableSize = BigInteger.valueOf(100L); // TODO
+        BigInteger tableSize = BigInteger.valueOf(20L); // TODO
         Class<?> entityClazz = entityType.getJavaType();
         if (metamodel instanceof MetamodelImpl) {
             MetamodelImpl hibernateMetamodel = (MetamodelImpl) metamodel;
@@ -81,7 +82,10 @@ public class JpaMetamodelHoloConfigLoader {
         List<HoloConfigColumn> columns = new ArrayList<>(attributes.size());
         for (Attribute<?, ?> attribute : attributes) {
             boolean isId = idAttributeName != null && attribute.getName().equals(idAttributeName);
-            columns.add(createColumn(attribute, isId, tableSize));
+            HoloConfigColumn columnConfig = createColumn(attribute, isId, tableSize);
+            if (columnConfig != null) {
+                columns.add(columnConfig);
+            }
         }
         HoloConfigTable table = new HoloConfigTable(tableName, writeable, tableSize, columns);
         List<HoloConfigTable> tables = tablesBySchema.computeIfAbsent(schemaName, k -> new ArrayList<>());
@@ -115,11 +119,22 @@ public class JpaMetamodelHoloConfigLoader {
         boolean isNumber = Number.class.isAssignableFrom(type);
         
         // TODO
-        ColumnMode mode = (isId && isNumber) ? ColumnMode.COUNTER : ColumnMode.DEFAULT;
+        ColumnMode mode = ColumnMode.DEFAULT;
         BigInteger nullCount = BigInteger.ZERO;
         List<Object> values = new ArrayList<>();
+        List<BigInteger> valuesRange = null;
         String valuesBundle = null;
         List<String> valuesForeignColumn = null;
+        
+        if (isId && isNumber) {
+            mode = ColumnMode.COUNTER;
+        } else if (isNumber) {
+            valuesRange = Arrays.asList(BigInteger.valueOf(1L), BigInteger.valueOf(5L));
+        } else if (type == String.class) {
+            valuesBundle = "lorem";
+        } else {
+            return null; // FIXME
+        }
         
         return new HoloConfigColumn(
                 columnName,
@@ -129,7 +144,7 @@ public class JpaMetamodelHoloConfigLoader {
                 values,
                 null,
                 valuesBundle,
-                null,
+                valuesRange,
                 null,
                 null,
                 valuesForeignColumn);

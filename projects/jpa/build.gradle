@@ -14,6 +14,9 @@ java {
 dependencies {
     implementation project(':app')
     implementation "hu.webarticum.miniconnect:api:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect:jdbc:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
     
 	runtimeDependenciesImplementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
     runtimeDependenciesImplementation 'org.hibernate:hibernate-core:5.4.31.Final'
