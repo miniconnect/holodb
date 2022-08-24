@@ -13,6 +13,8 @@ public @interface HoloTable {
 
     public String name() default "";
 
+    public HoloWriteable writeable() default HoloWriteable.UNDEFINED;
+
     public long size() default -1L;
 
     public String largeSize() default "";

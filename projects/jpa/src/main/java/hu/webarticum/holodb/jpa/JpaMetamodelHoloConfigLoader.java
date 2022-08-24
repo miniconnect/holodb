@@ -42,6 +42,7 @@ import hu.webarticum.holodb.jpa.annotation.HoloColumnMode;
 import hu.webarticum.holodb.jpa.annotation.HoloIgnore;
 import hu.webarticum.holodb.jpa.annotation.HoloTable;
 import hu.webarticum.holodb.jpa.annotation.HoloVirtualColumn;
+import hu.webarticum.holodb.jpa.annotation.HoloWriteable;
 
 // TODO: ignore column vs throw exception?
 public class JpaMetamodelHoloConfigLoader {
@@ -420,6 +421,9 @@ public class JpaMetamodelHoloConfigLoader {
         BigInteger size = BigInteger.TEN;
         HoloTable holoTableAnnotation = entityClazz.getAnnotation(HoloTable.class);
         if (holoTableAnnotation != null) {
+            if (holoTableAnnotation.writeable() != HoloWriteable.UNDEFINED) {
+                writeable = (holoTableAnnotation.writeable() == HoloWriteable.WRITEABLE);
+            }
             if (holoTableAnnotation.size() != -1L) {
                 size = BigInteger.valueOf(holoTableAnnotation.size());
             } else if (!holoTableAnnotation.largeSize().isEmpty()) {
