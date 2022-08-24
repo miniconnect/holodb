@@ -266,6 +266,59 @@ SQL > exit
 Bye-bye!
 ```
 
+## Mock JPA entities
+
+To mock JPA entities, define the `jpa` subproject as a dependency, and change the JDBC connection URL to:
+
+```
+jdbc:holodb:jpa://
+```
+
+Now, all of your entities will be backed by HoloDB tables with automatic configuration.
+To fine-tune this configuration, you can use some annotation on the entity classes.
+
+| Annotation | Target | Description |
+| ---------- | ------ | ----------- |
+| `@HoloTable` | class | Overrides table parameters (schema, name, writeable, size) |
+| `@HoloColumn` | field, method | Overrides column parameters |
+| `@HoloIgnore` | class, field, method | Ignores an entity or attribute |
+| `@HoloVirtualColumn` | class | Defines an additional column for the entity (multiple occurrences allowed) |
+
+`@HoloColumn` and `@HoloVirtualColumn` accepts all the columns configurations
+(for `@HoloVirtualColumn` `name` and `type` are mandatory).
+
+Some numeric settings have two variants, one for usual and one for large values:
+
+| Annotation | Usual field | Large field |
+| ---------- | ----------- | ----------- |
+| `@HoloTable` | `size` (`long`) | `largeSize` (`String`) |
+| `@HoloColumn` | `nullCount` (`long`) | `largeNullCount` (`String`) |
+| `@HoloColumn` | `valuesRange` (`long[]`) | `largeValuesRange` (`String[]`) |
+| `@HoloVirtualColumn` | `nullCount` (`long`) | `largeNullCount` (`String`) |
+| `@HoloVirtualColumn` | `valuesRange` (`long[]`) | `largeValuesRange` (`String[]`) |
+
+Example:
+
+```java
+@Entity
+@Table(name = "companies")
+@HoloTable(size = 25)
+@HoloVirtualColumn(name = "extracol", type = Integer.class, valuesRange = {10, 20})
+public class Company {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "birth_country", nullable = false)
+    @HoloColumn(valuesBundle = "countries")
+    private String country;
+    
+    // ...
+    
+}
+```
+
 ## How does it work?
 
 HoloDB introduces the concept of *holographic databases*.
