@@ -274,6 +274,30 @@ To mock JPA entities, define the `jpa` subproject as a dependency, and change th
 jdbc:holodb:jpa://
 ```
 
+At the moment, schema construction is not automatic, it's necessary to define an initializer class.
+For example (if you use Micronaut):
+
+```java
+@Singleton
+public class HoloInit {
+    
+    private final EntityManager entityManager;
+    
+    public HoloInit(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+    
+    @EventListener
+    @Transactional
+    public void onStartup(StartupEvent startupEvent) {
+        JpaMetamodelDriver.setMetamodel(entityManager.getMetamodel());
+    }
+    
+}
+```
+
+For other frameworks, the solution should be similarly simple.
+
 Now, all of your entities will be backed by HoloDB tables with automatic configuration.
 To fine-tune this configuration, you can use some annotation on the entity classes.
 
