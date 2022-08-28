@@ -33,17 +33,34 @@
 
 ## Version 0.2.0
 
-<!-- TODO: add sections -->
+Released on *2022-08-10*
 
-- Add support for regular expression based value generation
-- Add some other configuration possibilities
-- Add proper support for NULL values
-- Improve support for sequences
-- Improve examples
-- Fix many problems
-- and more &hellip;
+**MiniConnect version**: [0.2.0](https://github.com/miniconnect/miniconnect/blob/master/CHANGELOG.md#version-020)
+
+**Added:**
+
+- new column configurations: `valuesRange`, `valuesResource`, `valuesPattern`, `valuesDynamicPattern`
+- Support for database sequences
+- Proper support for NULL values
+- `possibleValues()` method in `Source`
+
+**Improved:**
+
+- Examples
+
+**Fixed:**
+
+- Malfunction of `PermutatedSelection` and permutated sources
+- Inappropriate content of `surnames.txt`
+- Problems with NULL matching
 
 ## Version 0.1.0
+
+Released on *2022-04-19*
+
+**MiniConnect version**: [0.1.0](https://github.com/miniconnect/miniconnect/blob/master/CHANGELOG.md#version-010)
+
+**Added:**
 
 - Data source framework
 - YAML configuration support
