@@ -34,7 +34,11 @@ import hu.webarticum.miniconnect.record.converter.DefaultConverter;
 
 public class JpaMetamodelDriver implements Driver {
     
-    // FIXME
+    public static final String URL_PREFIX = "jdbc:holodb:jpa://";
+    
+    public static final String DEFAULT_SCHEMA_NAME = "default_schema";
+    
+    
     public static Metamodel metamodel = null;
     
     
@@ -49,10 +53,7 @@ public class JpaMetamodelDriver implements Driver {
 
     @Override
     public boolean acceptsURL(String url) {
-        
-        // FIXME
-        return url.startsWith("jdbc:holodb:jpa://");
-        
+        return url.startsWith(URL_PREFIX);
     }
 
     @Override
@@ -82,8 +83,11 @@ public class JpaMetamodelDriver implements Driver {
 
     @Override
     public Connection connect(String url, Properties info) throws SQLException {
-
-        // FIXME
+        int prefixLength = URL_PREFIX.length();
+        String defaultSchemaName =
+                (url.length() > prefixLength) ?
+                url.substring(prefixLength + 1) :
+                DEFAULT_SCHEMA_NAME;
         SqlParser sqlParser = new AntlrSqlParser();
         QueryExecutor queryExecutor = new IntegratedQueryExecutor();
         DatabaseProvider databaseProvider = new BlanketDatabaseProvider();
@@ -91,27 +95,26 @@ public class JpaMetamodelDriver implements Driver {
         Engine engine = new LazyStorageEngine(
                 sqlParser,
                 queryExecutor,
-                () -> createMetamodelStorageAccess(),
-                e -> ((FrameworkSession) sessionHolder.get()).engineSession().state().setCurrentSchema("economy"));
+                () -> createMetamodelStorageAccess(defaultSchemaName),
+                e -> setupDefaultSchema(sessionHolder, defaultSchemaName));
         MiniSessionManager sessionManager = new FrameworkSessionManager(engine);
         MiniSession session = sessionManager.openSession();
         sessionHolder.set(session);
         return new MiniJdbcConnection(session, databaseProvider);
-        
     }
     
-    private static StorageAccess createMetamodelStorageAccess() {
-        
-        // FIXME
+    private static StorageAccess createMetamodelStorageAccess(String defaultSchemaName) {
         Metamodel metamodel = getMetamodel();
         if (metamodel == null) {
             throw new StorageAccessNotReadyException();
         }
-        String selectedSchemaName = "economy";
         BigInteger seed = BigInteger.valueOf(42L);
-        HoloConfig config = new JpaMetamodelHoloConfigLoader().load(metamodel, selectedSchemaName, seed);
+        HoloConfig config = new JpaMetamodelHoloConfigLoader().load(metamodel, defaultSchemaName, seed);
         return StorageAccessFactory.createStorageAccess(config, new DefaultConverter());
-        
+    }
+    
+    private static void setupDefaultSchema(AtomicReference<MiniSession> sessionHolder, String defaultSchemaName) {
+        ((FrameworkSession) sessionHolder.get()).engineSession().state().setCurrentSchema(defaultSchemaName);
     }
     
 }
