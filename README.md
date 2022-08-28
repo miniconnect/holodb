@@ -203,17 +203,6 @@ try (ClientMessenger clientMessenger = new ClientMessenger(host, port)) {
 }
 ```
 
-If you want to use JDBC, you can wrap the miniconnect session in a JDBC adapter:
-
-```java
-Connection connection = new MiniJdbcConnection(session, null);
-// ...
-```
-
-Note: one of the major goals of miniconnect is
-to relieve the pains of JDBC users and implementors.
-For more information see its repo.
-
 There is also a
 [miniconnect REPL](https://github.com/miniconnect/miniconnect/tree/master/projects/repl).
 Just type the host and port, and execute your queries xx:
@@ -266,6 +255,10 @@ SQL > exit
 Bye-bye!
 ```
 
+Also, you can use a MiniConnect server or even an existing MiniConnect `Session` via JDBC.
+For more information,
+see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect#jdbc-compatibility).
+
 ## Mock JPA entities
 
 To mock JPA entities, define the `jpa` subproject as a dependency, and change the JDBC connection URL to:
@@ -276,7 +269,7 @@ jdbc:holodb:jpa://
 
 (Optionally, the scheme can also be specified, e.g. `jdbc:holodb:jpa:///my_schema_name`.)
 
-At the moment, schema construction is not automatic, it's necessary to define an initializer class.
+At the moment, schema construction is not automatic, it's necessary to explicitly pass the metamodel.
 For example (if you use Micronaut):
 
 ```java
