@@ -3,9 +3,12 @@ package hu.webarticum.holodb.app.config;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import hu.webarticum.miniconnect.util.ToStringBuilder;
 
@@ -124,6 +127,41 @@ public class HoloConfigColumn {
                 .add("valuesDynamicPattern", valuesDynamicPattern)
                 .add("valuesForeignColumn", valuesForeignColumn)
                 .build();
+    }
+    
+    @JsonValue
+    public Map<String, Object> jsonValue() {
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("name", name);
+        result.put("type", type);
+        if (mode != ColumnMode.DEFAULT) {
+            result.put("mode", mode);
+        }
+        if (!nullCount.equals(BigInteger.ZERO)) {
+            result.put("nullCount", nullCount);
+        }
+        if (values != null) {
+            result.put("values", values);
+        }
+        if (valuesResource != null) {
+            result.put("valuesResource", valuesResource);
+        }
+        if (valuesBundle != null) {
+            result.put("valuesBundle", valuesBundle);
+        }
+        if (valuesRange != null) {
+            result.put("valuesRange", valuesRange);
+        }
+        if (valuesPattern != null) {
+            result.put("valuesPattern", valuesPattern);
+        }
+        if (valuesDynamicPattern != null) {
+            result.put("valuesDynamicPattern", valuesDynamicPattern);
+        }
+        if (valuesForeignColumn != null) {
+            result.put("valuesForeignColumn", valuesForeignColumn);
+        }
+        return result;
     }
 
 }

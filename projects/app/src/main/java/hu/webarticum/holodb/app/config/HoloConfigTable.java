@@ -2,9 +2,12 @@ package hu.webarticum.holodb.app.config;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import hu.webarticum.miniconnect.util.ToStringBuilder;
 
@@ -55,6 +58,18 @@ public class HoloConfigTable {
                 .add("size", size)
                 .add("columns", columns)
                 .build();
+    }
+    
+    @JsonValue
+    public Map<String, Object> jsonValue() {
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("name", name);
+        if (writeable) {
+            result.put("writeable", writeable);
+        }
+        result.put("size", size);
+        result.put("columns", columns);
+        return result;
     }
     
 }
