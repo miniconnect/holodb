@@ -25,7 +25,7 @@ public class HoloConfigColumn {
 
     private final BigInteger nullCount;
 
-    private final List<Object> values = new ArrayList<>();
+    private final List<Object> values = new ArrayList<>(); // FIXME: should be nullable?
 
     private final String valuesResource;
 
@@ -140,7 +140,7 @@ public class HoloConfigColumn {
         if (!nullCount.equals(BigInteger.ZERO)) {
             result.put("nullCount", nullCount);
         }
-        if (values != null) {
+        if (!values.isEmpty()) {
             result.put("values", values);
         }
         if (valuesResource != null) {

@@ -41,7 +41,10 @@ public class JpaMetamodelDriver implements Driver {
     
     public static Metamodel metamodel = null;
     
-    
+    // TODO: consider:
+    // org.hibernate.boot.spi.SessionFactoryOptions.getSessionFactoryObservers() --> SessionFactoryObserver[]
+    // SessionFactoryObserver.sessionFactoryCreated(SessionFactory factory) <-- SessionFactory
+    // [6.1] sessionFactory.getMetamodel() --> Metamodel
     public static synchronized void setMetamodel(Metamodel metamodel) {
         JpaMetamodelDriver.metamodel = metamodel;
     }
