@@ -12,9 +12,6 @@ import java.util.logging.Logger;
 
 import javax.persistence.metamodel.Metamodel;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import hu.webarticum.holodb.app.config.HoloConfig;
 import hu.webarticum.holodb.app.factory.StorageAccessFactory;
 import hu.webarticum.miniconnect.api.MiniSession;
@@ -44,10 +41,6 @@ public class JpaMetamodelDriver implements Driver {
     
     public static Metamodel metamodel = null;
     
-    // TODO: consider:
-    // org.hibernate.boot.spi.SessionFactoryOptions.getSessionFactoryObservers() --> SessionFactoryObserver[]
-    // SessionFactoryObserver.sessionFactoryCreated(SessionFactory factory) <-- SessionFactory
-    // [6.1] sessionFactory.getMetamodel() --> Metamodel
     public static synchronized void setMetamodel(Metamodel metamodel) {
         JpaMetamodelDriver.metamodel = metamodel;
     }
@@ -116,14 +109,6 @@ public class JpaMetamodelDriver implements Driver {
         }
         BigInteger seed = BigInteger.valueOf(42L);
         HoloConfig config = new JpaMetamodelHoloConfigLoader().load(metamodel, defaultSchemaName, seed);
-        
-        // XXX
-        try {
-            System.out.println(new ObjectMapper().writeValueAsString(config));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        
         return StorageAccessFactory.createStorageAccess(config, new DefaultConverter());
     }
     
