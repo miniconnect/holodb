@@ -19,6 +19,7 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
@@ -112,7 +113,25 @@ public class JpaMetamodelHoloConfigLoader {
         if (tableAnnotation != null && !tableAnnotation.schema().isEmpty()) {
             return tableAnnotation.schema();
         }
+
+        if (annotatedElement instanceof Member) {
+            return extractSchemaNameFromAnnotatedMember(annotatedElement, defaultSchemaName);
+        }
         
+        return defaultSchemaName;
+    }
+
+    private String extractSchemaNameFromAnnotatedMember(AnnotatedElement annotatedElement, String defaultSchemaName) {
+        JoinTable joinTableAnnotation = annotatedElement.getAnnotation(JoinTable.class);
+        if (joinTableAnnotation != null && !joinTableAnnotation.schema().isEmpty()) {
+            return joinTableAnnotation.schema();
+        }
+        
+        CollectionTable collectionTableAnnotation = annotatedElement.getAnnotation(CollectionTable.class);
+        if (collectionTableAnnotation != null && !collectionTableAnnotation.schema().isEmpty()) {
+            return collectionTableAnnotation.schema();
+        }
+
         return defaultSchemaName;
     }
 
@@ -210,7 +229,8 @@ public class JpaMetamodelHoloConfigLoader {
         } else if (persistentAttributeType == PersistentAttributeType.MANY_TO_ONE) {
             scanManyToOneAttribute(metamodel, jpaTableInfo, attribute, defaultSchemaName);
         } else if (persistentAttributeType == PersistentAttributeType.MANY_TO_MANY) {
-            scanManyToManyAttribute();
+            scanManyToManyAttribute(
+                    schemas, metamodel, schemaName, tableName, jpaTableInfo, attribute, defaultSchemaName);
         } else if (persistentAttributeType == PersistentAttributeType.EMBEDDED) {
             scanEmbeddedAttribute(
                     schemas, metamodel, schemaName, tableName, jpaTableInfo, attribute, defaultSchemaName);
@@ -344,8 +364,109 @@ public class JpaMetamodelHoloConfigLoader {
         mergeForeignLink(jpaColumnInfo, foreignSchemaName, foreignTableName, foreignColumnName);
     }
 
-    private void scanManyToManyAttribute( /* TODO */ ) {
-        // TODO
+    private void scanManyToManyAttribute(
+            Map<String, JpaSchemaInfo> schemas,
+            Metamodel metamodel,
+            String schemaName,
+            String tableName,
+            JpaTableInfo jpaTableInfo,
+            Attribute<?, ?> attribute,
+            String defaultSchemaName) {
+        if (jpaTableInfo.idColumnName.isEmpty()) {
+            return; // FIXME
+        }
+        
+        Member member = attribute.getJavaMember();
+        if (!(member instanceof AnnotatedElement)) {
+            return;
+        }
+        AnnotatedElement annotatedMember = (AnnotatedElement) member;
+        
+        ManyToMany manyToManyAnnotation = annotatedMember.getAnnotation(ManyToMany.class);
+        if (manyToManyAnnotation != null && !manyToManyAnnotation.mappedBy().isEmpty()) {
+            return;
+        }
+
+        if (!(attribute instanceof PluralAttribute)) {
+            return;
+        }
+        
+        PluralAttribute<?, ?, ?> pluralAttribute = (PluralAttribute<?, ?, ?>) attribute;
+        Type<?> itemType = pluralAttribute.getElementType();
+        Class<?> itemClazz = itemType.getJavaType();
+        
+        if (!(itemType instanceof EntityType)) {
+            return;
+        }
+        EntityType<?> entityType = (EntityType<?>) itemType;
+        
+        String subSchemaName = extractSchemaName(annotatedMember, schemaName);
+        String subTableName = extractTableName(metamodel, annotatedMember);
+        JpaSchemaInfo jpaSchemaInfo = schemas.computeIfAbsent(subSchemaName, k -> new JpaSchemaInfo());
+        JpaTableInfo subJpaTableInfo = jpaSchemaInfo.tables.computeIfAbsent(subTableName, k -> new JpaTableInfo());
+        subJpaTableInfo.annotatedElement = annotatedMember;
+        subJpaTableInfo.idColumnName = "";
+
+        String targetSchemaName = extractSchemaName(annotatedMember, schemaName);
+        String targetTableName = extractTableName(metamodel, itemClazz);
+        String targetIdColumnName = extractIdColumnName(entityType);
+
+        String parentIdColumnName = null;
+        JoinColumn joinColumnAnnotation = extractSingleJoinColumnAnnotation(annotatedMember);
+        if (joinColumnAnnotation != null) {
+            parentIdColumnName = joinColumnAnnotation.name();
+        }
+        if (parentIdColumnName == null) {
+            parentIdColumnName = tableName + "_id"; // FIXME
+        }
+
+        subJpaTableInfo.columnNamesInOrder.add(parentIdColumnName);
+        JpaColumnInfo parentIdJpaColumnInfo =
+                subJpaTableInfo.columns.computeIfAbsent(parentIdColumnName, k -> new JpaColumnInfo());
+        parentIdJpaColumnInfo.foreignSchemaName = schemaName;
+        parentIdJpaColumnInfo.foreignTableName = tableName;
+        parentIdJpaColumnInfo.foreignColumnName = jpaTableInfo.idColumnName;
+        parentIdJpaColumnInfo.mode = ColumnMode.DEFAULT;
+
+        String foreignIdColumnName = null;
+        JoinColumn inverseJoinColumnAnnotation = extractSingleInverseJoinColumnAnnotation(annotatedMember);
+        if (inverseJoinColumnAnnotation != null) {
+            foreignIdColumnName = inverseJoinColumnAnnotation.name();
+        }
+        if (foreignIdColumnName == null) {
+            foreignIdColumnName = targetTableName + "_id"; // FIXME
+        }
+
+        subJpaTableInfo.columnNamesInOrder.add(foreignIdColumnName);
+        JpaColumnInfo foreignIdJpaColumnInfo =
+                subJpaTableInfo.columns.computeIfAbsent(foreignIdColumnName, k -> new JpaColumnInfo());
+        foreignIdJpaColumnInfo.foreignSchemaName = targetSchemaName;
+        foreignIdJpaColumnInfo.foreignTableName = targetTableName;
+        foreignIdJpaColumnInfo.foreignColumnName = targetIdColumnName;
+        foreignIdJpaColumnInfo.mode = ColumnMode.DEFAULT;
+
+        OrderColumn orderColumnAnnotation = annotatedMember.getAnnotation(OrderColumn.class);
+        if (orderColumnAnnotation != null && !orderColumnAnnotation.name().isEmpty()) {
+            String orderColumnName = orderColumnAnnotation.name();
+            subJpaTableInfo.columnNamesInOrder.add(orderColumnName);
+            JpaColumnInfo orderJpaColumnInfo =
+                    subJpaTableInfo.columns.computeIfAbsent(orderColumnName, k -> new JpaColumnInfo());
+            parentIdJpaColumnInfo.type = BigInteger.class;
+            orderJpaColumnInfo.mode = ColumnMode.COUNTER; // FIXME: gaps are filled with nulls!
+        }
+        
+        OrderBy orderByAnnotation = annotatedMember.getAnnotation(OrderBy.class);
+        if (
+                orderByAnnotation != null &&
+                !orderByAnnotation.value().isEmpty() &&
+                !subJpaTableInfo.columnNamesInOrder.contains(orderByAnnotation.value())) {
+            String orderByName = orderByAnnotation.value();
+            subJpaTableInfo.columnNamesInOrder.add(orderByName);
+            JpaColumnInfo orderJpaColumnInfo =
+                    subJpaTableInfo.columns.computeIfAbsent(orderByName, k -> new JpaColumnInfo());
+            parentIdJpaColumnInfo.type = BigInteger.class;
+            orderJpaColumnInfo.mode = ColumnMode.COUNTER;
+        }
     }
 
     private void scanEmbeddedAttribute(
@@ -371,15 +492,14 @@ public class JpaMetamodelHoloConfigLoader {
             JpaTableInfo jpaTableInfo,
             Attribute<?, ?> attribute,
             String defaultSchemaName) {
-        Member member = attribute.getJavaMember();
-        if (!(member instanceof AnnotatedElement)) {
-            return;
-        }
-        
         if (jpaTableInfo.idColumnName.isEmpty()) {
             return; // FIXME
         }
         
+        Member member = attribute.getJavaMember();
+        if (!(member instanceof AnnotatedElement)) {
+            return;
+        }
         AnnotatedElement annotatedMember = (AnnotatedElement) member;
 
         if (!(attribute instanceof PluralAttribute)) {
@@ -390,7 +510,7 @@ public class JpaMetamodelHoloConfigLoader {
         Type<?> itemType = pluralAttribute.getElementType();
         Class<?> itemClazz = itemType.getJavaType();
         
-        String subSchemaName = extractSchemaName(annotatedMember, defaultSchemaName);
+        String subSchemaName = extractSchemaName(annotatedMember, schemaName);
         String subTableName = extractTableName(metamodel, annotatedMember);
         JpaSchemaInfo jpaSchemaInfo = schemas.computeIfAbsent(subSchemaName, k -> new JpaSchemaInfo());
         JpaTableInfo subJpaTableInfo = jpaSchemaInfo.tables.computeIfAbsent(subTableName, k -> new JpaTableInfo());
@@ -477,11 +597,32 @@ public class JpaMetamodelHoloConfigLoader {
                 return joinColumns[0];
             }
         }
+        
         CollectionTable collectionTableAnnotation = annotatedElement.getAnnotation(CollectionTable.class);
         if (collectionTableAnnotation != null) {
             JoinColumn[] joinColumns = collectionTableAnnotation.joinColumns();
             if (joinColumns.length == 1) {
                 return joinColumns[0];
+            }
+        }
+
+        JoinTable joinTableAnnotation = annotatedElement.getAnnotation(JoinTable.class);
+        if (joinTableAnnotation != null) {
+            JoinColumn[] joinColumns = joinTableAnnotation.joinColumns();
+            if (joinColumns.length == 1) {
+                return joinColumns[0];
+            }
+        }
+        
+        return null;
+    }
+    
+    private JoinColumn extractSingleInverseJoinColumnAnnotation(AnnotatedElement annotatedElement) {
+        JoinTable joinTableAnnotation = annotatedElement.getAnnotation(JoinTable.class);
+        if (joinTableAnnotation != null) {
+            JoinColumn[] inverseJoinColumns = joinTableAnnotation.inverseJoinColumns();
+            if (inverseJoinColumns.length == 1) {
+                return inverseJoinColumns[0];
             }
         }
         
