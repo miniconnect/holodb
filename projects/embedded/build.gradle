@@ -1,0 +1,27 @@
+plugins {
+    id 'java-library'
+    id 'eclipse'
+}
+
+description "HoloDB embedded functionality"
+
+java {
+    registerFeature('runtimeDependencies') {
+        usingSourceSet(sourceSets.main)
+    }
+}
+
+dependencies {
+    implementation project(':app')
+    implementation "hu.webarticum.miniconnect:api:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect:jdbc:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
+    
+    // FIXME
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+    
+	runtimeDependenciesImplementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
+    runtimeDependenciesImplementation 'org.hibernate:hibernate-core:5.4.31.Final'
+}

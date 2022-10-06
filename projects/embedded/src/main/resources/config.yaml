@@ -1,0 +1,11 @@
+seed: 1234
+schemas:
+  - name: hello
+    tables:
+      - name: world
+        size: 20
+        columns:
+          - name: id
+            type: 'java.math.BigInteger'
+            mode: COUNTER
+      

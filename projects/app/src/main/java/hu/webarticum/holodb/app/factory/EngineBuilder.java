@@ -44,12 +44,14 @@ public class EngineBuilder {
     }
     
     
-    public void sqlParser(SqlParser sqlParser) {
+    public EngineBuilder sqlParser(SqlParser sqlParser) {
         this.sqlParser = sqlParser;
+        return this;
     }
 
-    public void queryExecutor(QueryExecutor queryExecutor) {
+    public EngineBuilder queryExecutor(QueryExecutor queryExecutor) {
         this.queryExecutor = queryExecutor;
+        return this;
     }
     
     

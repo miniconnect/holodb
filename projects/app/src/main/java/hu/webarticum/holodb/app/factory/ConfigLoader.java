@@ -3,6 +3,7 @@ package hu.webarticum.holodb.app.factory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UncheckedIOException;
@@ -46,23 +47,40 @@ public class ConfigLoader {
     private final ContentType contentType;
     
 
-    public ConfigLoader(File file) {
-        this(file, detectContentType(file));
+    public ConfigLoader(String resource) {
+        this(() -> createResourceReader(resource), detectContentType(resource));
     }
     
-    private static ContentType detectContentType(File file) {
-        String filename = file.getName();
-        if (filename.endsWith(".json")) {
+    public ConfigLoader(File file) {
+        this(file, detectContentType(file.getName()));
+    }
+    
+    public ConfigLoader(File file, ContentType contentType) {
+        this(() -> createFileReader(file), contentType);
+    }
+    
+    public ConfigLoader(Supplier<Reader> readerSupplier, ContentType contentType) {
+        this.readerSupplier = readerSupplier;
+        this.contentType = contentType;
+    }
+
+    
+    private static ContentType detectContentType(String pathOrName) {
+        if (pathOrName.endsWith(".json")) {
             return ContentType.JSON;
-        } else if (filename.endsWith(".xml")) {
+        } else if (pathOrName.endsWith(".xml")) {
             return ContentType.XML;
         } else {
             return ContentType.YAML;
         }
     }
 
-    public ConfigLoader(File file, ContentType contentType) {
-        this(() -> createFileReader(file), contentType);
+    private static Reader createResourceReader(String resource) {
+        InputStream resourceIn = ConfigLoader.class.getClassLoader().getResourceAsStream(resource);
+        if (resourceIn == null) {
+            throw new IllegalArgumentException("Resource not found: " + resource);
+        }
+        return new InputStreamReader(resourceIn);
     }
     
     private static Reader createFileReader(File file) {
@@ -71,11 +89,6 @@ public class ConfigLoader {
         } catch(IOException e) {
             throw new UncheckedIOException(e);
         }
-    }
-    
-    public ConfigLoader(Supplier<Reader> readerSupplier, ContentType contentType) {
-        this.readerSupplier = readerSupplier;
-        this.contentType = contentType;
     }
     
     

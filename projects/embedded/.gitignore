@@ -1,0 +1,12 @@
+## build ##
+/bin/
+/build/
+/target/
+/.gradle/
+
+## editors ##
+/.classpath
+/.project
+/.settings/
+/.idea/
+/.vscode/

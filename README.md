@@ -189,23 +189,9 @@ COPY --from=builder /en-letters.txt /app/resources/en-letters.txt
 
 ## Run queries
 
-You can connect to a HoloDB database via [miniconnect](https://github.com/miniconnect/miniconnect).
-
-From code, you can open a miniconnect session like this:
-
-```java
-
-try (ClientMessenger clientMessenger = new ClientMessenger(host, port)) {
-    MiniSessionManager sessionManager = new MessengerSessionManager(clientMessenger);
-    try (MiniSession session = sessionManager.openSession()) {
-        // ...
-    }
-}
-```
-
-There is also a
+There is a
 [miniconnect REPL](https://github.com/miniconnect/miniconnect/tree/master/projects/repl).
-Just type the host and port, and execute your queries xx:
+Just type the host and port, and execute your queries:
 
 ```
 Welcome in miniConnect SQL REPL! - localhost:3430
@@ -258,6 +244,40 @@ Bye-bye!
 Also, you can use a MiniConnect server or even an existing MiniConnect `Session` via JDBC.
 For more information,
 see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect#jdbc-compatibility).
+
+## Connect to database from java code
+
+You can connect to a HoloDB database via [miniconnect](https://github.com/miniconnect/miniconnect).
+
+From code, you can open a miniconnect session like this:
+
+```java
+
+try (ClientMessenger clientMessenger = new ClientMessenger(host, port)) {
+    MiniSessionManager sessionManager = new MessengerSessionManager(clientMessenger);
+    try (MiniSession session = sessionManager.openSession()) {
+        // ...
+    }
+}
+```
+
+## Embedded mode
+
+You can use HoloDB as an embedded database.
+
+To achieve this, specify a resource:
+
+```
+jdbc:holodb:embedded:resource://config.yaml
+```
+
+Or any file on the file system:
+
+```
+jdbc:holodb:embedded:file///path/to/config.yaml
+```
+
+(Note: Number of slashes does matter.)
 
 ## Mock JPA entities
 

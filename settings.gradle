@@ -2,6 +2,7 @@ rootProject.name = 'holodb'
 
 include 'app'
 include 'core'
+include 'embedded'
 include 'jpa'
 include 'storage'
 include 'values'

@@ -1,0 +1,115 @@
+package hu.webarticum.holodb.embedded;
+
+import java.io.File;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverPropertyInfo;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.Properties;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.persistence.metamodel.Metamodel;
+
+import hu.webarticum.holodb.app.config.HoloConfig;
+import hu.webarticum.holodb.app.factory.ConfigLoader;
+import hu.webarticum.holodb.app.factory.EngineBuilder;
+import hu.webarticum.miniconnect.api.MiniSession;
+import hu.webarticum.miniconnect.api.MiniSessionManager;
+import hu.webarticum.miniconnect.jdbc.MiniJdbcConnection;
+import hu.webarticum.miniconnect.jdbc.MiniJdbcDriver;
+import hu.webarticum.miniconnect.jdbc.provider.DatabaseProvider;
+import hu.webarticum.miniconnect.jdbc.provider.impl.BlanketDatabaseProvider;
+import hu.webarticum.miniconnect.rdmsframework.engine.Engine;
+import hu.webarticum.miniconnect.rdmsframework.execution.QueryExecutor;
+import hu.webarticum.miniconnect.rdmsframework.execution.impl.IntegratedQueryExecutor;
+import hu.webarticum.miniconnect.rdmsframework.parser.AntlrSqlParser;
+import hu.webarticum.miniconnect.rdmsframework.parser.SqlParser;
+import hu.webarticum.miniconnect.rdmsframework.session.FrameworkSessionManager;
+
+public class HoloEmbeddedDriver implements Driver {
+    
+    public static final String URL_PREFIX = "jdbc:holodb:embedded:";
+    
+    public static final Pattern TAIL_PATTERN = Pattern.compile(
+            "^(?:file://(?<file>[^\\?]+)|resource://(?<resource>[^\\?]+))(?:\\?.*)?");
+    
+    
+    public static Metamodel metamodel = null;
+    
+    public static synchronized void setMetamodel(Metamodel metamodel) {
+        HoloEmbeddedDriver.metamodel = metamodel;
+    }
+
+    public static synchronized Metamodel getMetamodel() {
+        return metamodel;
+    }
+    
+
+    @Override
+    public boolean acceptsURL(String url) {
+        return url.startsWith(URL_PREFIX);
+    }
+
+    @Override
+    public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) {
+        return new DriverPropertyInfo[0];
+    }
+
+    @Override
+    public int getMajorVersion() {
+        return MiniJdbcDriver.DRIVER_MAJOR_VERSION;
+    }
+
+    @Override
+    public int getMinorVersion() {
+        return MiniJdbcDriver.DRIVER_MINOR_VERSION;
+    }
+
+    @Override
+    public boolean jdbcCompliant() {
+        return true;
+    }
+
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        throw new SQLFeatureNotSupportedException();
+    }
+
+    @Override
+    public Connection connect(String url, Properties info) throws SQLException {
+        String tail = url.substring(URL_PREFIX.length());
+        Matcher matcher = TAIL_PATTERN.matcher(tail);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("Invalid connection url: " + url);
+        }
+        
+        ConfigLoader configLoader;
+        
+        String resourcePath = matcher.group("resource");
+        if (resourcePath != null) {
+            configLoader = new ConfigLoader(resourcePath);
+        } else {
+            String filePath = matcher.group("file");
+            configLoader = new ConfigLoader(new File(filePath));
+        }
+        
+        SqlParser sqlParser = new AntlrSqlParser();
+        QueryExecutor queryExecutor = new IntegratedQueryExecutor();
+        DatabaseProvider databaseProvider = new BlanketDatabaseProvider();
+        AtomicReference<MiniSession> sessionHolder = new AtomicReference<>();
+        HoloConfig config = configLoader.load();
+        Engine engine = EngineBuilder.ofConfig(config)
+                .sqlParser(sqlParser)
+                .queryExecutor(queryExecutor)
+                .build();
+        MiniSessionManager sessionManager = new FrameworkSessionManager(engine);
+        MiniSession session = sessionManager.openSession();
+        sessionHolder.set(session);
+        return new MiniJdbcConnection(session, databaseProvider);
+    }
+    
+}
