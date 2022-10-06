@@ -267,7 +267,7 @@ To mock JPA entities, define the `jpa` subproject as a dependency, and change th
 jdbc:holodb:jpa://
 ```
 
-(Optionally, the scheme can also be specified, e.g. `jdbc:holodb:jpa:///my_schema_name`.)
+(Optionally, the schema can also be specified, e.g. `jdbc:holodb:jpa:///my_schema_name`.)
 
 At the moment, schema construction is not automatic, it's necessary to explicitly pass the metamodel.
 For example (if you use Micronaut):
