@@ -289,7 +289,7 @@ jdbc:holodb:jpa://
 
 (Optionally, the schema can also be specified, e.g. `jdbc:holodb:jpa:///my_schema_name`.)
 
-At the moment, schema construction is not automatic, it's necessary to explicitly pass the metamodel.
+At the moment, schema construction is not fully automatic, it's necessary to explicitly pass the metamodel.
 For example (if you use Micronaut):
 
 ```java
