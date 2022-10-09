@@ -12,9 +12,9 @@ schemas:
           - name: lastname
             valuesBundle: surnames
           - name: birth_year
-            type: 'java.lang.Integer'
+            type: java.lang.Integer
             valuesRange: [1950, 2000]
           - name: birth_country
             valuesBundle: countries
           - name: occupation
-            valuesResource: 'professionals.txt'
+            valuesResource: professionals.txt

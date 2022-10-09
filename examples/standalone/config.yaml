@@ -34,7 +34,7 @@ schemas:
           - name: lastname
             valuesBundle: surnames
           - name: birth_year
-            type: 'java.lang.Integer'
+            type: java.lang.Integer
             valuesRange: [1950, 2000]
           - name: birth_country
             valuesBundle: countries
@@ -51,7 +51,7 @@ schemas:
           - name: color
             valuesBundle: colors
           - name: quantity
-            type: 'java.lang.Integer'
+            type: java.lang.Integer
             valuesRange: [100, 500]
           - name: quality
             mode: ENUM

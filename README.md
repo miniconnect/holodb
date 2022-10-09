@@ -42,10 +42,10 @@ schemas:
         size: 150
         columns:
           - name: id
-            type: 'java.math.BigInteger'
+            type: java.math.BigInteger
             mode: COUNTER
           - name: name
-            type: 'java.lang.String'
+            type: java.lang.String
             values: ['Some name', 'Other name', 'Some other']
 ```
 
