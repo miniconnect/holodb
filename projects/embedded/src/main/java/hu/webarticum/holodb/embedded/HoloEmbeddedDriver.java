@@ -7,12 +7,9 @@ import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.persistence.metamodel.Metamodel;
 
 import hu.webarticum.holodb.app.config.HoloConfig;
 import hu.webarticum.holodb.app.factory.ConfigLoader;
@@ -36,17 +33,6 @@ public class HoloEmbeddedDriver implements Driver {
     
     public static final Pattern TAIL_PATTERN = Pattern.compile(
             "^(?:file://(?<file>[^\\?]+)|resource://(?<resource>[^\\?]+))(?:\\?.*)?");
-    
-    
-    public static Metamodel metamodel = null;
-    
-    public static synchronized void setMetamodel(Metamodel metamodel) {
-        HoloEmbeddedDriver.metamodel = metamodel;
-    }
-
-    public static synchronized Metamodel getMetamodel() {
-        return metamodel;
-    }
     
 
     @Override
@@ -100,7 +86,6 @@ public class HoloEmbeddedDriver implements Driver {
         SqlParser sqlParser = new AntlrSqlParser();
         QueryExecutor queryExecutor = new IntegratedQueryExecutor();
         DatabaseProvider databaseProvider = new BlanketDatabaseProvider();
-        AtomicReference<MiniSession> sessionHolder = new AtomicReference<>();
         HoloConfig config = configLoader.load();
         Engine engine = EngineBuilder.ofConfig(config)
                 .sqlParser(sqlParser)
@@ -108,7 +93,6 @@ public class HoloEmbeddedDriver implements Driver {
                 .build();
         MiniSessionManager sessionManager = new FrameworkSessionManager(engine);
         MiniSession session = sessionManager.openSession();
-        sessionHolder.set(session);
         return new MiniJdbcConnection(session, databaseProvider);
     }
     
