@@ -39,13 +39,13 @@ public class JpaMetamodelDriver implements Driver {
     public static final String DEFAULT_SCHEMA_NAME = "default_schema";
     
     
-    public static Metamodel metamodel = null;
+    private static Metamodel metamodel = null;
     
     public static synchronized void setMetamodel(Metamodel metamodel) {
         JpaMetamodelDriver.metamodel = metamodel;
     }
 
-    public static synchronized Metamodel getMetamodel() {
+    private static synchronized Metamodel getMetamodel() {
         return metamodel;
     }
     
