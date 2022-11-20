@@ -112,7 +112,7 @@ public class StorageAccessFactory {
         ImmutableList<ColumnDefinition> columnDefinitions =
                 columnConfigs.map(c -> new SimpleColumnDefinition(
                         extractType(c),
-                        !c.nullCount().equals(tableSize),
+                        !c.nullCount().equals(BigInteger.ZERO),
                         c.mode() == ColumnMode.COUNTER,
                         autoIncrementedName.isPresent() && c.name().equals(autoIncrementedName.get()),
                         extractEnumValues(c, columnSources.get(c.name())),
