@@ -81,7 +81,7 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
     @Override
     public Range find(Object value) {
         @SuppressWarnings("unchecked")
-        Comparator<Object> objectComparator = (Comparator<Object>) comparator;
+        Comparator<Object> objectComparator = (Comparator<Object>) (Comparator<?>) comparator;
         int position = Arrays.binarySearch(values, value, objectComparator);
         return position >= 0 ? Range.fromSize(position, 1) : Range.fromSize((-1 - position), 0);
     }

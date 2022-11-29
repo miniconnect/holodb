@@ -17,8 +17,8 @@ public class SelectionTableSelection implements TableSelection {
         this.selection = selection;
         this.ascOrder = ascOrder;
     }
-
-
+    
+    
     public Selection selection() {
         return selection;
     }

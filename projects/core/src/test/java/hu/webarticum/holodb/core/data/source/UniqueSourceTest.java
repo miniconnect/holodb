@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
 
@@ -107,7 +106,34 @@ class UniqueSourceTest {
     }
     
     private static UniqueSource<String> createSource() {
-        return new UniqueSource<>(String.class, new TreeSet<>(Arrays.asList("apple", "banana", "kiwi", "orange", "pear", "watermelon")));
+        return new UniqueSource<>(
+                String.class,
+                Arrays.asList("apple", "banana", "kiwi", "orange", "pear", "watermelon"));
+    }
+
+    @Test
+    void testFindFoundWithCustomComparator() {
+        Range range = createSourceWithCustomComparator().find("17");
+        assertThat(range).isEqualTo(Range.fromUntil(2, 3));
+    }
+
+    @Test
+    void testFindBetweenInclusiveWithCustomComparator() {
+        Range range = createSourceWithCustomComparator().findBetween("4", true, "243", true);
+        assertThat(range).isEqualTo(Range.fromUntil(1, 6));
+    }
+
+    @Test
+    void testFindBetweenUntilNullWithCustomComparator() {
+        Range range = createSourceWithCustomComparator().findBetween("35", false, null, true);
+        assertThat(range).isEqualTo(Range.fromUntil(4, 7));
+    }
+
+    private static UniqueSource<String> createSourceWithCustomComparator() {
+        return new UniqueSource<>(
+                String.class,
+                Arrays.asList("1", "4", "17", "35", "120", "243", "1000"),
+                (s1, s2) -> Integer.compare(Integer.parseInt(s1), Integer.parseInt(s2)));
     }
 
     private static BigInteger big(int value) {

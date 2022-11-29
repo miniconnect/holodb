@@ -37,7 +37,7 @@ public class PermutatedSelection implements Selection {
 
     @Override
     public boolean contains(BigInteger value) {
-        return baseSelection.contains(permutation.at(value));
+        return baseSelection.contains(permutation.indexOf(value));
     }
     
     @Override
