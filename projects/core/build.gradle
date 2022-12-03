@@ -1,8 +1,8 @@
 plugins {
     id 'java-library'
+    id 'eclipse'
     id 'me.champeau.gradle.jmh' version '0.5.0'
     id 'io.morethan.jmhreport' version '0.9.0'
-    id 'eclipse'
 }
 
 description "Core building blocks"
@@ -37,7 +37,10 @@ dependencies {
     
     jmh 'org.openjdk.jmh:jmh-core:1.34'
     jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.34'
-    jmh 'org.scala-lang:scala-library:2.13.8' // XXX
+}
+
+jmhJar {
+    duplicatesStrategy = DuplicatesStrategy.WARN
 }
 
 jmh {
