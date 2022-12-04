@@ -25,6 +25,8 @@ dependencies {
     implementation project(':core')
     implementation project(':storage')
     implementation project(':values')
+    implementation "hu.webarticum.miniconnect:lang:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect:lang-jackson:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:messenger:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"

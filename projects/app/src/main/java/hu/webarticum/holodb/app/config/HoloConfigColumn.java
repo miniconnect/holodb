@@ -1,15 +1,14 @@
 package hu.webarticum.holodb.app.config;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 
+import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.util.ToStringBuilder;
 
 public class HoloConfigColumn {
@@ -23,93 +22,112 @@ public class HoloConfigColumn {
 
     private final ColumnMode mode;
 
-    private final BigInteger nullCount;
+    private final LargeInteger nullCount;
 
-    private final List<Object> values = new ArrayList<>(); // FIXME: should be nullable?
+    private final ImmutableList<Object> values;
 
     private final String valuesResource;
 
     private final String valuesBundle;
 
-    private final List<BigInteger> valuesRange;
+    private final ImmutableList<LargeInteger> valuesRange;
     
     private final String valuesPattern;
     
     private final String valuesDynamicPattern;
 
-    private final List<String> valuesForeignColumn;
+    private final ImmutableList<String> valuesForeignColumn;
 
     
     public HoloConfigColumn( // NOSONAR: many parameter is OK
             @JsonProperty("name") String name,
             @JsonProperty("type") Class<?> type,
             @JsonProperty("mode") ColumnMode mode,
-            @JsonProperty("nullCount") BigInteger nullCount,
-            @JsonProperty("values") List<Object> values,
+            @JsonProperty("nullCount") LargeInteger nullCount,
+            @JsonProperty("values") ImmutableList<Object> values,
             @JsonProperty("valuesResource") String valuesResource,
             @JsonProperty("valuesBundle") String valuesBundle,
-            @JsonProperty("valuesRange") List<BigInteger> valuesRange,
+            @JsonProperty("valuesRange") ImmutableList<LargeInteger> valuesRange,
             @JsonProperty("valuesPattern") String valuesPattern,
             @JsonProperty("valuesDynamicPattern") String valuesDynamicPattern,
-            @JsonProperty("valuesForeignColumn") List<String> valuesForeignColumn) {
-        this.name = name;
-        this.type = type;
+            @JsonProperty("valuesForeignColumn") ImmutableList<String> valuesForeignColumn) {
+        this.name = Objects.requireNonNull(name, "Column name must be specified");
+        this.type = type; // FIXME: required?
         this.mode = mode == null ? ColumnMode.DEFAULT : mode;
-        this.nullCount = nullCount == null ? BigInteger.ZERO : nullCount;
-        if (values != null) {
-            this.values.addAll(values);
-        }
+        this.nullCount = nullCount == null ? LargeInteger.ZERO : nullCount; // FIXME
+        this.values = values != null ? values : ImmutableList.empty(); // FIXME: should null be supported?
         this.valuesResource = valuesResource;
         this.valuesBundle = valuesBundle;
-        this.valuesRange = valuesRange != null ? new ArrayList<>(valuesRange) : null;
+        this.valuesRange = valuesRange;
         this.valuesPattern = valuesPattern;
         this.valuesDynamicPattern = valuesDynamicPattern;
         this.valuesForeignColumn = valuesForeignColumn;
     }
     
 
+    @JsonGetter("name")
     public String name() {
         return name;
     }
 
+    @JsonGetter("type")
     public Class<?> type() {
         return type;
     }
 
+    @JsonGetter("mode")
+    @JsonInclude(Include.NON_NULL)
     public ColumnMode mode() {
         return mode;
     }
-
-    public BigInteger nullCount() {
+    
+    @JsonGetter("nullCount")
+    @JsonInclude(Include.NON_NULL)
+    public LargeInteger nullCount() {
         return nullCount;
     }
 
-    public List<Object> values() {
-        return Collections.unmodifiableList(values);
+    // FIXME: handle empty/null
+    @JsonGetter("values")
+    @JsonInclude(Include.NON_NULL)
+    public ImmutableList<Object> values() {
+        return values;
     }
 
+    @JsonGetter("valuesResource")
+    @JsonInclude(Include.NON_NULL)
     public String valuesResource() {
         return valuesResource;
     }
 
+    @JsonGetter("valuesBundle")
+    @JsonInclude(Include.NON_NULL)
     public String valuesBundle() {
         return valuesBundle;
     }
 
-    public List<BigInteger> valuesRange() {
-        return valuesRange != null ? Collections.unmodifiableList(valuesRange) : null;
+    @JsonGetter("valuesRange")
+    @JsonInclude(Include.NON_NULL)
+    public ImmutableList<LargeInteger> valuesRange() {
+        return valuesRange;
     }
 
+    @JsonGetter("valuesPattern")
+    @JsonInclude(Include.NON_NULL)
     public String valuesPattern() {
         return valuesPattern;
     }
 
+    @JsonGetter("valuesDynamicPattern")
+    @JsonInclude(Include.NON_NULL)
     public String valuesDynamicPattern() {
         return valuesDynamicPattern;
     }
 
-    public List<String> valuesForeignColumn() {
-        return valuesForeignColumn != null ? Collections.unmodifiableList(valuesForeignColumn) : null;
+    @JsonGetter("valuesForeignColumn")
+    @JsonInclude(Include.NON_NULL)
+    public ImmutableList<String> valuesForeignColumn() {
+        return valuesForeignColumn;
     }
     
     @Override
@@ -127,41 +145,6 @@ public class HoloConfigColumn {
                 .add("valuesDynamicPattern", valuesDynamicPattern)
                 .add("valuesForeignColumn", valuesForeignColumn)
                 .build();
-    }
-    
-    @JsonValue
-    public Map<String, Object> jsonValue() {
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put("name", name);
-        result.put("type", type);
-        if (mode != ColumnMode.DEFAULT) {
-            result.put("mode", mode);
-        }
-        if (!nullCount.equals(BigInteger.ZERO)) {
-            result.put("nullCount", nullCount);
-        }
-        if (!values.isEmpty()) {
-            result.put("values", values);
-        }
-        if (valuesResource != null) {
-            result.put("valuesResource", valuesResource);
-        }
-        if (valuesBundle != null) {
-            result.put("valuesBundle", valuesBundle);
-        }
-        if (valuesRange != null) {
-            result.put("valuesRange", valuesRange);
-        }
-        if (valuesPattern != null) {
-            result.put("valuesPattern", valuesPattern);
-        }
-        if (valuesDynamicPattern != null) {
-            result.put("valuesDynamicPattern", valuesDynamicPattern);
-        }
-        if (valuesForeignColumn != null) {
-            result.put("valuesForeignColumn", valuesForeignColumn);
-        }
-        return result;
     }
 
 }

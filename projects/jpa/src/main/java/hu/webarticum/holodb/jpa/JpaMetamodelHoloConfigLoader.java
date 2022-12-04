@@ -4,7 +4,6 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,6 +49,8 @@ import hu.webarticum.holodb.jpa.annotation.HoloIgnore;
 import hu.webarticum.holodb.jpa.annotation.HoloTable;
 import hu.webarticum.holodb.jpa.annotation.HoloVirtualColumn;
 import hu.webarticum.holodb.jpa.annotation.HoloWriteable;
+import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 // TODO: ignore column vs throw exception?
 // TODO: handling mapped superclasses?
@@ -58,7 +59,7 @@ public class JpaMetamodelHoloConfigLoader {
     private final Pattern getMethodPattern = Pattern.compile("^get([A-Z])(.*)$");
     
 
-    public HoloConfig load(Metamodel metamodel, String defaultSchemaName, BigInteger seed) {
+    public HoloConfig load(Metamodel metamodel, String defaultSchemaName, LargeInteger seed) {
         Map<String, JpaSchemaInfo> schemas = new TreeMap<>();
         scanMetamodel(schemas, metamodel, defaultSchemaName);
         return renderConfig(schemas, seed);
@@ -451,7 +452,7 @@ public class JpaMetamodelHoloConfigLoader {
             subJpaTableInfo.columnNamesInOrder.add(orderColumnName);
             JpaColumnInfo orderJpaColumnInfo =
                     subJpaTableInfo.columns.computeIfAbsent(orderColumnName, k -> new JpaColumnInfo());
-            parentIdJpaColumnInfo.type = BigInteger.class;
+            parentIdJpaColumnInfo.type = LargeInteger.class;
             orderJpaColumnInfo.mode = ColumnMode.COUNTER; // FIXME: gaps are filled with nulls!
         }
         
@@ -464,7 +465,7 @@ public class JpaMetamodelHoloConfigLoader {
             subJpaTableInfo.columnNamesInOrder.add(orderByName);
             JpaColumnInfo orderJpaColumnInfo =
                     subJpaTableInfo.columns.computeIfAbsent(orderByName, k -> new JpaColumnInfo());
-            parentIdJpaColumnInfo.type = BigInteger.class;
+            parentIdJpaColumnInfo.type = LargeInteger.class;
             orderJpaColumnInfo.mode = ColumnMode.COUNTER;
         }
     }
@@ -546,7 +547,7 @@ public class JpaMetamodelHoloConfigLoader {
             subJpaTableInfo.columnNamesInOrder.add(orderColumnName);
             JpaColumnInfo orderJpaColumnInfo =
                     subJpaTableInfo.columns.computeIfAbsent(orderColumnName, k -> new JpaColumnInfo());
-            idJpaColumnInfo.type = BigInteger.class;
+            idJpaColumnInfo.type = LargeInteger.class;
             orderJpaColumnInfo.mode = ColumnMode.COUNTER; // FIXME: gaps are filled with nulls!
         }
         
@@ -579,7 +580,7 @@ public class JpaMetamodelHoloConfigLoader {
             subJpaTableInfo.columnNamesInOrder.add(orderByName);
             JpaColumnInfo orderJpaColumnInfo =
                     subJpaTableInfo.columns.computeIfAbsent(orderByName, k -> new JpaColumnInfo());
-            idJpaColumnInfo.type = BigInteger.class;
+            idJpaColumnInfo.type = LargeInteger.class;
             orderJpaColumnInfo.mode = ColumnMode.COUNTER;
         }
     }
@@ -683,12 +684,12 @@ public class JpaMetamodelHoloConfigLoader {
         }
     }
 
-    private HoloConfig renderConfig(Map<String, JpaSchemaInfo> schemas, BigInteger seed) {
+    private HoloConfig renderConfig(Map<String, JpaSchemaInfo> schemas, LargeInteger seed) {
         List<HoloConfigSchema> schemaConfigs = new ArrayList<>(schemas.size());
         for (String schemaName : schemas.keySet()) {
             schemaConfigs.add(renderSchemaConfig(schemas, schemaName));
         }
-        return new HoloConfig(seed, schemaConfigs);
+        return new HoloConfig(seed, ImmutableList.fromCollection(schemaConfigs));
     }
 
     private HoloConfigSchema renderSchemaConfig(Map<String, JpaSchemaInfo> schemas, String schemaName) {
@@ -701,23 +702,23 @@ public class JpaMetamodelHoloConfigLoader {
                 tableConfigs.add(renderTableConfig(schemas, tableName, jpaTableInfo));
             }
         }
-        return new HoloConfigSchema(schemaName, tableConfigs);
+        return new HoloConfigSchema(schemaName, ImmutableList.fromCollection(tableConfigs));
     }
 
 
     private HoloConfigTable renderTableConfig(
             Map<String, JpaSchemaInfo> schemas, String tableName, JpaTableInfo jpaTableInfo) {
         boolean writeable = (jpaTableInfo.annotatedElement.getAnnotation(Immutable.class) != null);
-        BigInteger size = BigInteger.TEN;
+        LargeInteger size = LargeInteger.TEN;
         HoloTable holoTableAnnotation = jpaTableInfo.annotatedElement.getAnnotation(HoloTable.class);
         if (holoTableAnnotation != null) {
             if (holoTableAnnotation.writeable() != HoloWriteable.UNDEFINED) {
                 writeable = (holoTableAnnotation.writeable() == HoloWriteable.WRITEABLE);
             }
             if (holoTableAnnotation.size() != -1L) {
-                size = BigInteger.valueOf(holoTableAnnotation.size());
+                size = LargeInteger.of(holoTableAnnotation.size());
             } else if (!holoTableAnnotation.largeSize().isEmpty()) {
-                size = new BigInteger(holoTableAnnotation.largeSize());
+                size = LargeInteger.of(holoTableAnnotation.largeSize());
             }
         }
         List<HoloConfigColumn> columnConfigs = new ArrayList<>(jpaTableInfo.columns.size());
@@ -735,7 +736,8 @@ public class JpaMetamodelHoloConfigLoader {
         for (HoloVirtualColumn virtualColumnAnnotation : virtualColumnAnnotations) {
             columnConfigs.add(renderVirtualColumn(virtualColumnAnnotation));
         }
-        return new HoloConfigTable(tableName, writeable, size, columnConfigs);
+        return new HoloConfigTable(
+                tableName, writeable, size, ImmutableList.fromCollection(columnConfigs));
     }
 
     private int findColumnPosition(List<String> orderedFieldNames, String columnName) {
@@ -814,22 +816,22 @@ public class JpaMetamodelHoloConfigLoader {
         return ColumnMode.DEFAULT;
     }
     
-    private BigInteger detectColumnNullCount(HoloColumn holoColumnAnnotation) {
+    private LargeInteger detectColumnNullCount(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null && holoColumnAnnotation.nullCount() != -1) {
-            return BigInteger.valueOf(holoColumnAnnotation.nullCount());
+            return LargeInteger.of(holoColumnAnnotation.nullCount());
         } else if (holoColumnAnnotation != null && !holoColumnAnnotation.largeNullCount().isEmpty()) {
-            return new BigInteger(holoColumnAnnotation.largeNullCount());
+            return LargeInteger.of(holoColumnAnnotation.largeNullCount());
         }
         
-        return BigInteger.ZERO;
+        return LargeInteger.ZERO;
     }
 
-    private List<Object> detectColumnValues(HoloColumn holoColumnAnnotation) {
+    private ImmutableList<Object> detectColumnValues(HoloColumn holoColumnAnnotation) {
         List<Object> result = new ArrayList<>();
         if (holoColumnAnnotation != null && holoColumnAnnotation.values().length != 0) {
             result.addAll(Arrays.asList(holoColumnAnnotation.values()));
         }
-        return result;
+        return ImmutableList.fromCollection(result);
     }
 
     private String detectColumnValuesResource(HoloColumn holoColumnAnnotation) {
@@ -849,14 +851,14 @@ public class JpaMetamodelHoloConfigLoader {
         return "lorem";
     }
     
-    private List<BigInteger> detectColumnValuesRange(
+    private ImmutableList<LargeInteger> detectColumnValuesRange(
             JpaColumnInfo jpaColumnInfo, ColumnMode columnMode, HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null && holoColumnAnnotation.valuesRange().length != 0) {
             long[] valuesRange = holoColumnAnnotation.valuesRange();
-            return Arrays.asList(BigInteger.valueOf(valuesRange[0]), BigInteger.valueOf(valuesRange[1]));
+            return ImmutableList.of(LargeInteger.of(valuesRange[0]), LargeInteger.of(valuesRange[1]));
         } else if (holoColumnAnnotation != null && holoColumnAnnotation.largeValuesRange().length != 0) {
             String[] largeValuesRange = holoColumnAnnotation.largeValuesRange();
-            return Arrays.asList(new BigInteger(largeValuesRange[0]), new BigInteger(largeValuesRange[1]));
+            return ImmutableList.of(LargeInteger.of(largeValuesRange[0]), LargeInteger.of(largeValuesRange[1]));
         } else if (columnMode == ColumnMode.COUNTER || isAnyValueFieldExplicitlySet(holoColumnAnnotation)) {
             return null;
         } else if (jpaColumnInfo.attribute == null) {
@@ -865,7 +867,7 @@ public class JpaMetamodelHoloConfigLoader {
         
         Class<?> type = jpaColumnInfo.attribute.getJavaType();
         if (Number.class.isAssignableFrom(type)) {
-            return Arrays.asList(BigInteger.valueOf(1L), BigInteger.valueOf(10L));
+            return ImmutableList.of(LargeInteger.of(1L), LargeInteger.of(10L));
         }
         
         return null;
@@ -887,13 +889,13 @@ public class JpaMetamodelHoloConfigLoader {
         return null;
     }
     
-    private List<String> detectColumnValuesForeignColumn(
+    private ImmutableList<String> detectColumnValuesForeignColumn(
             Map<String, JpaSchemaInfo> schemas,
             JpaColumnInfo jpaColumnInfo,
             ColumnMode columnMode,
             HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null && holoColumnAnnotation.valuesForeignColumn().length != 0) {
-            return Arrays.asList(holoColumnAnnotation.valuesForeignColumn());
+            return ImmutableList.of(holoColumnAnnotation.valuesForeignColumn());
         } else if (columnMode == ColumnMode.COUNTER || isAnyValueFieldExplicitlySet(holoColumnAnnotation)) {
             return null;
         }
@@ -908,7 +910,7 @@ public class JpaMetamodelHoloConfigLoader {
                         .idColumnName;
             }
             if (!foreignColumnName.isEmpty()) {
-                return Arrays.asList(
+                return ImmutableList.of(
                         jpaColumnInfo.foreignSchemaName, jpaColumnInfo.foreignTableName, foreignColumnName);
             }
         }
@@ -937,7 +939,7 @@ public class JpaMetamodelHoloConfigLoader {
                 virtualColumnAnnotation.type(),
                 virtualColumnAnnotation.mode().columnMode(),
                 detectVirtualColumnNullCount(virtualColumnAnnotation),
-                Arrays.asList((Object[]) virtualColumnAnnotation.values()),
+                ImmutableList.of((Object[]) virtualColumnAnnotation.values()),
                 nonEmptyStringOrNull(virtualColumnAnnotation.valuesResource()),
                 nonEmptyStringOrNull(virtualColumnAnnotation.valuesBundle()),
                 detectVirtualColumnValuesRange(virtualColumnAnnotation),
@@ -946,31 +948,31 @@ public class JpaMetamodelHoloConfigLoader {
                 detectVirtualColumnValuesForeignColumn(virtualColumnAnnotation));
     }
     
-    private BigInteger detectVirtualColumnNullCount(HoloVirtualColumn virtualColumnAnnotation) {
+    private LargeInteger detectVirtualColumnNullCount(HoloVirtualColumn virtualColumnAnnotation) {
         if (virtualColumnAnnotation.nullCount() != -1) {
-            return BigInteger.valueOf(virtualColumnAnnotation.nullCount());
+            return LargeInteger.of(virtualColumnAnnotation.nullCount());
         } else if (!virtualColumnAnnotation.largeNullCount().isEmpty()) {
-            return new BigInteger(virtualColumnAnnotation.largeNullCount());
+            return LargeInteger.of(virtualColumnAnnotation.largeNullCount());
         } else {
             return null;
         }
     }
 
-    private List<BigInteger> detectVirtualColumnValuesRange(HoloVirtualColumn virtualColumnAnnotation) {
+    private ImmutableList<LargeInteger> detectVirtualColumnValuesRange(HoloVirtualColumn virtualColumnAnnotation) {
         if (virtualColumnAnnotation.valuesRange().length != 0) {
             long[] valuesRange = virtualColumnAnnotation.valuesRange();
-            return Arrays.asList(BigInteger.valueOf(valuesRange[0]), BigInteger.valueOf(valuesRange[1]));
+            return ImmutableList.of(LargeInteger.of(valuesRange[0]), LargeInteger.of(valuesRange[1]));
         } else if (virtualColumnAnnotation.largeValuesRange().length != 0) {
             String[] largeValuesRange = virtualColumnAnnotation.largeValuesRange();
-            return Arrays.asList(new BigInteger(largeValuesRange[0]), new BigInteger(largeValuesRange[1]));
+            return ImmutableList.of(LargeInteger.of(largeValuesRange[0]), LargeInteger.of(largeValuesRange[1]));
         } else {
             return null;
         }
     }
 
-    private List<String> detectVirtualColumnValuesForeignColumn(HoloVirtualColumn virtualColumnAnnotation) {
+    private ImmutableList<String> detectVirtualColumnValuesForeignColumn(HoloVirtualColumn virtualColumnAnnotation) {
         if (virtualColumnAnnotation.valuesForeignColumn().length != 0) {
-            return Arrays.asList(virtualColumnAnnotation.valuesForeignColumn());
+            return ImmutableList.of(virtualColumnAnnotation.valuesForeignColumn());
         } else {
             return null;
         }

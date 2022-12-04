@@ -20,6 +20,7 @@ import hu.webarticum.miniconnect.jdbc.MiniJdbcConnection;
 import hu.webarticum.miniconnect.jdbc.MiniJdbcDriver;
 import hu.webarticum.miniconnect.jdbc.provider.DatabaseProvider;
 import hu.webarticum.miniconnect.jdbc.provider.impl.BlanketDatabaseProvider;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.rdmsframework.engine.Engine;
 import hu.webarticum.miniconnect.rdmsframework.engine.impl.LazyStorageEngine;
 import hu.webarticum.miniconnect.rdmsframework.engine.impl.LazyStorageEngine.StorageAccessNotReadyException;
@@ -107,7 +108,7 @@ public class JpaMetamodelDriver implements Driver {
         if (metamodel == null) {
             throw new StorageAccessNotReadyException();
         }
-        BigInteger seed = BigInteger.valueOf(42L);
+        LargeInteger seed = LargeInteger.of(42L); // FIXME: detect?
         HoloConfig config = new JpaMetamodelHoloConfigLoader().load(metamodel, defaultSchemaName, seed);
         return StorageAccessFactory.createStorageAccess(config, new DefaultConverter());
     }

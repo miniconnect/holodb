@@ -1,14 +1,12 @@
 package hu.webarticum.holodb.app.config;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 
+import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.util.ToStringBuilder;
 
 public class HoloConfigTable {
@@ -17,37 +15,41 @@ public class HoloConfigTable {
     
     private final boolean writeable;
     
-    private final BigInteger size;
+    private final LargeInteger size;
 
-    private final List<HoloConfigColumn> columns;
+    private final ImmutableList<HoloConfigColumn> columns;
     
     
     public HoloConfigTable(
             @JsonProperty("name") String name,
             @JsonProperty("writeable") boolean writeable,
-            @JsonProperty("size") BigInteger size,
-            @JsonProperty("columns") List<HoloConfigColumn> columns) {
-        this.name = name;
+            @JsonProperty("size") LargeInteger size,
+            @JsonProperty("columns") ImmutableList<HoloConfigColumn> columns) {
+        this.name = Objects.requireNonNull(name, "Table name must be specified");
         this.writeable = writeable;
-        this.size = size;
-        this.columns = new ArrayList<>(columns);
+        this.size = Objects.requireNonNull(size, "Table size must be specified");
+        this.columns = columns != null ? columns : ImmutableList.empty();
     }
     
 
+    @JsonGetter("name")
     public String name() {
         return name;
     }
 
+    @JsonGetter("writeable")
     public boolean writeable() {
         return writeable;
     }
-    
-    public BigInteger size() {
+
+    @JsonGetter("size")
+    public LargeInteger size() {
         return size;
     }
-    
-    public List<HoloConfigColumn> columns() {
-        return new ArrayList<>(columns);
+
+    @JsonGetter("columns")
+    public ImmutableList<HoloConfigColumn> columns() {
+        return columns;
     }
 
     @Override
@@ -58,18 +60,6 @@ public class HoloConfigTable {
                 .add("size", size)
                 .add("columns", columns)
                 .build();
-    }
-    
-    @JsonValue
-    public Map<String, Object> jsonValue() {
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put("name", name);
-        if (writeable) {
-            result.put("writeable", writeable);
-        }
-        result.put("size", size);
-        result.put("columns", columns);
-        return result;
     }
     
 }

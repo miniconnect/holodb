@@ -1,36 +1,36 @@
 package hu.webarticum.holodb.app.config;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 
+import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.util.ToStringBuilder;
 
 public class HoloConfigSchema {
 
     private final String name;
 
-    private final List<HoloConfigTable> tables;
+    private final ImmutableList<HoloConfigTable> tables;
     
     
     public HoloConfigSchema(
             @JsonProperty("name") String name,
-            @JsonProperty("tables") List<HoloConfigTable> tables) {
-        this.name = name;
-        this.tables = new ArrayList<>(tables);
+            @JsonProperty("tables") ImmutableList<HoloConfigTable> tables) {
+        this.name = Objects.requireNonNull(name, "Schema name must be specified");
+        this.tables = tables != null ? tables : ImmutableList.empty();
     }
     
 
+    @JsonGetter("name")
     public String name() {
         return name;
     }
-    
-    public List<HoloConfigTable> tables() {
-        return new ArrayList<>(tables);
+
+    @JsonGetter("tables")
+    public ImmutableList<HoloConfigTable> tables() {
+        return tables;
     }
 
     @Override
@@ -39,14 +39,6 @@ public class HoloConfigSchema {
                 .add("name", name)
                 .add("tables", tables)
                 .build();
-    }
-    
-    @JsonValue
-    public Map<String, Object> jsonValue() {
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put("name", name);
-        result.put("tables", tables);
-        return result;
     }
     
 }

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import hu.webarticum.holodb.app.config.HoloConfig;
+import hu.webarticum.miniconnect.lang.jackson.JacksonSupport;
 
 public class ConfigLoader {
     
@@ -94,6 +95,7 @@ public class ConfigLoader {
     
     public HoloConfig load() {
         ObjectMapper mapper = new ObjectMapper(contentType.createJsonFactory());
+        mapper.registerModule(JacksonSupport.createModule());
         try {
             return mapper.readValue(readerSupplier.get(), HoloConfig.class);
         } catch (IOException e) {

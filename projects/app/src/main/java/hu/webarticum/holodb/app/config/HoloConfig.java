@@ -1,37 +1,35 @@
 package hu.webarticum.holodb.app.config;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 
+import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.util.ToStringBuilder;
 
 public class HoloConfig {
 
-    private final BigInteger seed;
+    private final LargeInteger seed;
 
-    private final List<HoloConfigSchema> schemas;
+    private final ImmutableList<HoloConfigSchema> schemas;
     
     
     public HoloConfig(
-            @JsonProperty("seed") BigInteger seed,
-            @JsonProperty("schemas") List<HoloConfigSchema> schemas) {
-        this.seed = seed;
-        this.schemas = new ArrayList<>(schemas);
+            @JsonProperty("seed") LargeInteger seed,
+            @JsonProperty("schemas") ImmutableList<HoloConfigSchema> schemas) {
+        this.seed = seed != null ? seed : LargeInteger.ZERO;
+        this.schemas = schemas != null ? schemas : ImmutableList.empty();
     }
     
 
-    public BigInteger seed() {
+    @JsonGetter("seed")
+    public LargeInteger seed() {
         return seed;
     }
-    
-    public List<HoloConfigSchema> schemas() {
-        return new ArrayList<>(schemas);
+
+    @JsonGetter("schemas")
+    public ImmutableList<HoloConfigSchema> schemas() {
+        return schemas;
     }
     
     @Override
@@ -40,14 +38,6 @@ public class HoloConfig {
                 .add("seed", seed)
                 .add("schemas", schemas)
                 .build();
-    }
-    
-    @JsonValue
-    public Map<String, Object> jsonValue() {
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put("seed", seed);
-        result.put("schemas", schemas);
-        return result;
     }
     
 }

@@ -50,6 +50,7 @@ import hu.webarticum.holodb.storage.HoloTable;
 import hu.webarticum.holodb.storage.IndexTableIndex;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.ImmutableMap;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.rdmsframework.storage.ColumnDefinition;
 import hu.webarticum.miniconnect.rdmsframework.storage.NamedResourceStore;
 import hu.webarticum.miniconnect.rdmsframework.storage.Schema;
@@ -65,12 +66,13 @@ import hu.webarticum.miniconnect.record.converter.Converter;
 import hu.webarticum.strex.Strex;
 
 // TODO: split to builder and sub-builders
+//FIXME: BigInteger -> LargeInteger
 public class StorageAccessFactory {
 
     public static StorageAccess createStorageAccess(HoloConfig config, Converter converter) {
         SimpleStorageAccess storageAccess =  new SimpleStorageAccess();
         SimpleResourceManager<Schema> schemaManager = storageAccess.schemas();
-        TreeRandom rootRandom = new HasherTreeRandom(config.seed());
+        TreeRandom rootRandom = new HasherTreeRandom(config.seed().bigIntegerValue());
         for (HoloConfigSchema schemaConfig : config.schemas()) {
             Schema schema = createSchema(config, schemaConfig, rootRandom, converter);
             schemaManager.register(schema);
@@ -100,10 +102,10 @@ public class StorageAccessFactory {
             HoloConfigTable tableConfig,
             TreeRandom schemaRandom,
             Converter converter) {
-        BigInteger tableSize = tableConfig.size();
+        BigInteger tableSize = tableConfig.size().bigIntegerValue();
         String tableName = tableConfig.name();
         TreeRandom tableRandom = schemaRandom.sub("table-" + tableName);
-        ImmutableList<HoloConfigColumn> columnConfigs = ImmutableList.fromCollection(tableConfig.columns());
+        ImmutableList<HoloConfigColumn> columnConfigs = tableConfig.columns();
         ImmutableList<String> columnNames = columnConfigs.map(HoloConfigColumn::name);
         ImmutableMap<String, Source<?>> columnSources = columnConfigs
                 .assign(c -> createColumnSource(config, schemaConfig, tableConfig, c, tableRandom, converter))
@@ -156,7 +158,7 @@ public class StorageAccessFactory {
             return BigInteger.class;
         }
 
-        List<Object> values = columnConfig.values();
+        ImmutableList<Object> values = columnConfig.values();
         if (values != null && !values.isEmpty()) {
             return values.get(0).getClass();
         }
@@ -190,7 +192,7 @@ public class StorageAccessFactory {
             TreeRandom tableRandom,
             Converter converter) {
         ColumnMode columnMode = columnConfig.mode();
-        BigInteger tableSize = tableConfig.size();
+        BigInteger tableSize = tableConfig.size().bigIntegerValue();
         if (columnMode == ColumnMode.DEFAULT || columnMode == ColumnMode.ENUM) {
             boolean isEnum = (columnMode == ColumnMode.ENUM);
             TreeRandom columnRandom = tableRandom.sub("col-" + columnConfig.name());
@@ -198,7 +200,8 @@ public class StorageAccessFactory {
                 return createForeignColumnSource(config, schemaConfig, tableConfig, columnConfig, columnRandom);
             } else if (columnConfig.valuesDynamicPattern() == null) {
                 SortedSource<?> baseSource = loadBaseSource(columnConfig, converter, isEnum);
-                return createShuffledSource(columnRandom, baseSource, tableSize, columnConfig.nullCount());
+                return createShuffledSource(
+                        columnRandom, baseSource, tableSize, columnConfig.nullCount().bigIntegerValue());
             } else if (!isEnum) {
                 return createDynamicPatternSource(columnConfig, columnRandom, converter, tableSize);
             } else {
@@ -209,7 +212,7 @@ public class StorageAccessFactory {
         } else if (columnMode == ColumnMode.COUNTER) {
             return new RangeSource(BigInteger.ONE, tableSize);
         } else if (columnMode == ColumnMode.FIXED) {
-            return createFixedSource(extractType(columnConfig), columnConfig.values());
+            return createFixedSource(extractType(columnConfig), columnConfig.values().asList());
         } else {
             throw new IllegalArgumentException(
                     "Invalid column mode: " + columnMode + " (" + tableConfig.name() + "." + columnConfig.name() + ")");
@@ -222,7 +225,7 @@ public class StorageAccessFactory {
             HoloConfigTable tableConfig,
             HoloConfigColumn columnConfig,
             TreeRandom columnRandom) {
-        List<String> valuesForeignColumn = columnConfig.valuesForeignColumn();
+        ImmutableList<String> valuesForeignColumn = columnConfig.valuesForeignColumn();
         int size = valuesForeignColumn.size();
         if (size > 3) {
             throw new IllegalArgumentException("Too many items for valuesForeignColumn: " + valuesForeignColumn);
@@ -248,10 +251,10 @@ public class StorageAccessFactory {
             throw new IllegalArgumentException();
         }
         
-        BigInteger foreignTableSize = foreignTableConfig.size();
+        BigInteger foreignTableSize = foreignTableConfig.size().bigIntegerValue();
         RangeSource rangeSource = new RangeSource(BigInteger.ONE, foreignTableSize);
-        BigInteger tableSize = tableConfig.size();
-        BigInteger nullCount = columnConfig.nullCount();
+        BigInteger tableSize = tableConfig.size().bigIntegerValue();
+        BigInteger nullCount = columnConfig.nullCount().bigIntegerValue();
         return createShuffledSource(columnRandom, rangeSource, tableSize, nullCount);
     }
 
@@ -267,10 +270,10 @@ public class StorageAccessFactory {
     }
 
     private static SortedSource<?> loadRangeSource(HoloConfigColumn columnConfig, Converter converter) {
-        List<BigInteger> valuesRange = columnConfig.valuesRange();
+        ImmutableList<LargeInteger> valuesRange = columnConfig.valuesRange();
         Class<?> type = extractType(columnConfig);
-        BigInteger from = valuesRange.get(0);
-        BigInteger to = valuesRange.get(1);
+        BigInteger from = valuesRange.get(0).bigIntegerValue();
+        BigInteger to = valuesRange.get(1).bigIntegerValue();
         BigInteger size = to.subtract(from).add(BigInteger.ONE);
         RangeSource rangeSource = new RangeSource(from, size);
         if (type == BigInteger.class) {
@@ -304,13 +307,13 @@ public class StorageAccessFactory {
 
     private static List<Object> loadValues(HoloConfigColumn columnConfig, Converter converter) {
         Class<?> columnClazz = extractType(columnConfig);
-        List<Object> rawValues = loadRawValues(columnConfig, converter);
+        ImmutableList<Object> rawValues = loadRawValues(columnConfig, converter);
         return rawValues.stream()
                 .map(v -> converter.convert(v, columnClazz))
                 .collect(Collectors.toList());
     }
     
-    private static List<Object> loadRawValues(HoloConfigColumn columnConfig, Converter converter) {
+    private static ImmutableList<Object> loadRawValues(HoloConfigColumn columnConfig, Converter converter) {
         String valuesResource = columnConfig.valuesResource();
         if (valuesResource != null) {
             return loadValuesFromResource(valuesResource);
@@ -325,7 +328,7 @@ public class StorageAccessFactory {
         return columnConfig.values();
     }
     
-    private static List<Object> loadValuesFromResource(String resource) {
+    private static ImmutableList<Object> loadValuesFromResource(String resource) {
         ClassLoader classLoader = HolodbServerMain.class.getClassLoader();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
                 classLoader.getResourceAsStream(resource)))) {
@@ -336,7 +339,7 @@ public class StorageAccessFactory {
                     values.add(value);
                 }
             }
-            return values;
+            return ImmutableList.fromCollection(values);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -408,7 +411,7 @@ public class StorageAccessFactory {
             TreeRandom columnRandom,
             Converter converter,
             BigInteger tableSize) {
-        BigInteger nullCount = columnConfig.nullCount();
+        BigInteger nullCount = columnConfig.nullCount().bigIntegerValue();
         BigInteger valueCount = tableSize.subtract(nullCount);
         String dynamicPattern = columnConfig.valuesDynamicPattern();
         Class<?> type = extractType(columnConfig);
