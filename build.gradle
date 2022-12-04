@@ -31,7 +31,7 @@ allprojects {
     group 'hu.webarticum.holodb'
     version automaticVersion
     
-    ext.miniConnectVersion = '0.2.1-SNAPSHOT'
+    ext.miniConnectVersion = '0.3.0'
     
     repositories {
         mavenCentral()

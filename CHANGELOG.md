@@ -20,6 +20,12 @@
   <tbody>
     <tr>
       <td rowspan="2">---</td>
+      <td><a href="https://github.com/miniconnect/miniconnect/blob/master/CHANGELOG.md#version-030">0.3.0</a></td>
+      <td rowspan="2">---</td>
+      <td><a href="#version-031">0.3.1</a></td>
+    </tr>
+    <tr>
+      <td rowspan="2">---</td>
       <td><a href="https://github.com/miniconnect/miniconnect/blob/master/CHANGELOG.md#version-020">0.2.0</a></td>
       <td rowspan="2">---</td>
       <td><a href="#version-020">0.2.0</a></td>
@@ -30,6 +36,34 @@
     </tr>
   </tbody>
 </table>
+
+## Version 0.3.1
+
+Released on *2022-12-04*
+
+**MiniConnect version**: [0.3.0](https://github.com/miniconnect/miniconnect/blob/master/CHANGELOG.md#version-030)
+
+**Added:**
+
+- Setup holodb from JPA entities
+- Setup embedded holodb from configuration file
+- ENUM column mode
+- `valuesForeignColumn` config
+
+**Improved:**
+
+- Handling of `valuesPattern`
+- Improved gradle build
+- Type guessing
+
+**Fixed:**
+
+- Ensure full java8 compatibility
+- Many more minor fixes
+
+## Version 0.3.0
+
+Please don't use this version except for testing purposes. It depends on a SNAPSHOT version of miniconnect.
 
 ## Version 0.2.0
 
