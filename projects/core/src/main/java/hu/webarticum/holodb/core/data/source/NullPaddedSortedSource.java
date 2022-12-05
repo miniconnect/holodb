@@ -1,20 +1,20 @@
 package hu.webarticum.holodb.core.data.source;
 
-import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.Optional;
 
 import hu.webarticum.holodb.core.data.selection.Range;
 import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class NullPaddedSortedSource<T> implements SortedSource<T> {
     
     private final SortedSource<T> baseSource;
     
-    private final BigInteger size;
+    private final LargeInteger size;
     
     
-    public NullPaddedSortedSource(SortedSource<T> baseSource, BigInteger size) {
+    public NullPaddedSortedSource(SortedSource<T> baseSource, LargeInteger size) {
         if (baseSource.size().compareTo(size) > 0) {
             throw new IllegalArgumentException("Base source size can not be larger than target size");
         }
@@ -30,12 +30,12 @@ public class NullPaddedSortedSource<T> implements SortedSource<T> {
     }
 
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return size;
     }
 
     @Override
-    public T get(BigInteger index) {
+    public T get(LargeInteger index) {
         return index.compareTo(baseSource.size()) < 0 ? baseSource.get(index) : null;
     }
 

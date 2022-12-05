@@ -1,9 +1,9 @@
 package hu.webarticum.holodb.storage;
 
-import java.math.BigInteger;
 import java.util.Iterator;
 
 import hu.webarticum.holodb.core.data.selection.Selection;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.rdmsframework.storage.TableSelection;
 
 public class SelectionTableSelection implements TableSelection {
@@ -24,12 +24,12 @@ public class SelectionTableSelection implements TableSelection {
     }
 
     @Override
-    public Iterator<BigInteger> iterator() {
+    public Iterator<LargeInteger> iterator() {
         return ascOrder ? selection.iterator() : selection.reverseOrder().iterator();
     }
 
     @Override
-    public boolean containsRow(BigInteger rowIndex) {
+    public boolean containsRow(LargeInteger rowIndex) {
         return selection.contains(rowIndex);
     }
 

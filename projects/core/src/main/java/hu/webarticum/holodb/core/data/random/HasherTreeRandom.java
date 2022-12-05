@@ -1,7 +1,6 @@
 package hu.webarticum.holodb.core.data.random;
 
 import java.io.ByteArrayOutputStream;
-import java.math.BigInteger;
 import java.util.function.BiFunction;
 
 import hu.webarticum.holodb.core.data.bitsource.ByteSource;
@@ -9,6 +8,7 @@ import hu.webarticum.holodb.core.data.bitsource.ByteSourceBitSource;
 import hu.webarticum.holodb.core.data.bitsource.FastByteSource;
 import hu.webarticum.holodb.core.data.hasher.FastHasher;
 import hu.webarticum.holodb.core.data.hasher.Hasher;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class HasherTreeRandom implements TreeRandom {
 
@@ -33,10 +33,10 @@ public class HasherTreeRandom implements TreeRandom {
     }
 
     public HasherTreeRandom(long seed) {
-        this(BigInteger.valueOf(seed));
+        this(LargeInteger.of(seed));
     }
 
-    public HasherTreeRandom(BigInteger seed) {
+    public HasherTreeRandom(LargeInteger seed) {
         this(seed.toByteArray());
     }
 
@@ -53,10 +53,10 @@ public class HasherTreeRandom implements TreeRandom {
     }
 
     public HasherTreeRandom(long seed, Hasher hasher) {
-        this(BigInteger.valueOf(seed), hasher);
+        this(LargeInteger.of(seed), hasher);
     }
 
-    public HasherTreeRandom(BigInteger seed, Hasher hasher) {
+    public HasherTreeRandom(LargeInteger seed, Hasher hasher) {
         this(seed.toByteArray(), hasher);
     }
 
@@ -69,10 +69,10 @@ public class HasherTreeRandom implements TreeRandom {
     }
 
     public HasherTreeRandom(long seed, Hasher hasher, BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory) {
-        this(BigInteger.valueOf(seed), hasher, additionalByteSourceFactory);
+        this(LargeInteger.of(seed), hasher, additionalByteSourceFactory);
     }
 
-    public HasherTreeRandom(BigInteger seed, Hasher hasher, BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory) {
+    public HasherTreeRandom(LargeInteger seed, Hasher hasher, BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory) {
         this(seed.toByteArray(), hasher, additionalByteSourceFactory);
     }
 
@@ -115,16 +115,16 @@ public class HasherTreeRandom implements TreeRandom {
     }
 
     @Override
-    public BigInteger getNumber(BigInteger highExclusive) {
+    public LargeInteger getNumber(LargeInteger highExclusive) {
         if (highExclusive.signum() != 1) {
             throw new IllegalArgumentException("High value must be positive");
         }
         
-        BigInteger two = BigInteger.valueOf(2);
-        BigInteger factor = highExclusive;
-        BigInteger powerOfTwo = BigInteger.ONE;
+        LargeInteger two = LargeInteger.of(2);
+        LargeInteger factor = highExclusive;
+        LargeInteger powerOfTwo = LargeInteger.ONE;
         int exponentOfTwo = 0;
-        while (factor.mod(two).equals(BigInteger.ZERO)) {
+        while (factor.mod(two).equals(LargeInteger.ZERO)) {
             factor = factor.divide(two);
             powerOfTwo = powerOfTwo.multiply(two);
             exponentOfTwo++;
@@ -133,10 +133,10 @@ public class HasherTreeRandom implements TreeRandom {
         
         ByteSourceBitSource bitSource = createBitSource();
         
-        BigInteger partition = exponentOfTwo > 0 ? new BigInteger(bitSource.fetch(exponentOfTwo)) : BigInteger.ZERO;
-        BigInteger offset = BigInteger.ZERO;
+        LargeInteger partition = exponentOfTwo > 0 ? LargeInteger.of(bitSource.fetch(exponentOfTwo)) : LargeInteger.ZERO;
+        LargeInteger offset = LargeInteger.ZERO;
         for (int i = 0; i < RANDOM_NUMBER_MAX_RETRIES; i++) {
-            BigInteger offsetCandidate = new BigInteger(bitSource.fetch(bitCountOfFactor));
+            LargeInteger offsetCandidate = LargeInteger.of(bitSource.fetch(bitCountOfFactor));
             if (offsetCandidate.compareTo(factor) < 0) {
                 offset = offsetCandidate;
                 break;

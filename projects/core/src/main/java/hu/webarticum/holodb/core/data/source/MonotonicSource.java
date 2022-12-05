@@ -1,12 +1,12 @@
 package hu.webarticum.holodb.core.data.source;
 
-import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.Optional;
 
 import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
 import hu.webarticum.holodb.core.data.selection.Range;
 import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class MonotonicSource<T> implements SortedSource<T> {
     
@@ -31,12 +31,12 @@ public class MonotonicSource<T> implements SortedSource<T> {
     }
     
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return monotonic.size();
     }
 
     @Override
-    public T get(BigInteger index) {
+    public T get(LargeInteger index) {
         return baseSource.get(monotonic.at(index));
     }
 

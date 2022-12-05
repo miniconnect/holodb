@@ -1,27 +1,27 @@
 package hu.webarticum.holodb.core.data.distribution;
 
-import java.math.BigInteger;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class FastSampler implements Sampler {
 
-    private final BigInteger size;
+    private final LargeInteger size;
 
-    private final BigInteger sample;
+    private final LargeInteger sample;
     
     
-    public FastSampler(BigInteger size) {
+    public FastSampler(LargeInteger size) {
         this.size = size;
-        this.sample = size.divide(BigInteger.valueOf(2L));
+        this.sample = size.divide(LargeInteger.of(2L));
     }
     
     
     @Override
-    public BigInteger sample() {
+    public LargeInteger sample() {
         return sample;
     }
 
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return size;
     }
 

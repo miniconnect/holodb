@@ -1,33 +1,32 @@
 package hu.webarticum.holodb.core.data.binrel.monotonic;
 
-import java.math.BigInteger;
-
 import hu.webarticum.holodb.core.data.binrel.Function;
 import hu.webarticum.holodb.core.data.selection.Range;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public interface Monotonic extends Function {
 
-    public Range indicesOf(BigInteger value);
+    public Range indicesOf(LargeInteger value);
 
-    public BigInteger imageSize();
+    public LargeInteger imageSize();
     
 
     public default Range indicesOf(Range range) {
-        BigInteger length = range.size();
-        if (length.equals(BigInteger.ZERO)) {
-            BigInteger from = range.from();
-            if (from.equals(BigInteger.ZERO)) {
-                return Range.empty(BigInteger.ZERO);
+        LargeInteger length = range.size();
+        if (length.equals(LargeInteger.ZERO)) {
+            LargeInteger from = range.from();
+            if (from.equals(LargeInteger.ZERO)) {
+                return Range.empty(LargeInteger.ZERO);
             } else if (from.equals(imageSize())) {
                 return Range.empty(size());
             } else {
                 return Range.empty(indicesOf(from).from());
             }
-        } else if (length.equals(BigInteger.ONE)) {
-            return indicesOf(range.at(BigInteger.ZERO));
+        } else if (length.equals(LargeInteger.ONE)) {
+            return indicesOf(range.at(LargeInteger.ZERO));
         } else {
             Range fromRange = indicesOf(range.from());
-            Range lastRange = indicesOf(range.until().subtract(BigInteger.ONE));
+            Range lastRange = indicesOf(range.until().subtract(LargeInteger.ONE));
             return Range.fromUntil(fromRange.from(), lastRange.until());
         }
     }

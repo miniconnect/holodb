@@ -1,9 +1,9 @@
 package hu.webarticum.holodb.core.data.selection;
 
-import java.math.BigInteger;
 import java.util.Iterator;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.lang.ReversibleIterable;
 import hu.webarticum.miniconnect.util.IteratorAdapter;
 
@@ -21,7 +21,7 @@ public class PermutatedSelection implements Selection {
     
 
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return baseSelection.size();
     }
 
@@ -31,24 +31,24 @@ public class PermutatedSelection implements Selection {
     }
 
     @Override
-    public BigInteger at(BigInteger index) {
+    public LargeInteger at(LargeInteger index) {
         return permutation.at(baseSelection.at(index));
     }
 
     @Override
-    public boolean contains(BigInteger value) {
+    public boolean contains(LargeInteger value) {
         return baseSelection.contains(permutation.indexOf(value));
     }
     
     @Override
-    public Iterator<BigInteger> iterator() {
+    public Iterator<LargeInteger> iterator() {
         return new IteratorAdapter<>(baseSelection.iterator(), permutation::at);
     }
 
     @Override
-    public ReversibleIterable<BigInteger> reverseOrder() {
-        Iterable<BigInteger> reversedBase = baseSelection.reverseOrder();
-        Iterable<BigInteger> permutatedReversed =
+    public ReversibleIterable<LargeInteger> reverseOrder() {
+        Iterable<LargeInteger> reversedBase = baseSelection.reverseOrder();
+        Iterable<LargeInteger> permutatedReversed =
                 () -> new IteratorAdapter<>(reversedBase.iterator(), permutation::at);
         return ReversibleIterable.of(permutatedReversed, this);
     }

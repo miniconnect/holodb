@@ -3,7 +3,6 @@ package hu.webarticum.holodb.core.lab.permutation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -18,6 +17,7 @@ import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.holodb.core.data.source.FixedSource;
 import hu.webarticum.holodb.core.data.source.PermutatedSource;
 import hu.webarticum.holodb.core.data.source.Source;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class PermutationComparisonMain {
 
@@ -31,28 +31,28 @@ public class PermutationComparisonMain {
                 line.chars()
                         .mapToObj(c -> Character.valueOf((char) c))
                         .collect(Collectors.toList()));
-        Map<String, Function<BigInteger, Permutation>> permutationFactories = createFactories();
+        Map<String, Function<LargeInteger, Permutation>> permutationFactories = createFactories();
         
         System.out.println();
         int maxLength =
                 permutationFactories.keySet().stream().mapToInt(String::length).max().orElse(0);
-        for (Map.Entry<String, Function<BigInteger, Permutation>> entry : permutationFactories.entrySet()) {
+        for (Map.Entry<String, Function<LargeInteger, Permutation>> entry : permutationFactories.entrySet()) {
             String name = entry.getKey();
-            Function<BigInteger, Permutation> factory = entry.getValue();
+            Function<LargeInteger, Permutation> factory = entry.getValue();
             Permutation permutation = factory.apply(source.size());
             Source<Character> permutatedSource = new PermutatedSource<>(source, permutation);
             System.out.print(String.format("%-" + maxLength + "s | ", name));
             for (int i = 0; i < lineLength ; i++) {
-                System.out.print(permutatedSource.get(BigInteger.valueOf(i)));
+                System.out.print(permutatedSource.get(LargeInteger.of(i)));
             }
             System.out.println(" |");
         }
     }
 
-    private static Map<String, Function<BigInteger, Permutation>> createFactories() {
+    private static Map<String, Function<LargeInteger, Permutation>> createFactories() {
         TreeRandom rootRandom = new HasherTreeRandom("lorem", new Sha256MacHasher());
         
-        Map<String, Function<BigInteger, Permutation>> result = new LinkedHashMap<>();
+        Map<String, Function<LargeInteger, Permutation>> result = new LinkedHashMap<>();
         result.put("FPE1", s -> new DirtyFpePermutation(rootRandom.sub(1L), s));
         result.put("FPE2", s -> new DirtyFpePermutation(rootRandom.sub(2L), s));
         result.put("MP1", s -> new ModuloPermutation(rootRandom.sub(3L), s));

@@ -1,34 +1,34 @@
 package hu.webarticum.holodb.core.data.binrel.permutation;
 
-import java.math.BigInteger;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class IdentityPermutation implements Permutation {
 
-    private final BigInteger size;
+    private final LargeInteger size;
     
     
-    public IdentityPermutation(BigInteger size) {
+    public IdentityPermutation(LargeInteger size) {
         this.size = size;
     }
     
     
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return size;
     }
 
     @Override
-    public BigInteger at(BigInteger index) {
+    public LargeInteger at(LargeInteger index) {
         return index;
     }
 
     @Override
-    public BigInteger indexOf(BigInteger value) {
+    public LargeInteger indexOf(LargeInteger value) {
         return value;
     }
 
     @Override
-    public IdentityPermutation resized(BigInteger size) {
+    public IdentityPermutation resized(LargeInteger size) {
         return new IdentityPermutation(size);
     }
 

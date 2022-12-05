@@ -1,11 +1,11 @@
 package hu.webarticum.holodb.core.data.distribution;
 
-import java.math.BigInteger;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public interface Sampler {
 
-    public BigInteger sample();
+    public LargeInteger sample();
     
-    public BigInteger size();
+    public LargeInteger size();
     
 }

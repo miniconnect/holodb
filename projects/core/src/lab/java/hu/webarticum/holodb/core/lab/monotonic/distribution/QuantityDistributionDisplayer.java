@@ -3,7 +3,6 @@ package hu.webarticum.holodb.core.lab.monotonic.distribution;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.math.BigInteger;
 import java.util.Random;
 import java.util.function.BiFunction;
 
@@ -21,6 +20,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class QuantityDistributionDisplayer implements Runnable {
     
@@ -126,12 +126,15 @@ public class QuantityDistributionDisplayer implements Runnable {
     }
     
     private double[] getCountsFromMonotonic(Monotonic monotonic, int m) {
-        BigInteger imageSize = monotonic.imageSize();
+        LargeInteger imageSize = monotonic.imageSize();
         
         double[] result = new double[m];
         
-        BigInteger step = imageSize.compareTo(BigInteger.valueOf(2000)) > 0 ? imageSize.divide(BigInteger.valueOf(2000)): BigInteger.ONE;
-        for (BigInteger value = BigInteger.ZERO; value.compareTo(imageSize) < 0; value = value.add(step)) {
+        LargeInteger step =
+                imageSize.compareTo(LargeInteger.of(2000)) > 0 ?
+                imageSize.divide(LargeInteger.of(2000)) :
+                LargeInteger.ONE;
+        for (LargeInteger value = LargeInteger.ZERO; value.compareTo(imageSize) < 0; value = value.add(step)) {
             int count = monotonic.indicesOf(value).size().intValue();
             if (count < m) {
                 result[count] += step.intValue();

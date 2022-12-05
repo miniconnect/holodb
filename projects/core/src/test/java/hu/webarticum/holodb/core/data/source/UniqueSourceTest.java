@@ -3,19 +3,19 @@ package hu.webarticum.holodb.core.data.source;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
 import hu.webarticum.holodb.core.data.selection.Range;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 class UniqueSourceTest {
 
     @Test
     void testValues() {
         UniqueSource<String> source = createSource();
-        assertThat(source).extracting(Source::size).as("size").isEqualTo(BigInteger.valueOf(6));
+        assertThat(source).extracting(Source::size).as("size").isEqualTo(LargeInteger.of(6));
         assertThat(source).extracting(s -> s.get(big(0))).as("at 0").isEqualTo("apple");
         assertThat(source).extracting(s -> s.get(big(1))).as("at 1").isEqualTo("banana");
         assertThat(source).extracting(s -> s.get(big(2))).as("at 2").isEqualTo("kiwi");
@@ -101,8 +101,8 @@ class UniqueSourceTest {
     @Test
     void testSort() {
         UniqueSource<String> source = new UniqueSource<>("cherry", "apple", "cherry", "orange", "kiwi");
-        assertThat(source.size()).isEqualTo(BigInteger.valueOf(4));
-        assertThat(source.get(BigInteger.valueOf(2))).isEqualTo("kiwi");
+        assertThat(source.size()).isEqualTo(LargeInteger.of(4));
+        assertThat(source.get(LargeInteger.of(2))).isEqualTo("kiwi");
     }
     
     private static UniqueSource<String> createSource() {
@@ -136,8 +136,8 @@ class UniqueSourceTest {
                 (s1, s2) -> Integer.compare(Integer.parseInt(s1), Integer.parseInt(s2)));
     }
 
-    private static BigInteger big(int value) {
-        return BigInteger.valueOf(value);
+    private static LargeInteger big(int value) {
+        return LargeInteger.of(value);
     }
 
 }

@@ -1,12 +1,12 @@
 package hu.webarticum.holodb.core.data.source;
 
-import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Function;
 
 import hu.webarticum.holodb.core.data.selection.Range;
 import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class TransformingSortedSource<T, U> implements SortedSource<U> {
 
@@ -51,12 +51,12 @@ public class TransformingSortedSource<T, U> implements SortedSource<U> {
     }
 
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return baseSource.size();
     }
 
     @Override
-    public U get(BigInteger index) {
+    public U get(LargeInteger index) {
         T encodedValue = baseSource.get(index);
         return encodedValue != null ? decoder.apply(encodedValue) : null;
     }

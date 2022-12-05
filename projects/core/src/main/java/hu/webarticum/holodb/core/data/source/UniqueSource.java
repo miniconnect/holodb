@@ -1,6 +1,5 @@
 package hu.webarticum.holodb.core.data.source;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -11,13 +10,14 @@ import java.util.TreeSet;
 
 import hu.webarticum.holodb.core.data.selection.Range;
 import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.rdmsframework.util.ComparatorUtil;
 
 public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
 
     private final Class<T> type;
 
-    private final BigInteger length;
+    private final LargeInteger length;
 
     private final Comparator<T> comparator;
     
@@ -39,7 +39,7 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
         this.type = type;
         this.comparator = comparator != null ? comparator : ComparatorUtil.createDefaultComparatorFor(type);
         this.values = toValueArray(values, this.comparator);
-        this.length = BigInteger.valueOf(this.values.length);
+        this.length = LargeInteger.of(this.values.length);
     }
     
     private static <T> Object[] toValueArray(Collection<T> values, Comparator<T> comparator) {
@@ -55,12 +55,12 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
     }
     
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return length;
     }
 
     @Override
-    public T get(BigInteger index) {
+    public T get(LargeInteger index) {
         @SuppressWarnings("unchecked")
         T result = (T) values[index.intValue()];
         return result;
@@ -97,15 +97,15 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
             }
         }
         
-        BigInteger from;
+        LargeInteger from;
         if (minValue != null) {
             Range minRange = find(minValue);
             from = minInclusive ? minRange.from() : minRange.until();
         } else {
-            from = BigInteger.ZERO;
+            from = LargeInteger.ZERO;
         }
         
-        BigInteger until;
+        LargeInteger until;
         if (maxValue != null) {
             Range maxRange = find(maxValue);
             until = maxInclusive ? maxRange.until() : maxRange.from();

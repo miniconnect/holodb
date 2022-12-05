@@ -1,18 +1,18 @@
 package hu.webarticum.holodb.core.data.source;
 
-import java.math.BigInteger;
 import java.util.Optional;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class NullPaddedSource<T> implements Source<T> {
     
     private final Source<T> baseSource;
     
-    private final BigInteger size;
+    private final LargeInteger size;
     
     
-    public NullPaddedSource(Source<T> baseSource, BigInteger size) {
+    public NullPaddedSource(Source<T> baseSource, LargeInteger size) {
         if (baseSource.size().compareTo(size) > 0) {
             throw new IllegalArgumentException("Base source size can not be larger than target size");
         }
@@ -28,12 +28,12 @@ public class NullPaddedSource<T> implements Source<T> {
     }
 
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return size;
     }
 
     @Override
-    public T get(BigInteger index) {
+    public T get(LargeInteger index) {
         return index.compareTo(baseSource.size()) < 0 ? baseSource.get(index) : null;
     }
 

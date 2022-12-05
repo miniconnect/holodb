@@ -1,17 +1,18 @@
 package hu.webarticum.holodb.core.data.binrel;
 
-import java.math.BigInteger;
 import java.util.Iterator;
 
-public interface Function extends Iterable<BigInteger> {
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
-    public BigInteger size();
+public interface Function extends Iterable<LargeInteger> {
+
+    public LargeInteger size();
     
-    public BigInteger at(BigInteger index);
+    public LargeInteger at(LargeInteger index);
     
     
     @Override
-    public default Iterator<BigInteger> iterator() {
+    public default Iterator<LargeInteger> iterator() {
         return new FunctionIterator(this);
     }
     

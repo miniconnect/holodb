@@ -1,15 +1,15 @@
 package hu.webarticum.holodb.core.data.binrel.permutation;
 
-import java.math.BigInteger;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class PermutationExtender implements PermutationDecorator {
 
     private final Permutation base;
     
-    private final BigInteger size;
+    private final LargeInteger size;
     
     
-    public PermutationExtender(Permutation base, BigInteger size) {
+    public PermutationExtender(Permutation base, LargeInteger size) {
         if (size.compareTo(base.size()) < 0) {
             throw new IllegalArgumentException("New size can not be smaller than size of base");
         }
@@ -20,23 +20,23 @@ public class PermutationExtender implements PermutationDecorator {
     
     
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return size;
     }
 
     @Override
-    public BigInteger at(BigInteger index) {
-        BigInteger baseSize = base.size();
-        BigInteger innerValue = base.at(index.mod(baseSize));
-        BigInteger startValue = index.divide(baseSize).multiply(baseSize);
+    public LargeInteger at(LargeInteger index) {
+        LargeInteger baseSize = base.size();
+        LargeInteger innerValue = base.at(index.mod(baseSize));
+        LargeInteger startValue = index.divide(baseSize).multiply(baseSize);
         return startValue.add(innerValue);
     }
 
     @Override
-    public BigInteger indexOf(BigInteger value) {
-        BigInteger baseSize = base.size();
-        BigInteger innerIndex = base.indexOf(value.mod(baseSize));
-        BigInteger startIndex = value.divide(baseSize).multiply(baseSize);
+    public LargeInteger indexOf(LargeInteger value) {
+        LargeInteger baseSize = base.size();
+        LargeInteger innerIndex = base.indexOf(value.mod(baseSize));
+        LargeInteger startIndex = value.divide(baseSize).multiply(baseSize);
         return startIndex.add(innerIndex);
     }
 
@@ -46,7 +46,7 @@ public class PermutationExtender implements PermutationDecorator {
     }
 
     @Override
-    public Permutation resized(BigInteger size) {
+    public Permutation resized(LargeInteger size) {
         return base.resized(size);
     }
     

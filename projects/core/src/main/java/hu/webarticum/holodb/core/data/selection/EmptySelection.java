@@ -1,9 +1,9 @@
 package hu.webarticum.holodb.core.data.selection;
 
-import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Iterator;
 
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.lang.ReversibleIterable;
 
 public final class EmptySelection implements Selection {
@@ -22,14 +22,14 @@ public final class EmptySelection implements Selection {
 
 
     @Override
-    public Iterator<BigInteger> iterator() {
+    public Iterator<LargeInteger> iterator() {
         return Collections.emptyIterator();
     }
 
 
     @Override
-    public BigInteger size() {
-        return BigInteger.ZERO;
+    public LargeInteger size() {
+        return LargeInteger.ZERO;
     }
 
 
@@ -40,18 +40,18 @@ public final class EmptySelection implements Selection {
 
 
     @Override
-    public BigInteger at(BigInteger index) {
+    public LargeInteger at(LargeInteger index) {
         throw new IndexOutOfBoundsException("This selection is empty");
     }
 
 
     @Override
-    public boolean contains(BigInteger value) {
+    public boolean contains(LargeInteger value) {
         return false;
     }
 
     @Override
-    public ReversibleIterable<BigInteger> reverseOrder() {
+    public ReversibleIterable<LargeInteger> reverseOrder() {
         return ReversibleIterable.of(() -> Collections.emptyIterator(), this);
     }
 

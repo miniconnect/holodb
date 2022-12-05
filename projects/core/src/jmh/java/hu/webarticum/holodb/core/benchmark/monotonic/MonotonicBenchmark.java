@@ -1,6 +1,5 @@
 package hu.webarticum.holodb.core.benchmark.monotonic;
 
-import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
 import org.openjdk.jmh.annotations.Benchmark;
@@ -18,6 +17,7 @@ import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
 import hu.webarticum.holodb.core.data.binrel.monotonic.FastMonotonic;
 import hu.webarticum.holodb.core.data.binrel.monotonic.SurjectiveMonotonic;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 @State(Scope.Benchmark)
 @Fork(value = 1, warmups = 1)
@@ -26,11 +26,11 @@ import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class MonotonicBenchmark {
     
-    private static final BigInteger SIZE = BigInteger.valueOf(5000L);
+    private static final LargeInteger SIZE = LargeInteger.of(5000L);
     
-    private static final BigInteger IMAGE_SIZE = BigInteger.valueOf(2000L);
+    private static final LargeInteger IMAGE_SIZE = LargeInteger.of(2000L);
     
-    private static final BigInteger DIVIDE = BigInteger.valueOf(20L);
+    private static final LargeInteger DIVIDE = LargeInteger.of(20L);
     
 
     private FastMonotonic fastMonotonic;
@@ -50,27 +50,27 @@ public class MonotonicBenchmark {
 
     @Benchmark
     public void benchmarkFastMonotonic(Blackhole blackhole) {
-        BigInteger size = fastMonotonic.size();
-        BigInteger step = size.divide(DIVIDE);
-        for (BigInteger i = BigInteger.ZERO; i.compareTo(size) < 0; i = i.add(step)) {
+        LargeInteger size = fastMonotonic.size();
+        LargeInteger step = size.divide(DIVIDE);
+        for (LargeInteger i = LargeInteger.ZERO; i.compareTo(size) < 0; i = i.add(step)) {
             blackhole.consume(fastMonotonic.at(i));
         }
     }
 
     @Benchmark
     public void benchmarkSurjectiveMonotonic(Blackhole blackhole) {
-        BigInteger size = surjectiveMonotonic.size();
-        BigInteger step = size.divide(DIVIDE);
-        for (BigInteger i = BigInteger.ZERO; i.compareTo(size) < 0; i = i.add(step)) {
+        LargeInteger size = surjectiveMonotonic.size();
+        LargeInteger step = size.divide(DIVIDE);
+        for (LargeInteger i = LargeInteger.ZERO; i.compareTo(size) < 0; i = i.add(step)) {
             blackhole.consume(surjectiveMonotonic.at(i));
         }
     }
 
     @Benchmark
     public void benchmarkBinomialMonotonic(Blackhole blackhole) {
-        BigInteger size = binomialMonotonic.size();
-        BigInteger step = size.divide(DIVIDE);
-        for (BigInteger i = BigInteger.ZERO; i.compareTo(size) < 0; i = i.add(step)) {
+        LargeInteger size = binomialMonotonic.size();
+        LargeInteger step = size.divide(DIVIDE);
+        for (LargeInteger i = LargeInteger.ZERO; i.compareTo(size) < 0; i = i.add(step)) {
             blackhole.consume(binomialMonotonic.at(i));
         }
     }

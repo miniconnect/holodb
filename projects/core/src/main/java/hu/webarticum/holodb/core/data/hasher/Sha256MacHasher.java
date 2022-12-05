@@ -1,12 +1,13 @@
 package hu.webarticum.holodb.core.data.hasher;
 
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class Sha256MacHasher implements Hasher {
 
@@ -25,10 +26,10 @@ public class Sha256MacHasher implements Hasher {
     }
     
     public Sha256MacHasher(long key) {
-        this(BigInteger.valueOf(key));
+        this(LargeInteger.of(key));
     }
     
-    public Sha256MacHasher(BigInteger key) {
+    public Sha256MacHasher(LargeInteger key) {
         this(key.toByteArray());
     }
     

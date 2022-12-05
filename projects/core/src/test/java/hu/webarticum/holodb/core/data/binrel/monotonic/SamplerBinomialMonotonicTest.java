@@ -1,9 +1,8 @@
 package hu.webarticum.holodb.core.data.binrel.monotonic;
 
-import java.math.BigInteger;
-
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 class SamplerBinomialMonotonicTest extends AbstractMonotonicTest<BinomialMonotonic> {
 
@@ -11,7 +10,7 @@ class SamplerBinomialMonotonicTest extends AbstractMonotonicTest<BinomialMonoton
     
     
     @Override
-    protected BinomialMonotonic create(BigInteger size, BigInteger imageSize) {
+    protected BinomialMonotonic create(LargeInteger size, LargeInteger imageSize) {
         return new BinomialMonotonic(treeRandom, size, imageSize);
     }
     

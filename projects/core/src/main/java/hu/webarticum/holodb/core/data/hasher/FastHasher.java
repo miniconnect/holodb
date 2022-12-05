@@ -1,10 +1,10 @@
 package hu.webarticum.holodb.core.data.hasher;
 
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import hu.webarticum.holodb.core.util.ByteUtil;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class FastHasher implements Hasher {
 
@@ -25,7 +25,7 @@ public class FastHasher implements Hasher {
         this(ByteUtil.longToBytes(key));
     }
 
-    public FastHasher(BigInteger key) {
+    public FastHasher(LargeInteger key) {
         this(key.toByteArray());
     }
 
@@ -41,7 +41,7 @@ public class FastHasher implements Hasher {
         this(ByteUtil.longToBytes(key), hashLength);
     }
 
-    public FastHasher(BigInteger key, int hashLength) {
+    public FastHasher(LargeInteger key, int hashLength) {
         this(key.toByteArray(), hashLength);
     }
 

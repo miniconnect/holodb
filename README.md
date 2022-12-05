@@ -42,10 +42,8 @@ schemas:
         size: 150
         columns:
           - name: id
-            type: java.math.BigInteger
             mode: COUNTER
           - name: name
-            type: java.lang.String
             values: ['Some name', 'Other name', 'Some other']
 ```
 
@@ -53,7 +51,7 @@ On the **top level** these keys are supported:
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
-| `seed` | `BigInteger` | global random seed |
+| `seed` | `LargeInteger` | global random seed |
 | `schemas` | `List` | list of schemas (see below) |
 
 The `seed` option sets a random seed with which you can vary the content of the database.
@@ -71,7 +69,7 @@ For each **table**, these subkeys are supported:
 | --- | ---- | ----------- |
 | `name` | `String` | name of the database table |
 | `writeable` | `boolean` | writeable or not |
-| `size` | `BigInteger` | number of records in this table |
+| `size` | `LargeInteger` | number of records in this table |
 | `columns` | `List` | list of columns in this table (see below) |
 
 If `writeable` option is set to true, then an additional layer
@@ -86,14 +84,14 @@ For each **column**, these subkeys are supported:
 | `name` | `String` | name of the table column |
 | `type` | `String` (`Class<?>`) | java class name of column type |
 | `mode` | `String` | filling mode (`DEFAULT`, `COUNTER`, `FIXED` or `ENUM`) |
-| `nullCount` | `BigInteger` | count of null values (default: `0`) |
-| `values` | `List` | explicit list of possible values |
+| `nullCount` | `LargeInteger` | count of null values (default: `0`) |
+| `values` | `Object[]` | explicit list of possible values |
 | `valuesResource` | `String` | name of a java resource which contains the values line by line |
 | `valuesBundle` | `String` | short name of a bundled value resource, otherwise similar to `valuesResource` (see below) |
-| `valuesRange` | `List<BigInteger>` | start and end value of a numeric value range |
+| `valuesRange` | `LargeInteger[]` | start and end value of a numeric value range |
 | `valuesPattern` | `String` | [strex](https://github.com/davidsusu/strex) regex pattern for values (reverse indexed) |
 | `valuesDynamicPattern` | `String` | arbitrary regex pattern for values (not reverse indexed) |
-| `valuesForeignColumn` | `List<String>` | use value set of a foreign `COUNTER` column |
+| `valuesForeignColumn` | `String[]` | use value set of a foreign `COUNTER` column |
 
 In most cases, `type` can be omitted.
 If the configuration loader cannot guess the type, the startup aborts with an error.
@@ -117,7 +115,7 @@ can be used.
 Currently, for a `FIXED` column, only `values` is supported.
 
 In the case of `COUNTER` mode, values will be ignored and should be omitted.
-The type of a `COUNTER` column is always `java.math.BigInteger`.
+The type of a `COUNTER` column is always `java.math.LargeInteger`.
 
 If used, the value of `valuesForeignColumn` must be an array of lengths 1, 2, or 3.
 The one-element version contains a column name in the same table.

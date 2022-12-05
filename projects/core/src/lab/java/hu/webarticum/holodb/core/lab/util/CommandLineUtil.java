@@ -3,10 +3,11 @@ package hu.webarticum.holodb.core.lab.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
+
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class CommandLineUtil {
 
@@ -58,8 +59,8 @@ public class CommandLineUtil {
         return readData(message, Long::parseLong);
     }
 
-    public static BigInteger readBigInteger(String message) {
-        return readData(message, BigInteger::new);
+    public static LargeInteger readLargeInteger(String message) {
+        return readData(message, LargeInteger::of);
     }
 
     public static String readString(String message) {

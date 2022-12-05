@@ -1,6 +1,5 @@
 package hu.webarticum.holodb.core.data.source;
 
-import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.Optional;
 
@@ -8,6 +7,7 @@ import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.selection.PermutatedSelection;
 import hu.webarticum.holodb.core.data.selection.Selection;
 import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class PermutatedIndexedSource<T> implements IndexedSource<T> {
     
@@ -17,8 +17,8 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
     
     
     public PermutatedIndexedSource(IndexedSource<T> baseSource, Permutation permutation) {
-        BigInteger baseSourceSize = baseSource.size();
-        BigInteger permutationSize = permutation.size();
+        LargeInteger baseSourceSize = baseSource.size();
+        LargeInteger permutationSize = permutation.size();
         if (baseSourceSize != permutationSize) {
             throw new IllegalArgumentException(String.format(
                     "Unmatching sizes (baseSource size: %d, permutation size: %d)",
@@ -37,13 +37,13 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
     }
 
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return baseSource.size();
     }
 
     @Override
-    public T get(BigInteger index) {
-        BigInteger permutatedIndex = permutation.indexOf(index);
+    public T get(LargeInteger index) {
+        LargeInteger permutatedIndex = permutation.indexOf(index);
         return baseSource.get(permutatedIndex);
     }
     

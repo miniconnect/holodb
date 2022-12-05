@@ -1,6 +1,5 @@
 package hu.webarticum.holodb.jpa;
 
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverPropertyInfo;

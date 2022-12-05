@@ -2,7 +2,6 @@ package hu.webarticum.holodb.core.data.source;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -11,13 +10,14 @@ import org.junit.jupiter.api.Test;
 
 import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
 import hu.webarticum.holodb.core.data.selection.Range;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 class MonotonicSourceTest {
 
     @Test
     void test() {
         MonotonicSource<String> source = createBaseSource();
-        assertThat(source.get(BigInteger.valueOf(2))).isEqualTo("banana");
+        assertThat(source.get(LargeInteger.of(2))).isEqualTo("banana");
         assertThat(source.find("pear")).isEqualTo(Range.fromUntil(4, 7));
         assertThat(source.find("kiwi")).isEqualTo(Range.fromUntil(3, 3));
         assertThat(source.findBetween("banana", true, "pear", true)).isEqualTo(Range.fromUntil(1, 7));
@@ -35,31 +35,31 @@ class MonotonicSourceTest {
 
         private final long[] values;
         
-        private final BigInteger imageSize;
+        private final LargeInteger imageSize;
         
         
         private MockMonotonic(long[] values, long imageSize) {
             this.values = values;
-            this.imageSize = BigInteger.valueOf(imageSize);
+            this.imageSize = LargeInteger.of(imageSize);
         }
         
         
         @Override
-        public BigInteger size() {
-            return BigInteger.valueOf(values.length);
+        public LargeInteger size() {
+            return LargeInteger.of(values.length);
         }
 
         @Override
-        public BigInteger at(BigInteger index) {
-            return BigInteger.valueOf(values[index.intValue()]);
+        public LargeInteger at(LargeInteger index) {
+            return LargeInteger.of(values[index.intValue()]);
         }
 
         @Override
-        public Range indicesOf(BigInteger value) {
+        public Range indicesOf(LargeInteger value) {
             long longValue = value.longValue();
             int from = values.length;
             for (int i = 0; i < values.length; i++) {
-                int cmp = BigInteger.valueOf(values[i]).compareTo(value);
+                int cmp = LargeInteger.of(values[i]).compareTo(value);
                 if (cmp > 0) {
                     return Range.fromSize(i, 0);
                 } else if (cmp == 0) {
@@ -75,7 +75,7 @@ class MonotonicSourceTest {
         }
 
         @Override
-        public BigInteger imageSize() {
+        public LargeInteger imageSize() {
             return imageSize;
         }
         

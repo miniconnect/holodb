@@ -1,17 +1,16 @@
 package hu.webarticum.holodb.core.data.selection;
 
-import java.math.BigInteger;
-
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.lang.ReversibleIterable;
 
-public interface Selection extends ReversibleIterable<BigInteger> {
+public interface Selection extends ReversibleIterable<LargeInteger> {
 
-    public BigInteger size();
+    public LargeInteger size();
 
     public boolean isEmpty();
 
-    public BigInteger at(BigInteger index);
+    public LargeInteger at(LargeInteger index);
     
-    public boolean contains(BigInteger value);
+    public boolean contains(LargeInteger value);
     
 }

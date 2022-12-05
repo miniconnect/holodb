@@ -1,40 +1,39 @@
 package hu.webarticum.holodb.core.data.binrel.monotonic;
 
-import java.math.BigInteger;
-
 import hu.webarticum.holodb.core.data.selection.Range;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class FastMonotonic implements Monotonic {
 
     
-    private final BigInteger size;
+    private final LargeInteger size;
     
-    private final BigInteger imageSize;
+    private final LargeInteger imageSize;
     
 
     public FastMonotonic(long size, long imageSize) {
-        this(BigInteger.valueOf(size), BigInteger.valueOf(imageSize));
+        this(LargeInteger.of(size), LargeInteger.of(imageSize));
     }
     
-    public FastMonotonic(BigInteger size, BigInteger imageSize) {
+    public FastMonotonic(LargeInteger size, LargeInteger imageSize) {
         this.size = size;
         this.imageSize = imageSize;
     }
     
     
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return size;
     }
 
     @Override
-    public BigInteger at(BigInteger index) {
+    public LargeInteger at(LargeInteger index) {
         return index.multiply(imageSize).divide(size);
     }
 
     @Override
-    public Range indicesOf(BigInteger value) {
-        return Range.fromUntil(calculateFrom(value), calculateFrom(value.add(BigInteger.ONE)));
+    public Range indicesOf(LargeInteger value) {
+        return Range.fromUntil(calculateFrom(value), calculateFrom(value.add(LargeInteger.ONE)));
     }
 
     @Override
@@ -42,17 +41,17 @@ public class FastMonotonic implements Monotonic {
         return Range.fromUntil(calculateFrom(range.from()), calculateFrom(range.until()));
     }
     
-    private BigInteger calculateFrom(BigInteger value) {
-        BigInteger product = value.multiply(size);
-        BigInteger result = product.divide(imageSize);
-        if (!product.mod(imageSize).equals(BigInteger.ZERO)) {
-            result = result.add(BigInteger.ONE);
+    private LargeInteger calculateFrom(LargeInteger value) {
+        LargeInteger product = value.multiply(size);
+        LargeInteger result = product.divide(imageSize);
+        if (!product.mod(imageSize).equals(LargeInteger.ZERO)) {
+            result = result.add(LargeInteger.ONE);
         }
         return result;
     }
 
     @Override
-    public BigInteger imageSize() {
+    public LargeInteger imageSize() {
         return imageSize;
     }
 

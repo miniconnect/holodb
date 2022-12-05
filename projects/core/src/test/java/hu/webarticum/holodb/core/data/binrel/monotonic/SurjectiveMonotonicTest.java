@@ -3,7 +3,6 @@ package hu.webarticum.holodb.core.data.binrel.monotonic;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.math.BigInteger;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.holodb.core.data.selection.Range;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 class SurjectiveMonotonicTest extends AbstractMonotonicTest<SurjectiveMonotonic> {
 
@@ -19,7 +19,7 @@ class SurjectiveMonotonicTest extends AbstractMonotonicTest<SurjectiveMonotonic>
     
     
     @Override
-    protected SurjectiveMonotonic create(BigInteger size, BigInteger imageSize) {
+    protected SurjectiveMonotonic create(LargeInteger size, LargeInteger imageSize) {
         return new SurjectiveMonotonic(treeRandom, size, imageSize);
     }
     
@@ -32,20 +32,20 @@ class SurjectiveMonotonicTest extends AbstractMonotonicTest<SurjectiveMonotonic>
     @Test
     void testInputConstraint() {
         assertThatThrownBy(() -> new SurjectiveMonotonic( // NOSONAR
-                treeRandom, BigInteger.valueOf(15), BigInteger.valueOf(25)))
+                treeRandom, LargeInteger.of(15), LargeInteger.of(25)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void testSurjectivity() {
-        checkSurjective(create(BigInteger.valueOf(15), BigInteger.valueOf(10)));
-        checkSurjective(create(BigInteger.valueOf(643), BigInteger.valueOf(234)));
-        checkSurjective(create(BigInteger.valueOf(643), BigInteger.valueOf(15)));
+        checkSurjective(create(LargeInteger.of(15), LargeInteger.of(10)));
+        checkSurjective(create(LargeInteger.of(643), LargeInteger.of(234)));
+        checkSurjective(create(LargeInteger.of(643), LargeInteger.of(15)));
     }
     
     public void checkSurjective(SurjectiveMonotonic monotonic) {
-        Set<BigInteger> values = new LinkedHashSet<BigInteger>();
-        for (BigInteger value : monotonic) {
+        Set<LargeInteger> values = new LinkedHashSet<LargeInteger>();
+        for (LargeInteger value : monotonic) {
             values.add(value);
         }
         assertThat(values).containsExactlyElementsOf(

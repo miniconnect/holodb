@@ -1,9 +1,8 @@
 package hu.webarticum.holodb.core.data.binrel.permutation;
 
-import java.math.BigInteger;
-
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 class DirtyFpePermutationTest extends AbstractPermutationTest<DirtyFpePermutation> {
 
@@ -11,7 +10,7 @@ class DirtyFpePermutationTest extends AbstractPermutationTest<DirtyFpePermutatio
     
     
     @Override
-    protected DirtyFpePermutation create(BigInteger size) {
+    protected DirtyFpePermutation create(LargeInteger size) {
         return new DirtyFpePermutation(treeRandom, size);
     }
 

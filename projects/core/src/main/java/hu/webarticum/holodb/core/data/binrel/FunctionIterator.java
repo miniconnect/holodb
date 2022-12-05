@@ -1,17 +1,18 @@
 package hu.webarticum.holodb.core.data.binrel;
 
-import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class FunctionIterator implements Iterator<BigInteger> {
+import hu.webarticum.miniconnect.lang.LargeInteger;
+
+public class FunctionIterator implements Iterator<LargeInteger> {
 
     private final Function function;
     
-    private final BigInteger size;
+    private final LargeInteger size;
     
     
-    private BigInteger counter = BigInteger.ZERO;
+    private LargeInteger counter = LargeInteger.ZERO;
     
     private boolean hasNext;
     
@@ -29,13 +30,13 @@ public class FunctionIterator implements Iterator<BigInteger> {
     }
 
     @Override
-    public BigInteger next() {
+    public LargeInteger next() {
         if (!hasNext) {
             throw new NoSuchElementException();
         }
         
-        BigInteger result = function.at(counter);
-        counter = counter.add(BigInteger.ONE);
+        LargeInteger result = function.at(counter);
+        counter = counter.increment();
         hasNext = checkNext();
         return result;
     }

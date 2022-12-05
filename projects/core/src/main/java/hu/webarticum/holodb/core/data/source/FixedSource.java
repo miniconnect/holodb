@@ -1,17 +1,17 @@
 package hu.webarticum.holodb.core.data.source;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class FixedSource<T extends Comparable<T>> implements Source<T> {
 
     private Class<T> type;
 
-    private BigInteger length;
+    private LargeInteger length;
     
     private Object[] values;
     
@@ -23,7 +23,7 @@ public class FixedSource<T extends Comparable<T>> implements Source<T> {
     
     public FixedSource(Class<T> type, Collection<T> values) {
         this.type = type;
-        this.length = BigInteger.valueOf(values.size());
+        this.length = LargeInteger.of(values.size());
         this.values = values.toArray();
     }
     
@@ -34,12 +34,12 @@ public class FixedSource<T extends Comparable<T>> implements Source<T> {
     }
     
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return length;
     }
 
     @Override
-    public T get(BigInteger index) {
+    public T get(LargeInteger index) {
         @SuppressWarnings("unchecked")
         T result = (T) values[index.intValue()];
         return result;

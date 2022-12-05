@@ -2,17 +2,17 @@ package hu.webarticum.holodb.core.data.binrel.monotonic;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
 import hu.webarticum.holodb.core.data.selection.Range;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 abstract class AbstractMonotonicTest<T extends Monotonic> {
 
-    protected abstract T create(BigInteger size, BigInteger imageSize);
+    protected abstract T create(LargeInteger size, LargeInteger imageSize);
 
     protected boolean isNarrowingEnabled() {
         return true;
@@ -21,7 +21,7 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
     
     @Test
     void testEmpty() {
-        checkSize(create(BigInteger.ZERO, BigInteger.ZERO), BigInteger.ZERO, BigInteger.ZERO);
+        checkSize(create(LargeInteger.ZERO, LargeInteger.ZERO), LargeInteger.ZERO, LargeInteger.ZERO);
     }
 
     @Test
@@ -33,8 +33,8 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
         for (long i = outerFrom; i < outerTo; i += step) {
             long innerFrom = isNarrowingEnabled() ? outerFrom : i;
             for (long j = innerFrom; j < innerTo; j += step) {
-                BigInteger imageSize = BigInteger.valueOf(i);
-                BigInteger size = BigInteger.valueOf(j);
+                LargeInteger imageSize = LargeInteger.of(i);
+                LargeInteger size = LargeInteger.of(j);
                 Monotonic monotonic = create(size, imageSize);
                 checkSize(monotonic, size, imageSize);
                 checkMonotonic(monotonic);
@@ -44,15 +44,13 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
     
     @Test
     void testLargeInstancesPartially() {
-        BigInteger innerTo = new BigInteger("123252453566234501434504213");
-        BigInteger outerFrom = new BigInteger("87495827938452954757483254");
-        BigInteger outerTo = isNarrowingEnabled() ?
-                innerTo :
-                new BigInteger("102729083749083816548294783");
-        BigInteger step = new BigInteger("6344583456194523561031234");
-        for (BigInteger imageSize = outerFrom; imageSize.compareTo(outerTo) <= 0; imageSize = imageSize.add(step)) {
-            BigInteger innerFrom = isNarrowingEnabled() ? outerFrom : imageSize;
-            for (BigInteger size = innerFrom; size.compareTo(innerTo) <= 0; size = size.add(step)) {
+        LargeInteger innerTo = LargeInteger.of("123252453566234501434504213");
+        LargeInteger outerFrom = LargeInteger.of("87495827938452954757483254");
+        LargeInteger outerTo = isNarrowingEnabled() ? innerTo : LargeInteger.of("102729083749083816548294783");
+        LargeInteger step = LargeInteger.of("6344583456194523561031234");
+        for (LargeInteger imageSize = outerFrom; imageSize.compareTo(outerTo) <= 0; imageSize = imageSize.add(step)) {
+            LargeInteger innerFrom = isNarrowingEnabled() ? outerFrom : imageSize;
+            for (LargeInteger size = innerFrom; size.compareTo(innerTo) <= 0; size = size.add(step)) {
                 Monotonic monotonic = create(size, imageSize);
                 checkSize(monotonic, size, imageSize);
                 checkProbablyMonotonic(monotonic);
@@ -60,7 +58,7 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
         }
     }
 
-    private void checkSize(Monotonic monotonic, BigInteger size, BigInteger imageSize) {
+    private void checkSize(Monotonic monotonic, LargeInteger size, LargeInteger imageSize) {
         assertThat(monotonic.size()).as("monotonic size").isEqualTo(size);
         assertThat(monotonic.imageSize()).as("monotonic image size").isEqualTo(imageSize);
     }
@@ -71,14 +69,14 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
     }
     
     private void checkValueRanges(Monotonic monotonic) {
-        BigInteger size = monotonic.size();
-        BigInteger imageSize = monotonic.imageSize();
+        LargeInteger size = monotonic.size();
+        LargeInteger imageSize = monotonic.imageSize();
         
-        Map<BigInteger, Range> rangeMap1 = new HashMap<>();
-        BigInteger previousValue = BigInteger.valueOf(-1);
-        BigInteger previousSplitPoint = null;
-        BigInteger currentValue = null;
-        for (BigInteger index = BigInteger.ZERO; index.compareTo(size) < 0; index = index.add(BigInteger.ONE)) {
+        Map<LargeInteger, Range> rangeMap1 = new HashMap<>();
+        LargeInteger previousValue = LargeInteger.of(-1);
+        LargeInteger previousSplitPoint = null;
+        LargeInteger currentValue = null;
+        for (LargeInteger index = LargeInteger.ZERO; index.compareTo(size) < 0; index = index.add(LargeInteger.ONE)) {
             currentValue = monotonic.at(index);
             if (!currentValue.equals(previousValue)) {
                 assertThat(currentValue).as("value compared to previous").isGreaterThanOrEqualTo(previousValue);
@@ -94,8 +92,8 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
             rangeMap1.put(currentValue, Range.fromUntil(previousSplitPoint, size));
         }
 
-        Map<BigInteger, Range> rangeMap2 = new HashMap<>();
-        for (BigInteger value = BigInteger.ZERO; value.compareTo(imageSize) < 0; value = value.add(BigInteger.ONE)) {
+        Map<LargeInteger, Range> rangeMap2 = new HashMap<>();
+        for (LargeInteger value = LargeInteger.ZERO; value.compareTo(imageSize) < 0; value = value.add(LargeInteger.ONE)) {
             Range indexRange = monotonic.indicesOf(value);
             if (!indexRange.isEmpty()) {
                 rangeMap2.put(value, indexRange);
@@ -106,36 +104,36 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
     }
 
     private void checkRangeRanges(Monotonic monotonic) {
-        Range fromEmptyActual = monotonic.indicesOf(Range.empty(BigInteger.ZERO));
-        assertThat(fromEmptyActual).isEqualTo(Range.empty(BigInteger.ZERO));
+        Range fromEmptyActual = monotonic.indicesOf(Range.empty(LargeInteger.ZERO));
+        assertThat(fromEmptyActual).isEqualTo(Range.empty(LargeInteger.ZERO));
 
-        BigInteger imageSize = monotonic.imageSize();
-        BigInteger size = monotonic.size();
+        LargeInteger imageSize = monotonic.imageSize();
+        LargeInteger size = monotonic.size();
         
         if (imageSize.signum() == 1) {
             Range untilEmptyActual = monotonic.indicesOf(Range.empty(imageSize));
             assertThat(untilEmptyActual).isEqualTo(Range.empty(size));
             
-            Range fromUntilActual = monotonic.indicesOf(Range.fromUntil(BigInteger.ZERO, imageSize));
-            assertThat(fromUntilActual).isEqualTo(Range.fromUntil(BigInteger.ZERO, size));
+            Range fromUntilActual = monotonic.indicesOf(Range.fromUntil(LargeInteger.ZERO, imageSize));
+            assertThat(fromUntilActual).isEqualTo(Range.fromUntil(LargeInteger.ZERO, size));
             
-            if (imageSize.compareTo(BigInteger.ONE) > 0) {
-                BigInteger midValue = imageSize.divide(BigInteger.valueOf(2L));
-                BigInteger midIndex = monotonic.indicesOf(midValue).from();
-                Range untilActual = monotonic.indicesOf(Range.fromUntil(BigInteger.ZERO, midValue));
-                Range untilExpected = Range.fromUntil(BigInteger.ZERO, midIndex);
+            if (imageSize.compareTo(LargeInteger.ONE) > 0) {
+                LargeInteger midValue = imageSize.divide(LargeInteger.of(2L));
+                LargeInteger midIndex = monotonic.indicesOf(midValue).from();
+                Range untilActual = monotonic.indicesOf(Range.fromUntil(LargeInteger.ZERO, midValue));
+                Range untilExpected = Range.fromUntil(LargeInteger.ZERO, midIndex);
                 assertThat(untilActual).isEqualTo(untilExpected);
 
-                Range midEmptyActual = monotonic.indicesOf(Range.fromSize(midValue, BigInteger.ZERO));
-                Range midEmptyExpected = Range.fromSize(midIndex, BigInteger.ZERO);
+                Range midEmptyActual = monotonic.indicesOf(Range.fromSize(midValue, LargeInteger.ZERO));
+                Range midEmptyExpected = Range.fromSize(midIndex, LargeInteger.ZERO);
                 assertThat(midEmptyActual).isEqualTo(midEmptyExpected);
 
-                if (imageSize.compareTo(BigInteger.valueOf(2L)) > 0) {
-                    Range firstRange = monotonic.indicesOf(Range.fromSize(BigInteger.ZERO, BigInteger.ONE));
-                    BigInteger lastValue = imageSize.subtract(BigInteger.ONE);
-                    Range lastRange = monotonic.indicesOf(Range.fromSize(lastValue, BigInteger.ONE));
+                if (imageSize.compareTo(LargeInteger.of(2L)) > 0) {
+                    Range firstRange = monotonic.indicesOf(Range.fromSize(LargeInteger.ZERO, LargeInteger.ONE));
+                    LargeInteger lastValue = imageSize.subtract(LargeInteger.ONE);
+                    Range lastRange = monotonic.indicesOf(Range.fromSize(lastValue, LargeInteger.ONE));
 
-                    Range midActual = monotonic.indicesOf(Range.fromUntil(BigInteger.ONE, lastValue));
+                    Range midActual = monotonic.indicesOf(Range.fromUntil(LargeInteger.ONE, lastValue));
                     Range midExpected = Range.fromUntil(firstRange.until(), lastRange.from());
                     assertThat(midActual).isEqualTo(midExpected);
                 }
@@ -144,14 +142,14 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
     }
 
     private void checkProbablyMonotonic(Monotonic monotonic) {
-        BigInteger size = monotonic.size();
-        BigInteger imageSize = monotonic.imageSize();
+        LargeInteger size = monotonic.size();
+        LargeInteger imageSize = monotonic.imageSize();
         
-        BigInteger step = size.divide(BigInteger.valueOf(20));
+        LargeInteger step = size.divide(LargeInteger.of(20));
 
-        BigInteger previousFetchedValue = BigInteger.valueOf(-1);
-        for (BigInteger index = BigInteger.ZERO; index.compareTo(size) < 0; index = index.add(step)) {
-            BigInteger value = monotonic.at(index);
+        LargeInteger previousFetchedValue = LargeInteger.of(-1);
+        for (LargeInteger index = LargeInteger.ZERO; index.compareTo(size) < 0; index = index.add(step)) {
+            LargeInteger value = monotonic.at(index);
             assertThat(value).as("value compared to previous fetched").isGreaterThanOrEqualTo(previousFetchedValue);
             assertThat(value).as("value in image").isLessThan(imageSize);
             Range valueIndexRange = monotonic.indicesOf(value);

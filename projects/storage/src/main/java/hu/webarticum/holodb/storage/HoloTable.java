@@ -1,6 +1,5 @@
 package hu.webarticum.holodb.storage;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -9,6 +8,7 @@ import java.util.Set;
 import hu.webarticum.holodb.core.data.source.Source;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.ImmutableMap;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.rdmsframework.storage.Column;
 import hu.webarticum.miniconnect.rdmsframework.storage.ColumnDefinition;
 import hu.webarticum.miniconnect.rdmsframework.storage.NamedResourceStore;
@@ -22,7 +22,7 @@ public class HoloTable implements Table {
     
     private final String name;
     
-    private final BigInteger size;
+    private final LargeInteger size;
     
     private final ImmutableList<String> columnNames;
     
@@ -39,14 +39,14 @@ public class HoloTable implements Table {
     
     public HoloTable( // NOSONAR many parameter is OK for now
             String name,
-            BigInteger size,
+            LargeInteger size,
             ImmutableList<String> columnNames,
             ImmutableList<? extends ColumnDefinition> columnDefinitions,
             ImmutableMap<String, ? extends Source<?>> singleColumnSources,
             ImmutableMap<ImmutableList<String>, ? extends Source<? extends ImmutableList<?>>>
                     multiColumnSources,
             NamedResourceStore<TableIndex> indexStore,
-            BigInteger sequenceValue) {
+            LargeInteger sequenceValue) {
         checkSources(
                 size,
                 columnNames,
@@ -65,7 +65,7 @@ public class HoloTable implements Table {
     }
     
     private static void checkSources(
-            BigInteger size,
+            LargeInteger size,
             ImmutableList<String> columnNames,
             ImmutableList<? extends ColumnDefinition> columnDefinitions,
             ImmutableMap<String, ? extends Source<?>> singleColumnSources,
@@ -110,10 +110,10 @@ public class HoloTable implements Table {
         }
     }
 
-    private static void checkSizes(ImmutableMap<?, ? extends Source<?>> sources, BigInteger size) {
+    private static void checkSizes(ImmutableMap<?, ? extends Source<?>> sources, LargeInteger size) {
         for (Map.Entry<?, ? extends Source<?>> entry : sources.entrySet()) {
             Source<?> source = entry.getValue();
-            BigInteger sourceSize = source.size();
+            LargeInteger sourceSize = source.size();
             if (!sourceSize.equals(size)) {
                 throw new IllegalArgumentException(String.format(
                         "Unmatching size for %s: %d, expected: %d",
@@ -176,12 +176,12 @@ public class HoloTable implements Table {
     }
 
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return size;
     }
 
     @Override
-    public Row row(BigInteger rowIndex) {
+    public Row row(LargeInteger rowIndex) {
         return new HoloTableRow(rowIndex);
     }
 
@@ -219,13 +219,13 @@ public class HoloTable implements Table {
     
     public class HoloTableRow implements Row {
         
-        private final BigInteger rowIndex;
+        private final LargeInteger rowIndex;
         
         
         private final Map<String, ValueCacheEntry> valueCache = new HashMap<>();
         
         
-        private HoloTableRow(BigInteger rowIndex) {
+        private HoloTableRow(LargeInteger rowIndex) {
             this.rowIndex = rowIndex;
         }
         

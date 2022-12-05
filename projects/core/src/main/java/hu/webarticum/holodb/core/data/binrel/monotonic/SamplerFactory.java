@@ -1,9 +1,8 @@
 package hu.webarticum.holodb.core.data.binrel.monotonic;
 
-import java.math.BigInteger;
-
 import hu.webarticum.holodb.core.data.distribution.ApacheCommonsBinomialSampler;
 import hu.webarticum.holodb.core.data.distribution.Sampler;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public interface SamplerFactory {
 
@@ -16,6 +15,6 @@ public interface SamplerFactory {
             new ApacheCommonsBinomialSampler(seed, size.intValue(), probability);
     
     
-    public Sampler create(long seed, BigInteger size, double probability);
+    public Sampler create(long seed, LargeInteger size, double probability);
 
 }

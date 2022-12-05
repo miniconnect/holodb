@@ -1,14 +1,14 @@
 package hu.webarticum.holodb.core.data.random;
 
-import java.math.BigInteger;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public interface TreeRandom {
 
     public default TreeRandom sub(long number) {
-        return sub(BigInteger.valueOf(number));
+        return sub(LargeInteger.of(number));
     }
     
-    public default TreeRandom sub(BigInteger number) {
+    public default TreeRandom sub(LargeInteger number) {
         return sub(number.toByteArray());
     }
 
@@ -20,6 +20,6 @@ public interface TreeRandom {
 
     public byte[] getBytes(int numberOfBytes);
     
-    public BigInteger getNumber(BigInteger highExclusive);
+    public LargeInteger getNumber(LargeInteger highExclusive);
     
 }

@@ -1,17 +1,17 @@
 package hu.webarticum.holodb.core.data.source;
 
-import java.math.BigInteger;
 import java.util.Optional;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public interface Source<T> {
     
     public Class<?> type();
 
-    public BigInteger size();
+    public LargeInteger size();
     
-    public T get(BigInteger index);
+    public T get(LargeInteger index);
 
     public Optional<ImmutableList<T>> possibleValues();
     

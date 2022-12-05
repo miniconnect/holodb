@@ -1,9 +1,8 @@
 package hu.webarticum.holodb.core.data.binrel.permutation;
 
-import java.math.BigInteger;
-
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 class ModuloPermutationTest extends AbstractPermutationTest<ModuloPermutation> {
 
@@ -11,7 +10,7 @@ class ModuloPermutationTest extends AbstractPermutationTest<ModuloPermutation> {
     
     
     @Override
-    protected ModuloPermutation create(BigInteger size) {
+    protected ModuloPermutation create(LargeInteger size) {
         return new ModuloPermutation(treeRandom, size);
     }
 

@@ -2,13 +2,13 @@ package hu.webarticum.holodb.core.data.binrel.permutation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import hu.webarticum.holodb.core.data.random.TreeRandom;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 /**
  * Generic Z_n FPE encryption, FE1 scheme
@@ -22,7 +22,7 @@ import hu.webarticum.holodb.core.data.random.TreeRandom;
  */
 public class DirtyFpePermutation implements Permutation {
     
-    private static final BigInteger MAX_PRIME = BigInteger.valueOf(65535);
+    private static final LargeInteger MAX_PRIME = LargeInteger.of(65535L);
 
     /**
      * According to a paper by Rogaway, Bellare, etc, the min safe number
@@ -37,14 +37,14 @@ public class DirtyFpePermutation implements Permutation {
 
     private byte[] macPrefixBytes;
     
-    private final BigInteger size;
+    private final LargeInteger size;
     
-    private final BigInteger a;
+    private final LargeInteger a;
     
-    private final BigInteger b;
+    private final LargeInteger b;
 
 
-    public DirtyFpePermutation(TreeRandom treeRandom, BigInteger size) {
+    public DirtyFpePermutation(TreeRandom treeRandom, LargeInteger size) {
         this.size = size;
         
         byte[] key = treeRandom.getBytes(16);
@@ -60,7 +60,7 @@ public class DirtyFpePermutation implements Permutation {
         mac.reset();
         macPrefixBytes = mac.doFinal(macByteStream.toByteArray());
         
-        BigInteger[] aAndB = factor(size);
+        LargeInteger[] aAndB = factor(size);
         a = aAndB[0];
         b = aAndB[1];
     }
@@ -83,20 +83,20 @@ public class DirtyFpePermutation implements Permutation {
     
     
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return size;
     }
     
     @Override
-    public BigInteger at(BigInteger index) {
-        BigInteger result = index;
+    public LargeInteger at(LargeInteger index) {
+        LargeInteger result = index;
         for (int i = 0; i != ROUNDS; i++) {
             result = runEncryptionRound(result, i);
         }
         return result;
     }
     
-    private BigInteger runEncryptionRound(BigInteger value, int round) {
+    private LargeInteger runEncryptionRound(LargeInteger value, int round) {
         try {
             return runEncryptionRoundUnwrapped(value, round);
         } catch (IOException e) {
@@ -104,25 +104,25 @@ public class DirtyFpePermutation implements Permutation {
         }
     }
 
-    private BigInteger runEncryptionRoundUnwrapped(BigInteger value, int round) throws IOException {
-        BigInteger k = value.divide(b);
-        BigInteger r = value.mod(b);
-        BigInteger encrypted;
+    private LargeInteger runEncryptionRoundUnwrapped(LargeInteger value, int round) throws IOException {
+        LargeInteger k = value.divide(b);
+        LargeInteger r = value.mod(b);
+        LargeInteger encrypted;
         encrypted = runMac(round, r);
-        BigInteger w = (k.add(encrypted)).mod(a);
+        LargeInteger w = (k.add(encrypted)).mod(a);
         return a.multiply(r).add(w);
     }
 
     @Override
-    public BigInteger indexOf(BigInteger value) {
-        BigInteger result = value;
+    public LargeInteger indexOf(LargeInteger value) {
+        LargeInteger result = value;
         for (int i = 0; i != ROUNDS; i++) {
             result = runDecryptionRound(result, ROUNDS - i - 1);
         }
         return result;
     }
 
-    private BigInteger runDecryptionRound(BigInteger value, int round) {
+    private LargeInteger runDecryptionRound(LargeInteger value, int round) {
         try {
             return runDecryptionRoundUnwrapped(value, round);
         } catch (IOException e) {
@@ -130,17 +130,17 @@ public class DirtyFpePermutation implements Permutation {
         }
     }
     
-    private BigInteger runDecryptionRoundUnwrapped(BigInteger value, int round) throws IOException {
-        BigInteger w = value.mod(a);
-        BigInteger r = value.divide(a);
-        BigInteger encrypted;
+    private LargeInteger runDecryptionRoundUnwrapped(LargeInteger value, int round) throws IOException {
+        LargeInteger w = value.mod(a);
+        LargeInteger r = value.divide(a);
+        LargeInteger encrypted;
         encrypted = runMac(round, r);
-        BigInteger bigInteger = (w.subtract(encrypted));
-        BigInteger k = bigInteger.mod(a);
+        LargeInteger bigInteger = (w.subtract(encrypted));
+        LargeInteger k = bigInteger.mod(a);
         return b.multiply(k).add(r);
     }
 
-    public BigInteger runMac(int roundNo, BigInteger value) throws IOException {
+    public LargeInteger runMac(int roundNo, LargeInteger value) throws IOException {
         byte[] valueBytes = value.toByteArray();
         ByteArrayOutputStream macByteStream = new ByteArrayOutputStream();
         macByteStream.write(macPrefixBytes);
@@ -153,7 +153,7 @@ public class DirtyFpePermutation implements Permutation {
         byte[] nullPrefixedBytes = new byte[decryptedBytes.length + 1];
         System.arraycopy(decryptedBytes, 0, nullPrefixedBytes, 1, decryptedBytes.length);
         
-        return new BigInteger(nullPrefixedBytes);
+        return LargeInteger.of(nullPrefixedBytes);
     }
     
 
@@ -183,13 +183,13 @@ public class DirtyFpePermutation implements Permutation {
      * Want a >= b since the safe number of rounds is 2+log_a(b);
      * if a >= b then this is always 3
      */
-    private static BigInteger[] factor(BigInteger n) {
-        if (n.equals(BigInteger.ZERO)) {
-            return new BigInteger[] { BigInteger.ZERO, BigInteger.ZERO };
+    private static LargeInteger[] factor(LargeInteger n) {
+        if (n.equals(LargeInteger.ZERO)) {
+            return new LargeInteger[] { LargeInteger.ZERO, LargeInteger.ZERO };
         }
         
-        BigInteger a = BigInteger.ONE;
-        BigInteger b = BigInteger.ONE;
+        LargeInteger a = LargeInteger.ONE;
+        LargeInteger b = LargeInteger.ONE;
            
         int nLowZero = lowZeroBits(n);
         a = a.shiftLeft(nLowZero / 2);
@@ -197,43 +197,43 @@ public class DirtyFpePermutation implements Permutation {
             
         n = n.shiftRight(nLowZero);
 
-        BigInteger prime = BigInteger.ONE;
+        LargeInteger prime = LargeInteger.ONE;
         while(prime.compareTo(MAX_PRIME) <= 0) {
             prime = prime.nextProbablePrime();
-            while (n.mod(prime).compareTo(BigInteger.ZERO) == 0) {
+            while (n.mod(prime).compareTo(LargeInteger.ZERO) == 0) {
                 a = a.multiply(prime);
                 if (a.compareTo(b) > 0) {
-                    BigInteger oldB = b;
+                    LargeInteger oldB = b;
                     b = a;
                     a = oldB;
                 }
                 n = n.divide(prime);
             }
-            if (a.compareTo(BigInteger.ONE) > 0 && b.compareTo(BigInteger.ONE) > 0) {
+            if (a.compareTo(LargeInteger.ONE) > 0 && b.compareTo(LargeInteger.ONE) > 0) {
                 break;
             }
         }
 
         if (a.compareTo(b) > 0) {
-            BigInteger oldB = b;
+            LargeInteger oldB = b;
             b = a;
             a = oldB;
         }
         a = a.multiply(n);
         if (a.compareTo(b) < 0) {
-            BigInteger oldB = b;
+            LargeInteger oldB = b;
             b = a;
             a = oldB;
         }
 
-        if (a.compareTo(BigInteger.ONE) < 0 || b.compareTo(BigInteger.ONE) < 0) {
+        if (a.compareTo(LargeInteger.ONE) < 0 || b.compareTo(LargeInteger.ONE) < 0) {
             throw new IllegalArgumentException("Could not factor n for use in FPE");
         }
         
-        return new BigInteger[] { a, b };
+        return new LargeInteger[] { a, b };
     }
     
-    private static int lowZeroBits(BigInteger n) {
+    private static int lowZeroBits(LargeInteger n) {
         int lowZero = 0;
         if (n.signum() > 0) {
             byte[] bytes = n.toByteArray();

@@ -1,6 +1,6 @@
 package hu.webarticum.holodb.core.data.binrel.permutation;
 
-import java.math.BigInteger;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class PermutationInverter implements PermutationDecorator {
 
@@ -13,17 +13,17 @@ public class PermutationInverter implements PermutationDecorator {
     
     
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return base.size();
     }
 
     @Override
-    public BigInteger at(BigInteger index) {
+    public LargeInteger at(LargeInteger index) {
         return base.indexOf(index);
     }
 
     @Override
-    public BigInteger indexOf(BigInteger value) {
+    public LargeInteger indexOf(LargeInteger value) {
         return base.at(value);
     }
 

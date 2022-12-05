@@ -1,10 +1,10 @@
 package hu.webarticum.holodb.core.data.distribution;
 
-import java.math.BigInteger;
-
 import org.apache.commons.math3.distribution.BinomialDistribution;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.random.Well19937c;
+
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class ApacheCommonsBinomialSampler implements Sampler {
     
@@ -28,13 +28,13 @@ public class ApacheCommonsBinomialSampler implements Sampler {
     
     
     @Override
-    public BigInteger sample() {
-        return BigInteger.valueOf(binomialDistribution.sample());
+    public LargeInteger sample() {
+        return LargeInteger.of(binomialDistribution.sample());
     }
     
     @Override
-    public BigInteger size() {
-        return BigInteger.valueOf(size);
+    public LargeInteger size() {
+        return LargeInteger.of(size);
     }
 
 }

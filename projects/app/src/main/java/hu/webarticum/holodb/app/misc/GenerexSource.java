@@ -1,6 +1,5 @@
 package hu.webarticum.holodb.app.misc;
 
-import java.math.BigInteger;
 import java.util.Optional;
 
 import com.mifmif.common.regex.Generex;
@@ -8,6 +7,7 @@ import com.mifmif.common.regex.Generex;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.holodb.core.data.source.Source;
 import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class GenerexSource implements Source<String> {
     
@@ -15,10 +15,10 @@ public class GenerexSource implements Source<String> {
     
     private final TreeRandom treeRandom;
     
-    private final BigInteger size;
+    private final LargeInteger size;
     
 
-    public GenerexSource(Generex generex, TreeRandom treeRandom, BigInteger size) {
+    public GenerexSource(Generex generex, TreeRandom treeRandom, LargeInteger size) {
         this.generex = generex;
         this.treeRandom = treeRandom;
         this.size = size;
@@ -31,13 +31,13 @@ public class GenerexSource implements Source<String> {
     }
 
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return size;
     }
 
     @Override
-    public String get(BigInteger index) {
-        int seed = treeRandom.sub(index).getNumber(BigInteger.valueOf(Integer.MAX_VALUE)).intValue();
+    public String get(LargeInteger index) {
+        int seed = treeRandom.sub(index).getNumber(LargeInteger.of(Integer.MAX_VALUE)).intValue();
         generex.setSeed(seed);
         return generex.random();
     }

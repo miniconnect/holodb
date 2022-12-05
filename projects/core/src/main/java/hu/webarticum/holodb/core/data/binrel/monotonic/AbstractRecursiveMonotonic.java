@@ -1,40 +1,39 @@
 package hu.webarticum.holodb.core.data.binrel.monotonic;
 
-import java.math.BigInteger;
-
 import hu.webarticum.holodb.core.data.selection.Range;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public abstract class AbstractRecursiveMonotonic implements Monotonic {
 
-    private final BigInteger size;
+    private final LargeInteger size;
     
-    private final BigInteger imageSize;
+    private final LargeInteger imageSize;
 
     
-    protected AbstractRecursiveMonotonic(BigInteger size, BigInteger imageSize) {
+    protected AbstractRecursiveMonotonic(LargeInteger size, LargeInteger imageSize) {
         this.size = size;
         this.imageSize = imageSize;
     }
     
     
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return size;
     }
 
     @Override
-    public BigInteger imageSize() {
+    public LargeInteger imageSize() {
         return imageSize;
     }
 
     @Override
-    public BigInteger at(BigInteger index) {
-        Range range = Range.fromSize(BigInteger.ZERO, size);
-        Range imageRange = Range.fromSize(BigInteger.ZERO, imageSize);
+    public LargeInteger at(LargeInteger index) {
+        Range range = Range.fromSize(LargeInteger.ZERO, size);
+        Range imageRange = Range.fromSize(LargeInteger.ZERO, imageSize);
         int level = 0;
-        while (imageRange.size().compareTo(BigInteger.ONE) > 0) {
-            BigInteger imageSplitPoint = imageRange.from().add(imageRange.until()).divide(BigInteger.valueOf(2L));
-            BigInteger splitPoint = split(range, imageRange, imageSplitPoint, level);
+        while (imageRange.size().compareTo(LargeInteger.ONE) > 0) {
+            LargeInteger imageSplitPoint = imageRange.from().add(imageRange.until()).divide(LargeInteger.of(2L));
+            LargeInteger splitPoint = split(range, imageRange, imageSplitPoint, level);
             if (splitPoint.compareTo(index) > 0) {
                 range = Range.fromUntil(range.from(), splitPoint);
                 imageRange = Range.fromUntil(imageRange.from(), imageSplitPoint);
@@ -44,17 +43,17 @@ public abstract class AbstractRecursiveMonotonic implements Monotonic {
             }
             level++;
         }
-        return imageRange.at(BigInteger.ZERO);
+        return imageRange.at(LargeInteger.ZERO);
     }
 
     @Override
-    public Range indicesOf(BigInteger value) {
-        Range range = Range.fromSize(BigInteger.ZERO, size);
-        Range imageRange = Range.fromSize(BigInteger.ZERO, imageSize);
+    public Range indicesOf(LargeInteger value) {
+        Range range = Range.fromSize(LargeInteger.ZERO, size);
+        Range imageRange = Range.fromSize(LargeInteger.ZERO, imageSize);
         int level = 0;
-        while (imageRange.size().compareTo(BigInteger.ONE) > 0) {
-            BigInteger imageSplitPoint = imageRange.from().add(imageRange.until()).divide(BigInteger.valueOf(2L));
-            BigInteger splitPoint = split(range, imageRange, imageSplitPoint, level);
+        while (imageRange.size().compareTo(LargeInteger.ONE) > 0) {
+            LargeInteger imageSplitPoint = imageRange.from().add(imageRange.until()).divide(LargeInteger.of(2L));
+            LargeInteger splitPoint = split(range, imageRange, imageSplitPoint, level);
             if (imageSplitPoint.compareTo(value) > 0) {
                 range = Range.fromUntil(range.from(), splitPoint);
                 imageRange = Range.fromUntil(imageRange.from(), imageSplitPoint);
@@ -67,5 +66,6 @@ public abstract class AbstractRecursiveMonotonic implements Monotonic {
         return range;
     }
 
-    protected abstract BigInteger split(Range range, Range imageRange, BigInteger imageSplitPoint, int level);
+    protected abstract LargeInteger split(Range range, Range imageRange, LargeInteger imageSplitPoint, int level);
+    
 }

@@ -1,31 +1,30 @@
 package hu.webarticum.holodb.storage;
 
-import java.math.BigInteger;
-
+import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.rdmsframework.storage.Sequence;
 
 public class HoloFixedSequence implements Sequence {
     
-    private final BigInteger value;
+    private final LargeInteger value;
     
 
-    public HoloFixedSequence(BigInteger value) {
+    public HoloFixedSequence(LargeInteger value) {
         this.value = value;
     }
     
     
     @Override
-    public BigInteger get() {
+    public LargeInteger get() {
         return value;
     }
 
     @Override
-    public BigInteger getAndIncrement() {
+    public LargeInteger getAndIncrement() {
         throw new UnsupportedOperationException("This sequence is read-only");
     }
 
     @Override
-    public void ensureGreaterThan(BigInteger high) {
+    public void ensureGreaterThan(LargeInteger high) {
         throw new UnsupportedOperationException("This sequence is read-only");
     }
 

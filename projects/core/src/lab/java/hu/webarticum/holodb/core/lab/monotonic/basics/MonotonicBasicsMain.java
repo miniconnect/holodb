@@ -1,6 +1,5 @@
 package hu.webarticum.holodb.core.lab.monotonic.basics;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
@@ -20,6 +19,7 @@ import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.holodb.core.data.selection.Range;
 import hu.webarticum.holodb.core.lab.util.CommandLineUtil;
 import hu.webarticum.holodb.core.lab.util.MutableHolder;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class MonotonicBasicsMain {
 
@@ -73,11 +73,11 @@ public class MonotonicBasicsMain {
 
         int columnWidth = ("" + (imageSize - 1)).length() + 1;
         for (int i = 0; i < size; i++) {
-            BigInteger value = monotonic.at(BigInteger.valueOf(i));
+            LargeInteger value = monotonic.at(LargeInteger.of(i));
             System.out.print(StringUtils.leftPad(value.toString(), columnWidth)); // NOSONAR
         }
         for (int i = 0; i < imageSize; i++) {
-            Range range = monotonic.indicesOf(BigInteger.valueOf(i));
+            Range range = monotonic.indicesOf(LargeInteger.of(i));
             int from = range.from().intValue();
             int until = range.until().intValue();
             if (!range.isEmpty()) {

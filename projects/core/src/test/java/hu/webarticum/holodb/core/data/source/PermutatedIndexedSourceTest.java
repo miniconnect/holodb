@@ -3,8 +3,6 @@ package hu.webarticum.holodb.core.data.source;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.math.BigInteger;
-
 import org.junit.jupiter.api.Test;
 
 import hu.webarticum.holodb.core.data.binrel.permutation.MockPermutation;
@@ -12,6 +10,7 @@ import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.selection.Range;
 import hu.webarticum.holodb.core.data.selection.Selection;
 import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 class PermutatedIndexedSourceTest {
 
@@ -59,7 +58,7 @@ class PermutatedIndexedSourceTest {
         PermutatedIndexedSource<String> permutatedSource =
                 new PermutatedIndexedSource<>(source, permutation);
         Selection selection = permutatedSource.find("b");
-        assertThat(selection).containsExactly(BigInteger.ZERO);
+        assertThat(selection).containsExactly(LargeInteger.ZERO);
     }
 
     @Test
@@ -70,7 +69,7 @@ class PermutatedIndexedSourceTest {
                 new PermutatedIndexedSource<>(source, permutation);
         Selection selection = permutatedSource.findBetween("c", true, "x", false);
         assertThat(selection.size()).isEqualTo(2);
-        assertThat(selection).containsExactly(BigInteger.valueOf(3), BigInteger.ZERO);
+        assertThat(selection).containsExactly(LargeInteger.of(3L), LargeInteger.ZERO);
     }
 
 }

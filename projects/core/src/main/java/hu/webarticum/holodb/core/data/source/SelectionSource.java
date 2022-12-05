@@ -1,10 +1,10 @@
 package hu.webarticum.holodb.core.data.source;
 
-import java.math.BigInteger;
 import java.util.Optional;
 
 import hu.webarticum.holodb.core.data.selection.Selection;
 import hu.webarticum.miniconnect.lang.ImmutableList;
+import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class SelectionSource<T> implements Source<T> {
 
@@ -25,12 +25,12 @@ public class SelectionSource<T> implements Source<T> {
     }
     
     @Override
-    public BigInteger size() {
+    public LargeInteger size() {
         return selection.size();
     }
 
     @Override
-    public T get(BigInteger index) {
+    public T get(LargeInteger index) {
         return baseSource.get(selection.at(index));
     }
 
