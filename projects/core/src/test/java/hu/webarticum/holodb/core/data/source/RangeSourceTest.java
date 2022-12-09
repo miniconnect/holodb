@@ -36,24 +36,24 @@ class RangeSourceTest {
     void testFind() {
         RangeSource source = new RangeSource(large(14), large(20));
         Range range = source.find(large(20));
-        assertThat(range.from()).isEqualTo(6);
-        assertThat(range.until()).isEqualTo(7);
+        assertThat(range.from()).isEqualTo(large(6));
+        assertThat(range.until()).isEqualTo(large(7));
     }
 
     @Test
     void testFindBetween() {
         RangeSource source = new RangeSource(large(3), large(9));
         Range range = source.findBetween(large(5), true, large(7), false);
-        assertThat(range.from()).isEqualTo(2);
-        assertThat(range.until()).isEqualTo(4);
+        assertThat(range.from()).isEqualTo(large(2));
+        assertThat(range.until()).isEqualTo(large(4));
     }
 
     @Test
     void testFindBetweenOut() {
         RangeSource source = new RangeSource(large(8), large(12));
         Range range = source.findBetween(large(12), false, large(50), false);
-        assertThat(range.from()).isEqualTo(5);
-        assertThat(range.until()).isEqualTo(12);
+        assertThat(range.from()).isEqualTo(large(5));
+        assertThat(range.until()).isEqualTo(large(12));
     }
 
     

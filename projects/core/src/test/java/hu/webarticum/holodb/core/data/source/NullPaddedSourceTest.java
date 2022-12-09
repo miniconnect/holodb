@@ -29,7 +29,7 @@ class NullPaddedSourceTest {
     void testNullsOnly() {
         SortedSource<Integer> baseSource = new UniqueSource<>();
         NullPaddedSource<Integer> nullPaddedSource = new NullPaddedSource<>(baseSource, large(3));
-        assertThat(nullPaddedSource.size()).isEqualTo(3);
+        assertThat(nullPaddedSource.size()).isEqualTo(large(3));
         assertThat(ImmutableList.fill(nullPaddedSource.size().intValue(), i -> nullPaddedSource.get(large(i))))
                 .containsExactly(null, null, null);
     }
@@ -38,7 +38,7 @@ class NullPaddedSourceTest {
     void testNoNulls() {
         SortedSource<Integer> baseSource = new UniqueSource<>(1, 2, 3, 4, 5);
         NullPaddedSource<Integer> nullPaddedSource = new NullPaddedSource<>(baseSource, large(5));
-        assertThat(nullPaddedSource.size()).isEqualTo(5);
+        assertThat(nullPaddedSource.size()).isEqualTo(large(5));
         assertThat(ImmutableList.fill(nullPaddedSource.size().intValue(), i -> nullPaddedSource.get(large(i))))
                 .containsExactly(1, 2, 3, 4, 5);
     }
@@ -47,7 +47,7 @@ class NullPaddedSourceTest {
     void testPadded() {
         SortedSource<Integer> baseSource = new UniqueSource<>(1, 3, 5, 7);
         NullPaddedSource<Integer> nullPaddedSource = new NullPaddedSource<>(baseSource, large(11));
-        assertThat(nullPaddedSource.size()).isEqualTo(11);
+        assertThat(nullPaddedSource.size()).isEqualTo(large(11));
         assertThat(ImmutableList.fill(nullPaddedSource.size().intValue(), i -> nullPaddedSource.get(large(i))))
                 .containsExactly(1, 3, 5, 7, null, null, null, null, null, null, null);
     }
