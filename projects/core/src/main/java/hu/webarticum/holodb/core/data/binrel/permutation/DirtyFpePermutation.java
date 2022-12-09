@@ -200,7 +200,7 @@ public class DirtyFpePermutation implements Permutation {
         LargeInteger prime = LargeInteger.ONE;
         while(prime.compareTo(MAX_PRIME) <= 0) {
             prime = prime.nextProbablePrime();
-            while (n.mod(prime).compareTo(LargeInteger.ZERO) == 0) {
+            while (n.mod(prime).isZero()) {
                 a = a.multiply(prime);
                 if (a.compareTo(b) > 0) {
                     LargeInteger oldB = b;
@@ -209,7 +209,7 @@ public class DirtyFpePermutation implements Permutation {
                 }
                 n = n.divide(prime);
             }
-            if (a.compareTo(LargeInteger.ONE) > 0 && b.compareTo(LargeInteger.ONE) > 0) {
+            if (a.isGreaterThan(LargeInteger.ONE) && b.isGreaterThan(LargeInteger.ONE)) {
                 break;
             }
         }
@@ -226,7 +226,7 @@ public class DirtyFpePermutation implements Permutation {
             a = oldB;
         }
 
-        if (a.compareTo(LargeInteger.ONE) < 0 || b.compareTo(LargeInteger.ONE) < 0) {
+        if (a.isLessThan(LargeInteger.ONE) || b.isLessThan(LargeInteger.ONE)) {
             throw new IllegalArgumentException("Could not factor n for use in FPE");
         }
         

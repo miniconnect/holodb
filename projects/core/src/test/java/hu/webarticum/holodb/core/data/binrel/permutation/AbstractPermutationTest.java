@@ -54,7 +54,7 @@ abstract class AbstractPermutationTest<T extends Permutation> {
         LargeInteger size = permutation.size();
         LargeInteger max = size.subtract(LargeInteger.ONE);
         Set<LargeInteger> values = new HashSet<>();
-        for (LargeInteger index = LargeInteger.ZERO; index.compareTo(size) < 0; index = index.add(LargeInteger.ONE)) {
+        for (LargeInteger index = LargeInteger.ZERO; index.isLessThan(size); index = index.add(LargeInteger.ONE)) {
             LargeInteger value = permutation.at(index);
             values.add(value);
             assertThat(value).as("value range").isBetween(LargeInteger.ZERO, max);

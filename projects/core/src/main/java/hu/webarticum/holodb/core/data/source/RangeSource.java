@@ -50,7 +50,7 @@ public class RangeSource implements SortedSource<LargeInteger> {
 
     @Override
     public Optional<ImmutableList<LargeInteger>> possibleValues() {
-        if (size.compareTo(LargeInteger.of(MAX_COUNT_OF_POSSIBLE_VALUES)) > 0) {
+        if (size.isGreaterThan(LargeInteger.of(MAX_COUNT_OF_POSSIBLE_VALUES))) {
             return Optional.empty();
         }
         

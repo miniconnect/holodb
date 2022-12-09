@@ -60,7 +60,7 @@ public class SurjectiveMonotonic extends AbstractCachingRecursiveMonotonic {
     }
     
     private static LargeInteger checkSize(LargeInteger size, LargeInteger imageSize) {
-        if (size.compareTo(imageSize) < 0) {
+        if (size.isLessThan(imageSize)) {
             throw new IllegalArgumentException("size must not be less then imageSize");
         }
         return size;
@@ -75,7 +75,7 @@ public class SurjectiveMonotonic extends AbstractCachingRecursiveMonotonic {
                 range.from().add(imageSplitPoint.subtract(imageRange.from())),
                 range.until().subtract(imageRange.until().subtract(imageSplitPoint)));
         
-        if (length.compareTo(samplerMaxLength) > 0) {
+        if (length.isGreaterThan(samplerMaxLength)) {
             splitPoint = splitFast(rangeToSplit);
         } else {
             splitPoint = splitWithSampler(rangeToSplit, imageRange, imageSplitPoint);

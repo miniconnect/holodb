@@ -36,10 +36,7 @@ class IdentityPermutationTest extends AbstractPermutationTest<IdentityPermutatio
 
     private void checkIdentity(Permutation permutation) {
         LargeInteger size = permutation.size();
-        for (
-                LargeInteger index = LargeInteger.ZERO;
-                index.compareTo(size) < 0;
-                index = index.add(LargeInteger.ONE)) {
+        for (LargeInteger index = LargeInteger.ZERO; index.isLessThan(size); index = index.add(LargeInteger.ONE)) {
             LargeInteger value = permutation.at(index);
             assertThat(value).isEqualTo(index);
         }
@@ -49,7 +46,7 @@ class IdentityPermutationTest extends AbstractPermutationTest<IdentityPermutatio
         int numberOfTests = 20;
         LargeInteger size = permutation.size();
         LargeInteger step = size.divide(LargeInteger.of(numberOfTests));
-        for (LargeInteger index = LargeInteger.ZERO; index.compareTo(size) < 0; index = index.add(step)) {
+        for (LargeInteger index = LargeInteger.ZERO; index.isLessThan(size); index = index.add(step)) {
             LargeInteger value = permutation.at(index);
             assertThat(value).isEqualTo(index);
         }

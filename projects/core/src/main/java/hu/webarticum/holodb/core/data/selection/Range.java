@@ -49,7 +49,7 @@ public class Range implements Selection {
     }
     
     public static Range fromUntil(LargeInteger from, LargeInteger until) {
-        if (until.compareTo(from) < 0) {
+        if (until.isLessThan(from)) {
             throw new IllegalArgumentException("Until index can not be lower then from index");
         }
         
@@ -89,7 +89,7 @@ public class Range implements Selection {
 
     @Override
     public LargeInteger at(LargeInteger index) {
-        if (index.signum() < 0 || index.compareTo(size()) >= 0) {
+        if (index.signum() < 0 || index.isGreaterThanOrEqualTo(size())) {
             throw new IndexOutOfBoundsException("Index out of bounds: " + index);
         }
         
@@ -98,7 +98,7 @@ public class Range implements Selection {
     
     @Override
     public boolean contains(LargeInteger value) {
-        return (value.compareTo(from) >= 0 && value.compareTo(until) < 0);
+        return (value.isGreaterThanOrEqualTo(from) && value.isLessThan(until));
     }
     
     @Override
@@ -108,7 +108,7 @@ public class Range implements Selection {
 
     @Override
     public ReversibleIterable<LargeInteger> reverseOrder() {
-        return ReversibleIterable.of(() -> new ReversedRangeIterator(), this);
+        return ReversibleIterable.of(ReversedRangeIterator::new, this);
     }
     
     @Override
@@ -128,7 +128,7 @@ public class Range implements Selection {
     
     @Override
     public String toString() {
-        return String.format("[%d, %d)", from, until);
+        return String.format("[%d, %d)", from.bigIntegerValue(), until.bigIntegerValue());
     }
     
 
@@ -157,7 +157,7 @@ public class Range implements Selection {
         }
 
         private boolean checkNext() {
-            return (counter.compareTo(until) < 0);
+            return (counter.isLessThan(until));
         }
         
     }
@@ -188,7 +188,7 @@ public class Range implements Selection {
         }
 
         private boolean checkNext() {
-            return (counter.compareTo(from) >= 0);
+            return (counter.isGreaterThanOrEqualTo(from));
         }
         
     }

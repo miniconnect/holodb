@@ -10,7 +10,7 @@ public class PermutationReducer implements PermutationDecorator {
     
     
     public PermutationReducer(Permutation base, LargeInteger size) {
-        if (size.compareTo(base.size()) > 0) {
+        if (size.isGreaterThan(base.size())) {
             throw new IllegalArgumentException("New size can not be larger than size of base");
         }
 
@@ -29,7 +29,7 @@ public class PermutationReducer implements PermutationDecorator {
         LargeInteger value = index;
         do {
             value = base.at(value);
-        } while (value.compareTo(size) >= 0);
+        } while (value.isGreaterThanOrEqualTo(size));
         return value;
     }
 
@@ -38,7 +38,7 @@ public class PermutationReducer implements PermutationDecorator {
         LargeInteger index = value;
         do {
             index = base.indexOf(index);
-        } while (index.compareTo(size) >= 0);
+        } while (index.isGreaterThanOrEqualTo(size));
         return index;
     }
 

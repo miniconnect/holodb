@@ -52,7 +52,7 @@ public class StrexSource implements SortedSource<String> {
     public Range find(Object value) {
         String stringValue = (String) value;
         LargeInteger position = LargeInteger.of(strex.indexOf(stringValue));
-        return position.compareTo(LargeInteger.ZERO) >= 0 ?
+        return position.isNonNegative() ?
                 Range.fromSize(position, LargeInteger.ONE) :
                 Range.fromSize(position.negate().subtract(LargeInteger.ONE), LargeInteger.ZERO);
     }

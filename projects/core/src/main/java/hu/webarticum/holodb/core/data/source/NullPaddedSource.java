@@ -13,7 +13,7 @@ public class NullPaddedSource<T> implements Source<T> {
     
     
     public NullPaddedSource(Source<T> baseSource, LargeInteger size) {
-        if (baseSource.size().compareTo(size) > 0) {
+        if (baseSource.size().isGreaterThan(size)) {
             throw new IllegalArgumentException("Base source size can not be larger than target size");
         }
         
@@ -34,7 +34,7 @@ public class NullPaddedSource<T> implements Source<T> {
 
     @Override
     public T get(LargeInteger index) {
-        return index.compareTo(baseSource.size()) < 0 ? baseSource.get(index) : null;
+        return index.isLessThan(baseSource.size()) ? baseSource.get(index) : null;
     }
 
     @Override

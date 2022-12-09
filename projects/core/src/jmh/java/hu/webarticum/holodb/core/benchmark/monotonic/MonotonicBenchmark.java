@@ -52,7 +52,7 @@ public class MonotonicBenchmark {
     public void benchmarkFastMonotonic(Blackhole blackhole) {
         LargeInteger size = fastMonotonic.size();
         LargeInteger step = size.divide(DIVIDE);
-        for (LargeInteger i = LargeInteger.ZERO; i.compareTo(size) < 0; i = i.add(step)) {
+        for (LargeInteger i = LargeInteger.ZERO; i.isLessThan(size); i = i.add(step)) {
             blackhole.consume(fastMonotonic.at(i));
         }
     }
@@ -61,7 +61,7 @@ public class MonotonicBenchmark {
     public void benchmarkSurjectiveMonotonic(Blackhole blackhole) {
         LargeInteger size = surjectiveMonotonic.size();
         LargeInteger step = size.divide(DIVIDE);
-        for (LargeInteger i = LargeInteger.ZERO; i.compareTo(size) < 0; i = i.add(step)) {
+        for (LargeInteger i = LargeInteger.ZERO; i.isLessThan(size); i = i.add(step)) {
             blackhole.consume(surjectiveMonotonic.at(i));
         }
     }
@@ -70,7 +70,7 @@ public class MonotonicBenchmark {
     public void benchmarkBinomialMonotonic(Blackhole blackhole) {
         LargeInteger size = binomialMonotonic.size();
         LargeInteger step = size.divide(DIVIDE);
-        for (LargeInteger i = LargeInteger.ZERO; i.compareTo(size) < 0; i = i.add(step)) {
+        for (LargeInteger i = LargeInteger.ZERO; i.isLessThan(size); i = i.add(step)) {
             blackhole.consume(binomialMonotonic.at(i));
         }
     }

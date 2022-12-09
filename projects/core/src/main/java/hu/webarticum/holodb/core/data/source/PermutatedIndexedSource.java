@@ -22,8 +22,8 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
         if (baseSourceSize != permutationSize) {
             throw new IllegalArgumentException(String.format(
                     "Unmatching sizes (baseSource size: %d, permutation size: %d)",
-                    baseSourceSize,
-                    permutationSize));
+                    baseSourceSize.bigIntegerValue(),
+                    permutationSize.bigIntegerValue()));
         }
         
         this.baseSource = baseSource;

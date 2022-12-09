@@ -42,7 +42,7 @@ public class FunctionIterator implements Iterator<LargeInteger> {
     }
     
     private boolean checkNext() {
-        return (counter.compareTo(size) < 0);
+        return counter.isLessThan(size);
     }
     
 }

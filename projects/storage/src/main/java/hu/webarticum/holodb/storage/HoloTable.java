@@ -118,8 +118,8 @@ public class HoloTable implements Table {
                 throw new IllegalArgumentException(String.format(
                         "Unmatching size for %s: %d, expected: %d",
                         entry.getKey().toString(),
-                        sourceSize,
-                        size));
+                        sourceSize.bigIntegerValue(),
+                        size.bigIntegerValue()));
             }
         }
     }

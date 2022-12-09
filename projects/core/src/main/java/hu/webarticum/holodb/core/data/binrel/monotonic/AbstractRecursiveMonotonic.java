@@ -31,7 +31,7 @@ public abstract class AbstractRecursiveMonotonic implements Monotonic {
         Range range = Range.fromSize(LargeInteger.ZERO, size);
         Range imageRange = Range.fromSize(LargeInteger.ZERO, imageSize);
         int level = 0;
-        while (imageRange.size().compareTo(LargeInteger.ONE) > 0) {
+        while (imageRange.size().isGreaterThan(LargeInteger.ONE)) {
             LargeInteger imageSplitPoint = imageRange.from().add(imageRange.until()).divide(LargeInteger.of(2L));
             LargeInteger splitPoint = split(range, imageRange, imageSplitPoint, level);
             if (splitPoint.compareTo(index) > 0) {
@@ -51,7 +51,7 @@ public abstract class AbstractRecursiveMonotonic implements Monotonic {
         Range range = Range.fromSize(LargeInteger.ZERO, size);
         Range imageRange = Range.fromSize(LargeInteger.ZERO, imageSize);
         int level = 0;
-        while (imageRange.size().compareTo(LargeInteger.ONE) > 0) {
+        while (imageRange.size().isGreaterThan(LargeInteger.ONE)) {
             LargeInteger imageSplitPoint = imageRange.from().add(imageRange.until()).divide(LargeInteger.of(2L));
             LargeInteger splitPoint = split(range, imageRange, imageSplitPoint, level);
             if (imageSplitPoint.compareTo(value) > 0) {

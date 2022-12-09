@@ -59,7 +59,7 @@ public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
     protected LargeInteger splitCacheable(Range range, Range imageRange, LargeInteger imageSplitPoint, int level) {
         LargeInteger length = range.size();
         LargeInteger splitPoint;
-        if (length.compareTo(samplerMaxLength) > 0) {
+        if (length.isGreaterThan(samplerMaxLength)) {
             splitPoint = splitFast(range, imageSplitPoint);
         } else if (length.equals(LargeInteger.ZERO)) {
             splitPoint = range.from();
