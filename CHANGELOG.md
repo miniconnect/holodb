@@ -47,8 +47,8 @@ Released on *2022-12-04*
 
 - Setup holodb from JPA entities
 - Setup embedded holodb from configuration file
-- ENUM column mode
-- `valuesForeignColumn` config
+- `ENUM` column mode
+- New config possibilities: `valuesBundle`, `valuesEnum`, and `valuesForeignColumn`
 
 **Improved:**
 
