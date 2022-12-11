@@ -19,11 +19,6 @@ configurations {
 
 dependencies {
     implementation project(':core')
+    implementation "hu.webarticum.miniconnect:lang:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
-    
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
-    testImplementation 'org.junit.platform:junit-platform-launcher:1.7.1'
-    testImplementation 'org.assertj:assertj-core:3.19.0'
 }

@@ -20,6 +20,7 @@ configurations {
 }
 
 dependencies {
+    implementation "hu.webarticum.miniconnect:lang:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
     
@@ -27,16 +28,14 @@ dependencies {
     implementation 'org.apache.commons:commons-math3:3.6.1'
     
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
-    testImplementation 'org.junit.platform:junit-platform-launcher:1.7.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.7.1'
     testImplementation 'org.assertj:assertj-core:3.19.0'
     
-    labImplementation 'dk.brics.automaton:automaton:1.11-8'
     labImplementation 'jfree:jfreechart:1.0.13'
     
     jmh 'org.openjdk.jmh:jmh-core:1.34'
-    jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.34'
+    jmhRuntimeOnly 'org.openjdk.jmh:jmh-generator-annprocess:1.34'
 }
 
 jmhJar {

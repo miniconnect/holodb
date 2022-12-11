@@ -1,10 +1,9 @@
 package hu.webarticum.holodb.app.misc;
 
+import java.text.Collator;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Optional;
-
-import com.ibm.icu.text.Collator;
 
 import hu.webarticum.holodb.core.data.selection.Range;
 import hu.webarticum.holodb.core.data.source.SortedSource;

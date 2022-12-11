@@ -6,18 +6,19 @@ plugins {
 description "HoloDB JPA loader functionality"
 
 java {
-    registerFeature('runtimeDependencies') {
+    registerFeature('malleableDependencies') {
         usingSourceSet(sourceSets.main)
     }
 }
 
 dependencies {
     implementation project(':app')
+    implementation "hu.webarticum.miniconnect:lang:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:api:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:jdbc:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
     
-	runtimeDependenciesImplementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
-    runtimeDependenciesImplementation 'org.hibernate:hibernate-core:5.4.31.Final'
+	malleableDependenciesImplementation 'javax.persistence:javax.persistence-api:2.2'
+    malleableDependenciesImplementation 'org.hibernate:hibernate-core:5.4.31.Final'
 }
