@@ -1,12 +1,18 @@
-## build ##
-/bin/
+### gradle: ###
 /build/
-/target/
 /.gradle/
 
-## editors ##
+### maven: ###
+/target/
+
+### eclipse: ###
+/bin/
+/.settings/
 /.classpath
 /.project
-/.settings/
+
+### idea: ###
 /.idea/
+
+### vscode: ###
 /.vscode/
