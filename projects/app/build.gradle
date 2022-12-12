@@ -25,14 +25,14 @@ dependencies {
     implementation project(':core')
     implementation project(':storage')
     implementation project(':values')
-    implementation "hu.webarticum.miniconnect:lang:${miniConnectVersion}"
-    implementation "hu.webarticum.miniconnect:lang-jackson:${miniConnectVersion}"
-    implementation "hu.webarticum.miniconnect:api:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+    implementation "hu.webarticum.miniconnect.api:lang-jackson:${miniConnectApiVersion}"
+    implementation "hu.webarticum.miniconnect.api:api:${miniConnectApiVersion}"
     implementation "hu.webarticum.miniconnect:messenger:${miniConnectVersion}"
-    implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:server:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"
+    implementation "hu.webarticum.minibase:framework:${miniBaseVersion}"
     
     implementation 'hu.webarticum.strex:strex:1.2.0'
     implementation 'com.github.mifmif:generex:1.0.2'

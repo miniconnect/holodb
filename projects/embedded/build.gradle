@@ -7,7 +7,7 @@ description "HoloDB embedded functionality"
 
 dependencies {
     implementation project(':app')
-    implementation "hu.webarticum.miniconnect:api:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect.api:api:${miniConnectApiVersion}"
     implementation "hu.webarticum.miniconnect:jdbc:${miniConnectVersion}"
-    implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
+    implementation "hu.webarticum.minibase:framework:${miniBaseVersion}"
 }

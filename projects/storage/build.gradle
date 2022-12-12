@@ -19,6 +19,6 @@ configurations {
 
 dependencies {
     implementation project(':core')
-    implementation "hu.webarticum.miniconnect:lang:${miniConnectVersion}"
-    implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+    implementation "hu.webarticum.minibase:framework:${miniBaseVersion}"
 }

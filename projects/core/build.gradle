@@ -20,9 +20,9 @@ configurations {
 }
 
 dependencies {
-    implementation "hu.webarticum.miniconnect:lang:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
     implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"
-    implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
+    implementation "hu.webarticum.minibase:framework:${miniBaseVersion}"
     
     implementation 'org.apache.commons:commons-lang3:3.0'
     implementation 'org.apache.commons:commons-math3:3.6.1'

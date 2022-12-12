@@ -13,11 +13,11 @@ java {
 
 dependencies {
     implementation project(':app')
-    implementation "hu.webarticum.miniconnect:lang:${miniConnectVersion}"
-    implementation "hu.webarticum.miniconnect:api:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect.api:api:${miniConnectApiVersion}"
+    implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
     implementation "hu.webarticum.miniconnect:jdbc:${miniConnectVersion}"
-    implementation "hu.webarticum.miniconnect:rdbms-framework:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
+    implementation "hu.webarticum.minibase:framework:${miniBaseVersion}"
     
 	malleableDependenciesImplementation 'javax.persistence:javax.persistence-api:2.2'
     malleableDependenciesImplementation 'org.hibernate:hibernate-core:5.4.31.Final'
