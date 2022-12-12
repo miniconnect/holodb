@@ -66,6 +66,10 @@ subprojects {
             }
         }
         
+        tasks.withType(JavaCompile) {
+		    options.release = 8
+		}
+		
         java {
             withJavadocJar()
             withSourcesJar()
