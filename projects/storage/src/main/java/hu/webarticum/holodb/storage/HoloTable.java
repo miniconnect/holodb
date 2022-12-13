@@ -9,14 +9,14 @@ import hu.webarticum.holodb.core.data.source.Source;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.ImmutableMap;
 import hu.webarticum.miniconnect.lang.LargeInteger;
-import hu.webarticum.miniconnect.rdmsframework.storage.Column;
-import hu.webarticum.miniconnect.rdmsframework.storage.ColumnDefinition;
-import hu.webarticum.miniconnect.rdmsframework.storage.NamedResourceStore;
-import hu.webarticum.miniconnect.rdmsframework.storage.Row;
-import hu.webarticum.miniconnect.rdmsframework.storage.Sequence;
-import hu.webarticum.miniconnect.rdmsframework.storage.Table;
-import hu.webarticum.miniconnect.rdmsframework.storage.TableIndex;
-import hu.webarticum.miniconnect.rdmsframework.storage.TablePatch;
+import hu.webarticum.minibase.storage.api.Column;
+import hu.webarticum.minibase.storage.api.ColumnDefinition;
+import hu.webarticum.minibase.storage.api.NamedResourceStore;
+import hu.webarticum.minibase.storage.api.Row;
+import hu.webarticum.minibase.storage.api.Sequence;
+import hu.webarticum.minibase.storage.api.Table;
+import hu.webarticum.minibase.storage.api.TableIndex;
+import hu.webarticum.minibase.storage.api.TablePatch;
 
 public class HoloTable implements Table {
     

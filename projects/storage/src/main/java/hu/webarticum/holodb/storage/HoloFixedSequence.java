@@ -1,7 +1,7 @@
 package hu.webarticum.holodb.storage;
 
 import hu.webarticum.miniconnect.lang.LargeInteger;
-import hu.webarticum.miniconnect.rdmsframework.storage.Sequence;
+import hu.webarticum.minibase.storage.api.Sequence;
 
 public class HoloFixedSequence implements Sequence {
     

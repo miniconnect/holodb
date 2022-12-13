@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
-import hu.webarticum.miniconnect.rdmsframework.storage.NamedResource;
-import hu.webarticum.miniconnect.rdmsframework.storage.NamedResourceStore;
+import hu.webarticum.minibase.storage.api.NamedResource;
+import hu.webarticum.minibase.storage.api.NamedResourceStore;
 
 public class GenericNamedResourceStore<T extends NamedResource> implements NamedResourceStore<T> {
     

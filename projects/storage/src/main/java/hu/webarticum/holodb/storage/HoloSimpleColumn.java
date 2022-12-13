@@ -3,8 +3,8 @@ package hu.webarticum.holodb.storage;
 import java.util.Optional;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
-import hu.webarticum.miniconnect.rdmsframework.storage.Column;
-import hu.webarticum.miniconnect.rdmsframework.storage.ColumnDefinition;
+import hu.webarticum.minibase.storage.api.Column;
+import hu.webarticum.minibase.storage.api.ColumnDefinition;
 
 public class HoloSimpleColumn implements Column {
     

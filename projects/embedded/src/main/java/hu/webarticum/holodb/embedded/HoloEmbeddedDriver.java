@@ -14,18 +14,18 @@ import java.util.regex.Pattern;
 import hu.webarticum.holodb.app.config.HoloConfig;
 import hu.webarticum.holodb.app.factory.ConfigLoader;
 import hu.webarticum.holodb.app.factory.EngineBuilder;
+import hu.webarticum.minibase.query.execution.QueryExecutor;
+import hu.webarticum.minibase.query.execution.impl.IntegratedQueryExecutor;
+import hu.webarticum.minibase.query.parser.AntlrSqlParser;
+import hu.webarticum.minibase.query.parser.SqlParser;
+import hu.webarticum.minibase.session.engine.Engine;
+import hu.webarticum.minibase.session.facade.FrameworkSessionManager;
 import hu.webarticum.miniconnect.api.MiniSession;
 import hu.webarticum.miniconnect.api.MiniSessionManager;
 import hu.webarticum.miniconnect.jdbc.MiniJdbcConnection;
 import hu.webarticum.miniconnect.jdbc.MiniJdbcDriver;
 import hu.webarticum.miniconnect.jdbc.provider.DatabaseProvider;
 import hu.webarticum.miniconnect.jdbc.provider.impl.BlanketDatabaseProvider;
-import hu.webarticum.miniconnect.rdmsframework.engine.Engine;
-import hu.webarticum.miniconnect.rdmsframework.execution.QueryExecutor;
-import hu.webarticum.miniconnect.rdmsframework.execution.impl.IntegratedQueryExecutor;
-import hu.webarticum.miniconnect.rdmsframework.parser.AntlrSqlParser;
-import hu.webarticum.miniconnect.rdmsframework.parser.SqlParser;
-import hu.webarticum.miniconnect.rdmsframework.session.FrameworkSessionManager;
 
 public class HoloEmbeddedDriver implements Driver {
     

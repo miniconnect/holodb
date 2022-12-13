@@ -3,10 +3,10 @@ package hu.webarticum.holodb.storage;
 import hu.webarticum.holodb.core.data.selection.Selection;
 import hu.webarticum.holodb.core.data.source.Index;
 import hu.webarticum.miniconnect.lang.ImmutableList;
-import hu.webarticum.miniconnect.rdmsframework.storage.SingleColumnTableIndex;
-import hu.webarticum.miniconnect.rdmsframework.storage.TableSelection;
-import hu.webarticum.miniconnect.rdmsframework.storage.impl.compound.DisjunctUnionTableSelection;
-import hu.webarticum.miniconnect.rdmsframework.storage.impl.simple.SimpleSelection;
+import hu.webarticum.minibase.storage.api.SingleColumnTableIndex;
+import hu.webarticum.minibase.storage.api.TableSelection;
+import hu.webarticum.minibase.storage.impl.compound.DisjunctUnionTableSelection;
+import hu.webarticum.minibase.storage.impl.simple.SimpleSelection;
 
 public class IndexTableIndex implements SingleColumnTableIndex {
 

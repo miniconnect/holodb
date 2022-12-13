@@ -5,11 +5,11 @@ import java.io.File;
 import hu.webarticum.holodb.app.config.HoloConfig;
 import hu.webarticum.holodb.app.factory.ConfigLoader;
 import hu.webarticum.holodb.app.factory.EngineBuilder;
+import hu.webarticum.minibase.session.engine.Engine;
+import hu.webarticum.minibase.session.facade.FrameworkSessionManager;
 import hu.webarticum.miniconnect.api.MiniSessionManager;
 import hu.webarticum.miniconnect.messenger.Messenger;
 import hu.webarticum.miniconnect.messenger.impl.SessionManagerMessenger;
-import hu.webarticum.miniconnect.rdmsframework.engine.Engine;
-import hu.webarticum.miniconnect.rdmsframework.session.FrameworkSessionManager;
 import hu.webarticum.miniconnect.server.MessengerServer;
 import hu.webarticum.miniconnect.server.ServerConstants;
 

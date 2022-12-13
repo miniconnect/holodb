@@ -3,8 +3,8 @@ package hu.webarticum.holodb.storage;
 import java.util.Iterator;
 
 import hu.webarticum.holodb.core.data.selection.Selection;
+import hu.webarticum.minibase.storage.api.TableSelection;
 import hu.webarticum.miniconnect.lang.LargeInteger;
-import hu.webarticum.miniconnect.rdmsframework.storage.TableSelection;
 
 public class SelectionTableSelection implements TableSelection {
     

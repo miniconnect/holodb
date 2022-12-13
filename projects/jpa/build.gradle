@@ -19,6 +19,6 @@ dependencies {
     implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
     implementation "hu.webarticum.minibase:framework:${miniBaseVersion}"
     
-	malleableDependenciesImplementation 'javax.persistence:javax.persistence-api:2.2'
+    malleableDependenciesImplementation 'javax.persistence:javax.persistence-api:2.2'
     malleableDependenciesImplementation 'org.hibernate:hibernate-core:5.4.31.Final'
 }

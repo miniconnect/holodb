@@ -11,9 +11,9 @@ import hu.webarticum.holodb.core.data.source.MonotonicSource;
 import hu.webarticum.holodb.core.data.source.PermutatedIndexedSource;
 import hu.webarticum.holodb.core.data.source.SortedSource;
 import hu.webarticum.holodb.core.data.source.Source;
+import hu.webarticum.minibase.storage.api.TableIndex;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
-import hu.webarticum.miniconnect.rdmsframework.storage.TableIndex;
 
 public class HoloSimpleSource<T> implements Source<T> {
     

@@ -1,8 +1,10 @@
 package hu.webarticum.holodb.core.data.source;
 
+import java.text.Collator;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.SortedSet;
@@ -11,7 +13,6 @@ import java.util.TreeSet;
 import hu.webarticum.holodb.core.data.selection.Range;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
-import hu.webarticum.miniconnect.rdmsframework.util.ComparatorUtil;
 
 public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
 
@@ -37,9 +38,18 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
         values.forEach(Objects::requireNonNull);
         
         this.type = type;
-        this.comparator = comparator != null ? comparator : ComparatorUtil.createDefaultComparatorFor(type);
+        this.comparator = comparator != null ? comparator : createDefaultComparatorFor(type);
         this.values = toValueArray(values, this.comparator);
         this.length = LargeInteger.of(this.values.length);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> Comparator<T> createDefaultComparatorFor(Class<T> clazz) {
+        if (clazz == String.class) {
+            return (Comparator<T>) Collator.getInstance(Locale.US);
+        } else {
+            return (Comparator<T>) Comparator.naturalOrder();
+        }
     }
     
     private static <T> Object[] toValueArray(Collection<T> values, Comparator<T> comparator) {
