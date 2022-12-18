@@ -9,5 +9,5 @@ dependencies {
     implementation project(':app')
     implementation "hu.webarticum.miniconnect.api:api:${miniConnectApiVersion}"
     implementation "hu.webarticum.miniconnect:jdbc:${miniConnectVersion}"
-    implementation "hu.webarticum.minibase:framework:${miniBaseVersion}"
+    implementation "hu.webarticum.minibase:engine:${miniBaseVersion}"
 }

@@ -20,5 +20,5 @@ configurations {
 dependencies {
     implementation project(':core')
     implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
-    implementation "hu.webarticum.minibase:framework:${miniBaseVersion}"
+    implementation "hu.webarticum.minibase:engine:${miniBaseVersion}"
 }

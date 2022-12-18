@@ -1,12 +1,12 @@
 package hu.webarticum.holodb.app.factory;
 
 import hu.webarticum.holodb.app.config.HoloConfig;
+import hu.webarticum.minibase.engine.api.Engine;
+import hu.webarticum.minibase.engine.impl.SimpleEngine;
 import hu.webarticum.minibase.query.execution.QueryExecutor;
 import hu.webarticum.minibase.query.execution.impl.IntegratedQueryExecutor;
 import hu.webarticum.minibase.query.parser.AntlrSqlParser;
 import hu.webarticum.minibase.query.parser.SqlParser;
-import hu.webarticum.minibase.session.engine.Engine;
-import hu.webarticum.minibase.session.engine.impl.SimpleEngine;
 import hu.webarticum.minibase.storage.api.StorageAccess;
 import hu.webarticum.miniconnect.record.converter.Converter;
 import hu.webarticum.miniconnect.record.converter.DefaultConverter;
