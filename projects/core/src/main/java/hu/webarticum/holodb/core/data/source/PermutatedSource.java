@@ -16,7 +16,7 @@ public class PermutatedSource<T> implements Source<T> {
     public PermutatedSource(Source<T> baseSource, Permutation permutation) {
         LargeInteger baseSourceSize = baseSource.size();
         LargeInteger permutationSize = permutation.size();
-        if (baseSourceSize != permutationSize) {
+        if (!baseSourceSize.equals(permutationSize)) {
             throw new IllegalArgumentException(String.format(
                     "Unmatching sizes (baseSource size: %d, permutation size: %d)",
                     baseSourceSize.bigIntegerValue(),
