@@ -25,7 +25,7 @@ import hu.webarticum.holodb.app.launch.HolodbServerMain;
 import hu.webarticum.holodb.app.misc.GenerexSource;
 import hu.webarticum.holodb.app.misc.StrexSource;
 import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
-import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
+import hu.webarticum.holodb.core.data.binrel.permutation.ModuloPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
@@ -400,7 +400,7 @@ public class StorageAccessFactory {
         if (!valueCount.equals(tableSize)) {
             valueSource = new NullPaddedSortedSource<>(valueSource, tableSize);
         }
-        Permutation permutation = new DirtyFpePermutation(treeRandom.sub("permutation"), tableSize);
+        Permutation permutation = new ModuloPermutation(treeRandom.sub("permutation"), tableSize);
         return new PermutatedIndexedSource<>(valueSource, permutation);
     }
     
@@ -423,7 +423,7 @@ public class StorageAccessFactory {
         }
         if (!nullCount.equals(LargeInteger.ZERO)) {
             source = new NullPaddedSource<>(source, tableSize);
-            Permutation permutation = new DirtyFpePermutation(columnRandom.sub("permutation"), tableSize);
+            Permutation permutation = new ModuloPermutation(columnRandom.sub("permutation"), tableSize);
             source = new PermutatedSource<>(source, permutation);
         }
         return source;
