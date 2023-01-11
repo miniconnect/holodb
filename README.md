@@ -25,8 +25,8 @@ FROM miniconnect/holodb:latest
 COPY config.yaml /app/config.yaml
 ```
 
-For some self-contained examples
-[see the examples directory](https://github.com/miniconnect/holodb/tree/master/examples).
+For some self-contained demos
+[look at the examples](https://github.com/miniconnect/general-docs/blob/main/examples/README.md).
 
 ## Configuration
 
@@ -151,12 +151,13 @@ If you use docker, the easiest way to do this is to copy the file into the `/app
 FROM miniconnect/holodb:latest
 
 COPY config.yaml /app/config.yaml
-COPY my-values.txt /app/resources/my-values.txt
+COPY my-car-brands.txt /app/resources/my-car-brands.txt
 ```
 
 You can use a predefined value set resource with the `valuesResource` key in `config.yaml`:
 
 ```yaml
+          # ...
           - name: car_brand
             valuesResource: 'my-car-brands.txt'
 ```
@@ -185,11 +186,23 @@ COPY config.yaml /app/config.yaml
 COPY --from=builder /en-letters.txt /app/resources/en-letters.txt
 ```
 
+## Generate from an existing database
+
+You can find an experimental python script in the `tools` directory
+that creates a HoloDB configuration from an existing MySQL database.
+
+Here is an example of how you can use it:
+
+```bash
+python3 mysql_scanner.py -u your_user -p your_password -d your_database -w
+```
+
+Use the `-h` or `--help` option for more details.
+
 ## Run queries
 
-There is a
-[miniconnect REPL](https://github.com/miniconnect/miniconnect/tree/master/projects/repl).
-Just type the host and port, and execute your queries:
+You can execute queries against HoloDB (or any other miniConnect server)
+via [miniconnect-client](https://github.com/miniconnect/miniconnect-client).
 
 ```
 Welcome in miniConnect SQL REPL! - localhost:3430
@@ -208,7 +221,7 @@ SQL > USE economy
 
   Query was successfully executed!
 
-SQL > SHOW TABLES
+SQL > SHOW TABLES;
 
   Query was successfully executed!
 
@@ -220,7 +233,7 @@ SQL > SHOW TABLES
   │ sales             │
   └───────────────────┘
 
-SQL > SELECT * FROM companies
+SQL > SELECT * FROM companies;
 
   Query was successfully executed!
 
@@ -242,22 +255,6 @@ Bye-bye!
 Also, you can use a MiniConnect server or even an existing MiniConnect `Session` via JDBC.
 For more information,
 see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect#jdbc-compatibility).
-
-## Connect to database from java code
-
-You can connect to a HoloDB database via [miniconnect](https://github.com/miniconnect/miniconnect).
-
-From code, you can open a miniconnect session like this:
-
-```java
-
-try (ClientMessenger clientMessenger = new ClientMessenger(host, port)) {
-    MiniSessionManager sessionManager = new MessengerSessionManager(clientMessenger);
-    try (MiniSession session = sessionManager.openSession()) {
-        // ...
-    }
-}
-```
 
 ## Embedded mode
 
@@ -288,7 +285,7 @@ jdbc:holodb:jpa://
 (Optionally, the schema can also be specified, e.g. `jdbc:holodb:jpa:///my_schema_name`.)
 
 At the moment, schema construction is not fully automatic, it's necessary to explicitly pass the metamodel.
-For example (if you use Micronaut):
+For example in Micronaut:
 
 ```java
 @Singleton
@@ -309,7 +306,7 @@ public class HoloInit {
 }
 ```
 
-For other frameworks, the solution should be similarly simple.
+The solution should be similarly simple for Spring or other frameworks.
 
 Now, all of your entities will be backed by HoloDB tables with automatic configuration.
 To fine-tune this configuration, you can use some annotation on the entity classes.
@@ -362,7 +359,7 @@ HoloDB introduces the concept of *holographic databases*.
 A holographic database stores no real data and calculates field values and reverse indexes on-the-fly.
 Nonetheless, you as a user experience a consistent, searchable (and optionally writable) database.
 Such a database consumes little memory (even for large "data") and needs near-zero startup time.
-Additionally, by changing the root seed the entire dataset can be shuffled (also a near-no-op).
+Additionally, by changing the root seed the entire dataset can be shuffled.
 
 So, HoloDB provides an arbitrarily large relational database filled with constrained random data.
 Parameters and constraints can be specified in a configuration file.
@@ -374,6 +371,8 @@ practically in `O(1)`, but at most in `O(log(tableSize))` time.
 As initialization is a no-op, it's particularly suitable for demonstrations, testing
 and, in the case of a read-only database,
 flexible orchestration, replication like some static content.
+
+HoloDB is an implementation of the [minibase](https://github.com/miniconnect/minibase) framework.
 
 ## Changelog
 
