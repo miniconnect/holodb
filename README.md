@@ -201,6 +201,9 @@ Use the `-h` or `--help` option for more details.
 
 ## Run queries
 
+HoloDB is an implementation of the [minibase](https://github.com/miniconnect/minibase) framework
+and uses its SQL engine.
+
 You can execute queries against HoloDB (or any other miniConnect server)
 via [miniconnect-client](https://github.com/miniconnect/miniconnect-client).
 
@@ -371,8 +374,6 @@ practically in `O(1)`, but at most in `O(log(tableSize))` time.
 As initialization is a no-op, it's particularly suitable for demonstrations, testing
 and, in the case of a read-only database,
 flexible orchestration, replication like some static content.
-
-HoloDB is an implementation of the [minibase](https://github.com/miniconnect/minibase) framework.
 
 ## Changelog
 
