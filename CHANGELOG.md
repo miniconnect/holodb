@@ -1,41 +1,27 @@
 # Changelog
 
-<table>
-  <thead>
-    <tr>
-      <th>
-        miniconnect-api
-      </th>
-      <th>
-        <a href="https://github.com/miniconnect/miniconnect">miniconnect</a>
-      </th>
-      <th>
-        minibase
-      </th>
-      <th>
-        <a>holodb</a>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td rowspan="2">---</td>
-      <td><a href="https://github.com/miniconnect/miniconnect/blob/master/CHANGELOG.md#version-030">0.3.0</a></td>
-      <td rowspan="2">---</td>
-      <td><a href="#version-031">0.3.1</a></td>
-    </tr>
-    <tr>
-      <td rowspan="2">---</td>
-      <td><a href="https://github.com/miniconnect/miniconnect/blob/master/CHANGELOG.md#version-020">0.2.0</a></td>
-      <td rowspan="2">---</td>
-      <td><a href="#version-020">0.2.0</a></td>
-    </tr>
-    <tr>
-      <td><a href="https://github.com/miniconnect/miniconnect/blob/master/CHANGELOG.md#version-010">0.1.0</a></td>
-      <td><a href="#version-010">0.1.0</a></td>
-    </tr>
-  </tbody>
-</table>
+## Version 0.4.0
+
+Released on *2023-01-11*
+
+### Added:
+
+- MySQL scanner script (see the `tools` directory)
+- Integrate `LargeInteger`
+- `LargeInteger` and `ImmutableList` in config classes
+
+### Changed:
+
+- `DirtyFpePermutation` was replaced by `ModuloPermutation` for fast initialization
+
+### Improved:
+
+- Improved gradle build
+
+### Removed:
+
+- Version table moved to the new `general-docs` repo
+- `examples` directory moved to the new `general-docs` repo
 
 ## Version 0.3.1
 
