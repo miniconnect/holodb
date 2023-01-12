@@ -32,9 +32,9 @@ allprojects {
     group 'hu.webarticum.holodb'
     version automaticVersion
     
-    ext.miniConnectApiVersion = '0.1.0-SNAPSHOT' // FIXME: how to make it transient?
-    ext.miniConnectVersion = '0.3.1-SNAPSHOT' // FIXME: how to make it transient?
-    ext.miniBaseVersion = '0.1.0-SNAPSHOT'
+    ext.miniConnectApiVersion = '0.1.0'
+    ext.miniConnectVersion = '0.4.0'
+    ext.miniBaseVersion = '0.1.0'
     
     repositories {
         mavenCentral()
