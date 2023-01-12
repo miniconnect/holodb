@@ -1,8 +1,8 @@
 # Changelog
 
-## Version 0.4.0
+## Version 0.4.1
 
-Released on *2023-01-11*
+Released on *2023-01-12*
 
 ### Added:
 
@@ -22,6 +22,12 @@ Released on *2023-01-11*
 
 - Version table moved to the new `general-docs` repo
 - `examples` directory moved to the new `general-docs` repo
+
+## Version 0.4.0
+
+Released on *2023-01-11*
+
+Please don't use this version except for testing purposes. It depends on a SNAPSHOT version of miniconnect.
 
 ## Version 0.3.1
 
@@ -48,6 +54,8 @@ Released on *2022-12-04*
 - Many more minor fixes
 
 ## Version 0.3.0
+
+Released on *2022-12-04*
 
 Please don't use this version except for testing purposes. It depends on a SNAPSHOT version of miniconnect.
 
