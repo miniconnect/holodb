@@ -3,17 +3,11 @@ package hu.webarticum.holodb.core.lab.permutation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
-import hu.webarticum.holodb.core.data.binrel.permutation.ModuloPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
-import hu.webarticum.holodb.core.data.hasher.Sha256MacHasher;
-import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
-import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.holodb.core.data.source.FixedSource;
 import hu.webarticum.holodb.core.data.source.PermutatedSource;
 import hu.webarticum.holodb.core.data.source.Source;
@@ -31,7 +25,8 @@ public class PermutationComparisonMain {
                 line.chars()
                         .mapToObj(c -> Character.valueOf((char) c))
                         .collect(Collectors.toList()));
-        Map<String, Function<LargeInteger, Permutation>> permutationFactories = createFactories();
+        Map<String, Function<LargeInteger, Permutation>> permutationFactories =
+                PermutationFactorySource.createFactories();
         
         System.out.println();
         int maxLength =
@@ -49,16 +44,4 @@ public class PermutationComparisonMain {
         }
     }
 
-    private static Map<String, Function<LargeInteger, Permutation>> createFactories() {
-        TreeRandom rootRandom = new HasherTreeRandom("lorem", new Sha256MacHasher());
-        
-        Map<String, Function<LargeInteger, Permutation>> result = new LinkedHashMap<>();
-        result.put("FPE1", s -> new DirtyFpePermutation(rootRandom.sub(1L), s));
-        result.put("FPE2", s -> new DirtyFpePermutation(rootRandom.sub(2L), s));
-        result.put("MP1", s -> new ModuloPermutation(rootRandom.sub(3L), s));
-        result.put("MP2", s -> new ModuloPermutation(rootRandom.sub(4L), s));
-        
-        return result;
-    }
-    
 }
