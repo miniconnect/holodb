@@ -2,16 +2,16 @@ package hu.webarticum.holodb.core.data.binrel.permutation;
 
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
-public class PermutationExtender implements PermutationDecorator {
+public class PermutationRepeater implements PermutationDecorator {
 
     private final Permutation base;
     
     private final LargeInteger size;
     
     
-    public PermutationExtender(Permutation base, LargeInteger size) {
-        if (size.compareTo(base.size()) < 0) {
-            throw new IllegalArgumentException("New size can not be smaller than size of base");
+    public PermutationRepeater(Permutation base, LargeInteger size) {
+        if (size.isNonPositive() || !size.isDivisibleBy(base.size())) {
+            throw new IllegalArgumentException("New size must be a positive multiple of base size");
         }
 
         this.base = base;

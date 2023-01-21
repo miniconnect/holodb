@@ -13,15 +13,22 @@ public interface Permutation extends Function {
         return new PermutationInverter(this);
     }
     
-    public default Permutation resized(LargeInteger size) {
-        int cmp = size.compareTo(size());
-        if (cmp > 0) {
-            return new PermutationExtender(this, size);
-        } else if (cmp < 0) {
-            return new PermutationReducer(this, size);
-        } else {
+    public default Permutation resized(LargeInteger newSize) {
+        LargeInteger size = size();
+        int cmp = newSize.compareTo(size);
+        if (cmp == 0) {
             return this;
+        } else if (cmp < 0) {
+            return new PermutationReducer(this, newSize);
         }
+        
+        LargeInteger mod = newSize.mod(size);
+        if (mod.isZero()) {
+            return new PermutationRepeater(this, newSize);
+        }
+        
+        LargeInteger sureSize = newSize.subtract(mod).add(size);
+        return new PermutationReducer(new PermutationRepeater(this, sureSize), newSize);
     }
 
 }
