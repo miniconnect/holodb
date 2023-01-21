@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
-abstract class AbstractPermutationTest<T extends Permutation> {
+abstract class AbstractGroundPermutationTest<T extends Permutation> {
 
     protected abstract T create(LargeInteger size);
 

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
-class IdentityPermutationTest extends AbstractPermutationTest<IdentityPermutation> {
+class IdentityPermutationTest extends AbstractGroundPermutationTest<IdentityPermutation> {
 
     @Override
     protected IdentityPermutation create(LargeInteger size) {

@@ -4,7 +4,7 @@ import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
-class ModuloPermutationTest extends AbstractPermutationTest<ModuloPermutation> {
+class ModuloPermutationTest extends AbstractGroundPermutationTest<ModuloPermutation> {
 
     private final TreeRandom treeRandom = new HasherTreeRandom("0123456789");
     
