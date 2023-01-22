@@ -23,11 +23,11 @@ public class PermutationBitmapMain {
     
     private static final LargeInteger SAMPLE_START = LargeInteger.of(10000L);
     
-    private static final int ROWS = 150;
+    private static final int ROWS = 300;
     
-    private static final int COLUMNS = 150;
+    private static final int COLUMNS = 300;
     
-    private static final int PIXEL_SIZE = 5;
+    private static final int PIXEL_SIZE = 3;
     
 
     public static void main(String[] args) {

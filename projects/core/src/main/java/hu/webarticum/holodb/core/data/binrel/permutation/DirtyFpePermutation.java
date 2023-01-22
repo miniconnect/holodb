@@ -24,13 +24,7 @@ public class DirtyFpePermutation implements Permutation {
     
     private static final LargeInteger MAX_PRIME = LargeInteger.of(65535L);
 
-    /**
-     * According to a paper by Rogaway, Bellare, etc, the min safe number
-     * of rounds to use for FPE is 2+log_a(b). If a >= b then log_a(b) &lt;= 1
-     * so 3 rounds is safe. The FPE factorization routine should always
-     * return a >= b, so just confirm that and return 3.
-     */
-    private static final int ROUNDS = 3;
+    private static final int ROUNDS = 6;
     
     
     private Mac mac;
