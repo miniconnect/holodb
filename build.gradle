@@ -32,7 +32,7 @@ allprojects {
     group 'hu.webarticum.holodb'
     version automaticVersion
     
-    ext.miniConnectApiVersion = '0.1.0'
+    ext.miniConnectApiVersion = '0.1.1-SNAPSHOT'
     ext.miniConnectVersion = '0.4.1-SNAPSHOT'
     ext.miniBaseVersion = '0.1.1-SNAPSHOT'
     
