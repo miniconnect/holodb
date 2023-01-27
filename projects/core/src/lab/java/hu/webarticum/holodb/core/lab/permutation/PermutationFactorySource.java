@@ -34,6 +34,7 @@ public class PermutationFactorySource {
                 new ModuloPermutation(rootRandom.sub(23434784L), s),
                 new ModuloPermutation(rootRandom.sub(53243567L), s),
                 new ModuloPermutation(rootRandom.sub(63L), s)));
+        result.put("SP", s -> new SmallPermutation(rootRandom, s));
         
         return result;
     }
