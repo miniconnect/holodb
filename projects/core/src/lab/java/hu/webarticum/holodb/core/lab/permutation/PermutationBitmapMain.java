@@ -21,13 +21,13 @@ public class PermutationBitmapMain {
     private static final LargeInteger PERMUTATION_LARGEST_BYTE_PARTITION_SIZE =
             PERMUTATION_SIZE.divide(LargeInteger.of(0xFF));
     
-    private static final LargeInteger SAMPLE_START = LargeInteger.of(10000L);
+    private static final LargeInteger SAMPLE_START = LargeInteger.of(100000L);
     
-    private static final int ROWS = 300;
+    private static final int ROWS = 419;
+
+    private static final int COLUMNS = 701;
     
-    private static final int COLUMNS = 300;
-    
-    private static final int PIXEL_SIZE = 3;
+    private static final int PIXEL_SIZE = 2;
     
 
     public static void main(String[] args) {
@@ -56,18 +56,18 @@ public class PermutationBitmapMain {
     
     private static BufferedImage render(Function<LargeInteger, Permutation> factory) {
         Permutation permutation = factory.apply(PERMUTATION_SIZE);
-        BufferedImage image = new BufferedImage(ROWS * PIXEL_SIZE, COLUMNS * PIXEL_SIZE, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(COLUMNS * PIXEL_SIZE, ROWS * PIXEL_SIZE, BufferedImage.TYPE_INT_RGB);
         Graphics g = image.getGraphics();
         g.setColor(Color.WHITE);
-        g.fillRect(0, 0, ROWS * PIXEL_SIZE, COLUMNS * PIXEL_SIZE);
+        g.fillRect(0, 0, COLUMNS * PIXEL_SIZE, ROWS * PIXEL_SIZE);
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
-                int i = (r * COLUMNS) + c;
+                int i = (c * ROWS) + r;
                 LargeInteger n = LargeInteger.of(i).multiply(LargeInteger.of(PIXEL_SIZE));
                 LargeInteger value = permutation.at(SAMPLE_START.add(n));
                 Color color = colorForValue(value);
                 g.setColor(color);
-                g.fillRect(r * PIXEL_SIZE, c * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+                g.fillRect(c * PIXEL_SIZE, r * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
             }
         }
         return image;
