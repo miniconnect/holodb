@@ -1,8 +1,6 @@
 package hu.webarticum.holodb.core.data.binrel.permutation;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
@@ -13,7 +11,7 @@ public class SmallPermutation implements Permutation {
     
     private final LargeInteger size;
     
-    private final LargeInteger[] permutatedValues;
+    private final int[] permutatedValues;
     
 
     public SmallPermutation(TreeRandom treeRandom, LargeInteger size) {
@@ -25,15 +23,24 @@ public class SmallPermutation implements Permutation {
         permutatedValues = createPermutation(treeRandom, size);
     }
     
-    private static LargeInteger[] createPermutation(TreeRandom treeRandom, int size) {
-        LargeInteger[] values = new LargeInteger[size];
+    private static int[] createPermutation(TreeRandom treeRandom, int size) {
+        int[] values = new int[size];
         for (int i = 0; i < size; i++) {
-            values[i] = LargeInteger.of(i);
+            values[i] = i;
         }
         long randomSeed = ByteBuffer.wrap(treeRandom.getBytes(Long.BYTES)).getLong();
         Random random = new Random(randomSeed);
-        Collections.shuffle(Arrays.asList(values), random);
+        shuffleInts(values, random);
         return values;
+    }
+    
+    private static void shuffleInts(int[] values, Random random) {
+        for (int i = values.length - 1; i > 1; i--) {
+            int j = random.nextInt(i + 1);
+            int tmp = values[j];
+            values[j] = values[i];
+            values[i] = tmp;
+        }
     }
 
     
@@ -44,13 +51,14 @@ public class SmallPermutation implements Permutation {
 
     @Override
     public LargeInteger at(LargeInteger index) {
-        return permutatedValues[index.intValueExact()];
+        return LargeInteger.of(permutatedValues[index.intValueExact()]);
     }
 
     @Override
     public LargeInteger indexOf(LargeInteger value) {
+        int intValue = value.intValueExact();
         for (int i = 0; i < permutatedValues.length; i++) {
-            if (permutatedValues[i].equals(value)) {
+            if (permutatedValues[i] == intValue) {
                 return LargeInteger.of(i);
             }
         }
