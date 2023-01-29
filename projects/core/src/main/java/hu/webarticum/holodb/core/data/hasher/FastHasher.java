@@ -11,7 +11,7 @@ public class FastHasher implements Hasher {
     private static final int DEFAULT_HASH_LENGTH = 8;
     
     
-    private static Hasher keyHasher;
+    private static volatile Hasher keyHasher; // NOSONAR volatile is OK
     
 
     private final byte[] key;
@@ -60,9 +60,15 @@ public class FastHasher implements Hasher {
 
     private static Hasher getKeyHasher() {
         if (keyHasher == null) {
-            keyHasher = new Sha256MacHasher();
+            initKeyHasher();
         }
         return keyHasher;
+    }
+
+    private static synchronized void initKeyHasher() {
+        if (keyHasher == null) {
+            keyHasher = new Sha256MacHasher();
+        }
     }
     
 
