@@ -21,11 +21,11 @@ import hu.webarticum.holodb.app.config.HoloConfigColumn;
 import hu.webarticum.holodb.app.config.HoloConfigSchema;
 import hu.webarticum.holodb.app.config.HoloConfigTable;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.ColumnMode;
+import hu.webarticum.holodb.app.config.HoloConfigColumn.ShuffleQuality;
 import hu.webarticum.holodb.app.launch.HolodbServerMain;
 import hu.webarticum.holodb.app.misc.GenerexSource;
 import hu.webarticum.holodb.app.misc.StrexSource;
 import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
-import hu.webarticum.holodb.core.data.binrel.permutation.ModuloPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
@@ -199,7 +199,7 @@ public class StorageAccessFactory {
                 return createForeignColumnSource(config, schemaConfig, tableConfig, columnConfig, columnRandom);
             } else if (columnConfig.valuesDynamicPattern() == null) {
                 SortedSource<?> baseSource = loadBaseSource(columnConfig, converter, isEnum);
-                return createShuffledSource(columnRandom, baseSource, tableSize, columnConfig.nullCount());
+                return createShuffledSource(columnConfig, columnRandom, baseSource, tableSize);
             } else if (!isEnum) {
                 return createDynamicPatternSource(columnConfig, columnRandom, converter, tableSize);
             } else {
@@ -252,8 +252,7 @@ public class StorageAccessFactory {
         LargeInteger foreignTableSize = foreignTableConfig.size();
         RangeSource rangeSource = new RangeSource(LargeInteger.ONE, foreignTableSize);
         LargeInteger tableSize = tableConfig.size();
-        LargeInteger nullCount = columnConfig.nullCount();
-        return createShuffledSource(columnRandom, rangeSource, tableSize, nullCount);
+        return createShuffledSource(columnConfig, columnRandom, rangeSource, tableSize);
     }
 
     private static SortedSource<?> loadBaseSource(HoloConfigColumn columnConfig, Converter converter, boolean isEnum) {
@@ -392,7 +391,8 @@ public class StorageAccessFactory {
     }
     
     private static <T> IndexedSource<T> createShuffledSource(
-            TreeRandom treeRandom, SortedSource<T> baseSource, LargeInteger tableSize, LargeInteger nullCount) {
+            HoloConfigColumn columnConfig, TreeRandom treeRandom, SortedSource<T> baseSource, LargeInteger tableSize) {
+        LargeInteger nullCount = columnConfig.nullCount();
         LargeInteger valueCount = tableSize.subtract(nullCount);
         SortedSource<T> valueSource = new MonotonicSource<>(
                 baseSource,
@@ -400,7 +400,7 @@ public class StorageAccessFactory {
         if (!valueCount.equals(tableSize)) {
             valueSource = new NullPaddedSortedSource<>(valueSource, tableSize);
         }
-        Permutation permutation = new ModuloPermutation(treeRandom.sub("permutation"), tableSize);
+        Permutation permutation = createPermutation(treeRandom, columnConfig, tableSize);
         return new PermutatedIndexedSource<>(valueSource, permutation);
     }
     
@@ -423,10 +423,20 @@ public class StorageAccessFactory {
         }
         if (!nullCount.equals(LargeInteger.ZERO)) {
             source = new NullPaddedSource<>(source, tableSize);
-            Permutation permutation = new ModuloPermutation(columnRandom.sub("permutation"), tableSize);
+            Permutation permutation = createPermutation(columnRandom, columnConfig, tableSize);
             source = new PermutatedSource<>(source, permutation);
         }
         return source;
+    }
+    
+    private static Permutation createPermutation(
+            TreeRandom treeRandom, HoloConfigColumn columnConfig, LargeInteger tableSize) {
+        ShuffleQuality shuffleQuality = columnConfig.shuffleQuality();
+        if (shuffleQuality == null) {
+            shuffleQuality = ShuffleQuality.MEDIUM;
+        }
+        
+        return PermutationFactory.createPermutation(treeRandom.sub("permutation"), tableSize, shuffleQuality);
     }
     
     private static FixedSource<?> createFixedSource(Class<?> type, Collection<?> values) {

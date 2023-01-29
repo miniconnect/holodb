@@ -38,17 +38,17 @@ public class PermutationFactorySource {
         //        new ModuloPermutation(rootRandom.sub(23434784L), s),
         //        new ModuloPermutation(rootRandom.sub(53243567L), s),
         //        new ModuloPermutation(rootRandom.sub(63L), s)));
-        result.put("FEI-F-1", s -> new FeistelNetworkPermutation(rootRandom, s.bitLength() + 1, 1, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
-        //result.put("FEI-F-2", s -> new FeistelNetworkPermutation(rootRandom, s.bitLength() + 1, 2, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
-        //result.put("FEI-F-3", s -> new FeistelNetworkPermutation(rootRandom, s.bitLength() + 1, 3, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
-        result.put("FEI-F-4", s -> new FeistelNetworkPermutation(rootRandom, s.bitLength() + 1, 4, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
-        //result.put("FEI-F-10", s -> new FeistelNetworkPermutation(rootRandom, s.bitLength() + 1, 10, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
-        //result.put("FEI-F-50", s -> new FeistelNetworkPermutation(rootRandom, s.bitLength() + 1, 50, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
-        //result.put("FEI-F-1000", s -> new FeistelNetworkPermutation(rootRandom, s.bitLength() + 1, 1000, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
-        //result.put("FEI-S-1", s -> new FeistelNetworkPermutation(rootRandom, s.bitLength() + 1, 1, new Sha256MacHasher()).resized(s));
-        result.put("FEI-S-2", s -> new FeistelNetworkPermutation(rootRandom, s.bitLength() + 1, 2, new Sha256MacHasher()).resized(s));
-        //result.put("FEI-S-3", s -> new FeistelNetworkPermutation(rootRandom, s.bitLength() + 1, 3, new Sha256MacHasher()).resized(s));
-        //result.put("FEI-S-4", s -> new FeistelNetworkPermutation(rootRandom, s.bitLength() + 1, 4, new Sha256MacHasher()).resized(s));
+        result.put("FEI-F-1", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 1, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
+        //result.put("FEI-F-2", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 2, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
+        //result.put("FEI-F-3", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 3, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
+        result.put("FEI-F-4", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 4, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
+        //result.put("FEI-F-10", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 10, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
+        //result.put("FEI-F-50", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 50, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
+        //result.put("FEI-F-1000", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 1000, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s));
+        //result.put("FEI-S-1", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 1, new Sha256MacHasher()).resized(s));
+        result.put("FEI-S-2", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 2, new Sha256MacHasher()).resized(s));
+        //result.put("FEI-S-3", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 3, new Sha256MacHasher()).resized(s));
+        //result.put("FEI-S-4", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 4, new Sha256MacHasher()).resized(s));
         result.put("SP", s -> new SmallPermutation(rootRandom, s));
         
         return result;

@@ -13,7 +13,17 @@ import hu.webarticum.miniconnect.util.ToStringBuilder;
 
 public class HoloConfigColumn {
     
-    public enum ColumnMode { DEFAULT, COUNTER, FIXED, ENUM }
+    public enum ColumnMode {
+        
+        DEFAULT, COUNTER, FIXED, ENUM
+    
+    }
+    
+    public enum ShuffleQuality {
+        
+        NOOP, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH
+    
+    }
     
 
     private final String name;
@@ -37,6 +47,8 @@ public class HoloConfigColumn {
     private final String valuesDynamicPattern;
 
     private final ImmutableList<String> valuesForeignColumn;
+    
+    private final ShuffleQuality shuffleQuality;
 
     
     public HoloConfigColumn( // NOSONAR: many parameter is OK
@@ -50,7 +62,8 @@ public class HoloConfigColumn {
             @JsonProperty("valuesRange") ImmutableList<LargeInteger> valuesRange,
             @JsonProperty("valuesPattern") String valuesPattern,
             @JsonProperty("valuesDynamicPattern") String valuesDynamicPattern,
-            @JsonProperty("valuesForeignColumn") ImmutableList<String> valuesForeignColumn) {
+            @JsonProperty("valuesForeignColumn") ImmutableList<String> valuesForeignColumn,
+            @JsonProperty("shuffleQuality") ShuffleQuality shuffleQuality) {
         this.name = Objects.requireNonNull(name, "Column name must be specified");
         this.type = type; // FIXME: required?
         this.mode = mode == null ? ColumnMode.DEFAULT : mode;
@@ -62,6 +75,7 @@ public class HoloConfigColumn {
         this.valuesPattern = valuesPattern;
         this.valuesDynamicPattern = valuesDynamicPattern;
         this.valuesForeignColumn = valuesForeignColumn;
+        this.shuffleQuality = shuffleQuality;
     }
     
 
@@ -129,6 +143,12 @@ public class HoloConfigColumn {
     public ImmutableList<String> valuesForeignColumn() {
         return valuesForeignColumn;
     }
+
+    @JsonGetter("shuffleQuality")
+    @JsonInclude(Include.NON_NULL)
+    public ShuffleQuality shuffleQuality() {
+        return shuffleQuality;
+    }
     
     @Override
     public String toString() {
@@ -144,6 +164,7 @@ public class HoloConfigColumn {
                 .add("valuesPattern", valuesPattern)
                 .add("valuesDynamicPattern", valuesDynamicPattern)
                 .add("valuesForeignColumn", valuesForeignColumn)
+                .add("shuffleQuality", shuffleQuality)
                 .build();
     }
 

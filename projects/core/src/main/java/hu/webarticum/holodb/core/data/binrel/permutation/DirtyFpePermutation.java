@@ -21,17 +21,19 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
  * @author David Horvath
  */
 public class DirtyFpePermutation implements Permutation {
+
+    private static final int DEFAULT_ROUNDS = 6;
     
     private static final LargeInteger MAX_PRIME = LargeInteger.of(65535L);
-
-    private static final int ROUNDS = 6;
     
+
+    private final LargeInteger size;
+
+    private final int rounds;
     
     private Mac mac;
 
     private byte[] macPrefixBytes;
-    
-    private final LargeInteger size;
     
     private final LargeInteger a;
     
@@ -39,6 +41,11 @@ public class DirtyFpePermutation implements Permutation {
 
 
     public DirtyFpePermutation(TreeRandom treeRandom, LargeInteger size) {
+        this(treeRandom, size, DEFAULT_ROUNDS);
+    }
+    
+    public DirtyFpePermutation(TreeRandom treeRandom, LargeInteger size, int rounds) {
+        this.rounds = rounds;
         this.size = size;
         
         byte[] key = treeRandom.getBytes(16);
@@ -84,7 +91,7 @@ public class DirtyFpePermutation implements Permutation {
     @Override
     public LargeInteger at(LargeInteger index) {
         LargeInteger result = index;
-        for (int i = 0; i != ROUNDS; i++) {
+        for (int i = 0; i != rounds; i++) {
             result = runEncryptionRound(result, i);
         }
         return result;
@@ -110,8 +117,8 @@ public class DirtyFpePermutation implements Permutation {
     @Override
     public LargeInteger indexOf(LargeInteger value) {
         LargeInteger result = value;
-        for (int i = 0; i != ROUNDS; i++) {
-            result = runDecryptionRound(result, ROUNDS - i - 1);
+        for (int i = 0; i != rounds; i++) {
+            result = runDecryptionRound(result, rounds - i - 1);
         }
         return result;
     }

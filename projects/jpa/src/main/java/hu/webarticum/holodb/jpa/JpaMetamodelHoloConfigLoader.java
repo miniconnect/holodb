@@ -43,6 +43,7 @@ import hu.webarticum.holodb.app.config.HoloConfigColumn;
 import hu.webarticum.holodb.app.config.HoloConfigSchema;
 import hu.webarticum.holodb.app.config.HoloConfigTable;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.ColumnMode;
+import hu.webarticum.holodb.app.config.HoloConfigColumn.ShuffleQuality;
 import hu.webarticum.holodb.jpa.annotation.HoloColumn;
 import hu.webarticum.holodb.jpa.annotation.HoloColumnMode;
 import hu.webarticum.holodb.jpa.annotation.HoloIgnore;
@@ -764,7 +765,8 @@ public class JpaMetamodelHoloConfigLoader {
                 detectColumnValuesRange(jpaColumnInfo, columnMode, holoColumnAnnotation),
                 detectColumnValuesPattern(holoColumnAnnotation),
                 detectColumnValuesDynamicPattern(holoColumnAnnotation),
-                detectColumnValuesForeignColumn(schemas, jpaColumnInfo, columnMode, holoColumnAnnotation));
+                detectColumnValuesForeignColumn(schemas, jpaColumnInfo, columnMode, holoColumnAnnotation),
+                detectColumnShuffleQuality(holoColumnAnnotation));
     }
 
     private HoloColumn detectHoloColumnAnnotation(JpaColumnInfo jpaColumnInfo) {
@@ -932,6 +934,10 @@ public class JpaMetamodelHoloConfigLoader {
                 !holoColumnAnnotation.valuesDynamicPattern().isEmpty() ||
                 holoColumnAnnotation.valuesForeignColumn().length != 0;
     }
+    
+    private ShuffleQuality detectColumnShuffleQuality(HoloColumn columnAnnotation) {
+        return columnAnnotation.shuffleQuality().shuffleQuality();
+    }
 
     private HoloConfigColumn renderVirtualColumn(HoloVirtualColumn virtualColumnAnnotation) {
         return new HoloConfigColumn(
@@ -945,7 +951,8 @@ public class JpaMetamodelHoloConfigLoader {
                 detectVirtualColumnValuesRange(virtualColumnAnnotation),
                 nonEmptyStringOrNull(virtualColumnAnnotation.valuesPattern()),
                 nonEmptyStringOrNull(virtualColumnAnnotation.valuesDynamicPattern()),
-                detectVirtualColumnValuesForeignColumn(virtualColumnAnnotation));
+                detectVirtualColumnValuesForeignColumn(virtualColumnAnnotation),
+                detectVirtualColumnShuffleQuality(virtualColumnAnnotation));
     }
     
     private LargeInteger detectVirtualColumnNullCount(HoloVirtualColumn virtualColumnAnnotation) {
@@ -978,6 +985,10 @@ public class JpaMetamodelHoloConfigLoader {
         }
     }
     
+    private ShuffleQuality detectVirtualColumnShuffleQuality(HoloVirtualColumn virtualColumnAnnotation) {
+        return virtualColumnAnnotation.shuffleQuality().shuffleQuality();
+    }
+
     private String nonEmptyStringOrNull(String value) {
         return value.isEmpty() ? null : value;
     }

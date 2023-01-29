@@ -35,4 +35,6 @@ public @interface HoloColumn {
     
     public String[] valuesForeignColumn() default {};
     
+    public HoloColumnShuffleQuality shuffleQuality() default HoloColumnShuffleQuality.UNDEFINED;
+    
 }
