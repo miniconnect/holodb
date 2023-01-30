@@ -6,7 +6,7 @@ import hu.webarticum.holodb.core.data.binrel.permutation.FeistelNetworkPermutati
 import hu.webarticum.holodb.core.data.binrel.permutation.IdentityPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.ModuloPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
-import hu.webarticum.holodb.core.data.binrel.permutation.SmallPermutation;
+import hu.webarticum.holodb.core.data.binrel.permutation.InMemoryRandomPermutation;
 import hu.webarticum.holodb.core.data.hasher.FastHasher;
 import hu.webarticum.holodb.core.data.hasher.Hasher;
 import hu.webarticum.holodb.core.data.hasher.Sha256MacHasher;
@@ -81,7 +81,7 @@ public class PermutationFactory {
     }
 
     private static Permutation createSmallHighQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
-        return new SmallPermutation(treeRandom, size);
+        return new InMemoryRandomPermutation(treeRandom, size);
     }
 
     private static Permutation createHighQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
@@ -91,7 +91,7 @@ public class PermutationFactory {
 
     private static Permutation createSmallVeryHighQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
         // TODO: can we improve this in any way?
-        return new SmallPermutation(treeRandom, size);
+        return new InMemoryRandomPermutation(treeRandom, size);
     }
 
     private static Permutation createVeryHighQualityPermutation(TreeRandom treeRandom, LargeInteger size) {

@@ -7,18 +7,18 @@ import java.util.Random;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
-public class SmallPermutation implements Permutation {
+public class InMemoryRandomPermutation implements Permutation {
     
     private final LargeInteger size;
     
     private final int[] permutatedValues;
     
 
-    public SmallPermutation(TreeRandom treeRandom, LargeInteger size) {
+    public InMemoryRandomPermutation(TreeRandom treeRandom, LargeInteger size) {
         this(treeRandom, size.intValueExact());
     }
 
-    public SmallPermutation(TreeRandom treeRandom, int size) {
+    public InMemoryRandomPermutation(TreeRandom treeRandom, int size) {
         this.size = LargeInteger.of(size);
         permutatedValues = createPermutation(treeRandom, size);
     }

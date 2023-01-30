@@ -9,7 +9,7 @@ import hu.webarticum.holodb.core.data.binrel.permutation.FeistelNetworkPermutati
 import hu.webarticum.holodb.core.data.binrel.permutation.ModuloPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.PermutationComposition;
-import hu.webarticum.holodb.core.data.binrel.permutation.SmallPermutation;
+import hu.webarticum.holodb.core.data.binrel.permutation.InMemoryRandomPermutation;
 import hu.webarticum.holodb.core.data.hasher.FastHasher;
 import hu.webarticum.holodb.core.data.hasher.Sha256MacHasher;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
@@ -49,7 +49,7 @@ public class PermutationFactorySource {
         result.put("FEI-S-2", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 2, new Sha256MacHasher()).resized(s));
         //result.put("FEI-S-3", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 3, new Sha256MacHasher()).resized(s));
         //result.put("FEI-S-4", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 4, new Sha256MacHasher()).resized(s));
-        result.put("SP", s -> new SmallPermutation(rootRandom, s));
+        result.put("SP", s -> new InMemoryRandomPermutation(rootRandom, s));
         
         return result;
     }
