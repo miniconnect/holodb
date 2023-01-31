@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import hu.webarticum.holodb.spi.config.SourceFactory;
+
 @Target({ ElementType.TYPE, ElementType.METHOD, ElementType.FIELD })
 @Retention( RetentionPolicy.RUNTIME )
 @Repeatable(HoloVirtualColumns.class)
@@ -38,5 +40,10 @@ public @interface HoloVirtualColumn {
     public String[] valuesForeignColumn() default {};
 
     public HoloColumnShuffleQuality shuffleQuality() default HoloColumnShuffleQuality.UNDEFINED;
+    
+    public Class<? extends SourceFactory> sourceFactory() default SourceFactory.class;
+
+    /** Data in JSON format */
+    public String sourceFactoryData() default "";
     
 }

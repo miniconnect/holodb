@@ -1,5 +1,6 @@
 package hu.webarticum.holodb.jpa;
 
+import java.io.UncheckedIOException;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -38,6 +39,9 @@ import org.hibernate.metamodel.internal.MetamodelImpl;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import hu.webarticum.holodb.app.config.HoloConfig;
 import hu.webarticum.holodb.app.config.HoloConfigColumn;
 import hu.webarticum.holodb.app.config.HoloConfigSchema;
@@ -50,6 +54,7 @@ import hu.webarticum.holodb.jpa.annotation.HoloIgnore;
 import hu.webarticum.holodb.jpa.annotation.HoloTable;
 import hu.webarticum.holodb.jpa.annotation.HoloVirtualColumn;
 import hu.webarticum.holodb.jpa.annotation.HoloWriteable;
+import hu.webarticum.holodb.spi.config.SourceFactory;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
@@ -766,7 +771,9 @@ public class JpaMetamodelHoloConfigLoader {
                 detectColumnValuesPattern(holoColumnAnnotation),
                 detectColumnValuesDynamicPattern(holoColumnAnnotation),
                 detectColumnValuesForeignColumn(schemas, jpaColumnInfo, columnMode, holoColumnAnnotation),
-                detectColumnShuffleQuality(holoColumnAnnotation));
+                detectColumnShuffleQuality(holoColumnAnnotation),
+                detectSourceFactory(holoColumnAnnotation),
+                detectSourceFactoryData(holoColumnAnnotation));
     }
 
     private HoloColumn detectHoloColumnAnnotation(JpaColumnInfo jpaColumnInfo) {
@@ -935,8 +942,33 @@ public class JpaMetamodelHoloConfigLoader {
                 holoColumnAnnotation.valuesForeignColumn().length != 0;
     }
     
-    private ShuffleQuality detectColumnShuffleQuality(HoloColumn columnAnnotation) {
-        return columnAnnotation.shuffleQuality().shuffleQuality();
+    private ShuffleQuality detectColumnShuffleQuality(HoloColumn holoColumnAnnotation) {
+        if (holoColumnAnnotation != null) {
+            return holoColumnAnnotation.shuffleQuality().shuffleQuality();
+        }
+        
+        return null;
+    }
+    
+    private Class<? extends SourceFactory> detectSourceFactory(HoloColumn holoColumnAnnotation) {
+        if (holoColumnAnnotation != null && holoColumnAnnotation.sourceFactory() != SourceFactory.class) {
+            return holoColumnAnnotation.sourceFactory();
+        }
+        
+        return null;
+    }
+    
+    private Object detectSourceFactoryData(HoloColumn holoColumnAnnotation) {
+        if (holoColumnAnnotation != null && !holoColumnAnnotation.sourceFactoryData().isEmpty()) {
+            String dataJson = holoColumnAnnotation.sourceFactoryData();
+            try {
+                return new ObjectMapper().readValue(dataJson, Object.class);
+            } catch (JsonProcessingException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
+        
+        return null;
     }
 
     private HoloConfigColumn renderVirtualColumn(HoloVirtualColumn virtualColumnAnnotation) {
@@ -952,7 +984,9 @@ public class JpaMetamodelHoloConfigLoader {
                 nonEmptyStringOrNull(virtualColumnAnnotation.valuesPattern()),
                 nonEmptyStringOrNull(virtualColumnAnnotation.valuesDynamicPattern()),
                 detectVirtualColumnValuesForeignColumn(virtualColumnAnnotation),
-                detectVirtualColumnShuffleQuality(virtualColumnAnnotation));
+                detectVirtualColumnShuffleQuality(virtualColumnAnnotation),
+                detectVirtualSourceFactory(virtualColumnAnnotation),
+                detectVirtualSourceFactoryData(virtualColumnAnnotation));
     }
     
     private LargeInteger detectVirtualColumnNullCount(HoloVirtualColumn virtualColumnAnnotation) {
@@ -987,6 +1021,27 @@ public class JpaMetamodelHoloConfigLoader {
     
     private ShuffleQuality detectVirtualColumnShuffleQuality(HoloVirtualColumn virtualColumnAnnotation) {
         return virtualColumnAnnotation.shuffleQuality().shuffleQuality();
+    }
+
+    private Class<? extends SourceFactory> detectVirtualSourceFactory(HoloVirtualColumn virtualColumnAnnotation) {
+        if (virtualColumnAnnotation != null && virtualColumnAnnotation.sourceFactory() != SourceFactory.class) {
+            return virtualColumnAnnotation.sourceFactory();
+        }
+        
+        return null;
+    }
+    
+    private Object detectVirtualSourceFactoryData(HoloVirtualColumn virtualColumnAnnotation) {
+        if (virtualColumnAnnotation != null && !virtualColumnAnnotation.sourceFactoryData().isEmpty()) {
+            String dataJson = virtualColumnAnnotation.sourceFactoryData();
+            try {
+                return new ObjectMapper().readValue(dataJson, Object.class);
+            } catch (JsonProcessingException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
+        
+        return null;
     }
 
     private String nonEmptyStringOrNull(String value) {

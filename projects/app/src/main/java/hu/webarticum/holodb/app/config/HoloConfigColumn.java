@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import hu.webarticum.holodb.spi.config.SourceFactory;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.util.ToStringBuilder;
@@ -49,6 +50,10 @@ public class HoloConfigColumn {
     private final ImmutableList<String> valuesForeignColumn;
     
     private final ShuffleQuality shuffleQuality;
+    
+    private final Class<? extends SourceFactory> sourceFactory;
+    
+    private final Object sourceFactoryData;
 
     
     public HoloConfigColumn( // NOSONAR: many parameter is OK
@@ -63,7 +68,9 @@ public class HoloConfigColumn {
             @JsonProperty("valuesPattern") String valuesPattern,
             @JsonProperty("valuesDynamicPattern") String valuesDynamicPattern,
             @JsonProperty("valuesForeignColumn") ImmutableList<String> valuesForeignColumn,
-            @JsonProperty("shuffleQuality") ShuffleQuality shuffleQuality) {
+            @JsonProperty("shuffleQuality") ShuffleQuality shuffleQuality,
+            @JsonProperty("sourceFactory") Class<? extends SourceFactory> sourceFactory,
+            @JsonProperty("sourceFactoryData") Object sourceFactoryData) {
         this.name = Objects.requireNonNull(name, "Column name must be specified");
         this.type = type; // FIXME: required?
         this.mode = mode == null ? ColumnMode.DEFAULT : mode;
@@ -76,6 +83,8 @@ public class HoloConfigColumn {
         this.valuesDynamicPattern = valuesDynamicPattern;
         this.valuesForeignColumn = valuesForeignColumn;
         this.shuffleQuality = shuffleQuality;
+        this.sourceFactory = sourceFactory;
+        this.sourceFactoryData = sourceFactoryData;
     }
     
 
@@ -149,6 +158,18 @@ public class HoloConfigColumn {
     public ShuffleQuality shuffleQuality() {
         return shuffleQuality;
     }
+
+    @JsonGetter("sourceFactory")
+    @JsonInclude(Include.NON_NULL)
+    public Class<? extends SourceFactory> sourceFactory() {
+        return sourceFactory;
+    }
+
+    @JsonGetter("sourceFactoryData")
+    @JsonInclude(Include.NON_NULL)
+    public Object sourceFactoryData() {
+        return sourceFactoryData;
+    }
     
     @Override
     public String toString() {
@@ -165,6 +186,8 @@ public class HoloConfigColumn {
                 .add("valuesDynamicPattern", valuesDynamicPattern)
                 .add("valuesForeignColumn", valuesForeignColumn)
                 .add("shuffleQuality", shuffleQuality)
+                .add("sourceFactory", sourceFactory)
+                .add("sourceFactoryData", sourceFactoryData)
                 .build();
     }
 

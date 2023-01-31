@@ -23,6 +23,7 @@ configurations {
 
 dependencies {
     implementation project(':core')
+    implementation project(':spi')
     implementation project(':storage')
     implementation project(':values')
     implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"

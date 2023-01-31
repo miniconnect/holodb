@@ -1,0 +1,11 @@
+plugins {
+    id 'java-library'
+    id 'eclipse'
+}
+
+description "HoloDB standalone app"
+
+dependencies {
+    api project(':core')
+    api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+}

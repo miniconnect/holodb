@@ -43,6 +43,8 @@ import hu.webarticum.holodb.core.data.source.Source;
 import hu.webarticum.holodb.core.data.source.TransformingSortedSource;
 import hu.webarticum.holodb.core.data.source.TransformingSource;
 import hu.webarticum.holodb.core.data.source.UniqueSource;
+import hu.webarticum.holodb.spi.config.ColumnLocation;
+import hu.webarticum.holodb.spi.config.SourceFactory;
 import hu.webarticum.holodb.storage.GenericNamedResourceStore;
 import hu.webarticum.holodb.storage.HoloSimpleSource;
 import hu.webarticum.holodb.storage.HoloTable;
@@ -110,13 +112,10 @@ public class StorageAccessFactory {
                 .map(HoloConfigColumn::name, s -> s);
         Optional<String> autoIncrementedName = extractAutoIncrementedColumnName(columnConfigs);
         ImmutableList<ColumnDefinition> columnDefinitions =
-                columnConfigs.map(c -> new SimpleColumnDefinition(
-                        extractType(c),
-                        !c.nullCount().equals(LargeInteger.ZERO),
-                        c.mode() == ColumnMode.COUNTER,
-                        autoIncrementedName.isPresent() && c.name().equals(autoIncrementedName.get()),
-                        extractEnumValues(c, columnSources.get(c.name())),
-                        extractComparator(columnSources.get(c.name()))));
+                columnConfigs.map(c -> createColumnDefinition(
+                        c,
+                        columnSources.get(c.name()),
+                        autoIncrementedName.isPresent() && c.name().equals(autoIncrementedName.get())));
         NamedResourceStore<TableIndex> indexStore = createIndexStore(columnSources);
         boolean hasAutoIncremented = autoIncrementedName.isPresent();
         LargeInteger sequenceValue = hasAutoIncremented ? tableSize.increment() : LargeInteger.ONE;
@@ -135,7 +134,26 @@ public class StorageAccessFactory {
         return table;
     }
     
+    private static ColumnDefinition createColumnDefinition(
+            HoloConfigColumn columnConfig, Source<?> source, boolean autoIncremented) {
+        return new SimpleColumnDefinition(
+                extractType(columnConfig, source),
+                extractNullable(columnConfig, source),
+                columnConfig.mode() == ColumnMode.COUNTER,
+                autoIncremented,
+                extractEnumValues(columnConfig, source),
+                extractComparator(source));
+    }
+
     private static Class<?> extractType(HoloConfigColumn columnConfig) {
+        return extractType(columnConfig, null);
+    }
+    
+    private static Class<?> extractType(HoloConfigColumn columnConfig, Source<?> source) {
+        if (columnConfig.sourceFactory() != null && source != null) {
+            return source.type();
+        }
+        
         if (columnConfig.mode() == ColumnMode.COUNTER || columnConfig.valuesForeignColumn() != null) {
             return LargeInteger.class;
         }
@@ -162,7 +180,23 @@ public class StorageAccessFactory {
             return values.get(0).getClass();
         }
         
+        if (source != null) {
+            return source.type();
+        }
+        
         throw new IllegalArgumentException("Can not guess type for column: " + columnConfig.name());
+    }
+    
+    private static boolean extractNullable(HoloConfigColumn columnConfig, Source<?> source) {
+        if (columnConfig.sourceFactory() != null) {
+            if (source instanceof IndexedSource) {
+                return !((IndexedSource<?>) source).findNulls().isEmpty();
+            } else {
+                return true;
+            }
+        }
+        
+        return !columnConfig.nullCount().equals(LargeInteger.ZERO);
     }
     
     private static ImmutableList<Object> extractEnumValues(HoloConfigColumn columnConfig, Source<?> source) {
@@ -190,11 +224,28 @@ public class StorageAccessFactory {
             HoloConfigColumn columnConfig,
             TreeRandom tableRandom,
             Converter converter) {
-        ColumnMode columnMode = columnConfig.mode();
         LargeInteger tableSize = tableConfig.size();
+        String columnName = columnConfig.name();
+        
+        Class<? extends SourceFactory> factoryClazz = columnConfig.sourceFactory();
+        if (factoryClazz != null) {
+            SourceFactory sourceFactory;
+            try {
+                sourceFactory = factoryClazz.newInstance();
+            } catch (ReflectiveOperationException e) {
+                throw new IllegalStateException("Factory instatiation failed", e);
+            }
+            return sourceFactory.create(
+                    new ColumnLocation(schemaConfig.name(), tableConfig.name(), columnName),
+                    tableRandom.sub("col-" + columnName),
+                    tableSize,
+                    columnConfig.sourceFactoryData());
+        }
+        
+        ColumnMode columnMode = columnConfig.mode();
         if (columnMode == ColumnMode.DEFAULT || columnMode == ColumnMode.ENUM) {
             boolean isEnum = (columnMode == ColumnMode.ENUM);
-            TreeRandom columnRandom = tableRandom.sub("col-" + columnConfig.name());
+            TreeRandom columnRandom = tableRandom.sub("col-" + columnName);
             if (columnConfig.valuesForeignColumn() != null) {
                 return createForeignColumnSource(config, schemaConfig, tableConfig, columnConfig, columnRandom);
             } else if (columnConfig.valuesDynamicPattern() == null) {
@@ -205,7 +256,7 @@ public class StorageAccessFactory {
             } else {
                 throw new IllegalArgumentException(
                         "ENUM mode can not be used with dynamic column (" +
-                        tableConfig.name() + "." + columnConfig.name() + ")");
+                        tableConfig.name() + "." + columnName + ")");
             }
         } else if (columnMode == ColumnMode.COUNTER) {
             return new RangeSource(LargeInteger.ONE, tableSize);
@@ -216,7 +267,7 @@ public class StorageAccessFactory {
                     "Invalid column mode: " + columnMode + " (" + tableConfig.name() + "." + columnConfig.name() + ")");
         }
     }
-
+    
     private static Source<?> createForeignColumnSource(
             HoloConfig config,
             HoloConfigSchema schemaConfig,
