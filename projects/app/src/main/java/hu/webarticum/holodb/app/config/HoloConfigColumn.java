@@ -54,6 +54,8 @@ public class HoloConfigColumn {
     private final Class<? extends SourceFactory> sourceFactory;
     
     private final Object sourceFactoryData;
+    
+    private final Object defaultValue;
 
     
     public HoloConfigColumn( // NOSONAR: many parameter is OK
@@ -70,7 +72,8 @@ public class HoloConfigColumn {
             @JsonProperty("valuesForeignColumn") ImmutableList<String> valuesForeignColumn,
             @JsonProperty("shuffleQuality") ShuffleQuality shuffleQuality,
             @JsonProperty("sourceFactory") Class<? extends SourceFactory> sourceFactory,
-            @JsonProperty("sourceFactoryData") Object sourceFactoryData) {
+            @JsonProperty("sourceFactoryData") Object sourceFactoryData,
+            @JsonProperty("defaultValue") Object defaultValue) {
         this.name = Objects.requireNonNull(name, "Column name must be specified");
         this.type = type; // FIXME: required?
         this.mode = mode == null ? ColumnMode.DEFAULT : mode;
@@ -85,6 +88,7 @@ public class HoloConfigColumn {
         this.shuffleQuality = shuffleQuality;
         this.sourceFactory = sourceFactory;
         this.sourceFactoryData = sourceFactoryData;
+        this.defaultValue = defaultValue;
     }
     
 
@@ -170,6 +174,12 @@ public class HoloConfigColumn {
     public Object sourceFactoryData() {
         return sourceFactoryData;
     }
+
+    @JsonGetter("defaultValue")
+    @JsonInclude(Include.NON_NULL)
+    public Object defaultValue() {
+        return defaultValue;
+    }
     
     @Override
     public String toString() {
@@ -188,6 +198,7 @@ public class HoloConfigColumn {
                 .add("shuffleQuality", shuffleQuality)
                 .add("sourceFactory", sourceFactory)
                 .add("sourceFactoryData", sourceFactoryData)
+                .add("defaultValue", defaultValue)
                 .build();
     }
 

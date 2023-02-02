@@ -142,7 +142,8 @@ public class StorageAccessFactory {
                 columnConfig.mode() == ColumnMode.COUNTER,
                 autoIncremented,
                 extractEnumValues(columnConfig, source),
-                extractComparator(source));
+                extractComparator(source),
+                columnConfig.defaultValue());
     }
 
     private static Class<?> extractType(HoloConfigColumn columnConfig) {

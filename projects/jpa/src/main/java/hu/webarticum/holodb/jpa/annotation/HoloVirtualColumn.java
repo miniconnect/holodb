@@ -43,7 +43,10 @@ public @interface HoloVirtualColumn {
     
     public Class<? extends SourceFactory> sourceFactory() default SourceFactory.class;
 
-    /** Data in JSON format */
-    public String sourceFactoryData() default "";
+    public HoloValue sourceFactoryData() default @HoloValue(isGiven = false, type = HoloValue.Type.NULL);
+
+    public HoloValue[] sourceFactoryDataMap() default {};
+
+    public HoloValue defaultValue() default @HoloValue(isGiven = false, type = HoloValue.Type.NULL);
     
 }

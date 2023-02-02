@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -52,6 +53,7 @@ import hu.webarticum.holodb.jpa.annotation.HoloColumn;
 import hu.webarticum.holodb.jpa.annotation.HoloColumnMode;
 import hu.webarticum.holodb.jpa.annotation.HoloIgnore;
 import hu.webarticum.holodb.jpa.annotation.HoloTable;
+import hu.webarticum.holodb.jpa.annotation.HoloValue;
 import hu.webarticum.holodb.jpa.annotation.HoloVirtualColumn;
 import hu.webarticum.holodb.jpa.annotation.HoloWriteable;
 import hu.webarticum.holodb.spi.config.SourceFactory;
@@ -773,7 +775,8 @@ public class JpaMetamodelHoloConfigLoader {
                 detectColumnValuesForeignColumn(schemas, jpaColumnInfo, columnMode, holoColumnAnnotation),
                 detectColumnShuffleQuality(holoColumnAnnotation),
                 detectSourceFactory(holoColumnAnnotation),
-                detectSourceFactoryData(holoColumnAnnotation));
+                detectSourceFactoryData(holoColumnAnnotation),
+                detectDefaultValue(holoColumnAnnotation));
     }
 
     private HoloColumn detectHoloColumnAnnotation(JpaColumnInfo jpaColumnInfo) {
@@ -959,18 +962,33 @@ public class JpaMetamodelHoloConfigLoader {
     }
     
     private Object detectSourceFactoryData(HoloColumn holoColumnAnnotation) {
-        if (holoColumnAnnotation != null && !holoColumnAnnotation.sourceFactoryData().isEmpty()) {
-            String dataJson = holoColumnAnnotation.sourceFactoryData();
-            try {
-                return new ObjectMapper().readValue(dataJson, Object.class);
-            } catch (JsonProcessingException e) {
-                throw new UncheckedIOException(e);
+        if (holoColumnAnnotation != null) {
+            if (holoColumnAnnotation.sourceFactoryDataMap().length > 0) {
+                Map<String, Object> result = new LinkedHashMap<>();
+                for (HoloValue holoValue : holoColumnAnnotation.sourceFactoryDataMap()) {
+                    String key = holoValue.key();
+                    Object value = resolveValue(holoValue);
+                    result.put(key, value);
+                }
+                return result;
+            } else {
+                HoloValue holoValue = holoColumnAnnotation.sourceFactoryData();
+                return resolveValue(holoValue);
             }
         }
         
         return null;
     }
 
+    private Object detectDefaultValue(HoloColumn holoColumnAnnotation) {
+        if (holoColumnAnnotation != null && holoColumnAnnotation.defaultValue().isGiven()) {
+            HoloValue holoValue = holoColumnAnnotation.defaultValue();
+            return resolveValue(holoValue);
+        }
+        
+        return null;
+    }
+    
     private HoloConfigColumn renderVirtualColumn(HoloVirtualColumn virtualColumnAnnotation) {
         return new HoloConfigColumn(
                 virtualColumnAnnotation.name(),
@@ -986,7 +1004,8 @@ public class JpaMetamodelHoloConfigLoader {
                 detectVirtualColumnValuesForeignColumn(virtualColumnAnnotation),
                 detectVirtualColumnShuffleQuality(virtualColumnAnnotation),
                 detectVirtualSourceFactory(virtualColumnAnnotation),
-                detectVirtualSourceFactoryData(virtualColumnAnnotation));
+                detectVirtualSourceFactoryData(virtualColumnAnnotation),
+                detectVirtualDefaultValue(virtualColumnAnnotation));
     }
     
     private LargeInteger detectVirtualColumnNullCount(HoloVirtualColumn virtualColumnAnnotation) {
@@ -1032,16 +1051,70 @@ public class JpaMetamodelHoloConfigLoader {
     }
     
     private Object detectVirtualSourceFactoryData(HoloVirtualColumn virtualColumnAnnotation) {
-        if (virtualColumnAnnotation != null && !virtualColumnAnnotation.sourceFactoryData().isEmpty()) {
-            String dataJson = virtualColumnAnnotation.sourceFactoryData();
-            try {
-                return new ObjectMapper().readValue(dataJson, Object.class);
-            } catch (JsonProcessingException e) {
-                throw new UncheckedIOException(e);
+        if (virtualColumnAnnotation != null) {
+            if (virtualColumnAnnotation.sourceFactoryDataMap().length > 0) {
+                Map<String, Object> result = new LinkedHashMap<>();
+                for (HoloValue holoValue : virtualColumnAnnotation.sourceFactoryDataMap()) {
+                    String key = holoValue.key();
+                    Object value = resolveValue(holoValue);
+                    result.put(key, value);
+                }
+                return result;
+            } else {
+                HoloValue holoValue = virtualColumnAnnotation.sourceFactoryData();
+                return resolveValue(holoValue);
             }
         }
         
         return null;
+    }
+
+    private Object detectVirtualDefaultValue(HoloVirtualColumn virtualColumnAnnotation) {
+        if (virtualColumnAnnotation != null) {
+            HoloValue holoValue = virtualColumnAnnotation.defaultValue();
+            return resolveValue(holoValue);
+        }
+        
+        return null;
+    }
+    
+    private Object resolveValue(HoloValue holoValue) {
+        HoloValue.Type type = holoValue.type();
+        switch (type) {
+            case NULL:
+                return null;
+            case BOOLEAN:
+                return holoValue.booleanValue();
+            case BYTE:
+                return holoValue.byteValue();
+            case CHAR:
+                return holoValue.charValue();
+            case SHORT:
+                return holoValue.shortValue();
+            case INT:
+                return holoValue.intValue();
+            case LONG:
+                return holoValue.longValue();
+            case FLOAT:
+                return holoValue.floatValue();
+            case DOUBLE:
+                return holoValue.doubleValue();
+            case STRING:
+                return holoValue.stringValue();
+            case CLASS:
+                return holoValue.classValue();
+            case LARGE_INTEGER:
+                return LargeInteger.of(holoValue.largeIntegerValue());
+            case JSON:
+                String dataJson = holoValue.json();
+                try {
+                    return new ObjectMapper().readValue(dataJson, Object.class);
+                } catch (JsonProcessingException e) {
+                    throw new UncheckedIOException(e);
+                }
+        }
+        
+        throw new IllegalArgumentException("Unknown type: " + type);
     }
 
     private String nonEmptyStringOrNull(String value) {
