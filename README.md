@@ -92,6 +92,10 @@ For each **column**, these subkeys are supported:
 | `valuesPattern` | `String` | [strex](https://github.com/davidsusu/strex) regex pattern for values (reverse indexed) |
 | `valuesDynamicPattern` | `String` | arbitrary regex pattern for values (not reverse indexed) |
 | `valuesForeignColumn` | `String[]` | use value set of a foreign `COUNTER` column |
+| `shuffleQuality` | `String` | shuffle quality (`NOOP`, `VERY_LOW`, `LOW`, `MEDIUM`, `HIGH`, `VERY_HIGH`) |
+| `sourceFactory` | `String` | java class name of source factory (must implement `hu.webarticum.holodb.spi.config.SourceFactory`) |
+| `sourceFactoryData` | *any* | data will be passed to the source factory |
+| `defaultValue` | *any* | default insert value for the column |
 
 In most cases, `type` can be omitted.
 If the configuration loader cannot guess the type, the startup aborts with an error.
@@ -333,6 +337,19 @@ Some numeric settings have two variants, one for usual and one for large values:
 | `@HoloColumn` | `valuesRange` (`long[]`) | `largeValuesRange` (`String[]`) |
 | `@HoloVirtualColumn` | `nullCount` (`long`) | `largeNullCount` (`String`) |
 | `@HoloVirtualColumn` | `valuesRange` (`long[]`) | `largeValuesRange` (`String[]`) |
+
+Some settings accepts custom data:
+
+| Annotation | Annotation field | Type | Config field |
+| `@HoloColumn` | `sourceFactoryData` | `@HoloValue` | `sourceFactoryData` |
+| `@HoloColumn` | `sourceFactoryDataMap` | `@HoloValue[]` | `sourceFactoryData` |
+| `@HoloColumn` | `defaultValue` | `@HoloValue` | `defaultValue` |
+| `@HoloVirtualColumn` | `sourceFactoryData` | `@HoloValue` | `sourceFactoryData` |
+| `@HoloVirtualColumn` | `sourceFactoryDataMap` | `@HoloValue[]` | `sourceFactoryData` |
+| `@HoloVirtualColumn` | `defaultValue` | `@HoloValue` | `defaultValue` |
+
+Fields ending with the 'Map' suffix accepts an array of `@HoloValue`s,
+you can use `@HoloValue.key` to set map entry key for each.
 
 Example:
 
