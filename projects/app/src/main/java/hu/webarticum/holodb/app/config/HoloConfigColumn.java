@@ -109,7 +109,7 @@ public class HoloConfigColumn {
                 null,
                 null,
                 ColumnMode.DEFAULT, // FIXME null == NON NULL?
-                LargeInteger.ZERO,
+                null,
                 ImmutableList.empty(), // FIXME: should null be supported?
                 null,
                 null,

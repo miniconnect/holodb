@@ -270,7 +270,7 @@ public class StorageAccessFactory {
             }
         }
         
-        return !columnConfig.nullCount().equals(LargeInteger.ZERO);
+        return columnConfig.nullCount() != null;
     }
     
     private static ImmutableList<Object> extractEnumValues(HoloConfigColumn columnConfig, Source<?> source) {
@@ -521,7 +521,8 @@ public class StorageAccessFactory {
     private static <T> IndexedSource<T> createShuffledSource(
             HoloConfigColumn columnConfig, TreeRandom treeRandom, SortedSource<T> baseSource, LargeInteger tableSize) {
         LargeInteger nullCount = columnConfig.nullCount();
-        LargeInteger valueCount = tableSize.subtract(nullCount);
+        LargeInteger effectiveNullCount = nullCount != null ? nullCount : LargeInteger.ZERO;
+        LargeInteger valueCount = tableSize.subtract(effectiveNullCount);
         Monotonic monotonic = createMonotonic(treeRandom.sub("monotonic"), columnConfig, valueCount, baseSource.size());
         SortedSource<T> valueSource = new MonotonicSource<>(baseSource, monotonic);
         if (!valueCount.equals(tableSize)) {
@@ -537,7 +538,8 @@ public class StorageAccessFactory {
             Converter converter,
             LargeInteger tableSize) {
         LargeInteger nullCount = columnConfig.nullCount();
-        LargeInteger valueCount = tableSize.subtract(nullCount);
+        LargeInteger effectiveNullCount = nullCount != null ? nullCount : LargeInteger.ZERO;
+        LargeInteger valueCount = tableSize.subtract(effectiveNullCount);
         String dynamicPattern = columnConfig.valuesDynamicPattern();
         Class<?> type = extractType(columnConfig);
         GenerexSource generexSource = new GenerexSource(new Generex(dynamicPattern), columnRandom, valueCount);
@@ -548,7 +550,7 @@ public class StorageAccessFactory {
                     type,
                     b -> converter.convert(b, type));
         }
-        if (!nullCount.equals(LargeInteger.ZERO)) {
+        if (!effectiveNullCount.equals(LargeInteger.ZERO)) {
             source = new NullPaddedSource<>(source, tableSize);
             Permutation permutation = createPermutation(columnRandom, columnConfig, tableSize);
             source = new PermutatedSource<>(source, permutation);

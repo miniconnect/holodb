@@ -116,6 +116,11 @@ The meaning of `mode` values:
 In the case of writable tables, if other than the `ENUM` mode is used,
 users can also put values ​​different from the initial ones.
 
+If `nullCount` is specified (even if `0`), then the column will be nullable.
+Omit `nullCount` to make the column `NOT NULL`.
+In case of custom `sourceFactory`, the column will be `NOT NULL` only iff
+the source is an `IndexedSource` and has at least one null value.
+
 For specifying the possible values in the column, one of
 `values`, `valuesResource`, `valuesRange`, `valuesPattern`,  `valuesDynamicPattern` and `valuesForeignColumn`
 can be used.
