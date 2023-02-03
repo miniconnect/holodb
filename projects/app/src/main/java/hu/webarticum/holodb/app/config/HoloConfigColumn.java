@@ -108,7 +108,7 @@ public class HoloConfigColumn {
         return new HoloConfigColumn(
                 null,
                 null,
-                ColumnMode.DEFAULT, // FIXME null == NON NULL?
+                ColumnMode.DEFAULT,
                 null,
                 ImmutableList.empty(), // FIXME: should null be supported?
                 null,
@@ -175,7 +175,6 @@ public class HoloConfigColumn {
         return nullCount;
     }
 
-    // FIXME: handle empty/null
     @JsonGetter("values")
     @JsonInclude(Include.NON_NULL)
     public ImmutableList<Object> values() {

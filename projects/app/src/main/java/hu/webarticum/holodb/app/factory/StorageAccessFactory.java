@@ -335,7 +335,8 @@ public class StorageAccessFactory {
         } else if (columnMode == ColumnMode.COUNTER) {
             return new RangeSource(LargeInteger.ONE, tableSize);
         } else if (columnMode == ColumnMode.FIXED) {
-            return createFixedSource(extractType(columnConfig), columnConfig.values().asList());
+            List<Object> values = loadValues(columnConfig, converter);
+            return createFixedSource(extractType(columnConfig), values);
         } else {
             throw new IllegalArgumentException(
                     "Invalid column mode: " + columnMode + " (" + tableConfig.name() + "." + columnConfig.name() + ")");
@@ -432,13 +433,13 @@ public class StorageAccessFactory {
 
     private static List<Object> loadValues(HoloConfigColumn columnConfig, Converter converter) {
         Class<?> columnClazz = extractType(columnConfig);
-        ImmutableList<Object> rawValues = loadRawValues(columnConfig, converter);
+        ImmutableList<Object> rawValues = loadRawValues(columnConfig);
         return rawValues.stream()
                 .map(v -> converter.convert(v, columnClazz))
                 .collect(Collectors.toList());
     }
     
-    private static ImmutableList<Object> loadRawValues(HoloConfigColumn columnConfig, Converter converter) {
+    private static ImmutableList<Object> loadRawValues(HoloConfigColumn columnConfig) {
         String valuesResource = columnConfig.valuesResource();
         if (valuesResource != null) {
             return loadValuesFromResource(valuesResource);
@@ -450,7 +451,12 @@ public class StorageAccessFactory {
             return loadValuesFromResource(bundleValuesResource);
         }
         
-        return columnConfig.values();
+        ImmutableList<Object> values = columnConfig.values();
+        if (values != null) {
+            return values;
+        }
+        
+        throw new IllegalArgumentException("No values given for " + columnConfig.name());
     }
     
     private static ImmutableList<Object> loadValuesFromResource(String resource) {
@@ -580,8 +586,7 @@ public class StorageAccessFactory {
     
     private static FixedSource<?> createFixedSource(Class<?> type, Collection<?> values) {
         try {
-            return FixedSource.class.getConstructor(Class.class, Collection.class)
-                    .newInstance(type, values);
+            return FixedSource.class.getConstructor(Class.class, Collection.class).newInstance(type, values);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
