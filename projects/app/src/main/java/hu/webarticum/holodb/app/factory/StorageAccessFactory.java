@@ -73,7 +73,8 @@ public class StorageAccessFactory {
         SimpleStorageAccess storageAccess =  new SimpleStorageAccess();
         SimpleResourceManager<Schema> schemaManager = storageAccess.schemas();
         TreeRandom rootRandom = new HasherTreeRandom(config.seed());
-        for (HoloConfigSchema schemaConfig : config.schemas()) {
+        ImmutableList<HoloConfigSchema> schemaConfigs = config.schemas().map(c -> renderSchemaConfig(config, c));
+        for (HoloConfigSchema schemaConfig : schemaConfigs) {
             Schema schema = createSchema(config, schemaConfig, rootRandom, converter);
             schemaManager.register(schema);
         }
@@ -89,7 +90,9 @@ public class StorageAccessFactory {
         TreeRandom schemaRandom = rootRandom.sub("schema-" + schemaName);
         SimpleSchema schema = new SimpleSchema(schemaName);
         SimpleResourceManager<Table> tableManager = schema.tables();
-        for (HoloConfigTable tableConfig : schemaConfig.tables()) {
+        ImmutableList<HoloConfigTable> tableConfigs = schemaConfig.tables().map(
+                c -> renderTableConfig(config, schemaConfig, c));
+        for (HoloConfigTable tableConfig : tableConfigs) {
             Table table = createTable(config, schemaConfig, tableConfig, schemaRandom, converter);
             tableManager.register(table);
         }
@@ -103,11 +106,10 @@ public class StorageAccessFactory {
             TreeRandom schemaRandom,
             Converter converter) {
         LargeInteger tableSize = tableConfig.size();
-        String schemaName = schemaConfig.name();
         String tableName = tableConfig.name();
         TreeRandom tableRandom = schemaRandom.sub("table-" + tableName);
         ImmutableList<HoloConfigColumn> columnConfigs = tableConfig.columns().map(
-                c -> renderColumnConfig(config, schemaName, tableName, c));
+                c -> renderColumnConfig(config, schemaConfig, tableConfig, c));
         ImmutableList<String> columnNames = columnConfigs.map(HoloConfigColumn::name);
         ImmutableMap<String, Source<?>> columnSources = columnConfigs
                 .assign(c -> createColumnSource(config, schemaConfig, tableConfig, c, tableRandom, converter))
@@ -136,15 +138,67 @@ public class StorageAccessFactory {
         return table;
     }
     
+    private static HoloConfigSchema renderSchemaConfig(HoloConfig config, HoloConfigSchema schemaConfig) {
+        HoloConfigSchema mergedSchemaConfig = HoloConfigSchema.createWithDefaults()
+                .merge(config.schemaDefaults())
+                .merge(schemaConfig);
+
+        String schemaName = mergedSchemaConfig.name();
+        if (schemaName == null) {
+            throw new IllegalArgumentException("Unnamed schema");
+        }
+
+        if (mergedSchemaConfig.tables() == null) {
+            throw new IllegalArgumentException("Tables config is null for schema " + schemaName);
+        }
+        
+        return mergedSchemaConfig;
+    }
+    
+    private static HoloConfigTable renderTableConfig(
+            HoloConfig config, HoloConfigSchema schemaConfig, HoloConfigTable tableConfig) {
+        HoloConfigTable mergedColumnConfig = HoloConfigTable.createWithDefaults()
+                .merge(config.tableDefaults())
+                .merge(schemaConfig.tableDefaults())
+                .merge(tableConfig);
+        
+        String schemaName = schemaConfig.name();
+        String tableName = mergedColumnConfig.name();
+        if (tableName == null) {
+            throw new IllegalArgumentException("Unnamed table in schema " + schemaName);
+        }
+
+        if (mergedColumnConfig.writeable() == null) {
+            throw new IllegalArgumentException("No writeable setting given for table " + schemaName + "." + tableName);
+        }
+
+        if (mergedColumnConfig.size() == null) {
+            throw new IllegalArgumentException("No size given for table " + schemaName + "." + tableName);
+        }
+
+        if (mergedColumnConfig.columns() == null) {
+            throw new IllegalArgumentException("Columns config is null for table " + schemaName + "." + tableName);
+        }
+        
+        return mergedColumnConfig;
+    }
+    
     private static HoloConfigColumn renderColumnConfig(
-            HoloConfig config, String schemaName, String tableName, HoloConfigColumn columnConfig) {
+            HoloConfig config,
+            HoloConfigSchema schemaConfig,
+            HoloConfigTable tableConfig,
+            HoloConfigColumn columnConfig) {
         HoloConfigColumn mergedColumnConfig = HoloConfigColumn.createWithDefaults()
                 .merge(config.columnDefaults())
+                .merge(schemaConfig.columnDefaults())
+                .merge(tableConfig.columnDefaults())
                 .merge(columnConfig);
-        
+
+        String schemaName = schemaConfig.name();
+        String tableName = tableConfig.name();
         String columnName = mergedColumnConfig.name();
         if (columnName == null) {
-            throw new IllegalArgumentException("Unnamed column in " + schemaName + "." + tableName);
+            throw new IllegalArgumentException("Unnamed column in table " + schemaName + "." + tableName);
         }
 
         // TODO: other checks? values?
@@ -302,15 +356,18 @@ public class StorageAccessFactory {
         String foreignTableName = size >= 2 ? valuesForeignColumn.get(size - 2) : tableConfig.name();
         String foreignColumnName = valuesForeignColumn.get(size - 1);
         HoloConfigSchema foreignSchemaConfig = config.schemas().stream()
-                .filter(s -> s.name().equals(foreignSchemaName))
+                .map(c -> renderSchemaConfig(config, c))
+                .filter(c -> c.name().equals(foreignSchemaName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Schema not found: " + foreignSchemaName));
         HoloConfigTable foreignTableConfig = foreignSchemaConfig.tables().stream()
-                .filter(s -> s.name().equals(foreignTableName))
+                .map(c -> renderTableConfig(config, foreignSchemaConfig, c))
+                .filter(c -> c.name().equals(foreignTableName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Table not found: " + foreignTableName));
         HoloConfigColumn foreignColumnConfig = foreignTableConfig.columns().stream()
-                .filter(s -> s.name().equals(foreignColumnName))
+                .map(c -> renderColumnConfig(config, foreignSchemaConfig, foreignTableConfig, c))
+                .filter(c -> c.name().equals(foreignColumnName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Column not found: " + foreignTableName + "." + foreignTableName));
@@ -502,7 +559,6 @@ public class StorageAccessFactory {
     private static Permutation createPermutation(
             TreeRandom treeRandom, HoloConfigColumn columnConfig, LargeInteger tableSize) {
         ShuffleQuality shuffleQuality = columnConfig.shuffleQuality();
-        
         if (shuffleQuality == null) {
             shuffleQuality = ShuffleQuality.MEDIUM;
         }

@@ -697,7 +697,7 @@ public class JpaMetamodelHoloConfigLoader {
         for (String schemaName : schemas.keySet()) {
             schemaConfigs.add(renderSchemaConfig(schemas, schemaName));
         }
-        return new HoloConfig(seed, null, ImmutableList.fromCollection(schemaConfigs));
+        return new HoloConfig(seed, null, null, null, ImmutableList.fromCollection(schemaConfigs));
     }
 
     private HoloConfigSchema renderSchemaConfig(Map<String, JpaSchemaInfo> schemas, String schemaName) {
@@ -710,7 +710,7 @@ public class JpaMetamodelHoloConfigLoader {
                 tableConfigs.add(renderTableConfig(schemas, tableName, jpaTableInfo));
             }
         }
-        return new HoloConfigSchema(schemaName, ImmutableList.fromCollection(tableConfigs));
+        return new HoloConfigSchema(schemaName, null, null, ImmutableList.fromCollection(tableConfigs));
     }
 
 
@@ -745,7 +745,7 @@ public class JpaMetamodelHoloConfigLoader {
             columnConfigs.add(renderVirtualColumn(virtualColumnAnnotation));
         }
         return new HoloConfigTable(
-                tableName, writeable, size, ImmutableList.fromCollection(columnConfigs));
+                tableName, writeable, size, null, ImmutableList.fromCollection(columnConfigs));
     }
 
     private int findColumnPosition(List<String> orderedFieldNames, String columnName) {

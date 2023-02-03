@@ -1,7 +1,5 @@
 package hu.webarticum.holodb.app.config;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,35 +8,72 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.util.ToStringBuilder;
 
 public class HoloConfigTable {
+    
+    private static final LargeInteger DEFAULT_SIZE = LargeInteger.of(50);
+    
 
     private final String name;
     
-    private final boolean writeable;
+    private final Boolean writeable;
     
     private final LargeInteger size;
+
+    private final HoloConfigColumn columnDefaults;
 
     private final ImmutableList<HoloConfigColumn> columns;
     
     
     public HoloConfigTable(
             @JsonProperty("name") String name,
-            @JsonProperty("writeable") boolean writeable,
+            @JsonProperty("writeable") Boolean writeable,
             @JsonProperty("size") LargeInteger size,
+            @JsonProperty("columnDefaults") HoloConfigColumn columnDefaults,
             @JsonProperty("columns") ImmutableList<HoloConfigColumn> columns) {
-        this.name = Objects.requireNonNull(name, "Table name must be specified");
+        this.name = name;
         this.writeable = writeable;
-        this.size = Objects.requireNonNull(size, "Table size must be specified");
-        this.columns = columns != null ? columns : ImmutableList.empty();
+        this.size = size;
+        this.columnDefaults = columnDefaults;
+        this.columns = columns;
+    }
+
+    public static HoloConfigTable empty() {
+        return new HoloConfigTable(null, null, null, null, null);
+    }
+    
+    public static HoloConfigTable createWithDefaults() {
+        return new HoloConfigTable(
+                null,
+                false,
+                DEFAULT_SIZE,
+                null,
+                ImmutableList.empty());
     }
     
 
+    public HoloConfigTable merge(HoloConfigTable other) {
+        if (other == null) {
+            return this;
+        }
+        
+        return new HoloConfigTable(
+                mergeValue(name, other.name()),
+                mergeValue(writeable, other.writeable()),
+                mergeValue(size, other.size()),
+                mergeValue(columnDefaults, other.columnDefaults()),
+                mergeValue(columns, other.columns()));
+    }
+    
+    private <T> T mergeValue(T fallbackValue, T mergeValue) {
+        return (mergeValue != null) ? mergeValue : fallbackValue;
+    }
+    
     @JsonGetter("name")
     public String name() {
         return name;
     }
 
     @JsonGetter("writeable")
-    public boolean writeable() {
+    public Boolean writeable() {
         return writeable;
     }
 
@@ -47,6 +82,11 @@ public class HoloConfigTable {
         return size;
     }
 
+    @JsonGetter("columnDefaults")
+    public HoloConfigColumn columnDefaults() {
+        return columnDefaults;
+    }
+    
     @JsonGetter("columns")
     public ImmutableList<HoloConfigColumn> columns() {
         return columns;

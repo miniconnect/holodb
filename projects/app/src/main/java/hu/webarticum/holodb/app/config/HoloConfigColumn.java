@@ -115,6 +115,10 @@ public class HoloConfigColumn {
     
 
     public HoloConfigColumn merge(HoloConfigColumn other) {
+        if (other == null) {
+            return this;
+        }
+        
         return new HoloConfigColumn(
                 mergeValue(name, other.name()),
                 mergeValue(type, other.type()),

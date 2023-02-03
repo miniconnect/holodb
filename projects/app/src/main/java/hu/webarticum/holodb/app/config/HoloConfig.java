@@ -10,6 +10,10 @@ import hu.webarticum.miniconnect.util.ToStringBuilder;
 public class HoloConfig {
 
     private final LargeInteger seed;
+    
+    private final HoloConfigSchema schemaDefaults;
+    
+    private final HoloConfigTable tableDefaults;
 
     private final HoloConfigColumn columnDefaults;
 
@@ -18,10 +22,14 @@ public class HoloConfig {
     
     public HoloConfig(
             @JsonProperty("seed") LargeInteger seed,
+            @JsonProperty("schemaDefaults") HoloConfigSchema schemaDefaults,
+            @JsonProperty("tableDefaults") HoloConfigTable tableDefaults,
             @JsonProperty("columnDefaults") HoloConfigColumn columnDefaults,
             @JsonProperty("schemas") ImmutableList<HoloConfigSchema> schemas) {
         this.seed = seed != null ? seed : LargeInteger.ZERO;
-        this.columnDefaults = columnDefaults != null ? columnDefaults : HoloConfigColumn.empty();
+        this.schemaDefaults = schemaDefaults;
+        this.tableDefaults = tableDefaults;
+        this.columnDefaults = columnDefaults;
         this.schemas = schemas != null ? schemas : ImmutableList.empty();
     }
     
@@ -31,6 +39,16 @@ public class HoloConfig {
         return seed;
     }
 
+    @JsonGetter("schemaDefaults")
+    public HoloConfigSchema schemaDefaults() {
+        return schemaDefaults;
+    }
+
+    @JsonGetter("tableDefaults")
+    public HoloConfigTable tableDefaults() {
+        return tableDefaults;
+    }
+    
     @JsonGetter("columnDefaults")
     public HoloConfigColumn columnDefaults() {
         return columnDefaults;
