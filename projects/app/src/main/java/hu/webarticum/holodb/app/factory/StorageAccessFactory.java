@@ -103,9 +103,11 @@ public class StorageAccessFactory {
             TreeRandom schemaRandom,
             Converter converter) {
         LargeInteger tableSize = tableConfig.size();
+        String schemaName = schemaConfig.name();
         String tableName = tableConfig.name();
         TreeRandom tableRandom = schemaRandom.sub("table-" + tableName);
-        ImmutableList<HoloConfigColumn> columnConfigs = tableConfig.columns();
+        ImmutableList<HoloConfigColumn> columnConfigs = tableConfig.columns().map(
+                c -> renderColumnConfig(config, schemaName, tableName, c));
         ImmutableList<String> columnNames = columnConfigs.map(HoloConfigColumn::name);
         ImmutableMap<String, Source<?>> columnSources = columnConfigs
                 .assign(c -> createColumnSource(config, schemaConfig, tableConfig, c, tableRandom, converter))
@@ -132,6 +134,22 @@ public class StorageAccessFactory {
             table = new DiffTable(table);
         }
         return table;
+    }
+    
+    private static HoloConfigColumn renderColumnConfig(
+            HoloConfig config, String schemaName, String tableName, HoloConfigColumn columnConfig) {
+        HoloConfigColumn mergedColumnConfig = HoloConfigColumn.createWithDefaults()
+                .merge(config.columnDefaults())
+                .merge(columnConfig);
+        
+        String columnName = mergedColumnConfig.name();
+        if (columnName == null) {
+            throw new IllegalArgumentException("Unnamed column in " + schemaName + "." + tableName);
+        }
+
+        // TODO: other checks? values?
+        
+        return mergedColumnConfig;
     }
     
     private static ColumnDefinition createColumnDefinition(
@@ -484,6 +502,7 @@ public class StorageAccessFactory {
     private static Permutation createPermutation(
             TreeRandom treeRandom, HoloConfigColumn columnConfig, LargeInteger tableSize) {
         ShuffleQuality shuffleQuality = columnConfig.shuffleQuality();
+        
         if (shuffleQuality == null) {
             shuffleQuality = ShuffleQuality.MEDIUM;
         }

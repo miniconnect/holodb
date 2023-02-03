@@ -11,13 +11,17 @@ public class HoloConfig {
 
     private final LargeInteger seed;
 
+    private final HoloConfigColumn columnDefaults;
+
     private final ImmutableList<HoloConfigSchema> schemas;
     
     
     public HoloConfig(
             @JsonProperty("seed") LargeInteger seed,
+            @JsonProperty("columnDefaults") HoloConfigColumn columnDefaults,
             @JsonProperty("schemas") ImmutableList<HoloConfigSchema> schemas) {
         this.seed = seed != null ? seed : LargeInteger.ZERO;
+        this.columnDefaults = columnDefaults != null ? columnDefaults : HoloConfigColumn.empty();
         this.schemas = schemas != null ? schemas : ImmutableList.empty();
     }
     
@@ -27,6 +31,11 @@ public class HoloConfig {
         return seed;
     }
 
+    @JsonGetter("columnDefaults")
+    public HoloConfigColumn columnDefaults() {
+        return columnDefaults;
+    }
+    
     @JsonGetter("schemas")
     public ImmutableList<HoloConfigSchema> schemas() {
         return schemas;

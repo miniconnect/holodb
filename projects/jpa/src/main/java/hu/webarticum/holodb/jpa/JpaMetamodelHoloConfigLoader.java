@@ -697,7 +697,7 @@ public class JpaMetamodelHoloConfigLoader {
         for (String schemaName : schemas.keySet()) {
             schemaConfigs.add(renderSchemaConfig(schemas, schemaName));
         }
-        return new HoloConfig(seed, ImmutableList.fromCollection(schemaConfigs));
+        return new HoloConfig(seed, null, ImmutableList.fromCollection(schemaConfigs));
     }
 
     private HoloConfigSchema renderSchemaConfig(Map<String, JpaSchemaInfo> schemas, String schemaName) {

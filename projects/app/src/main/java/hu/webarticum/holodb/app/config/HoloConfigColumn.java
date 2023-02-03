@@ -1,7 +1,5 @@
 package hu.webarticum.holodb.app.config;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -26,7 +24,7 @@ public class HoloConfigColumn {
     
     }
     
-
+    
     private final String name;
 
     private final Class<?> type;
@@ -74,11 +72,11 @@ public class HoloConfigColumn {
             @JsonProperty("sourceFactory") Class<? extends SourceFactory> sourceFactory,
             @JsonProperty("sourceFactoryData") Object sourceFactoryData,
             @JsonProperty("defaultValue") Object defaultValue) {
-        this.name = Objects.requireNonNull(name, "Column name must be specified");
-        this.type = type; // FIXME: required?
-        this.mode = mode == null ? ColumnMode.DEFAULT : mode;
-        this.nullCount = nullCount == null ? LargeInteger.ZERO : nullCount; // FIXME
-        this.values = values != null ? values : ImmutableList.empty(); // FIXME: should null be supported?
+        this.name = name;
+        this.type = type;
+        this.mode = mode;
+        this.nullCount = nullCount;
+        this.values = values;
         this.valuesResource = valuesResource;
         this.valuesBundle = valuesBundle;
         this.valuesRange = valuesRange;
@@ -90,8 +88,55 @@ public class HoloConfigColumn {
         this.sourceFactoryData = sourceFactoryData;
         this.defaultValue = defaultValue;
     }
+
+    public static HoloConfigColumn empty() {
+        return new HoloConfigColumn(
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+    }
+    
+    public static HoloConfigColumn createWithDefaults() {
+        return new HoloConfigColumn(
+                null,
+                null,
+                ColumnMode.DEFAULT, // FIXME null == NON NULL?
+                LargeInteger.ZERO,
+                ImmutableList.empty(), // FIXME: should null be supported?
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                ShuffleQuality.MEDIUM,
+                null,
+                null,
+                null);
+    }
     
 
+    public HoloConfigColumn merge(HoloConfigColumn other) {
+        return new HoloConfigColumn(
+                mergeValue(name, other.name()),
+                mergeValue(type, other.type()),
+                mergeValue(mode, other.mode()),
+                mergeValue(nullCount, other.nullCount()),
+                mergeValue(values, other.values()),
+                mergeValue(valuesResource, other.valuesResource()),
+                mergeValue(valuesBundle, other.valuesBundle()),
+                mergeValue(valuesRange, other.valuesRange()),
+                mergeValue(valuesPattern, other.valuesPattern()),
+                mergeValue(valuesDynamicPattern, other.valuesDynamicPattern()),
+                mergeValue(valuesForeignColumn, other.valuesForeignColumn()),
+                mergeValue(shuffleQuality, other.shuffleQuality()),
+                mergeValue(sourceFactory, other.sourceFactory()),
+                mergeValue(sourceFactoryData, other.sourceFactoryData()),
+                mergeValue(defaultValue, other.defaultValue()));
+    }
+    
+    private <T> T mergeValue(T fallbackValue, T mergeValue) {
+        return (mergeValue != null) ? mergeValue : fallbackValue;
+    }
+    
     @JsonGetter("name")
     public String name() {
         return name;
