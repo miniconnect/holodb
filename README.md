@@ -94,6 +94,7 @@ For each **column**, these subkeys are supported:
 | `valuesPattern` | `String` | [strex](https://github.com/davidsusu/strex) regex pattern for values (reverse indexed) |
 | `valuesDynamicPattern` | `String` | arbitrary regex pattern for values (not reverse indexed) |
 | `valuesForeignColumn` | `String[]` | use value set of a foreign `COUNTER` column |
+| `distributionQuality` | `String` | distribution quality: `LOW`, `MEDIUM`, or `HIGH` (global default: `MEDIUM`) |
 | `shuffleQuality` | `String` | shuffle quality: `NOOP`, `VERY_LOW`, `LOW`, `MEDIUM`, `HIGH`, or `VERY_HIGH` (global default: `MEDIUM`) |
 | `sourceFactory` | `String` | java class name of source factory (must implement `hu.webarticum.holodb.spi.config.SourceFactory`) |
 | `sourceFactoryData` | *any* | data will be passed to the source factory |

@@ -21,11 +21,12 @@ import hu.webarticum.holodb.app.config.HoloConfigColumn;
 import hu.webarticum.holodb.app.config.HoloConfigSchema;
 import hu.webarticum.holodb.app.config.HoloConfigTable;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.ColumnMode;
+import hu.webarticum.holodb.app.config.HoloConfigColumn.DistributionQuality;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.ShuffleQuality;
 import hu.webarticum.holodb.app.launch.HolodbServerMain;
 import hu.webarticum.holodb.app.misc.GenerexSource;
 import hu.webarticum.holodb.app.misc.StrexSource;
-import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
+import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
@@ -516,14 +517,13 @@ public class StorageAccessFactory {
         }
         return position1.compareTo(position2);
     }
-    
+
     private static <T> IndexedSource<T> createShuffledSource(
             HoloConfigColumn columnConfig, TreeRandom treeRandom, SortedSource<T> baseSource, LargeInteger tableSize) {
         LargeInteger nullCount = columnConfig.nullCount();
         LargeInteger valueCount = tableSize.subtract(nullCount);
-        SortedSource<T> valueSource = new MonotonicSource<>(
-                baseSource,
-                new BinomialMonotonic(treeRandom.sub("monotonic"), valueCount, baseSource.size()));
+        Monotonic monotonic = createMonotonic(treeRandom.sub("monotonic"), columnConfig, valueCount, baseSource.size());
+        SortedSource<T> valueSource = new MonotonicSource<>(baseSource, monotonic);
         if (!valueCount.equals(tableSize)) {
             valueSource = new NullPaddedSortedSource<>(valueSource, tableSize);
         }
@@ -554,6 +554,16 @@ public class StorageAccessFactory {
             source = new PermutatedSource<>(source, permutation);
         }
         return source;
+    }
+    
+    private static Monotonic createMonotonic(
+            TreeRandom treeRandom, HoloConfigColumn columnConfig, LargeInteger size, LargeInteger baseSize) {
+        DistributionQuality distributionQuality = columnConfig.distributionQuality();
+        if (distributionQuality == null) {
+            distributionQuality = DistributionQuality.MEDIUM;
+        }
+        
+        return MonotonicFactory.createMonotonic(treeRandom, size, baseSize, distributionQuality);
     }
     
     private static Permutation createPermutation(

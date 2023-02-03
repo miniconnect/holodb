@@ -18,6 +18,12 @@ public class HoloConfigColumn {
     
     }
     
+    public enum DistributionQuality {
+        
+        LOW, MEDIUM, HIGH
+    
+    }
+    
     public enum ShuffleQuality {
         
         NOOP, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH
@@ -47,6 +53,8 @@ public class HoloConfigColumn {
 
     private final ImmutableList<String> valuesForeignColumn;
     
+    private final DistributionQuality distributionQuality;
+    
     private final ShuffleQuality shuffleQuality;
     
     private final Class<? extends SourceFactory> sourceFactory;
@@ -68,6 +76,7 @@ public class HoloConfigColumn {
             @JsonProperty("valuesPattern") String valuesPattern,
             @JsonProperty("valuesDynamicPattern") String valuesDynamicPattern,
             @JsonProperty("valuesForeignColumn") ImmutableList<String> valuesForeignColumn,
+            @JsonProperty("distributionQuality") DistributionQuality distributionQuality,
             @JsonProperty("shuffleQuality") ShuffleQuality shuffleQuality,
             @JsonProperty("sourceFactory") Class<? extends SourceFactory> sourceFactory,
             @JsonProperty("sourceFactoryData") Object sourceFactoryData,
@@ -83,6 +92,7 @@ public class HoloConfigColumn {
         this.valuesPattern = valuesPattern;
         this.valuesDynamicPattern = valuesDynamicPattern;
         this.valuesForeignColumn = valuesForeignColumn;
+        this.distributionQuality = distributionQuality;
         this.shuffleQuality = shuffleQuality;
         this.sourceFactory = sourceFactory;
         this.sourceFactoryData = sourceFactoryData;
@@ -91,7 +101,7 @@ public class HoloConfigColumn {
 
     public static HoloConfigColumn empty() {
         return new HoloConfigColumn(
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
     
     public static HoloConfigColumn createWithDefaults() {
@@ -107,6 +117,7 @@ public class HoloConfigColumn {
                 null,
                 null,
                 null,
+                DistributionQuality.MEDIUM,
                 ShuffleQuality.MEDIUM,
                 null,
                 null,
@@ -131,6 +142,7 @@ public class HoloConfigColumn {
                 mergeValue(valuesPattern, other.valuesPattern()),
                 mergeValue(valuesDynamicPattern, other.valuesDynamicPattern()),
                 mergeValue(valuesForeignColumn, other.valuesForeignColumn()),
+                mergeValue(distributionQuality, other.distributionQuality()),
                 mergeValue(shuffleQuality, other.shuffleQuality()),
                 mergeValue(sourceFactory, other.sourceFactory()),
                 mergeValue(sourceFactoryData, other.sourceFactoryData()),
@@ -206,6 +218,12 @@ public class HoloConfigColumn {
         return valuesForeignColumn;
     }
 
+    @JsonGetter("distributionQuality")
+    @JsonInclude(Include.NON_NULL)
+    public DistributionQuality distributionQuality() {
+        return distributionQuality;
+    }
+
     @JsonGetter("shuffleQuality")
     @JsonInclude(Include.NON_NULL)
     public ShuffleQuality shuffleQuality() {
@@ -244,6 +262,7 @@ public class HoloConfigColumn {
                 .add("valuesPattern", valuesPattern)
                 .add("valuesDynamicPattern", valuesDynamicPattern)
                 .add("valuesForeignColumn", valuesForeignColumn)
+                .add("distributionQuality", distributionQuality)
                 .add("shuffleQuality", shuffleQuality)
                 .add("sourceFactory", sourceFactory)
                 .add("sourceFactoryData", sourceFactoryData)

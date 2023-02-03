@@ -38,6 +38,8 @@ public @interface HoloVirtualColumn {
     public String valuesDynamicPattern() default "";
     
     public String[] valuesForeignColumn() default {};
+    
+    public HoloColumnDistributionQuality distributionQuality() default HoloColumnDistributionQuality.UNDEFINED;
 
     public HoloColumnShuffleQuality shuffleQuality() default HoloColumnShuffleQuality.UNDEFINED;
     

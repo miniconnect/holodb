@@ -37,6 +37,8 @@ public @interface HoloColumn {
     
     public String[] valuesForeignColumn() default {};
     
+    public HoloColumnDistributionQuality distributionQuality() default HoloColumnDistributionQuality.UNDEFINED;
+    
     public HoloColumnShuffleQuality shuffleQuality() default HoloColumnShuffleQuality.UNDEFINED;
     
     public Class<? extends SourceFactory> sourceFactory() default SourceFactory.class;

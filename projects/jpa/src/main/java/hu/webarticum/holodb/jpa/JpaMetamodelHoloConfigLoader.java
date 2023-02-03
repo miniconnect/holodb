@@ -48,6 +48,7 @@ import hu.webarticum.holodb.app.config.HoloConfigColumn;
 import hu.webarticum.holodb.app.config.HoloConfigSchema;
 import hu.webarticum.holodb.app.config.HoloConfigTable;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.ColumnMode;
+import hu.webarticum.holodb.app.config.HoloConfigColumn.DistributionQuality;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.ShuffleQuality;
 import hu.webarticum.holodb.jpa.annotation.HoloColumn;
 import hu.webarticum.holodb.jpa.annotation.HoloColumnMode;
@@ -773,6 +774,7 @@ public class JpaMetamodelHoloConfigLoader {
                 detectColumnValuesPattern(holoColumnAnnotation),
                 detectColumnValuesDynamicPattern(holoColumnAnnotation),
                 detectColumnValuesForeignColumn(schemas, jpaColumnInfo, columnMode, holoColumnAnnotation),
+                detectColumnDistributionQuality(holoColumnAnnotation),
                 detectColumnShuffleQuality(holoColumnAnnotation),
                 detectSourceFactory(holoColumnAnnotation),
                 detectSourceFactoryData(holoColumnAnnotation),
@@ -944,6 +946,14 @@ public class JpaMetamodelHoloConfigLoader {
                 !holoColumnAnnotation.valuesDynamicPattern().isEmpty() ||
                 holoColumnAnnotation.valuesForeignColumn().length != 0;
     }
+
+    private DistributionQuality detectColumnDistributionQuality(HoloColumn holoColumnAnnotation) {
+        if (holoColumnAnnotation != null) {
+            return holoColumnAnnotation.distributionQuality().distributionQuality();
+        }
+        
+        return null;
+    }
     
     private ShuffleQuality detectColumnShuffleQuality(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null) {
@@ -1002,6 +1012,7 @@ public class JpaMetamodelHoloConfigLoader {
                 nonEmptyStringOrNull(virtualColumnAnnotation.valuesPattern()),
                 nonEmptyStringOrNull(virtualColumnAnnotation.valuesDynamicPattern()),
                 detectVirtualColumnValuesForeignColumn(virtualColumnAnnotation),
+                detectVirtualColumnDistributionQuality(virtualColumnAnnotation),
                 detectVirtualColumnShuffleQuality(virtualColumnAnnotation),
                 detectVirtualSourceFactory(virtualColumnAnnotation),
                 detectVirtualSourceFactoryData(virtualColumnAnnotation),
@@ -1036,6 +1047,14 @@ public class JpaMetamodelHoloConfigLoader {
         } else {
             return null;
         }
+    }
+
+    private DistributionQuality detectVirtualColumnDistributionQuality(HoloVirtualColumn virtualColumnAnnotation) {
+        if (virtualColumnAnnotation != null) {
+            return virtualColumnAnnotation.distributionQuality().distributionQuality();
+        }
+        
+        return null;
     }
     
     private ShuffleQuality detectVirtualColumnShuffleQuality(HoloVirtualColumn virtualColumnAnnotation) {
