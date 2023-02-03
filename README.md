@@ -14,6 +14,7 @@ An optional second layer is built on top of this, allowing read-write access
 So, you can start an arbitrarily large database in moments, with minimal effort;
 all you need is a configuration file.
 
+
 ## Use with Docker
 
 HoloDB is available on [DockerHub](https://hub.docker.com/r/miniconnect/holodb).
@@ -27,6 +28,7 @@ COPY config.yaml /app/config.yaml
 
 For some self-contained demos
 [look at the examples](https://github.com/miniconnect/general-docs/blob/main/examples/README.md).
+
 
 ## Configuration
 
@@ -51,7 +53,7 @@ On the **top level** these keys are supported:
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
-| `seed` | `LargeInteger` | global random seed |
+| `seed` | `LargeInteger` | global random seed (global default: `0`) |
 | `schemas` | `List` | list of schemas (see below) |
 
 The `seed` option sets a random seed with which you can vary the content of the database.
@@ -61,16 +63,16 @@ For each **schema**, these subkeys are supported:
 | Key | Type | Description |
 | --- | ---- | ----------- |
 | `name` | `String` | name of the database schema |
-| `tables` | `List` | list of tables in this schema (see below) |
+| `tables` | `List` | list of tables in this schema, see below (global default: none) |
 
 For each **table**, these subkeys are supported:
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
 | `name` | `String` | name of the database table |
-| `writeable` | `boolean` | writeable or not |
-| `size` | `LargeInteger` | number of records in this table |
-| `columns` | `List` | list of columns in this table (see below) |
+| `writeable` | `boolean` | writeable or not (global default: `false`) |
+| `size` | `LargeInteger` | number of records in this table (global default: `50`) |
+| `columns` | `List` | list of columns in this table, see below (global default: none) |
 
 If `writeable` option is set to true, then an additional layer
 will be added over the read-only table,
@@ -83,8 +85,8 @@ For each **column**, these subkeys are supported:
 | --- | ---- | ----------- |
 | `name` | `String` | name of the table column |
 | `type` | `String` (`Class<?>`) | java class name of column type |
-| `mode` | `String` | filling mode (`DEFAULT`, `COUNTER`, `FIXED` or `ENUM`) |
-| `nullCount` | `LargeInteger` | count of null values (default: `0`) |
+| `mode` | `String` | filling mode: `DEFAULT`, `COUNTER`, `FIXED`, or `ENUM` (global default: `DEFAULT`) |
+| `nullCount` | `LargeInteger` | count of null values (global default: `0`) |
 | `values` | `Object[]` | explicit list of possible values |
 | `valuesResource` | `String` | name of a java resource which contains the values line by line |
 | `valuesBundle` | `String` | short name of a bundled value resource, otherwise similar to `valuesResource` (see below) |
@@ -92,7 +94,7 @@ For each **column**, these subkeys are supported:
 | `valuesPattern` | `String` | [strex](https://github.com/davidsusu/strex) regex pattern for values (reverse indexed) |
 | `valuesDynamicPattern` | `String` | arbitrary regex pattern for values (not reverse indexed) |
 | `valuesForeignColumn` | `String[]` | use value set of a foreign `COUNTER` column |
-| `shuffleQuality` | `String` | shuffle quality (`NOOP`, `VERY_LOW`, `LOW`, `MEDIUM`, `HIGH`, `VERY_HIGH`) |
+| `shuffleQuality` | `String` | shuffle quality: `NOOP`, `VERY_LOW`, `LOW`, `MEDIUM`, `HIGH`, or `VERY_HIGH` (global default: `MEDIUM`) |
 | `sourceFactory` | `String` | java class name of source factory (must implement `hu.webarticum.holodb.spi.config.SourceFactory`) |
 | `sourceFactoryData` | *any* | data will be passed to the source factory |
 | `defaultValue` | *any* | default insert value for the column |
@@ -143,6 +145,38 @@ There are several possible values for `valuesBundle`:
 | `surnames` | 100 frequent English surnames |
 | `weekdays` | the names of the 7 days of the week |
 
+You can set default values for schemas, tables, and columns at any higher level in the configuration tree.
+Any value set at a lower lever will override any value set at a higher level (and, of course, the global default).
+
+| Key | Available in |
+| `schemaDefaults` | root |
+| `tableDefaults` | root, `schemas.*` |
+| `columnDefaults` | root, `schemas.*`, `schemas.*.tables.*` |
+
+For example:
+
+```yaml
+tableDefaults:
+  writeable: false
+  size: 120
+columnDefaults:
+  shuffleQuality: NOOP
+schemas:
+  - name: schema_1
+    tables:
+      # ...
+schemas:
+  - name: schema_2
+    tableDefaults:
+      writeable: true
+    tables:
+      # ...
+```
+
+Using this config all table with no explicit `size` will have the size 120,
+all table with no explicit `writeable` will read-only in `schema_1`, and writeable in `schema_2`.
+Also, data shuffling is disabled by default.
+
 
 ## Load values from resource
 
@@ -190,6 +224,7 @@ COPY config.yaml /app/config.yaml
 COPY --from=builder /en-letters.txt /app/resources/en-letters.txt
 ```
 
+
 ## Generate from an existing database
 
 You can find an experimental python script in the `tools` directory
@@ -202,6 +237,7 @@ python3 mysql_scanner.py -u your_user -p your_password -d your_database -w
 ```
 
 Use the `-h` or `--help` option for more details.
+
 
 ## Run queries
 
@@ -263,6 +299,7 @@ Also, you can use a MiniConnect server or even an existing MiniConnect `Session`
 For more information,
 see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect#jdbc-compatibility).
 
+
 ## Embedded mode
 
 You can use HoloDB as an embedded database.
@@ -280,6 +317,7 @@ jdbc:holodb:embedded:file///path/to/config.yaml
 ```
 
 (Note: Number of slashes does matter.)
+
 
 ## Mock JPA entities
 
@@ -373,6 +411,7 @@ public class Company {
 }
 ```
 
+
 ## How does it work?
 
 HoloDB introduces the concept of *holographic databases*.
@@ -391,6 +430,7 @@ practically in `O(1)`, but at most in `O(log(tableSize))` time.
 As initialization is a no-op, it's particularly suitable for demonstrations, testing
 and, in the case of a read-only database,
 flexible orchestration, replication like some static content.
+
 
 ## Changelog
 
