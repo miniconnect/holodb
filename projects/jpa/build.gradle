@@ -12,10 +12,12 @@ java {
 }
 
 dependencies {
+    api project(':jpa-annotations')
+    api project(':spi')
+    api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+    
     implementation project(':app')
-    implementation project(':spi')
     implementation "hu.webarticum.miniconnect.api:api:${miniConnectApiVersion}"
-    implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
     implementation "hu.webarticum.miniconnect:jdbc:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
     implementation "hu.webarticum.minibase:engine:${miniBaseVersion}"

@@ -51,7 +51,9 @@ import hu.webarticum.holodb.app.config.HoloConfigColumn.ColumnMode;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.DistributionQuality;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.ShuffleQuality;
 import hu.webarticum.holodb.jpa.annotation.HoloColumn;
+import hu.webarticum.holodb.jpa.annotation.HoloColumnDistributionQuality;
 import hu.webarticum.holodb.jpa.annotation.HoloColumnMode;
+import hu.webarticum.holodb.jpa.annotation.HoloColumnShuffleQuality;
 import hu.webarticum.holodb.jpa.annotation.HoloIgnore;
 import hu.webarticum.holodb.jpa.annotation.HoloTable;
 import hu.webarticum.holodb.jpa.annotation.HoloValue;
@@ -815,7 +817,7 @@ public class JpaMetamodelHoloConfigLoader {
         }
         
         if (holoColumnAnnotation != null && holoColumnAnnotation.mode() != HoloColumnMode.UNDEFINED) {
-            return holoColumnAnnotation.mode().columnMode();
+            return columnModeOf(holoColumnAnnotation.mode());
         }
         
         if (jpaColumnInfo.attribute != null) {
@@ -835,9 +837,9 @@ public class JpaMetamodelHoloConfigLoader {
             return LargeInteger.of(holoColumnAnnotation.nullCount());
         } else if (holoColumnAnnotation != null && !holoColumnAnnotation.largeNullCount().isEmpty()) {
             return LargeInteger.of(holoColumnAnnotation.largeNullCount());
+        } else {
+            return LargeInteger.ZERO;
         }
-        
-        return LargeInteger.ZERO;
     }
 
     private ImmutableList<Object> detectColumnValues(HoloColumn holoColumnAnnotation) {
@@ -851,8 +853,9 @@ public class JpaMetamodelHoloConfigLoader {
     private String detectColumnValuesResource(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null && !holoColumnAnnotation.valuesResource().isEmpty()) {
             return holoColumnAnnotation.valuesResource();
+        } else {
+            return null;
         }
-        return null;
     }
 
     private String detectColumnValuesBundle(ColumnMode columnMode, HoloColumn holoColumnAnnotation) {
@@ -860,9 +863,10 @@ public class JpaMetamodelHoloConfigLoader {
             return holoColumnAnnotation.valuesBundle();
         } else if (columnMode == ColumnMode.COUNTER || isAnyValueFieldExplicitlySet(holoColumnAnnotation)) {
             return null;
+        } else {
+            // TODO: guess
+            return "lorem";
         }
-        // TODO: guess
-        return "lorem";
     }
     
     private ImmutableList<LargeInteger> detectColumnValuesRange(
@@ -877,30 +881,27 @@ public class JpaMetamodelHoloConfigLoader {
             return null;
         } else if (jpaColumnInfo.attribute == null) {
             return null;
-        }
-        
-        Class<?> type = jpaColumnInfo.attribute.getJavaType();
-        if (Number.class.isAssignableFrom(type)) {
+        } else if (Number.class.isAssignableFrom(jpaColumnInfo.attribute.getJavaType())) {
             return ImmutableList.of(LargeInteger.of(1L), LargeInteger.of(10L));
+        } else {
+            return null;
         }
-        
-        return null;
     }
 
     private String detectColumnValuesPattern(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null && !holoColumnAnnotation.valuesPattern().isEmpty()) {
             return holoColumnAnnotation.valuesPattern();
+        } else {
+            return null;
         }
-        
-        return null;
     }
 
     private String detectColumnValuesDynamicPattern(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null && !holoColumnAnnotation.valuesDynamicPattern().isEmpty()) {
             return holoColumnAnnotation.valuesDynamicPattern();
+        } else {
+            return null;
         }
-        
-        return null;
     }
     
     private ImmutableList<String> detectColumnValuesForeignColumn(
@@ -949,26 +950,26 @@ public class JpaMetamodelHoloConfigLoader {
 
     private DistributionQuality detectColumnDistributionQuality(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null) {
-            return holoColumnAnnotation.distributionQuality().distributionQuality();
+            return distributionQualityOf(holoColumnAnnotation.distributionQuality());
+        } else {
+            return null;
         }
-        
-        return null;
     }
     
     private ShuffleQuality detectColumnShuffleQuality(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null) {
-            return holoColumnAnnotation.shuffleQuality().shuffleQuality();
+            return shuffleQualityOf(holoColumnAnnotation.shuffleQuality());
+        } else {
+            return null;
         }
-        
-        return null;
     }
     
     private Class<? extends SourceFactory> detectSourceFactory(HoloColumn holoColumnAnnotation) {
-        if (holoColumnAnnotation != null && holoColumnAnnotation.sourceFactory() != SourceFactory.class) {
-            return holoColumnAnnotation.sourceFactory();
+        if (holoColumnAnnotation != null && holoColumnAnnotation.sourceFactory() != Void.class) {
+            return sourceFactoryClassOf(holoColumnAnnotation.sourceFactory());
+        } else {
+            return null;
         }
-        
-        return null;
     }
     
     private Object detectSourceFactoryData(HoloColumn holoColumnAnnotation) {
@@ -1003,7 +1004,7 @@ public class JpaMetamodelHoloConfigLoader {
         return new HoloConfigColumn(
                 virtualColumnAnnotation.name(),
                 virtualColumnAnnotation.type(),
-                virtualColumnAnnotation.mode().columnMode(),
+                columnModeOf(virtualColumnAnnotation.mode()),
                 detectVirtualColumnNullCount(virtualColumnAnnotation),
                 ImmutableList.of((Object[]) virtualColumnAnnotation.values()),
                 nonEmptyStringOrNull(virtualColumnAnnotation.valuesResource()),
@@ -1051,22 +1052,26 @@ public class JpaMetamodelHoloConfigLoader {
 
     private DistributionQuality detectVirtualColumnDistributionQuality(HoloVirtualColumn virtualColumnAnnotation) {
         if (virtualColumnAnnotation != null) {
-            return virtualColumnAnnotation.distributionQuality().distributionQuality();
+            return distributionQualityOf(virtualColumnAnnotation.distributionQuality());
+        } else {
+            return null;
         }
-        
-        return null;
     }
     
     private ShuffleQuality detectVirtualColumnShuffleQuality(HoloVirtualColumn virtualColumnAnnotation) {
-        return virtualColumnAnnotation.shuffleQuality().shuffleQuality();
+        if (virtualColumnAnnotation != null) {
+            return shuffleQualityOf(virtualColumnAnnotation.shuffleQuality());
+        } else {
+            return null;
+        }
     }
 
     private Class<? extends SourceFactory> detectVirtualSourceFactory(HoloVirtualColumn virtualColumnAnnotation) {
-        if (virtualColumnAnnotation != null && virtualColumnAnnotation.sourceFactory() != SourceFactory.class) {
-            return virtualColumnAnnotation.sourceFactory();
+        if (virtualColumnAnnotation != null && virtualColumnAnnotation.sourceFactory() != Void.class) {
+            return sourceFactoryClassOf(virtualColumnAnnotation.sourceFactory());
+        } else {
+            return null;
         }
-        
-        return null;
     }
     
     private Object detectVirtualSourceFactoryData(HoloVirtualColumn virtualColumnAnnotation) {
@@ -1083,18 +1088,47 @@ public class JpaMetamodelHoloConfigLoader {
                 HoloValue holoValue = virtualColumnAnnotation.sourceFactoryData();
                 return resolveValue(holoValue);
             }
+        } else {
+            return null;
         }
-        
-        return null;
     }
 
     private Object detectVirtualDefaultValue(HoloVirtualColumn virtualColumnAnnotation) {
         if (virtualColumnAnnotation != null) {
             HoloValue holoValue = virtualColumnAnnotation.defaultValue();
             return resolveValue(holoValue);
+        } else {
+            return null;
         }
-        
-        return null;
+    }
+    
+    private ColumnMode columnModeOf(HoloColumnMode holoColumnMode) {
+        if (holoColumnMode != HoloColumnMode.UNDEFINED) {
+            return ColumnMode.valueOf(holoColumnMode.name());
+        } else {
+            return null;
+        }
+    }
+
+    private DistributionQuality distributionQualityOf(HoloColumnDistributionQuality holoColumnDistributionQuality) {
+        if (holoColumnDistributionQuality != HoloColumnDistributionQuality.UNDEFINED) {
+            return DistributionQuality.valueOf(holoColumnDistributionQuality.name());
+        } else {
+            return null;
+        }
+    }
+
+    private ShuffleQuality shuffleQualityOf(HoloColumnShuffleQuality holoColumnShuffleQuality) {
+        if (holoColumnShuffleQuality != HoloColumnShuffleQuality.UNDEFINED) {
+            return ShuffleQuality.valueOf(holoColumnShuffleQuality.name());
+        } else {
+            return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Class<SourceFactory> sourceFactoryClassOf(Class<?> clazz) {
+        return (Class<SourceFactory>) clazz;
     }
     
     private Object resolveValue(HoloValue holoValue) {

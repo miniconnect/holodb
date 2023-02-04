@@ -310,7 +310,13 @@ see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect#
 
 You can use HoloDB as an embedded database.
 
-To achieve this, specify a resource:
+To achieve this, first add the required dependency:
+
+```gradle
+implementation "hu.webarticum.holodb:embedded:${holodbVersion}"
+```
+
+Set the JDBC connection URL, specifying a resource:
 
 ```
 jdbc:holodb:embedded:resource://config.yaml
@@ -327,7 +333,28 @@ jdbc:holodb:embedded:file///path/to/config.yaml
 
 ## Mock JPA entities
 
-To mock JPA entities, define the `jpa` subproject as a dependency, and change the JDBC connection URL to:
+To use the annotations below, set the `jpa-annotations` subproject as a dependency:
+
+```gradle
+implementation "hu.webarticum.holodb:jpa-annotations:${holodbVersion}"
+```
+
+If you want to use the service providers (e. g. `SourceFactory`), include the `spi` subproject too:
+
+```gradle
+implementation "hu.webarticum.holodb:spi:${holodbVersion}"
+```
+
+Actually running it requires the `jpa` subproject instead of the `jpa-annotations`:
+
+```gradle
+implementation "hu.webarticum.holodb:jpa:${holodbVersion}"
+```
+
+The `jpa` subproject has several dependencies (while `jpa-annotations` is near pure).
+If you only use it for tests, define it as a test-only dependency.
+
+Set this JDBC connection URL to use HoloDB as the database backend:
 
 ```
 jdbc:holodb:jpa://

@@ -1,0 +1,10 @@
+plugins {
+    id 'java-library'
+    id 'eclipse'
+}
+
+description "HoloDB JPA configuration annotations"
+
+dependencies {
+    api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+}
