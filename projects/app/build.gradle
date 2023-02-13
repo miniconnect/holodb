@@ -1,7 +1,6 @@
 plugins {
     id 'java-library'
     id 'application'
-    id 'eclipse'
     id 'com.google.cloud.tools.jib' version '3.3.1'
 }
 
