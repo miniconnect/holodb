@@ -79,6 +79,16 @@ subprojects {
             options.addStringOption('Xdoclint:none', '-quiet')
         }
         
+        def moduleNamePrefix = 'hu.webarticum.holodb.'
+        def cleanProjectName = project.name.replaceAll(/\W/, ".")
+        def moduleName = "${moduleNamePrefix}${cleanProjectName}"
+        
+        jar {
+            manifest {
+                attributes('Automatic-Module-Name': moduleName)
+            }
+        }
+        
         test {
             useJUnitPlatform()
             testLogging {
