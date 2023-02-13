@@ -14,7 +14,7 @@ class TransformingSortedSourceTest {
     void testBasics() {
         TransformingSortedSource<LargeInteger, String> source = createTransformingSortedSource();
         assertThat(source.type()).isEqualTo(String.class);
-        assertThat(source.size()).isEqualTo(large(20));
+        assertThat(source.size()).isEqualTo(LargeInteger.of(20));
     }
 
     @Test
@@ -28,7 +28,7 @@ class TransformingSortedSourceTest {
     @Test
     void testGet() {
         TransformingSortedSource<LargeInteger, String> source = createTransformingSortedSource();
-        assertThat(source.get(large(15))).isEqualTo("20");
+        assertThat(source.get(LargeInteger.of(15))).isEqualTo("20");
     }
 
     @Test
@@ -42,31 +42,19 @@ class TransformingSortedSourceTest {
     @Test
     void testFind() {
         TransformingSortedSource<LargeInteger, String> source = createTransformingSortedSource();
-        assertThat(source.find("20")).containsExactly(large(15));
+        assertThat(source.find("20")).containsExactly(LargeInteger.of(15));
     }
 
     @Test
     void testFindBetween() {
         TransformingSortedSource<LargeInteger, String> source = createTransformingSortedSource();
-        assertThat(source.findBetween("6", true, "12", true)).containsExactly(larges(1, 2, 3, 4, 5, 6, 7));
+        assertThat(source.findBetween("6", true, "12", true)).containsExactly(LargeInteger.arrayOf(1, 2, 3, 4, 5, 6, 7));
     }
 
     
     private static TransformingSortedSource<LargeInteger, String> createTransformingSortedSource() {
-        RangeSource rangeSource = new RangeSource(large(5), large(20));
+        RangeSource rangeSource = new RangeSource(LargeInteger.of(5), LargeInteger.of(20));
         return new TransformingSortedSource<>(rangeSource, String.class, LargeInteger::of, LargeInteger::toString);
-    }
-    
-    private static LargeInteger large(int value) {
-        return LargeInteger.of(value);
-    }
-
-    private static LargeInteger[] larges(int... values) {
-        LargeInteger[] result = new LargeInteger[values.length];
-        for (int i = 0; i < values.length; i++) {
-            result[i] = LargeInteger.of(values[i]);
-        }
-        return result;
     }
 
 }

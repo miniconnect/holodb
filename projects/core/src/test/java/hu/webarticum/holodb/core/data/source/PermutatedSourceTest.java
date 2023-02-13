@@ -36,7 +36,7 @@ class PermutatedSourceTest {
         Source<String> source = new FixedSource<>("aaa", "bbb");
         PermutatedSource<String> permutatedSource =
                 new PermutatedSource<>(source, permutation);
-        assertThat(permutatedSource.size()).isEqualTo(large(2));
+        assertThat(permutatedSource.size()).isEqualTo(LargeInteger.of(2));
     }
 
     @Test
@@ -59,10 +59,6 @@ class PermutatedSourceTest {
         ImmutableList<String> permutatedValues =
                 ImmutableList.fromIterable(Range.until(source.size())).map(permutatedSource::get);
         assertThat(permutatedValues).containsExactly("b", "a", "b", "a", "b");
-    }
-
-    private static LargeInteger large(int value) {
-        return LargeInteger.of(value);
     }
 
 }

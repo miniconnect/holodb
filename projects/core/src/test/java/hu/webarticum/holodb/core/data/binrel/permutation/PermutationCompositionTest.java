@@ -33,8 +33,8 @@ class PermutationCompositionTest {
         Permutation permutation = MockPermutation.of(2, 3, 1, 0);
         Permutation composition = new PermutationComposition(permutation);
         assertThat(composition.size().intValueExact()).isEqualTo(4);
-        assertThat(composition).containsExactly(larges(2, 3, 1, 0));
-        assertThat(composition.inverted()).containsExactly(larges(3, 2, 0, 1));
+        assertThat(composition).containsExactly(LargeInteger.arrayOf(2, 3, 1, 0));
+        assertThat(composition.inverted()).containsExactly(LargeInteger.arrayOf(3, 2, 0, 1));
     }
 
     @Test
@@ -43,8 +43,8 @@ class PermutationCompositionTest {
         Permutation permutation2 = MockPermutation.of(0, 2, 3, 1);
         Permutation composition = new PermutationComposition(permutation1, permutation2);
         assertThat(composition.size().intValueExact()).isEqualTo(4);
-        assertThat(composition).containsExactly(larges(3, 0, 2, 1));
-        assertThat(composition.inverted()).containsExactly(larges(1, 3, 2, 0));
+        assertThat(composition).containsExactly(LargeInteger.arrayOf(3, 0, 2, 1));
+        assertThat(composition.inverted()).containsExactly(LargeInteger.arrayOf(1, 3, 2, 0));
     }
 
     @Test
@@ -53,8 +53,8 @@ class PermutationCompositionTest {
         Permutation permutation2 = MockPermutation.of(3, 0, 2, 1);
         Permutation composition = new PermutationComposition(permutation1, permutation2);
         assertThat(composition.size().intValueExact()).isEqualTo(4);
-        assertThat(composition).containsExactly(larges(0, 2, 1, 3));
-        assertThat(composition.inverted()).containsExactly(larges(0, 2, 1, 3));
+        assertThat(composition).containsExactly(LargeInteger.arrayOf(0, 2, 1, 3));
+        assertThat(composition.inverted()).containsExactly(LargeInteger.arrayOf(0, 2, 1, 3));
     }
 
     @Test
@@ -67,17 +67,8 @@ class PermutationCompositionTest {
         Permutation composition = new PermutationComposition(
                 permutation1, permutation2, permutation3, permutation4, permutation5);
         assertThat(composition.size().intValueExact()).isEqualTo(6);
-        assertThat(composition).containsExactly(larges(1, 2, 4, 0, 5, 3));
-        assertThat(composition.inverted()).containsExactly(larges(3, 0, 1, 5, 2, 4));
-    }
-    
-    
-    private LargeInteger[] larges(int... values) {
-        LargeInteger[] result = new LargeInteger[values.length];
-        for (int i = 0; i < values.length; i++) {
-            result[i] = LargeInteger.of(values[i]);
-        }
-        return result;
+        assertThat(composition).containsExactly(LargeInteger.arrayOf(1, 2, 4, 0, 5, 3));
+        assertThat(composition.inverted()).containsExactly(LargeInteger.arrayOf(3, 0, 1, 5, 2, 4));
     }
     
 }

@@ -22,17 +22,8 @@ class PermutationInverterTest {
         Permutation permutation = MockPermutation.of(1, 4, 0, 5, 3, 2);
         Permutation invertedPermutation = new PermutationInverter(permutation);
         assertThat(invertedPermutation.size().intValueExact()).isEqualTo(6);
-        assertThat(invertedPermutation).containsExactly(larges(2, 0, 5, 4, 1, 3));
-        assertThat(invertedPermutation.inverted()).containsExactly(larges(1, 4, 0, 5, 3, 2));
-    }
-
-    
-    private LargeInteger[] larges(int... values) {
-        LargeInteger[] result = new LargeInteger[values.length];
-        for (int i = 0; i < values.length; i++) {
-            result[i] = LargeInteger.of(values[i]);
-        }
-        return result;
+        assertThat(invertedPermutation).containsExactly(LargeInteger.arrayOf(2, 0, 5, 4, 1, 3));
+        assertThat(invertedPermutation.inverted()).containsExactly(LargeInteger.arrayOf(1, 4, 0, 5, 3, 2));
     }
     
 }

@@ -16,14 +16,14 @@ class UniqueSourceTest {
     void testValues() {
         UniqueSource<String> source = createSource();
         assertThat(source).extracting(Source::size).as("size").isEqualTo(LargeInteger.of(6));
-        assertThat(source).extracting(s -> s.get(big(0))).as("at 0").isEqualTo("apple");
-        assertThat(source).extracting(s -> s.get(big(1))).as("at 1").isEqualTo("banana");
-        assertThat(source).extracting(s -> s.get(big(2))).as("at 2").isEqualTo("kiwi");
-        assertThat(source).extracting(s -> s.get(big(3))).as("at 3").isEqualTo("orange");
-        assertThat(source).extracting(s -> s.get(big(4))).as("at 4").isEqualTo("pear");
-        assertThat(source).extracting(s -> s.get(big(5))).as("at 5").isEqualTo("watermelon");
-        assertThatThrownBy(() -> source.get(big(-1))).isInstanceOf(ArrayIndexOutOfBoundsException.class); // NOSONAR
-        assertThatThrownBy(() -> source.get(big(6))).isInstanceOf(ArrayIndexOutOfBoundsException.class); // NOSONAR
+        assertThat(source).extracting(s -> s.get(LargeInteger.of(0))).as("at 0").isEqualTo("apple");
+        assertThat(source).extracting(s -> s.get(LargeInteger.of(1))).as("at 1").isEqualTo("banana");
+        assertThat(source).extracting(s -> s.get(LargeInteger.of(2))).as("at 2").isEqualTo("kiwi");
+        assertThat(source).extracting(s -> s.get(LargeInteger.of(3))).as("at 3").isEqualTo("orange");
+        assertThat(source).extracting(s -> s.get(LargeInteger.of(4))).as("at 4").isEqualTo("pear");
+        assertThat(source).extracting(s -> s.get(LargeInteger.of(5))).as("at 5").isEqualTo("watermelon");
+        assertThatThrownBy(() -> source.get(LargeInteger.of(-1))).isInstanceOf(ArrayIndexOutOfBoundsException.class);
+        assertThatThrownBy(() -> source.get(LargeInteger.of(6))).isInstanceOf(ArrayIndexOutOfBoundsException.class);
     }
 
     @Test
@@ -134,10 +134,6 @@ class UniqueSourceTest {
                 String.class,
                 Arrays.asList("1", "4", "17", "35", "120", "243", "1000"),
                 (s1, s2) -> Integer.compare(Integer.parseInt(s1), Integer.parseInt(s2)));
-    }
-
-    private static LargeInteger big(int value) {
-        return LargeInteger.of(value);
     }
 
 }

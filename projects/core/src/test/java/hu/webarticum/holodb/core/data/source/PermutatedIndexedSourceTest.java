@@ -37,7 +37,7 @@ class PermutatedIndexedSourceTest {
         IndexedSource<String> source = new UniqueSource<>("aaa", "bbb");
         PermutatedIndexedSource<String> permutatedSource =
                 new PermutatedIndexedSource<>(source, permutation);
-        assertThat(permutatedSource.size()).isEqualTo(large(2));
+        assertThat(permutatedSource.size()).isEqualTo(LargeInteger.of(2));
     }
 
     @Test
@@ -68,12 +68,8 @@ class PermutatedIndexedSourceTest {
         PermutatedIndexedSource<String> permutatedSource =
                 new PermutatedIndexedSource<>(source, permutation);
         Selection selection = permutatedSource.findBetween("c", true, "x", false);
-        assertThat(selection.size()).isEqualTo(large(2));
-        assertThat(selection).containsExactly(large(3), LargeInteger.ZERO);
-    }
-
-    private static LargeInteger large(int value) {
-        return LargeInteger.of(value);
+        assertThat(selection.size()).isEqualTo(LargeInteger.of(2));
+        assertThat(selection).containsExactly(LargeInteger.of(3), LargeInteger.ZERO);
     }
 
 }

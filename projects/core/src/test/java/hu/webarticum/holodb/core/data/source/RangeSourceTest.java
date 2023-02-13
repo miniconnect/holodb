@@ -12,61 +12,48 @@ class RangeSourceTest {
 
     @Test
     void testEmpty() {
-        RangeSource source = new RangeSource(large(0));
-        assertThat(source.size()).isEqualTo(large(0));
+        RangeSource source = new RangeSource(LargeInteger.ZERO);
+        assertThat(source.size()).isEqualTo(LargeInteger.ZERO);
     }
 
     @Test
     void testValues() {
-        RangeSource source = new RangeSource(large(12));
-        assertThat(source.size()).isEqualTo(large(12));
+        RangeSource source = new RangeSource(LargeInteger.of(12));
+        assertThat(source.size()).isEqualTo(LargeInteger.of(12));
         assertThat(ImmutableList.fromIterable(Range.until(12)).map(source::get))
-                .isEqualTo(ImmutableList.of(larges(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)));
+                .isEqualTo(ImmutableList.of(LargeInteger.arrayOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)));
     }
 
     @Test
     void testValuesWithOffset() {
-        RangeSource source = new RangeSource(large(3), large(4));
-        assertThat(source.size()).isEqualTo(large(4));
+        RangeSource source = new RangeSource(LargeInteger.of(3), LargeInteger.of(4));
+        assertThat(source.size()).isEqualTo(LargeInteger.of(4));
         assertThat(ImmutableList.fromIterable(Range.until(4)).map(source::get))
-                .isEqualTo(ImmutableList.of(larges(3, 4, 5, 6)));
+                .isEqualTo(ImmutableList.of(LargeInteger.arrayOf(3, 4, 5, 6)));
     }
 
     @Test
     void testFind() {
-        RangeSource source = new RangeSource(large(14), large(20));
-        Range range = source.find(large(20));
-        assertThat(range.from()).isEqualTo(large(6));
-        assertThat(range.until()).isEqualTo(large(7));
+        RangeSource source = new RangeSource(LargeInteger.of(14), LargeInteger.of(20));
+        Range range = source.find(LargeInteger.of(20));
+        assertThat(range.from()).isEqualTo(LargeInteger.of(6));
+        assertThat(range.until()).isEqualTo(LargeInteger.of(7));
     }
 
     @Test
     void testFindBetween() {
-        RangeSource source = new RangeSource(large(3), large(9));
-        Range range = source.findBetween(large(5), true, large(7), false);
-        assertThat(range.from()).isEqualTo(large(2));
-        assertThat(range.until()).isEqualTo(large(4));
+        RangeSource source = new RangeSource(LargeInteger.of(3), LargeInteger.of(9));
+        Range range = source.findBetween(LargeInteger.of(5), true, LargeInteger.of(7), false);
+        assertThat(range.from()).isEqualTo(LargeInteger.of(2));
+        assertThat(range.until()).isEqualTo(LargeInteger.of(4));
     }
 
     @Test
     void testFindBetweenOut() {
-        RangeSource source = new RangeSource(large(8), large(12));
-        Range range = source.findBetween(large(12), false, large(50), false);
-        assertThat(range.from()).isEqualTo(large(5));
-        assertThat(range.until()).isEqualTo(large(12));
-    }
-
-    
-    private static LargeInteger large(int value) {
-        return LargeInteger.of(value);
-    }
-
-    private static LargeInteger[] larges(int... values) {
-        LargeInteger[] result = new LargeInteger[values.length];
-        for (int i = 0; i < values.length; i++) {
-            result[i] = LargeInteger.of(values[i]);
-        }
-        return result;
+        RangeSource source = new RangeSource(LargeInteger.of(8), LargeInteger.of(12));
+        Range range = source.findBetween(LargeInteger.of(12), false, LargeInteger.of(50), false);
+        assertThat(range.from()).isEqualTo(LargeInteger.of(5));
+        assertThat(range.until()).isEqualTo(LargeInteger.of(12));
     }
 
 }

@@ -13,19 +13,22 @@ class TransformingSourceTest {
     void testBasics() {
         TransformingSource<Integer, String> source = createTransformingSource();
         assertThat(source.type()).isEqualTo(String.class);
-        assertThat(source.size()).isEqualTo(large(8));
+        assertThat(source.size()).isEqualTo(LargeInteger.of(8));
     }
 
     @Test
     void testGet() {
         TransformingSource<Integer, String> source = createTransformingSource();
-        assertThat(source.get(large(3))).isEqualTo("24");
+        assertThat(source.get(LargeInteger.of(3))).isEqualTo("24");
     }
 
     @Test
     void testPossibleValues() {
         TransformingSource<Integer, String> source = createTransformingSource();
-        assertThat(ImmutableList.fill(source.size().intValue(), i -> source.get(large(i))))
+        assertThat(ImmutableList.fill(
+                        source.size().intValue(),
+                        i -> source.get(LargeInteger.of(i)))
+                )
                 .containsExactly("4", "6", "3", "24", "35", "24", "12", "63");
     }
 
@@ -33,10 +36,6 @@ class TransformingSourceTest {
     private static TransformingSource<Integer, String> createTransformingSource() {
         Source<Integer> baseSource = new FixedSource<>(4, 6, 3, 24, 35, 24, 12, 63);
         return new TransformingSource<>(baseSource, String.class, i -> i.toString());
-    }
-    
-    private static LargeInteger large(int value) {
-        return LargeInteger.of(value);
     }
 
 }
