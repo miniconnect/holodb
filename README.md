@@ -155,6 +155,7 @@ You can set default values for schemas, tables, and columns at any higher level 
 Any value set at a lower lever will override any value set at a higher level (and, of course, the global default).
 
 | Key | Available in |
+| --- | ------------ |
 | `schemaDefaults` | root |
 | `tableDefaults` | root, `schemas.*` |
 | `columnDefaults` | root, `schemas.*`, `schemas.*.tables.*` |
