@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-description "HoloDB standalone app"
+description "HoloDB service provider interfaces"
 
 dependencies {
     api project(':core')
