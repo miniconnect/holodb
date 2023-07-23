@@ -33,7 +33,11 @@ public class HoloEmbeddedDriver implements Driver {
     
     public static final Pattern TAIL_PATTERN = Pattern.compile(
             "^(?:file://(?<file>[^\\?]+)|resource://(?<resource>[^\\?]+))(?:\\?.*)?");
-    
+
+    public static final String FILE_GROUPNAME = "file";
+
+    public static final String RESOURCE_GROUPNAME = "resource";
+            
 
     @Override
     public boolean acceptsURL(String url) {
@@ -75,11 +79,11 @@ public class HoloEmbeddedDriver implements Driver {
         
         ConfigLoader configLoader;
         
-        String resourcePath = matcher.group("resource");
+        String resourcePath = matcher.group(RESOURCE_GROUPNAME);
         if (resourcePath != null) {
             configLoader = new ConfigLoader(resourcePath);
         } else {
-            String filePath = matcher.group("file");
+            String filePath = matcher.group(FILE_GROUPNAME);
             configLoader = new ConfigLoader(new File(filePath));
         }
         

@@ -1,0 +1,13 @@
+plugins {
+    id 'java-library'
+}
+
+description "HoloDB configuration"
+
+dependencies {
+    implementation project(':spi')
+    api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+    implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"
+    
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
+}
