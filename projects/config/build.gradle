@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "hu.webarticum.miniconnect.api:lang-jackson:${miniConnectApiVersion}"
+        classpath 'com.fasterxml.jackson.module:jackson-module-jsonSchema:2.15.0'
+    }
+}
+
 plugins {
     id 'java-library'
 }
@@ -10,4 +21,27 @@ dependencies {
     implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"
     
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
+}
+
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import hu.webarticum.miniconnect.lang.jackson.JacksonSupport;
+
+task generateSchema(dependsOn: classes) {
+    doLast {
+        def classLoader = new GroovyClassLoader()
+        sourceSets.main.runtimeClasspath.each { classLoader.addClasspath(it.path) }
+        
+        def configClass = classLoader.loadClass('hu.webarticum.holodb.app.config.HoloConfig')
+        def schemaOutDir = new File(buildDir, "schemas")
+        
+        ObjectMapper mapper = JacksonSupport.createMapper();
+        JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(mapper);
+        JsonSchema schema = schemaGen.generateSchema(configClass);
+        schemaOutDir.mkdirs();
+        def schemaOutFile = new File(schemaOutDir, "holodb-config.schema.json")
+        schemaOutFile.text = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema)
+    }
 }
