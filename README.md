@@ -421,6 +421,7 @@ Some numeric settings have two variants, one for usual and one for large values:
 Some settings accepts custom data:
 
 | Annotation | Annotation field | Type | Config field |
+| ---------- | ---------------- | ---- | ------------ |
 | `@HoloColumn` | `sourceFactoryData` | `@HoloValue` | `sourceFactoryData` |
 | `@HoloColumn` | `sourceFactoryDataMap` | `@HoloValue[]` | `sourceFactoryData` |
 | `@HoloColumn` | `defaultValue` | `@HoloValue` | `defaultValue` |
