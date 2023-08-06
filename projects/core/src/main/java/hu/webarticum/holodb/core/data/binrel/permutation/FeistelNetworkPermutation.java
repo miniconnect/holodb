@@ -2,9 +2,7 @@ package hu.webarticum.holodb.core.data.binrel.permutation;
 
 import java.util.BitSet;
 
-import hu.webarticum.holodb.core.data.hasher.FastHasher;
 import hu.webarticum.holodb.core.data.hasher.Hasher;
-import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
@@ -108,22 +106,7 @@ public class FeistelNetworkPermutation implements Permutation {
         for (int bi = leftBits.previousSetBit(leftSize); bi != -1; bi = leftBits.previousSetBit(bi - 1)) {
             resultBits.set(rightSize + bi);
         }
-        return LargeInteger.of(resultBits);
+        return LargeInteger.nonNegativeOf(resultBits);
     }
     
-    
-    public static void main(String[] args) {
-        TreeRandom treeRandom = new HasherTreeRandom();
-        Hasher hasher = new FastHasher("lorem", 3);
-        for (int n = 5; n < 6; n++) {
-            System.out.println(" :: " + n + " :: --------------------------");
-            Permutation permutation = new FeistelNetworkPermutation(treeRandom, n, 3, hasher);
-            for (int i = 0; i < 1; i++) {
-                LargeInteger value = permutation.at(LargeInteger.of(i));
-                //LargeInteger back = permutation.indexOf(value);
-                System.out.println(i + " ==> " + value);// + " ==> " + back);
-            }
-        }
-    }
-
 }
