@@ -12,7 +12,7 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class HasherTreeRandom implements TreeRandom {
 
-    private static final int RANDOM_NUMBER_MAX_RETRIES = 15;
+    private static final int RANDOM_NUMBER_MAX_RETRIES = 50;
 
     private static final byte SEPARATOR = (byte) 0b11111111;
 
@@ -133,7 +133,9 @@ public class HasherTreeRandom implements TreeRandom {
         
         ByteSourceBitSource bitSource = createBitSource();
         
-        LargeInteger partition = exponentOfTwo > 0 ? LargeInteger.of(bitSource.fetch(exponentOfTwo)) : LargeInteger.ZERO;
+        LargeInteger partition = exponentOfTwo > 0 ?
+                LargeInteger.nonNegativeOf(bitSource.fetch(exponentOfTwo)) :
+                LargeInteger.ZERO;
         LargeInteger offset = LargeInteger.ZERO;
         for (int i = 0; i < RANDOM_NUMBER_MAX_RETRIES; i++) {
             LargeInteger offsetCandidate = LargeInteger.of(bitSource.fetch(bitCountOfFactor));
