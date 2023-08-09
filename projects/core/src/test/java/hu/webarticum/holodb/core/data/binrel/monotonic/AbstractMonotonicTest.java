@@ -1,9 +1,12 @@
 package hu.webarticum.holodb.core.data.binrel.monotonic;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 
@@ -66,6 +69,7 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
     private void checkMonotonic(Monotonic monotonic) {
         checkValueRanges(monotonic);
         checkRangeRanges(monotonic);
+        checkIterator(monotonic);
     }
     
     private void checkValueRanges(Monotonic monotonic) {
@@ -141,12 +145,23 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
         }
     }
 
+    private void checkIterator(Monotonic monotonic) {
+        LargeInteger size = monotonic.size();
+        Iterator<LargeInteger> iterator = monotonic.iterator();
+        for (LargeInteger index = LargeInteger.ZERO; index.isLessThan(size); index = index.increment()) {
+            assertThat(iterator.hasNext()).isTrue();
+            LargeInteger iteratorValue = iterator.next();
+            LargeInteger value = monotonic.at(index);
+            assertThat(iteratorValue).isEqualTo(value);
+        }
+        assertThat(iterator.hasNext()).isFalse();
+        assertThatThrownBy(() -> iterator.next()).isInstanceOf(NoSuchElementException.class);
+    }
+    
     private void checkProbablyMonotonic(Monotonic monotonic) {
         LargeInteger size = monotonic.size();
         LargeInteger imageSize = monotonic.imageSize();
-        
         LargeInteger step = size.divide(LargeInteger.of(20));
-
         LargeInteger previousFetchedValue = LargeInteger.of(-1);
         for (LargeInteger index = LargeInteger.ZERO; index.isLessThan(size); index = index.add(step)) {
             LargeInteger value = monotonic.at(index);

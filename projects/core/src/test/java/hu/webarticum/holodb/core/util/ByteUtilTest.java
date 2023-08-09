@@ -36,6 +36,7 @@ class ByteUtilTest {
     @Test
     void testFirstBytesToLong() {
         assertThat(ByteUtil.firstBytesToLong(b(0, 0, 0, 0, 0, 1))).isEqualTo(65536L);
+        assertThat(ByteUtil.firstBytesToLong(b(0, 2, 234, 123, 17, 0, 6, 95))).isEqualTo(820764240512607L);
         assertThat(ByteUtil.firstBytesToLong(b(0, 0, 0, 0, 0, 201, 72, 7, 45, 31, 122, 255, 1, 0, 1))).isEqualTo(13191175L);
         assertThat(ByteUtil.firstBytesToLong(b(12, 50, 197, 78, 203, 61, 112, 132, 32, 45, 174, 63))).isEqualTo(878981819498590340L);
         assertThat(ByteUtil.firstBytesToLong(b(219, 45, 145, 245, 185, 34, 167, 92, 99, 192, 3, 204))).isEqualTo(-2653304120892283044L);
