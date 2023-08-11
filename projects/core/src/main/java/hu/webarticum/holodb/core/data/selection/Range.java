@@ -108,7 +108,7 @@ public class Range implements Selection {
 
     @Override
     public ReversibleIterable<LargeInteger> reverseOrder() {
-        return ReversibleIterable.of(ReversedRangeIterator::new, this);
+        return ReversibleIterable.reversedOfReference(ReversedRangeIterator::new, this);
     }
     
     @Override

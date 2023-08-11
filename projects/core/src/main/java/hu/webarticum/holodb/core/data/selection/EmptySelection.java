@@ -52,7 +52,7 @@ public final class EmptySelection implements Selection {
 
     @Override
     public ReversibleIterable<LargeInteger> reverseOrder() {
-        return ReversibleIterable.of(() -> Collections.emptyIterator(), this);
+        return ReversibleIterable.reversedOfReference(Collections::emptyIterator, this);
     }
 
 

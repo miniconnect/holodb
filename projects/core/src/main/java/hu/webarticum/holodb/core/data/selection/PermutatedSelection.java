@@ -50,7 +50,7 @@ public class PermutatedSelection implements Selection {
         Iterable<LargeInteger> reversedBase = baseSelection.reverseOrder();
         Iterable<LargeInteger> permutatedReversed =
                 () -> new IteratorAdapter<>(reversedBase.iterator(), permutation::at);
-        return ReversibleIterable.of(permutatedReversed, this);
+        return ReversibleIterable.reversedOfReference(permutatedReversed, this);
     }
     
 }

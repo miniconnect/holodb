@@ -4,14 +4,14 @@ import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
-class ModuloPermutationTest extends AbstractLargeGroundPermutationTest<ModuloPermutation> {
+class InMemoryRandomPermutationTest extends AbstractGroundPermutationTest<InMemoryRandomPermutation> {
 
     private final TreeRandom treeRandom = new HasherTreeRandom("0123456789");
     
-    
-    @Override
-    protected ModuloPermutation create(LargeInteger size) {
-        return new ModuloPermutation(treeRandom, size);
-    }
 
+    @Override
+    protected InMemoryRandomPermutation create(LargeInteger size) {
+        return new InMemoryRandomPermutation(treeRandom, size);
+    }
+    
 }
