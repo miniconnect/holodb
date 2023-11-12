@@ -1,5 +1,7 @@
 package hu.webarticum.holodb.core.data.random;
 
+import java.nio.charset.StandardCharsets;
+
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public interface TreeRandom {
@@ -13,7 +15,7 @@ public interface TreeRandom {
     }
 
     public default TreeRandom sub(String name) {
-        return sub(name.getBytes());
+        return sub(name.getBytes(StandardCharsets.UTF_8));
     }
     
     public TreeRandom sub(byte... bytes);
