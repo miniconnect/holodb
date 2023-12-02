@@ -1,11 +1,16 @@
 package hu.webarticum.holodb.embedded;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -15,13 +20,12 @@ import hu.webarticum.holodb.app.config.HoloConfig;
 import hu.webarticum.holodb.app.factory.ConfigLoader;
 import hu.webarticum.holodb.app.factory.EngineBuilder;
 import hu.webarticum.minibase.engine.api.Engine;
+import hu.webarticum.minibase.engine.facade.FrameworkSession;
 import hu.webarticum.minibase.engine.facade.FrameworkSessionManager;
 import hu.webarticum.minibase.execution.QueryExecutor;
 import hu.webarticum.minibase.execution.impl.IntegratedQueryExecutor;
 import hu.webarticum.minibase.query.parser.AntlrSqlParser;
 import hu.webarticum.minibase.query.parser.SqlParser;
-import hu.webarticum.miniconnect.api.MiniSession;
-import hu.webarticum.miniconnect.api.MiniSessionManager;
 import hu.webarticum.miniconnect.jdbc.MiniJdbcConnection;
 import hu.webarticum.miniconnect.jdbc.MiniJdbcDriver;
 import hu.webarticum.miniconnect.jdbc.provider.DatabaseProvider;
@@ -32,11 +36,15 @@ public class HoloEmbeddedDriver implements Driver {
     public static final String URL_PREFIX = "jdbc:holodb:embedded:";
     
     public static final Pattern TAIL_PATTERN = Pattern.compile(
-            "^(?:file://(?<file>[^\\?]+)|resource://(?<resource>[^\\?]+))(?:\\?.*)?");
+            "^(?:file://(?<file>[^\\?]+)|resource://(?<resource>[^\\?]+))(?:\\?(?<properties>.*))?");
 
     public static final String FILE_GROUPNAME = "file";
 
     public static final String RESOURCE_GROUPNAME = "resource";
+
+    public static final String PROPERTIES_GROUPNAME = "properties";
+
+    public static final String SCHEMA_KEYNAME = "schema";
             
 
     @Override
@@ -87,6 +95,8 @@ public class HoloEmbeddedDriver implements Driver {
             configLoader = new ConfigLoader(new File(filePath));
         }
         
+        Map<String, String> properties = parseProperties(matcher.group(PROPERTIES_GROUPNAME));
+
         SqlParser sqlParser = new AntlrSqlParser();
         QueryExecutor queryExecutor = new IntegratedQueryExecutor();
         DatabaseProvider databaseProvider = new BlanketDatabaseProvider();
@@ -95,9 +105,36 @@ public class HoloEmbeddedDriver implements Driver {
                 .sqlParser(sqlParser)
                 .queryExecutor(queryExecutor)
                 .build();
-        MiniSessionManager sessionManager = new FrameworkSessionManager(engine);
-        MiniSession session = sessionManager.openSession();
+        FrameworkSessionManager sessionManager = new FrameworkSessionManager(engine);
+        FrameworkSession session = sessionManager.openSession();
+        if (properties.containsKey(SCHEMA_KEYNAME)) {
+            session.engineSession().state().setCurrentSchema(properties.get(SCHEMA_KEYNAME));
+        }
         return new MiniJdbcConnection(session, databaseProvider);
+    }
+    
+    private Map<String, String> parseProperties(String propertiesString) {
+        Map<String, String> properties = new HashMap<>();
+        if (propertiesString == null || propertiesString.isEmpty()) {
+            return properties;
+        }
+        
+        for (String entryString : propertiesString.split("&")) {
+            String[] keyValue = entryString.split("=");
+            String key = decodeUrlValue(keyValue[0]);
+            String value = decodeUrlValue(keyValue[1]);
+            properties.put(key, value);
+        }
+        
+        return properties;
+    }
+    
+    private String decodeUrlValue(String rawValue) {
+        try {
+            return URLDecoder.decode(rawValue, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            return rawValue;
+        }
     }
     
 }
