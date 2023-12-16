@@ -1,5 +1,30 @@
 # Changelog
 
+## Version 0.5.0
+
+Released on *2023-12-16*
+
+### Fixed:
+
+- Set explicit encoding to byte extraction in `TreeRandom::sub(String)`
+- Fixed unsigned arithmetics in `FeistelNetworkPermutation` and `HasherTreeRandom`
+
+### Added:
+
+- New column settings in configuration: `defaultValue`, `distributionQuality`, `shuffleQuality`, `sourceFactory`, `sourceFactoryData`
+- More and improved permutation types
+- Support for default config values at all level for all sublevels
+- JSON Schema generator task: `config:generateSchema`
+
+### Improved:
+
+- Made `values` config nullable like others
+- Improved key hasher initialization in `FastHasher`
+- Made nullability more clear for config constructors
+- Extracted `config` project
+- Extracted `jpa-annotations` from `jpa` to its own lightweight subproject
+- Added module definition and utf-8 encoding explicitly
+
 ## Version 0.4.1
 
 Released on *2023-01-12*
