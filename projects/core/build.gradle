@@ -50,9 +50,13 @@ tasks.getByName('jmhJar').doFirst() {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
 
+def jmhReportHtmlDir = 'build/reports/jmh/html'
+project.tasks.getByName("jmhReport").doFirst {
+    project.file(jmhReportHtmlDir).mkdirs()
+}
 jmhReport {
     jmhResultPath = project.file('build/reports/jmh/results.json')
-    jmhReportOutput = project.file('build/reports/jmh/html')
+    jmhReportOutput = project.file(jmhReportHtmlDir)
 }
 
 tasks.getByName('jmhReport').doFirst() {
