@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'application'
     id 'com.google.cloud.tools.jib' version '3.3.1'
-    //id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 description "HoloDB standalone app"
@@ -47,17 +47,16 @@ application {
     mainClass = project.ext.mainClass
 }
 
-/*
-// FIXME: because of the antlr dependency bug
 shadowJar {
     dependencies {
+        // FIXME: because of the antlr dependency bug
         exclude(dependency('org.antlr:antlr4'))
         exclude(dependency('org.antlr:antlr-runtime'))
         exclude(dependency('org.antlr:ST4'))
         exclude(dependency('org.abego.treelayout:org.abego.treelayout.core'))
         exclude(dependency('com.ibm.icu:icu4j'))
     }
-}*/
+}
 
 jib {
     to {
