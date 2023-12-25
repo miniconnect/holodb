@@ -310,6 +310,11 @@ SQL > exit
 Bye-bye!
 ```
 
+Visit the [SQL guide](https://github.com/miniconnect/minibase/blob/master/SQL.md)
+to learn more about the SQL features supported by the default query engine.
+Alternatively, you can try the experimental integration with the
+[Apache Calcite](https://github.com/miniconnect/calcite-integration) query planner.
+
 Also, you can use a MiniConnect server or even an existing MiniConnect `Session` via JDBC.
 For more information,
 see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect#jdbc-compatibility).
