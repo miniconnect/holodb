@@ -47,17 +47,6 @@ application {
     mainClass = project.ext.mainClass
 }
 
-shadowJar {
-    dependencies {
-        // FIXME: because of the antlr dependency bug
-        exclude(dependency('org.antlr:antlr4'))
-        exclude(dependency('org.antlr:antlr-runtime'))
-        exclude(dependency('org.antlr:ST4'))
-        exclude(dependency('org.abego.treelayout:org.abego.treelayout.core'))
-        exclude(dependency('com.ibm.icu:icu4j'))
-    }
-}
-
 jib {
     to {
         image = 'miniconnect/holodb'
