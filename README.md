@@ -49,7 +49,7 @@ schemas:
             values: ['Some name', 'Other name', 'Some other']
 ```
 
-You can generate a json schema for this configuration data structure
+You can generate a JSON schema for this configuration data structure
 by executing the `config:generateSchema` gradle task inside the holodb gradle project.
 Then the generated schema file will be found here:
 
