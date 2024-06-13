@@ -1,11 +1,21 @@
 package hu.webarticum.holodb.regex.ast;
 
+import java.util.Objects;
+
 public class CharacterLiteralAstNode implements AstNode {
+
+    private final int startingPosition;
 
     private final char value;
     
-    public CharacterLiteralAstNode(char value) {
+    public CharacterLiteralAstNode(int startingPosition, char value) {
+        this.startingPosition = startingPosition;
         this.value = value;
+    }
+
+    @Override
+    public int startingPosition() {
+        return startingPosition;
     }
     
     public char value() {
@@ -14,7 +24,7 @@ public class CharacterLiteralAstNode implements AstNode {
 
     @Override
     public int hashCode() {
-        return Character.hashCode(value);
+        return Objects.hash(startingPosition, value);
     }
     
     @Override
@@ -23,14 +33,16 @@ public class CharacterLiteralAstNode implements AstNode {
             return true;
         } else if (!(obj instanceof CharacterLiteralAstNode)) {
             return false;
-        } else {
-            return value == ((CharacterLiteralAstNode) obj).value;
         }
+        CharacterLiteralAstNode other = (CharacterLiteralAstNode) obj;
+        return (
+                startingPosition == other.startingPosition &&
+                value == other.value);
     }
 
     @Override
     public String toString() {
-        return "'" + value + "'";
+        return startingPosition + ":'" + value + "'";
     }
     
 }

@@ -1,13 +1,23 @@
 package hu.webarticum.holodb.regex.ast;
 
+import java.util.Objects;
+
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class AlternationAstNode implements AstNode {
+    
+    private final int startingPosition;
 
     private final ImmutableList<SequenceAstNode> branches;
     
-    public AlternationAstNode(ImmutableList<SequenceAstNode> branches) {
+    public AlternationAstNode(int startingPosition, ImmutableList<SequenceAstNode> branches) {
+        this.startingPosition = startingPosition;
         this.branches = branches;
+    }
+
+    @Override
+    public int startingPosition() {
+        return startingPosition;
     }
     
     public ImmutableList<SequenceAstNode> branches() {
@@ -16,7 +26,7 @@ public class AlternationAstNode implements AstNode {
     
     @Override
     public int hashCode() {
-        return branches.hashCode();
+        return Objects.hash(startingPosition, branches);
     }
     
     @Override
@@ -25,14 +35,16 @@ public class AlternationAstNode implements AstNode {
             return true;
         } else if (!(obj instanceof AlternationAstNode)) {
             return false;
-        } else {
-            return branches.equals(((AlternationAstNode) obj).branches);
         }
+        AlternationAstNode other = (AlternationAstNode) obj;
+        return (
+                startingPosition == other.startingPosition &&
+                branches.equals(other.branches));
     }
 
     @Override
     public String toString() {
-        return "alt" + branches.toString();
+        return startingPosition + ":alt" + branches.toString();
     }
     
 }

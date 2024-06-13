@@ -1,6 +1,10 @@
 package hu.webarticum.holodb.regex.ast;
 
+import java.util.Objects;
+
 public class QuantifiedAstNode implements AstNode {
+
+    private final int startingPosition;
 
     private final AstNode node;
 
@@ -8,12 +12,18 @@ public class QuantifiedAstNode implements AstNode {
 
     private final int maxOccurences;
     
-    public QuantifiedAstNode(AstNode node, int minOccurences, int maxOccurences) {
+    public QuantifiedAstNode(int startingPosition, AstNode node, int minOccurences, int maxOccurences) {
+        this.startingPosition = startingPosition;
         this.node = node;
         this.minOccurences = minOccurences;
         this.maxOccurences = maxOccurences;
     }
 
+    @Override
+    public int startingPosition() {
+        return startingPosition;
+    }
+    
     public AstNode node() {
         return node;
     }
@@ -28,7 +38,7 @@ public class QuantifiedAstNode implements AstNode {
 
     @Override
     public int hashCode() {
-        return node.hashCode();
+        return Objects.hash(startingPosition, node, minOccurences, maxOccurences);
     }
     
     @Override
@@ -37,14 +47,18 @@ public class QuantifiedAstNode implements AstNode {
             return true;
         } else if (!(obj instanceof QuantifiedAstNode)) {
             return false;
-        } else {
-            return node.equals(((QuantifiedAstNode) obj).node);
         }
+        QuantifiedAstNode other = (QuantifiedAstNode) obj;
+        return (
+                startingPosition == other.startingPosition &&
+                node.equals(other.node) &&
+                minOccurences == other.minOccurences &&
+                maxOccurences == other.maxOccurences);
     }
 
     @Override
     public String toString() {
-        return "quant{node: " + node + ", min:" + minOccurences + ", max: " + maxOccurences + "}";
+        return startingPosition + ":quant{node: " + node + ", min:" + minOccurences + ", max: " + maxOccurences + "}";
     }
     
 }
