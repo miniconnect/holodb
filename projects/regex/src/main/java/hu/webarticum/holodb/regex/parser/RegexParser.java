@@ -25,7 +25,6 @@ public class RegexParser {
     }
     
     private AlternationAstNode parseAlternation(ParserInput parserInput) {
-        int position = parserInput.position();
         List<SequenceAstNode> branches = new ArrayList<>(1);
         branches.add(parseSequence(parserInput));
         while (parserInput.hasNext()) {
@@ -36,24 +35,22 @@ public class RegexParser {
                 break;
             }
         }
-        return new AlternationAstNode(position, ImmutableList.fromCollection(branches));
+        return new AlternationAstNode(ImmutableList.fromCollection(branches));
     }
 
     private SequenceAstNode parseSequence(ParserInput parserInput) {
         requireNonQuantifier(parserInput);
-        int position = parserInput.position();
         List<AstNode> items = new ArrayList<>();
         AstNode nextInSequence;
         while ((nextInSequence = parseNextInSequence(parserInput)) != null) {
             int[] quantifierData = parseQuantifier(parserInput);
             AstNode nextNode = (quantifierData != null ?
-                    new QuantifiedAstNode(
-                            nextInSequence.startingPosition(), nextInSequence, quantifierData[0], quantifierData[1]):
+                    new QuantifiedAstNode(nextInSequence, quantifierData[0], quantifierData[1]):
                     nextInSequence);
             items.add(nextNode);
             requireNonQuantifier(parserInput);
         }
-        return new SequenceAstNode(position, ImmutableList.fromCollection(items));
+        return new SequenceAstNode(ImmutableList.fromCollection(items));
     }
 
     private AstNode parseNextInSequence(ParserInput parserInput) {
@@ -73,7 +70,7 @@ public class RegexParser {
         
         // TODO
         if (Character.isAlphabetic(next) || Character.isDigit(next)) {
-            return new CharacterLiteralAstNode(position, next);
+            return new CharacterLiteralAstNode(next);
         } else {
             throw new RegexParserException(position, "Invalid input at position " + position + ": " + next);
         }
@@ -83,7 +80,6 @@ public class RegexParser {
     
     private GroupAstNode parseOpenedGroup(ParserInput parserInput) {
         requireNonEnd(parserInput);
-        int startPosition = parserInput.position() - 1;
         Object[] groupMetadata = parseGroupPrefix(parserInput);
         GroupAstNode.Kind kind = (GroupAstNode.Kind) groupMetadata[0];
         String name = (String) groupMetadata[1];
@@ -96,7 +92,7 @@ public class RegexParser {
                     afterPosition,
                     "Unexpected input at position " + afterPosition + ": " + after);
         }
-        return new GroupAstNode(startPosition, alternation, kind, name);
+        return new GroupAstNode(alternation, kind, name);
     }
     
     private Object[] parseGroupPrefix(ParserInput parserInput) {
