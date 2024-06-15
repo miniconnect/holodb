@@ -22,13 +22,22 @@ public class ParserInput {
         return position < characters.length;
     }
 
+    public char peek() {
+        requireNext();
+        return characters[position];
+    }
+    
     public char next() {
-        if (!hasNext()) {
-            throw new NoSuchElementException("There are no more characters");
-        }
+        requireNext();
         char next = characters[position];
         position++;
         return next;
+    }
+    
+    private void requireNext() {
+        if (!hasNext()) {
+            throw new NoSuchElementException("There are no more characters");
+        }
     }
     
     public void storno() {

@@ -9,6 +9,7 @@ import hu.webarticum.holodb.regex.ast.AlternationAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
+import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
@@ -242,6 +243,58 @@ class RegexParserTest {
     }
 
     @Test
+    void testSimpleQuantifiers() {
+        String pattern = "a?b*c+";
+        AstNode expectedAst = new AlternationAstNode(0, ImmutableList.of(
+            new SequenceAstNode(0, ImmutableList.of(
+                new QuantifiedAstNode(0, new CharacterLiteralAstNode(0, 'a'), 0, 1),
+                new QuantifiedAstNode(2, new CharacterLiteralAstNode(2, 'b'), 0, QuantifiedAstNode.NO_UPPER_LIMIT),
+                new QuantifiedAstNode(4, new CharacterLiteralAstNode(4, 'c'), 1, QuantifiedAstNode.NO_UPPER_LIMIT)
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+
+    @Test
+    void testQuantifierPlacedInside() {
+        String pattern = "a(b(c)?)";
+        AstNode expectedAst = new AlternationAstNode(0, ImmutableList.of(
+            new SequenceAstNode(0, ImmutableList.of(
+                new CharacterLiteralAstNode(0, 'a'),
+                new GroupAstNode(1, new AlternationAstNode(2, ImmutableList.of(
+                    new SequenceAstNode(2, ImmutableList.of(
+                        new CharacterLiteralAstNode(2, 'b'),
+                        new QuantifiedAstNode(3,
+                            new GroupAstNode(3, new AlternationAstNode(4, ImmutableList.of(
+                                new SequenceAstNode(4, ImmutableList.of(
+                                    new CharacterLiteralAstNode(4, 'c')
+                                ))
+                            )), GroupAstNode.Kind.CAPTURING, ""),
+                        0, 1)
+                    ))
+                )), GroupAstNode.Kind.CAPTURING, "")
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+
+    @Test
+    void testExplicitQuantifiers() {
+        String pattern = "a{3}b{1,4}c{2,}";
+        AstNode expectedAst = new AlternationAstNode(0, ImmutableList.of(
+            new SequenceAstNode(0, ImmutableList.of(
+                new QuantifiedAstNode(0, new CharacterLiteralAstNode(0, 'a'), 3, 3),
+                new QuantifiedAstNode(4, new CharacterLiteralAstNode(4, 'b'), 1, 4),
+                new QuantifiedAstNode(10, new CharacterLiteralAstNode(10, 'c'), 2, QuantifiedAstNode.NO_UPPER_LIMIT)
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+    
+    @Test
     void testExceptionCases() {
         testExceptionCase(")", 0);
         testExceptionCase("abc)", 3);
@@ -254,6 +307,12 @@ class RegexParserTest {
         testExceptionCase("(?'%%%')", 3);
         testExceptionCase("(?P<&&&>)", 4);
         testExceptionCase("lorem((ipsum)|(?:dolor)sit", 26);
+        testExceptionCase("a++", 1);
+        testExceptionCase("a*?", 1);
+        testExceptionCase("a***", 2);
+        testExceptionCase("a{}", 2);
+        testExceptionCase("a{x}", 2);
+        testExceptionCase("a{3}{4}", 4);
     }
     
     private void testExceptionCase(String pattern, int expectedPosition) {

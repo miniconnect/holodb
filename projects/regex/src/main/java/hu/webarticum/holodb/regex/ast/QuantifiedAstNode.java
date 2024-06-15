@@ -3,6 +3,8 @@ package hu.webarticum.holodb.regex.ast;
 import java.util.Objects;
 
 public class QuantifiedAstNode implements AstNode {
+    
+    public static final int NO_UPPER_LIMIT = Integer.MAX_VALUE;
 
     private final int startingPosition;
 

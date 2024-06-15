@@ -7,6 +7,7 @@ import hu.webarticum.holodb.regex.ast.AlternationAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
+import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
@@ -39,16 +40,22 @@ public class RegexParser {
     }
 
     private SequenceAstNode parseSequence(ParserInput parserInput) {
+        requireNonQuantifier(parserInput);
         int position = parserInput.position();
         List<AstNode> items = new ArrayList<>();
         AstNode nextInSequence;
         while ((nextInSequence = parseNextInSequence(parserInput)) != null) {
-            items.add(nextInSequence);
+            int[] quantifierData = parseQuantifier(parserInput);
+            AstNode nextNode = (quantifierData != null ?
+                    new QuantifiedAstNode(
+                            nextInSequence.startingPosition(), nextInSequence, quantifierData[0], quantifierData[1]):
+                    nextInSequence);
+            items.add(nextNode);
+            requireNonQuantifier(parserInput);
         }
         return new SequenceAstNode(position, ImmutableList.fromCollection(items));
     }
 
-    // TODO: simple implementation
     private AstNode parseNextInSequence(ParserInput parserInput) {
         if (!parserInput.hasNext()) {
             return null;
@@ -58,17 +65,20 @@ public class RegexParser {
         if (next == '|' || next == ')') {
             parserInput.storno();
             return null;
-        }
-        if (next == '(') {
+        } else if (next == '(') {
             return parseOpenedGroup(parserInput);
         }
         
-        // FIXME: dummy implementation
+        
+        
+        // TODO
         if (Character.isAlphabetic(next) || Character.isDigit(next)) {
             return new CharacterLiteralAstNode(position, next);
         } else {
             throw new RegexParserException(position, "Invalid input at position " + position + ": " + next);
         }
+        
+        
     }
     
     private GroupAstNode parseOpenedGroup(ParserInput parserInput) {
@@ -161,6 +171,88 @@ public class RegexParser {
         return (
                 isAllowedGroupNameFirstChar(c) ||
                 (c >= '0' && c <= '9'));
+    }
+    
+    private void requireNonQuantifier(ParserInput parserInput) {
+        if (!parserInput.hasNext()) {
+            return;
+        }
+        char next = parserInput.peek();
+        if (next == '?' || next == '*' || next == '+' || next == '{') {
+            int position = parserInput.position();
+            throw new RegexParserException(position, "Unexpected quantifer at position " + position + ": " + next);
+        }
+    }
+    
+    private int[] parseQuantifier(ParserInput parserInput) {
+        if (!parserInput.hasNext()) {
+            return null; // NOSONAR
+        }
+        int position = parserInput.position();
+        char next = parserInput.next();
+        int[] result;
+        if (next == '?') {
+            result = new int[] { 0, 1 };
+        } else if (next == '*') {
+            result = new int[] { 0, QuantifiedAstNode.NO_UPPER_LIMIT };
+        } else if (next == '+') {
+            result = new int[] { 1, QuantifiedAstNode.NO_UPPER_LIMIT };
+        } else if (next == '{') {
+            result = parseOpenedCurlyQuantifier(parserInput);
+        } else {
+            parserInput.storno();
+            return null; // NOSONAR
+        }
+        if (parserInput.hasNext()) {
+            char nextNext = parserInput.peek();
+            if (nextNext == '?') {
+                throw new RegexParserException(
+                        position, "Lazy quantifiers are not supported, used at position " + position);
+            } else if (nextNext == '+') {
+                throw new RegexParserException(
+                        position, "Possessive quantifiers are not supported, used at position " + position);
+            }
+        }
+        return result;
+    }
+    
+    private int[] parseOpenedCurlyQuantifier(ParserInput parserInput) {
+        int position = parserInput.position();
+        int num1 = parseNaturalNumber(parserInput);
+        if (num1 == -1 || !parserInput.hasNext()) {
+            throw new RegexParserException(position, "Invalid quantifier at position " + position);
+        }
+        int afterNum1 = parserInput.next();
+        if (afterNum1 == '}') {
+            return new int[] { num1, num1 };
+        } else if (afterNum1 == ',') {
+            int num2Candidate = parseNaturalNumber(parserInput);
+            if (!parserInput.hasNext() || parserInput.next() != '}') {
+                throw new RegexParserException(position, "Invalid quantifier at position " + position);
+            }
+            int num2 = (num2Candidate == -1) ? QuantifiedAstNode.NO_UPPER_LIMIT : num2Candidate;
+            return new int[] { num1, num2 };
+        } else {
+            throw new RegexParserException(position, "Invalid quantifier at position " + position);
+        }
+    }
+    
+    private int parseNaturalNumber(ParserInput parserInput) {
+        StringBuilder digits = new StringBuilder();
+        while (parserInput.hasNext()) {
+            char next = parserInput.next();
+            if (next >= '0' && next <= '9') {
+                digits.append(next);
+            } else {
+                parserInput.storno();
+                break;
+            }
+        }
+        if (digits.length() == 0) {
+            return -1;
+        } else {
+            return Integer.parseInt(digits.toString());
+        }
     }
     
     private void requireNonEnd(ParserInput parserInput) {
