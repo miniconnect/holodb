@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import hu.webarticum.holodb.regex.ast.AlternationAstNode;
 import hu.webarticum.holodb.regex.ast.AnchorAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
+import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
@@ -296,8 +297,8 @@ class RegexParserTest {
     }
 
     @Test
-    void testEscapeSequences() {
-        String pattern = "\\A\\\\?\\\\\\?\\?\\bc";
+    void testSimpleEscapeSequences() {
+        String pattern = "\\A\\\\?\\\\\\?\\?\\b\\v";
         AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
             new SequenceAstNode( ImmutableList.of(
                 new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_INPUT),
@@ -306,7 +307,7 @@ class RegexParserTest {
                 new CharacterLiteralAstNode('?'),
                 new CharacterLiteralAstNode('?'),
                 new AnchorAstNode(AnchorAstNode.Kind.WORD_BOUNDARY),
-                new CharacterLiteralAstNode('c')
+                new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.VERTICAL_WHITESPACE)
             ))
         ));
 

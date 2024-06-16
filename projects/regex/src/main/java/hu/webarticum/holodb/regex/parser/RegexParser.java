@@ -6,6 +6,7 @@ import java.util.List;
 import hu.webarticum.holodb.regex.ast.AlternationAstNode;
 import hu.webarticum.holodb.regex.ast.AnchorAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
+import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
@@ -206,9 +207,26 @@ public class RegexParser {
                 return new AnchorAstNode(AnchorAstNode.Kind.END_OF_INPUT_ALLOW_NEWLINE);
             case 'G':
                 return new AnchorAstNode(AnchorAstNode.Kind.END_OF_PREVIOUS_MATCH);
-
-            // TODO: \n \N \w \W \d \D etc.
-                
+            case 'w':
+                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.WORD);
+            case 'W':
+                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.NON_WORD);
+            case 'd':
+                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.DIGIT);
+            case 'D':
+                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.NON_DIGIT);
+            case 's':
+                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.WHITESPACE);
+            case 'S':
+                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.NON_WHITESPACE);
+            case 'h':
+                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.HORIZONTAL_WHITESPACE);
+            case 'H':
+                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.NON_HORIZONTAL_WHITESPACE);
+            case 'v':
+                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.VERTICAL_WHITESPACE);
+            case 'V':
+                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.NON_VERTICAL_WHITESPACE);
             default:
                 throw new RegexParserException(
                         position, "Unsupported escape sequence \\" + next + " at position: " + position);
@@ -226,10 +244,7 @@ public class RegexParser {
     
     private AstNode parseSingleInputCharacter(char next) {
         if (next == '.') {
-            
-            // TODO
-            throw new UnsupportedOperationException("Dot wildcard: not implemented yet");
-            
+            return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.ANY);
         } else if (next == '^') {
             return new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_LINE);
         } else if (next == '$') {
