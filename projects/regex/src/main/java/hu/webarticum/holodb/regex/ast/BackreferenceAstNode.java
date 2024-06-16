@@ -1,0 +1,36 @@
+package hu.webarticum.holodb.regex.ast;
+
+public class BackreferenceAstNode implements AstNode {
+
+    private final int number;
+    
+    public BackreferenceAstNode(int number) {
+        this.number = number;
+    }
+
+    public int number() {
+        return number;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(number);
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        } else if (!(obj instanceof BackreferenceAstNode)) {
+            return false;
+        }
+        BackreferenceAstNode other = (BackreferenceAstNode) obj;
+        return number == other.number;
+    }
+
+    @Override
+    public String toString() {
+        return "back:" + number;
+    }
+    
+}

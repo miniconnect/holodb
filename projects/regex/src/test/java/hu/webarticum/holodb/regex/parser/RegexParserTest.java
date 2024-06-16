@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import hu.webarticum.holodb.regex.ast.AlternationAstNode;
 import hu.webarticum.holodb.regex.ast.AnchorAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
+import hu.webarticum.holodb.regex.ast.BackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
@@ -286,7 +287,7 @@ class RegexParserTest {
     void testExplicitQuantifiers() {
         String pattern = "a{3}b{1,4}c{2,}";
         AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode( ImmutableList.of(
+            new SequenceAstNode(ImmutableList.of(
                 new QuantifiedAstNode(new CharacterLiteralAstNode('a'), 3, 3),
                 new QuantifiedAstNode(new CharacterLiteralAstNode('b'), 1, 4),
                 new QuantifiedAstNode(new CharacterLiteralAstNode('c'), 2, QuantifiedAstNode.NO_UPPER_LIMIT)
@@ -300,7 +301,7 @@ class RegexParserTest {
     void testSimpleEscapeSequences() {
         String pattern = "\\A\\\\?\\\\\\?\\?\\b\\v";
         AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode( ImmutableList.of(
+            new SequenceAstNode(ImmutableList.of(
                 new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_INPUT),
                 new QuantifiedAstNode(new CharacterLiteralAstNode('\\'), 0, 1),
                 new CharacterLiteralAstNode('\\'),
@@ -318,9 +319,26 @@ class RegexParserTest {
     void testOctalEscapeSequences() {
         String pattern = "\\075e";
         AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode( ImmutableList.of(
+            new SequenceAstNode(ImmutableList.of(
                 new CharacterLiteralAstNode('='),
                 new CharacterLiteralAstNode('e')
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+
+    @Test
+    void testBackreference() {
+        String pattern = "(a)\\1";
+        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
+            new SequenceAstNode(ImmutableList.of(
+                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
+                    new SequenceAstNode(ImmutableList.of(
+                        new CharacterLiteralAstNode('a')
+                    ))
+                )), GroupAstNode.Kind.CAPTURING, ""),
+                new BackreferenceAstNode(1)
             ))
         ));
 

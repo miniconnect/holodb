@@ -6,6 +6,7 @@ import java.util.List;
 import hu.webarticum.holodb.regex.ast.AlternationAstNode;
 import hu.webarticum.holodb.regex.ast.AnchorAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
+import hu.webarticum.holodb.regex.ast.BackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
@@ -184,10 +185,9 @@ public class RegexParser {
             int number = parseOctalNumber(parserInput);
             return new CharacterLiteralAstNode((char) number);
         } else if (next >= '1' && next <= '9') {
-            
-            // TODO
-            throw new UnsupportedOperationException("Backreference: not implemented yet");
-            
+            parserInput.storno();
+            int number = parseDecimalNumber(parserInput);
+            return new BackreferenceAstNode(number);
         }
         if (!Character.isAlphabetic(next)) {
             return new CharacterLiteralAstNode(next);
