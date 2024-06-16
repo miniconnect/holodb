@@ -313,6 +313,19 @@ class RegexParserTest {
 
         assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
     }
+
+    @Test
+    void testOctalEscapeSequences() {
+        String pattern = "\\075e";
+        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
+            new SequenceAstNode( ImmutableList.of(
+                new CharacterLiteralAstNode('='),
+                new CharacterLiteralAstNode('e')
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
     
     @Test
     void testExceptionCases() {

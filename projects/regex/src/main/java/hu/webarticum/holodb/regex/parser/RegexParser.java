@@ -181,10 +181,8 @@ public class RegexParser {
         int position = parserInput.position() - 1;
         char next = parserInput.next();
         if (next == '0') {
-         
-            // TODO
-            throw new UnsupportedOperationException("Octal escape sequence: not implemented yet");
-            
+            int number = parseOctalNumber(parserInput);
+            return new CharacterLiteralAstNode((char) number);
         } else if (next >= '1' && next <= '9') {
             
             // TODO
@@ -288,7 +286,7 @@ public class RegexParser {
     
     private int[] parseOpenedCurlyQuantifier(ParserInput parserInput) {
         int position = parserInput.position();
-        int num1 = parseNaturalNumber(parserInput);
+        int num1 = parseDecimalNumber(parserInput);
         if (num1 == -1 || !parserInput.hasNext()) {
             throw new RegexParserException(position, "Invalid quantifier at position " + position);
         }
@@ -296,7 +294,7 @@ public class RegexParser {
         if (afterNum1 == '}') {
             return new int[] { num1, num1 };
         } else if (afterNum1 == ',') {
-            int num2Candidate = parseNaturalNumber(parserInput);
+            int num2Candidate = parseDecimalNumber(parserInput);
             if (!parserInput.hasNext() || parserInput.next() != '}') {
                 throw new RegexParserException(position, "Invalid quantifier at position " + position);
             }
@@ -307,7 +305,7 @@ public class RegexParser {
         }
     }
     
-    private int parseNaturalNumber(ParserInput parserInput) {
+    private int parseDecimalNumber(ParserInput parserInput) {
         StringBuilder digits = new StringBuilder();
         while (parserInput.hasNext()) {
             char next = parserInput.next();
@@ -324,7 +322,25 @@ public class RegexParser {
             return Integer.parseInt(digits.toString());
         }
     }
-    
+
+    private int parseOctalNumber(ParserInput parserInput) {
+        StringBuilder digits = new StringBuilder();
+        while (parserInput.hasNext()) {
+            char next = parserInput.next();
+            if (next >= '0' && next <= '7') {
+                digits.append(next);
+            } else {
+                parserInput.storno();
+                break;
+            }
+        }
+        if (digits.length() == 0) {
+            return -1;
+        } else {
+            return Integer.parseInt(digits.toString(), 8);
+        }
+    }
+
     private void requireNonEnd(ParserInput parserInput) {
         if (!parserInput.hasNext()) {
             throw unexpectedEnd(parserInput.position());
