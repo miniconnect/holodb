@@ -178,7 +178,7 @@ public class RegexParser {
     private AstNode parseOpenedEscapeSequence(ParserInput parserInput) {
         requireNonEnd(parserInput);
         int position = parserInput.position() - 1;
-        char next = parserInput.peek();
+        char next = parserInput.next();
         if (next == '0') {
          
             // TODO
@@ -194,12 +194,12 @@ public class RegexParser {
             return new CharacterLiteralAstNode(next);
         }
         switch (next) {
-            case 'w':
+            case 'b':
                 return new AnchorAstNode(AnchorAstNode.Kind.WORD_BOUNDARY);
-            case 'W':
+            case 'B':
                 return new AnchorAstNode(AnchorAstNode.Kind.NOT_WORD_BOUNDARY);
             case 'A':
-                return new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_LINE);
+                return new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_INPUT);
             case 'z':
                 return new AnchorAstNode(AnchorAstNode.Kind.END_OF_INPUT);
             case 'Z':

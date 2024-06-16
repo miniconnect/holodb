@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Test;
 
 import hu.webarticum.holodb.regex.ast.AlternationAstNode;
+import hu.webarticum.holodb.regex.ast.AnchorAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
@@ -293,6 +294,24 @@ class RegexParserTest {
 
         assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
     }
+
+    @Test
+    void testEscapeSequences() {
+        String pattern = "\\A\\\\?\\\\\\?\\?\\bc";
+        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
+            new SequenceAstNode( ImmutableList.of(
+                new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_INPUT),
+                new QuantifiedAstNode(new CharacterLiteralAstNode('\\'), 0, 1),
+                new CharacterLiteralAstNode('\\'),
+                new CharacterLiteralAstNode('?'),
+                new CharacterLiteralAstNode('?'),
+                new AnchorAstNode(AnchorAstNode.Kind.WORD_BOUNDARY),
+                new CharacterLiteralAstNode('c')
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
     
     @Test
     void testExceptionCases() {
@@ -313,6 +332,9 @@ class RegexParserTest {
         testExceptionCase("a{}", 2);
         testExceptionCase("a{x}", 2);
         testExceptionCase("a{3}{4}", 4);
+        testExceptionCase("\\", 1);
+        testExceptionCase("abc\\", 4);
+        testExceptionCase("lorem\\ipsum", 5);
     }
     
     private void testExceptionCase(String pattern, int expectedPosition) {
