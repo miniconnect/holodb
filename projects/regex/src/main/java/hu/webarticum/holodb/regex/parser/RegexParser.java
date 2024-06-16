@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.webarticum.holodb.regex.ast.AlternationAstNode;
+import hu.webarticum.holodb.regex.ast.AnchorAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
@@ -57,25 +58,19 @@ public class RegexParser {
         if (!parserInput.hasNext()) {
             return null;
         }
-        int position = parserInput.position();
         char next = parserInput.next();
         if (next == '|' || next == ')') {
             parserInput.storno();
             return null;
         } else if (next == '(') {
             return parseOpenedGroup(parserInput);
-        }
-        
-        
-        
-        // TODO
-        if (Character.isAlphabetic(next) || Character.isDigit(next)) {
-            return new CharacterLiteralAstNode(next);
+        } else if (next == '\\') {
+            return parseOpenedEscapeSequence(parserInput);
+        } else if (next == '[') {
+            return parseOpenedCharacterClass(parserInput);
         } else {
-            throw new RegexParserException(position, "Invalid input at position " + position + ": " + next);
+            return parseSingleInputCharacter(next);
         }
-        
-        
     }
     
     private GroupAstNode parseOpenedGroup(ParserInput parserInput) {
@@ -177,6 +172,70 @@ public class RegexParser {
         if (next == '?' || next == '*' || next == '+' || next == '{') {
             int position = parserInput.position();
             throw new RegexParserException(position, "Unexpected quantifer at position " + position + ": " + next);
+        }
+    }
+    
+    private AstNode parseOpenedEscapeSequence(ParserInput parserInput) {
+        requireNonEnd(parserInput);
+        int position = parserInput.position() - 1;
+        char next = parserInput.peek();
+        if (next == '0') {
+         
+            // TODO
+            throw new UnsupportedOperationException("Octal escape sequence: not implemented yet");
+            
+        } else if (next >= '1' && next <= '9') {
+            
+            // TODO
+            throw new UnsupportedOperationException("Backreference: not implemented yet");
+            
+        }
+        if (!Character.isAlphabetic(next)) {
+            return new CharacterLiteralAstNode(next);
+        }
+        switch (next) {
+            case 'w':
+                return new AnchorAstNode(AnchorAstNode.Kind.WORD_BOUNDARY);
+            case 'W':
+                return new AnchorAstNode(AnchorAstNode.Kind.NOT_WORD_BOUNDARY);
+            case 'A':
+                return new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_LINE);
+            case 'z':
+                return new AnchorAstNode(AnchorAstNode.Kind.END_OF_INPUT);
+            case 'Z':
+                return new AnchorAstNode(AnchorAstNode.Kind.END_OF_INPUT_ALLOW_NEWLINE);
+            case 'G':
+                return new AnchorAstNode(AnchorAstNode.Kind.END_OF_PREVIOUS_MATCH);
+
+            // TODO: \n \N \w \W \d \D etc.
+                
+            default:
+                throw new RegexParserException(
+                        position, "Unsupported escape sequence \\" + next + " at position: " + position);
+        }
+        
+    }
+    
+    private AstNode parseOpenedCharacterClass(ParserInput parserInput) {
+        requireNonEnd(parserInput);
+        
+        // TODO
+        throw new UnsupportedOperationException("Character class: not implemented yet");
+        
+    }
+    
+    private AstNode parseSingleInputCharacter(char next) {
+        if (next == '.') {
+            
+            // TODO
+            throw new UnsupportedOperationException("Dot wildcard: not implemented yet");
+            
+        } else if (next == '^') {
+            return new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_LINE);
+        } else if (next == '$') {
+            return new AnchorAstNode(AnchorAstNode.Kind.END_OF_LINE);
+        } else {
+            return new CharacterLiteralAstNode(next);
         }
     }
     
