@@ -197,7 +197,7 @@ public class RegexParser {
             case 'b':
                 return new AnchorAstNode(AnchorAstNode.Kind.WORD_BOUNDARY);
             case 'B':
-                return new AnchorAstNode(AnchorAstNode.Kind.NOT_WORD_BOUNDARY);
+                return new AnchorAstNode(AnchorAstNode.Kind.NON_WORD_BOUNDARY);
             case 'A':
                 return new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_INPUT);
             case 'z':

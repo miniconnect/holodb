@@ -4,7 +4,7 @@ public class AnchorAstNode implements AstNode {
 
     public enum Kind {
         WORD_BOUNDARY,
-        NOT_WORD_BOUNDARY,
+        NON_WORD_BOUNDARY,
         BEGIN_OF_LINE,
         END_OF_LINE,
         BEGIN_OF_INPUT,
