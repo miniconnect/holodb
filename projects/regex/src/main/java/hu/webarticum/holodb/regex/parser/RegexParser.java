@@ -10,6 +10,7 @@ import hu.webarticum.holodb.regex.ast.BackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
+import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -193,6 +194,8 @@ public class RegexParser {
             return new CharacterLiteralAstNode(next);
         }
         switch (next) {
+            case 'R':
+                return new LinebreakAstNode();
             case 'b':
                 return new AnchorAstNode(AnchorAstNode.Kind.WORD_BOUNDARY);
             case 'B':

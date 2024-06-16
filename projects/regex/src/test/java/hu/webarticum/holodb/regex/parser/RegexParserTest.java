@@ -12,6 +12,7 @@ import hu.webarticum.holodb.regex.ast.BackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
+import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -299,7 +300,7 @@ class RegexParserTest {
 
     @Test
     void testSimpleEscapeSequences() {
-        String pattern = "\\A\\\\?\\\\\\?\\?\\b\\v";
+        String pattern = "\\A\\\\?\\\\\\?\\?\\b\\v\\R";
         AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
             new SequenceAstNode(ImmutableList.of(
                 new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_INPUT),
@@ -308,7 +309,8 @@ class RegexParserTest {
                 new CharacterLiteralAstNode('?'),
                 new CharacterLiteralAstNode('?'),
                 new AnchorAstNode(AnchorAstNode.Kind.WORD_BOUNDARY),
-                new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.VERTICAL_WHITESPACE)
+                new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.VERTICAL_WHITESPACE),
+                new LinebreakAstNode()
             ))
         ));
 
