@@ -22,8 +22,8 @@ class RegexParserTest {
     @Test
     void testEmpty() {
         String pattern = "";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.empty())
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.empty())
         ));
         
         assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
@@ -32,14 +32,14 @@ class RegexParserTest {
     @Test
     void testSimpleCharacters() {
         String pattern = "abc123";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new CharacterLiteralAstNode('a'),
-                new CharacterLiteralAstNode('b'),
-                new CharacterLiteralAstNode('c'),
-                new CharacterLiteralAstNode('1'),
-                new CharacterLiteralAstNode('2'),
-                new CharacterLiteralAstNode('3')
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterLiteralAstNode.of('a'),
+                CharacterLiteralAstNode.of('b'),
+                CharacterLiteralAstNode.of('c'),
+                CharacterLiteralAstNode.of('1'),
+                CharacterLiteralAstNode.of('2'),
+                CharacterLiteralAstNode.of('3')
             ))
         ));
         
@@ -49,20 +49,20 @@ class RegexParserTest {
     @Test
     void testSimpleAlternation() {
         String pattern = "a1|b2|c333";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new CharacterLiteralAstNode('a'),
-                new CharacterLiteralAstNode('1')
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterLiteralAstNode.of('a'),
+                CharacterLiteralAstNode.of('1')
             )),
-            new SequenceAstNode(ImmutableList.of(
-                new CharacterLiteralAstNode('b'),
-                new CharacterLiteralAstNode('2')
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterLiteralAstNode.of('b'),
+                CharacterLiteralAstNode.of('2')
             )),
-            new SequenceAstNode(ImmutableList.of(
-                new CharacterLiteralAstNode('c'),
-                new CharacterLiteralAstNode('3'),
-                new CharacterLiteralAstNode('3'),
-                new CharacterLiteralAstNode('3')
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterLiteralAstNode.of('c'),
+                CharacterLiteralAstNode.of('3'),
+                CharacterLiteralAstNode.of('3'),
+                CharacterLiteralAstNode.of('3')
             ))
         ));
         
@@ -72,10 +72,10 @@ class RegexParserTest {
     @Test
     void testEmptyGroup() {
         String pattern = "()";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                    new SequenceAstNode(ImmutableList.empty())
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.empty())
                 )), GroupAstNode.Kind.CAPTURING, "")
             ))
         ));
@@ -86,15 +86,15 @@ class RegexParserTest {
     @Test
     void testSimpleGroup() {
         String pattern = "(lorem)";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                    new SequenceAstNode(ImmutableList.of(
-                        new CharacterLiteralAstNode('l'),
-                        new CharacterLiteralAstNode('o'),
-                        new CharacterLiteralAstNode('r'),
-                        new CharacterLiteralAstNode('e'),
-                        new CharacterLiteralAstNode('m')
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterLiteralAstNode.of('l'),
+                        CharacterLiteralAstNode.of('o'),
+                        CharacterLiteralAstNode.of('r'),
+                        CharacterLiteralAstNode.of('e'),
+                        CharacterLiteralAstNode.of('m')
                     ))
                 )), GroupAstNode.Kind.CAPTURING, "")
             ))
@@ -106,22 +106,22 @@ class RegexParserTest {
     @Test
     void testAlternationGroup() {
         String pattern = "(lorem|ipsum)";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                    new SequenceAstNode(ImmutableList.of(
-                        new CharacterLiteralAstNode('l'),
-                        new CharacterLiteralAstNode('o'),
-                        new CharacterLiteralAstNode('r'),
-                        new CharacterLiteralAstNode('e'),
-                        new CharacterLiteralAstNode('m')
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterLiteralAstNode.of('l'),
+                        CharacterLiteralAstNode.of('o'),
+                        CharacterLiteralAstNode.of('r'),
+                        CharacterLiteralAstNode.of('e'),
+                        CharacterLiteralAstNode.of('m')
                     )),
-                    new SequenceAstNode(ImmutableList.of(
-                            new CharacterLiteralAstNode('i'),
-                            new CharacterLiteralAstNode('p'),
-                            new CharacterLiteralAstNode('s'),
-                            new CharacterLiteralAstNode('u'),
-                            new CharacterLiteralAstNode('m')
+                    SequenceAstNode.of(ImmutableList.of(
+                            CharacterLiteralAstNode.of('i'),
+                            CharacterLiteralAstNode.of('p'),
+                            CharacterLiteralAstNode.of('s'),
+                            CharacterLiteralAstNode.of('u'),
+                            CharacterLiteralAstNode.of('m')
                         ))
                 )), GroupAstNode.Kind.CAPTURING, "")
             ))
@@ -133,54 +133,54 @@ class RegexParserTest {
     @Test
     void testGroupKinds() {
         String pattern = "(lorem)(?:ipsum)(?<dolor>sit)(?'amet'consectetur)(?P<adipiscing>elit)";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                    new SequenceAstNode(ImmutableList.of(
-                        new CharacterLiteralAstNode('l'),
-                        new CharacterLiteralAstNode('o'),
-                        new CharacterLiteralAstNode('r'),
-                        new CharacterLiteralAstNode('e'),
-                        new CharacterLiteralAstNode('m')
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterLiteralAstNode.of('l'),
+                        CharacterLiteralAstNode.of('o'),
+                        CharacterLiteralAstNode.of('r'),
+                        CharacterLiteralAstNode.of('e'),
+                        CharacterLiteralAstNode.of('m')
                     ))
                 )), GroupAstNode.Kind.CAPTURING, ""),
-                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                    new SequenceAstNode(ImmutableList.of(
-                        new CharacterLiteralAstNode('i'),
-                        new CharacterLiteralAstNode('p'),
-                        new CharacterLiteralAstNode('s'),
-                        new CharacterLiteralAstNode('u'),
-                        new CharacterLiteralAstNode('m')
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterLiteralAstNode.of('i'),
+                        CharacterLiteralAstNode.of('p'),
+                        CharacterLiteralAstNode.of('s'),
+                        CharacterLiteralAstNode.of('u'),
+                        CharacterLiteralAstNode.of('m')
                     ))
                 )), GroupAstNode.Kind.NON_CAPTURING, ""),
-                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                    new SequenceAstNode(ImmutableList.of(
-                        new CharacterLiteralAstNode('s'),
-                        new CharacterLiteralAstNode('i'),
-                        new CharacterLiteralAstNode('t')
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterLiteralAstNode.of('s'),
+                        CharacterLiteralAstNode.of('i'),
+                        CharacterLiteralAstNode.of('t')
                     ))
                 )), GroupAstNode.Kind.NAMED, "dolor"),
-                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                    new SequenceAstNode(ImmutableList.of(
-                        new CharacterLiteralAstNode('c'),
-                        new CharacterLiteralAstNode('o'),
-                        new CharacterLiteralAstNode('n'),
-                        new CharacterLiteralAstNode('s'),
-                        new CharacterLiteralAstNode('e'),
-                        new CharacterLiteralAstNode('c'),
-                        new CharacterLiteralAstNode('t'),
-                        new CharacterLiteralAstNode('e'),
-                        new CharacterLiteralAstNode('t'),
-                        new CharacterLiteralAstNode('u'),
-                        new CharacterLiteralAstNode('r')
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterLiteralAstNode.of('c'),
+                        CharacterLiteralAstNode.of('o'),
+                        CharacterLiteralAstNode.of('n'),
+                        CharacterLiteralAstNode.of('s'),
+                        CharacterLiteralAstNode.of('e'),
+                        CharacterLiteralAstNode.of('c'),
+                        CharacterLiteralAstNode.of('t'),
+                        CharacterLiteralAstNode.of('e'),
+                        CharacterLiteralAstNode.of('t'),
+                        CharacterLiteralAstNode.of('u'),
+                        CharacterLiteralAstNode.of('r')
                     ))
                 )), GroupAstNode.Kind.NAMED, "amet"),
-                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                    new SequenceAstNode(ImmutableList.of(
-                        new CharacterLiteralAstNode('e'),
-                        new CharacterLiteralAstNode('l'),
-                        new CharacterLiteralAstNode('i'),
-                        new CharacterLiteralAstNode('t')
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterLiteralAstNode.of('e'),
+                        CharacterLiteralAstNode.of('l'),
+                        CharacterLiteralAstNode.of('i'),
+                        CharacterLiteralAstNode.of('t')
                     ))
                 )), GroupAstNode.Kind.NAMED, "adipiscing")
             ))
@@ -192,50 +192,50 @@ class RegexParserTest {
     @Test
     void testNestedGroups() {
         String pattern = "lorem(ipsum|(?:dolor(?<sit>amet)|consectetur))";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new CharacterLiteralAstNode('l'),
-                new CharacterLiteralAstNode('o'),
-                new CharacterLiteralAstNode('r'),
-                new CharacterLiteralAstNode('e'),
-                new CharacterLiteralAstNode('m'),
-                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                    new SequenceAstNode(ImmutableList.of(
-                        new CharacterLiteralAstNode('i'),
-                        new CharacterLiteralAstNode('p'),
-                        new CharacterLiteralAstNode('s'),
-                        new CharacterLiteralAstNode('u'),
-                        new CharacterLiteralAstNode('m')
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterLiteralAstNode.of('l'),
+                CharacterLiteralAstNode.of('o'),
+                CharacterLiteralAstNode.of('r'),
+                CharacterLiteralAstNode.of('e'),
+                CharacterLiteralAstNode.of('m'),
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterLiteralAstNode.of('i'),
+                        CharacterLiteralAstNode.of('p'),
+                        CharacterLiteralAstNode.of('s'),
+                        CharacterLiteralAstNode.of('u'),
+                        CharacterLiteralAstNode.of('m')
                     )),
-                    new SequenceAstNode(ImmutableList.of(
-                        new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                            new SequenceAstNode(ImmutableList.of(
-                                new CharacterLiteralAstNode('d'),
-                                new CharacterLiteralAstNode('o'),
-                                new CharacterLiteralAstNode('l'),
-                                new CharacterLiteralAstNode('o'),
-                                new CharacterLiteralAstNode('r'),
-                                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                                    new SequenceAstNode(ImmutableList.of(
-                                        new CharacterLiteralAstNode('a'),
-                                        new CharacterLiteralAstNode('m'),
-                                        new CharacterLiteralAstNode('e'),
-                                        new CharacterLiteralAstNode('t')
+                    SequenceAstNode.of(ImmutableList.of(
+                        GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                            SequenceAstNode.of(ImmutableList.of(
+                                CharacterLiteralAstNode.of('d'),
+                                CharacterLiteralAstNode.of('o'),
+                                CharacterLiteralAstNode.of('l'),
+                                CharacterLiteralAstNode.of('o'),
+                                CharacterLiteralAstNode.of('r'),
+                                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                                    SequenceAstNode.of(ImmutableList.of(
+                                        CharacterLiteralAstNode.of('a'),
+                                        CharacterLiteralAstNode.of('m'),
+                                        CharacterLiteralAstNode.of('e'),
+                                        CharacterLiteralAstNode.of('t')
                                     ))
                                 )), GroupAstNode.Kind.NAMED, "sit")
                             )),
-                            new SequenceAstNode(ImmutableList.of(
-                                new CharacterLiteralAstNode('c'),
-                                new CharacterLiteralAstNode('o'),
-                                new CharacterLiteralAstNode('n'),
-                                new CharacterLiteralAstNode('s'),
-                                new CharacterLiteralAstNode('e'),
-                                new CharacterLiteralAstNode('c'),
-                                new CharacterLiteralAstNode('t'),
-                                new CharacterLiteralAstNode('e'),
-                                new CharacterLiteralAstNode('t'),
-                                new CharacterLiteralAstNode('u'),
-                                new CharacterLiteralAstNode('r')
+                            SequenceAstNode.of(ImmutableList.of(
+                                CharacterLiteralAstNode.of('c'),
+                                CharacterLiteralAstNode.of('o'),
+                                CharacterLiteralAstNode.of('n'),
+                                CharacterLiteralAstNode.of('s'),
+                                CharacterLiteralAstNode.of('e'),
+                                CharacterLiteralAstNode.of('c'),
+                                CharacterLiteralAstNode.of('t'),
+                                CharacterLiteralAstNode.of('e'),
+                                CharacterLiteralAstNode.of('t'),
+                                CharacterLiteralAstNode.of('u'),
+                                CharacterLiteralAstNode.of('r')
                             ))
                         )), GroupAstNode.Kind.NON_CAPTURING, "")
                     ))
@@ -249,11 +249,11 @@ class RegexParserTest {
     @Test
     void testSimpleQuantifiers() {
         String pattern = "a?b*c+";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new QuantifiedAstNode(new CharacterLiteralAstNode('a'), 0, 1),
-                new QuantifiedAstNode(new CharacterLiteralAstNode('b'), 0, QuantifiedAstNode.NO_UPPER_LIMIT),
-                new QuantifiedAstNode(new CharacterLiteralAstNode('c'), 1, QuantifiedAstNode.NO_UPPER_LIMIT)
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                QuantifiedAstNode.of(CharacterLiteralAstNode.of('a'), 0, 1),
+                QuantifiedAstNode.of(CharacterLiteralAstNode.of('b'), 0, QuantifiedAstNode.NO_UPPER_LIMIT),
+                QuantifiedAstNode.of(CharacterLiteralAstNode.of('c'), 1, QuantifiedAstNode.NO_UPPER_LIMIT)
             ))
         ));
 
@@ -263,16 +263,16 @@ class RegexParserTest {
     @Test
     void testQuantifierPlacedInside() {
         String pattern = "a(b(c)?)";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new CharacterLiteralAstNode('a'),
-                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                    new SequenceAstNode(ImmutableList.of(
-                        new CharacterLiteralAstNode('b'),
-                        new QuantifiedAstNode(
-                            new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                                new SequenceAstNode(ImmutableList.of(
-                                    new CharacterLiteralAstNode('c')
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterLiteralAstNode.of('a'),
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterLiteralAstNode.of('b'),
+                        QuantifiedAstNode.of(
+                            GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                                SequenceAstNode.of(ImmutableList.of(
+                                    CharacterLiteralAstNode.of('c')
                                 ))
                             )), GroupAstNode.Kind.CAPTURING, ""),
                         0, 1)
@@ -287,11 +287,11 @@ class RegexParserTest {
     @Test
     void testExplicitQuantifiers() {
         String pattern = "a{3}b{1,4}c{2,}";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new QuantifiedAstNode(new CharacterLiteralAstNode('a'), 3, 3),
-                new QuantifiedAstNode(new CharacterLiteralAstNode('b'), 1, 4),
-                new QuantifiedAstNode(new CharacterLiteralAstNode('c'), 2, QuantifiedAstNode.NO_UPPER_LIMIT)
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                QuantifiedAstNode.of(CharacterLiteralAstNode.of('a'), 3, 3),
+                QuantifiedAstNode.of(CharacterLiteralAstNode.of('b'), 1, 4),
+                QuantifiedAstNode.of(CharacterLiteralAstNode.of('c'), 2, QuantifiedAstNode.NO_UPPER_LIMIT)
             ))
         ));
 
@@ -301,16 +301,16 @@ class RegexParserTest {
     @Test
     void testSimpleEscapeSequences() {
         String pattern = "\\A\\\\?\\\\\\?\\?\\b\\v\\R";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_INPUT),
-                new QuantifiedAstNode(new CharacterLiteralAstNode('\\'), 0, 1),
-                new CharacterLiteralAstNode('\\'),
-                new CharacterLiteralAstNode('?'),
-                new CharacterLiteralAstNode('?'),
-                new AnchorAstNode(AnchorAstNode.Kind.WORD_BOUNDARY),
-                new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.VERTICAL_WHITESPACE),
-                new LinebreakAstNode()
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                AnchorAstNode.BEGIN_OF_INPUT,
+                QuantifiedAstNode.of(CharacterLiteralAstNode.of('\\'), 0, 1),
+                CharacterLiteralAstNode.of('\\'),
+                CharacterLiteralAstNode.of('?'),
+                CharacterLiteralAstNode.of('?'),
+                AnchorAstNode.WORD_BOUNDARY,
+                BuiltinCharacterClassAstNode.VERTICAL_WHITESPACE,
+                LinebreakAstNode.instance()
             ))
         ));
 
@@ -320,10 +320,10 @@ class RegexParserTest {
     @Test
     void testOctalEscapeSequences() {
         String pattern = "\\075e";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new CharacterLiteralAstNode('='),
-                new CharacterLiteralAstNode('e')
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterLiteralAstNode.of('='),
+                CharacterLiteralAstNode.of('e')
             ))
         ));
 
@@ -333,14 +333,14 @@ class RegexParserTest {
     @Test
     void testBackreference() {
         String pattern = "(a)\\1";
-        AstNode expectedAst = new AlternationAstNode(ImmutableList.of(
-            new SequenceAstNode(ImmutableList.of(
-                new GroupAstNode(new AlternationAstNode(ImmutableList.of(
-                    new SequenceAstNode(ImmutableList.of(
-                        new CharacterLiteralAstNode('a')
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterLiteralAstNode.of('a')
                     ))
                 )), GroupAstNode.Kind.CAPTURING, ""),
-                new BackreferenceAstNode(1)
+                BackreferenceAstNode.of(1)
             ))
         ));
 

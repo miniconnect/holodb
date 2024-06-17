@@ -4,8 +4,12 @@ public class CharacterLiteralAstNode implements AstNode {
 
     private final char value;
     
-    public CharacterLiteralAstNode(char value) {
+    private CharacterLiteralAstNode(char value) {
         this.value = value;
+    }
+
+    public static CharacterLiteralAstNode of(char value) {
+        return new CharacterLiteralAstNode(value);
     }
 
     public char value() {

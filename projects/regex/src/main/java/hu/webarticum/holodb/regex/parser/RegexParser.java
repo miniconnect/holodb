@@ -39,7 +39,7 @@ public class RegexParser {
                 break;
             }
         }
-        return new AlternationAstNode(ImmutableList.fromCollection(branches));
+        return AlternationAstNode.of(ImmutableList.fromCollection(branches));
     }
 
     private SequenceAstNode parseSequence(ParserInput parserInput) {
@@ -49,12 +49,12 @@ public class RegexParser {
         while ((nextInSequence = parseNextInSequence(parserInput)) != null) {
             int[] quantifierData = parseQuantifier(parserInput);
             AstNode nextNode = (quantifierData != null ?
-                    new QuantifiedAstNode(nextInSequence, quantifierData[0], quantifierData[1]):
+                    QuantifiedAstNode.of(nextInSequence, quantifierData[0], quantifierData[1]):
                     nextInSequence);
             items.add(nextNode);
             requireNonQuantifier(parserInput);
         }
-        return new SequenceAstNode(ImmutableList.fromCollection(items));
+        return SequenceAstNode.of(ImmutableList.fromCollection(items));
     }
 
     private AstNode parseNextInSequence(ParserInput parserInput) {
@@ -90,7 +90,7 @@ public class RegexParser {
                     afterPosition,
                     "Unexpected input at position " + afterPosition + ": " + after);
         }
-        return new GroupAstNode(alternation, kind, name);
+        return GroupAstNode.of(alternation, kind, name);
     }
     
     private Object[] parseGroupPrefix(ParserInput parserInput) {
@@ -184,50 +184,50 @@ public class RegexParser {
         char next = parserInput.next();
         if (next == '0') {
             int number = parseOctalNumber(parserInput);
-            return new CharacterLiteralAstNode((char) number);
+            return CharacterLiteralAstNode.of((char) number);
         } else if (next >= '1' && next <= '9') {
             parserInput.storno();
             int number = parseDecimalNumber(parserInput);
-            return new BackreferenceAstNode(number);
+            return BackreferenceAstNode.of(number);
         }
         if (!Character.isAlphabetic(next)) {
-            return new CharacterLiteralAstNode(next);
+            return CharacterLiteralAstNode.of(next);
         }
         switch (next) {
             case 'R':
-                return new LinebreakAstNode();
+                return LinebreakAstNode.instance();
             case 'b':
-                return new AnchorAstNode(AnchorAstNode.Kind.WORD_BOUNDARY);
+                return AnchorAstNode.WORD_BOUNDARY;
             case 'B':
-                return new AnchorAstNode(AnchorAstNode.Kind.NON_WORD_BOUNDARY);
+                return AnchorAstNode.NON_WORD_BOUNDARY;
             case 'A':
-                return new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_INPUT);
+                return AnchorAstNode.BEGIN_OF_INPUT;
             case 'z':
-                return new AnchorAstNode(AnchorAstNode.Kind.END_OF_INPUT);
+                return AnchorAstNode.END_OF_INPUT;
             case 'Z':
-                return new AnchorAstNode(AnchorAstNode.Kind.END_OF_INPUT_ALLOW_NEWLINE);
+                return AnchorAstNode.END_OF_INPUT_ALLOW_NEWLINE;
             case 'G':
-                return new AnchorAstNode(AnchorAstNode.Kind.END_OF_PREVIOUS_MATCH);
+                return AnchorAstNode.END_OF_PREVIOUS_MATCH;
             case 'w':
-                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.WORD);
+                return BuiltinCharacterClassAstNode.WORD;
             case 'W':
-                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.NON_WORD);
+                return BuiltinCharacterClassAstNode.NON_WORD;
             case 'd':
-                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.DIGIT);
+                return BuiltinCharacterClassAstNode.DIGIT;
             case 'D':
-                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.NON_DIGIT);
+                return BuiltinCharacterClassAstNode.NON_DIGIT;
             case 's':
-                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.WHITESPACE);
+                return BuiltinCharacterClassAstNode.WHITESPACE;
             case 'S':
-                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.NON_WHITESPACE);
+                return BuiltinCharacterClassAstNode.NON_WHITESPACE;
             case 'h':
-                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.HORIZONTAL_WHITESPACE);
+                return BuiltinCharacterClassAstNode.HORIZONTAL_WHITESPACE;
             case 'H':
-                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.NON_HORIZONTAL_WHITESPACE);
+                return BuiltinCharacterClassAstNode.NON_HORIZONTAL_WHITESPACE;
             case 'v':
-                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.VERTICAL_WHITESPACE);
+                return BuiltinCharacterClassAstNode.VERTICAL_WHITESPACE;
             case 'V':
-                return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.NON_VERTICAL_WHITESPACE);
+                return BuiltinCharacterClassAstNode.NON_VERTICAL_WHITESPACE;
             default:
                 throw new RegexParserException(
                         position, "Unsupported escape sequence \\" + next + " at position: " + position);
@@ -245,13 +245,13 @@ public class RegexParser {
     
     private AstNode parseSingleInputCharacter(char next) {
         if (next == '.') {
-            return new BuiltinCharacterClassAstNode(BuiltinCharacterClassAstNode.Kind.ANY);
+            return BuiltinCharacterClassAstNode.ANY;
         } else if (next == '^') {
-            return new AnchorAstNode(AnchorAstNode.Kind.BEGIN_OF_LINE);
+            return AnchorAstNode.BEGIN_OF_LINE;
         } else if (next == '$') {
-            return new AnchorAstNode(AnchorAstNode.Kind.END_OF_LINE);
+            return AnchorAstNode.END_OF_LINE;
         } else {
-            return new CharacterLiteralAstNode(next);
+            return CharacterLiteralAstNode.of(next);
         }
     }
     

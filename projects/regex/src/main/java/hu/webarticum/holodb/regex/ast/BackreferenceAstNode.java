@@ -4,8 +4,12 @@ public class BackreferenceAstNode implements AstNode {
 
     private final int number;
     
-    public BackreferenceAstNode(int number) {
+    private BackreferenceAstNode(int number) {
         this.number = number;
+    }
+
+    public static BackreferenceAstNode of(int number) {
+        return new BackreferenceAstNode(number);
     }
 
     public int number() {

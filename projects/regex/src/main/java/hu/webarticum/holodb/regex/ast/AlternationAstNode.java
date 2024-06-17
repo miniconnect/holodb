@@ -6,8 +6,12 @@ public class AlternationAstNode implements AstNode {
     
     private final ImmutableList<SequenceAstNode> branches;
     
-    public AlternationAstNode(ImmutableList<SequenceAstNode> branches) {
+    private AlternationAstNode(ImmutableList<SequenceAstNode> branches) {
         this.branches = branches;
+    }
+    
+    public static AlternationAstNode of(ImmutableList<SequenceAstNode> branches) {
+        return new AlternationAstNode(branches);
     }
 
     public ImmutableList<SequenceAstNode> branches() {

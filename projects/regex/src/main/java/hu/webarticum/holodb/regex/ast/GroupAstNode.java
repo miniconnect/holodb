@@ -14,10 +14,14 @@ public class GroupAstNode implements AstNode {
     
     private final String name;
     
-    public GroupAstNode(AlternationAstNode alternation, Kind kind, String name) {
+    private GroupAstNode(AlternationAstNode alternation, Kind kind, String name) {
         this.alternation = alternation;
         this.kind = kind;
         this.name = name;
+    }
+
+    public static GroupAstNode of(AlternationAstNode alternation, Kind kind, String name) {
+        return new GroupAstNode(alternation, kind, name);
     }
 
     public AlternationAstNode alternation() {

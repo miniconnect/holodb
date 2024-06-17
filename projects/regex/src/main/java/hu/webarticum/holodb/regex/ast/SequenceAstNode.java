@@ -6,8 +6,12 @@ public class SequenceAstNode implements AstNode {
 
     private final ImmutableList<AstNode> nodes;
     
-    public SequenceAstNode(ImmutableList<AstNode> nodes) {
+    private SequenceAstNode(ImmutableList<AstNode> nodes) {
         this.nodes = nodes;
+    }
+
+    public static SequenceAstNode of(ImmutableList<AstNode> nodes) {
+        return new SequenceAstNode(nodes);
     }
 
     public ImmutableList<AstNode> nodes() {

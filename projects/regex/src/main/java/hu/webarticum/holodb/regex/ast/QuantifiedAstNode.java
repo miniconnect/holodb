@@ -12,10 +12,14 @@ public class QuantifiedAstNode implements AstNode {
 
     private final int maxOccurences;
     
-    public QuantifiedAstNode(AstNode node, int minOccurences, int maxOccurences) {
+    private QuantifiedAstNode(AstNode node, int minOccurences, int maxOccurences) {
         this.node = node;
         this.minOccurences = minOccurences;
         this.maxOccurences = maxOccurences;
+    }
+
+    public static QuantifiedAstNode of(AstNode node, int minOccurences, int maxOccurences) {
+        return new QuantifiedAstNode(node, minOccurences, maxOccurences);
     }
 
     public AstNode node() {
