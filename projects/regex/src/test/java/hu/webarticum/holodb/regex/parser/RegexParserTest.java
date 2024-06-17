@@ -13,6 +13,7 @@ import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
+import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -341,6 +342,23 @@ class RegexParserTest {
                     ))
                 )), GroupAstNode.Kind.CAPTURING, ""),
                 BackreferenceAstNode.of(1)
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+
+    @Test
+    void testNamedBackreference() {
+        String pattern = "(?<x>a)\\k<x>";
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterLiteralAstNode.of('a')
+                    ))
+                )), GroupAstNode.Kind.NAMED, "x"),
+                NamedBackreferenceAstNode.of("x")
             ))
         ));
 

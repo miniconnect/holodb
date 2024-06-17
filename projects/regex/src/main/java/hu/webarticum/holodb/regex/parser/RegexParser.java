@@ -11,6 +11,7 @@ import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
+import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -22,7 +23,6 @@ public class RegexParser {
     // TODO: POSIX/Unicode category character class
     // TODO: named backreference
     // TODO: quoted string
-    // TODO: special single characters (\\n, \\r, \\f, \\a, \\e)
     // TODO: control character (\\cx)
     
     public AstNode parse(String patternString) {
@@ -202,8 +202,6 @@ public class RegexParser {
             return CharacterLiteralAstNode.of(next);
         }
         switch (next) {
-            case 'R':
-                return LinebreakAstNode.instance();
             case 'b':
                 return AnchorAstNode.WORD_BOUNDARY;
             case 'B':
@@ -236,9 +234,35 @@ public class RegexParser {
                 return BuiltinCharacterClassAstNode.VERTICAL_WHITESPACE;
             case 'V':
                 return BuiltinCharacterClassAstNode.NON_VERTICAL_WHITESPACE;
+            case 'R':
+                return LinebreakAstNode.instance();
+            case 'n':
+                return CharacterLiteralAstNode.of('\n');
+            case 'r':
+                return CharacterLiteralAstNode.of('\r');
+            case 't':
+                return CharacterLiteralAstNode.of('\t');
+            case 'f':
+                return CharacterLiteralAstNode.of('\f');
+            case 'a':
+                return CharacterLiteralAstNode.of('\u0007');
+            case 'e':
+                return CharacterLiteralAstNode.of('\u001B');
+            case 'k':
+                requireNonEnd(parserInput);
+                int ltPosition = parserInput.position();
+                char ltChar = parserInput.next();
+                if (ltChar != '<') {
+                    throw new RegexParserException(
+                            ltPosition,
+                            "Unexpected character " + ltChar + " instead of backreference name" +
+                                    " at position " + ltPosition);
+                }
+                String groupName = parseOpenedGroupName(parserInput, '>');
+                return NamedBackreferenceAstNode.of(groupName);
             default:
                 throw new RegexParserException(
-                        position, "Unsupported escape sequence \\" + next + " at position: " + position);
+                        position, "Unsupported escape sequence \\" + next + " at position:" + position);
         }
         
     }
