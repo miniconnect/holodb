@@ -16,6 +16,14 @@ import hu.webarticum.holodb.regex.ast.SequenceAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class RegexParser {
+
+    // TODO: simple hexadecimal escape sequence (\\x)
+    // TODO: Unicode escape sequence (\\u99, \\u{9999})
+    // TODO: POSIX/Unicode category character class
+    // TODO: named backreference
+    // TODO: quoted string
+    // TODO: special single characters (\\n, \\r, \\f, \\a, \\e)
+    // TODO: control character (\\cx)
     
     public AstNode parse(String patternString) {
         ParserInput parserInput = new ParserInput(patternString);
