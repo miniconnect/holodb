@@ -8,7 +8,7 @@ import hu.webarticum.holodb.regex.ast.AnchorAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.BackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
-import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
+import hu.webarticum.holodb.regex.ast.CharacterConstantAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
@@ -192,14 +192,14 @@ public class RegexParser {
         char next = parserInput.next();
         if (next == '0') {
             int number = parseOctalNumber(parserInput);
-            return CharacterLiteralAstNode.of((char) number);
+            return CharacterConstantAstNode.of((char) number);
         } else if (next >= '1' && next <= '9') {
             parserInput.storno();
             int number = parseDecimalNumber(parserInput);
             return BackreferenceAstNode.of(number);
         }
         if (!Character.isAlphabetic(next)) {
-            return CharacterLiteralAstNode.of(next);
+            return CharacterConstantAstNode.of(next);
         }
         switch (next) {
             case 'b':
@@ -237,17 +237,17 @@ public class RegexParser {
             case 'R':
                 return LinebreakAstNode.instance();
             case 'n':
-                return CharacterLiteralAstNode.of('\n');
+                return CharacterConstantAstNode.of('\n');
             case 'r':
-                return CharacterLiteralAstNode.of('\r');
+                return CharacterConstantAstNode.of('\r');
             case 't':
-                return CharacterLiteralAstNode.of('\t');
+                return CharacterConstantAstNode.of('\t');
             case 'f':
-                return CharacterLiteralAstNode.of('\f');
+                return CharacterConstantAstNode.of('\f');
             case 'a':
-                return CharacterLiteralAstNode.of('\u0007');
+                return CharacterConstantAstNode.of('\u0007');
             case 'e':
-                return CharacterLiteralAstNode.of('\u001B');
+                return CharacterConstantAstNode.of('\u001B');
             case 'k':
                 requireNonEnd(parserInput);
                 int ltPosition = parserInput.position();
@@ -283,7 +283,7 @@ public class RegexParser {
         } else if (next == '$') {
             return AnchorAstNode.END_OF_LINE;
         } else {
-            return CharacterLiteralAstNode.of(next);
+            return CharacterConstantAstNode.of(next);
         }
     }
     

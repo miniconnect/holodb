@@ -10,7 +10,7 @@ import hu.webarticum.holodb.regex.ast.AnchorAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.BackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
-import hu.webarticum.holodb.regex.ast.CharacterLiteralAstNode;
+import hu.webarticum.holodb.regex.ast.CharacterConstantAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
@@ -35,12 +35,12 @@ class RegexParserTest {
         String pattern = "abc123";
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.of(
-                CharacterLiteralAstNode.of('a'),
-                CharacterLiteralAstNode.of('b'),
-                CharacterLiteralAstNode.of('c'),
-                CharacterLiteralAstNode.of('1'),
-                CharacterLiteralAstNode.of('2'),
-                CharacterLiteralAstNode.of('3')
+                CharacterConstantAstNode.of('a'),
+                CharacterConstantAstNode.of('b'),
+                CharacterConstantAstNode.of('c'),
+                CharacterConstantAstNode.of('1'),
+                CharacterConstantAstNode.of('2'),
+                CharacterConstantAstNode.of('3')
             ))
         ));
         
@@ -52,18 +52,18 @@ class RegexParserTest {
         String pattern = "a1|b2|c333";
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.of(
-                CharacterLiteralAstNode.of('a'),
-                CharacterLiteralAstNode.of('1')
+                CharacterConstantAstNode.of('a'),
+                CharacterConstantAstNode.of('1')
             )),
             SequenceAstNode.of(ImmutableList.of(
-                CharacterLiteralAstNode.of('b'),
-                CharacterLiteralAstNode.of('2')
+                CharacterConstantAstNode.of('b'),
+                CharacterConstantAstNode.of('2')
             )),
             SequenceAstNode.of(ImmutableList.of(
-                CharacterLiteralAstNode.of('c'),
-                CharacterLiteralAstNode.of('3'),
-                CharacterLiteralAstNode.of('3'),
-                CharacterLiteralAstNode.of('3')
+                CharacterConstantAstNode.of('c'),
+                CharacterConstantAstNode.of('3'),
+                CharacterConstantAstNode.of('3'),
+                CharacterConstantAstNode.of('3')
             ))
         ));
         
@@ -91,11 +91,11 @@ class RegexParserTest {
             SequenceAstNode.of(ImmutableList.of(
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                     SequenceAstNode.of(ImmutableList.of(
-                        CharacterLiteralAstNode.of('l'),
-                        CharacterLiteralAstNode.of('o'),
-                        CharacterLiteralAstNode.of('r'),
-                        CharacterLiteralAstNode.of('e'),
-                        CharacterLiteralAstNode.of('m')
+                        CharacterConstantAstNode.of('l'),
+                        CharacterConstantAstNode.of('o'),
+                        CharacterConstantAstNode.of('r'),
+                        CharacterConstantAstNode.of('e'),
+                        CharacterConstantAstNode.of('m')
                     ))
                 )), GroupAstNode.Kind.CAPTURING, "")
             ))
@@ -111,18 +111,18 @@ class RegexParserTest {
             SequenceAstNode.of(ImmutableList.of(
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                     SequenceAstNode.of(ImmutableList.of(
-                        CharacterLiteralAstNode.of('l'),
-                        CharacterLiteralAstNode.of('o'),
-                        CharacterLiteralAstNode.of('r'),
-                        CharacterLiteralAstNode.of('e'),
-                        CharacterLiteralAstNode.of('m')
+                        CharacterConstantAstNode.of('l'),
+                        CharacterConstantAstNode.of('o'),
+                        CharacterConstantAstNode.of('r'),
+                        CharacterConstantAstNode.of('e'),
+                        CharacterConstantAstNode.of('m')
                     )),
                     SequenceAstNode.of(ImmutableList.of(
-                            CharacterLiteralAstNode.of('i'),
-                            CharacterLiteralAstNode.of('p'),
-                            CharacterLiteralAstNode.of('s'),
-                            CharacterLiteralAstNode.of('u'),
-                            CharacterLiteralAstNode.of('m')
+                            CharacterConstantAstNode.of('i'),
+                            CharacterConstantAstNode.of('p'),
+                            CharacterConstantAstNode.of('s'),
+                            CharacterConstantAstNode.of('u'),
+                            CharacterConstantAstNode.of('m')
                         ))
                 )), GroupAstNode.Kind.CAPTURING, "")
             ))
@@ -138,50 +138,50 @@ class RegexParserTest {
             SequenceAstNode.of(ImmutableList.of(
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                     SequenceAstNode.of(ImmutableList.of(
-                        CharacterLiteralAstNode.of('l'),
-                        CharacterLiteralAstNode.of('o'),
-                        CharacterLiteralAstNode.of('r'),
-                        CharacterLiteralAstNode.of('e'),
-                        CharacterLiteralAstNode.of('m')
+                        CharacterConstantAstNode.of('l'),
+                        CharacterConstantAstNode.of('o'),
+                        CharacterConstantAstNode.of('r'),
+                        CharacterConstantAstNode.of('e'),
+                        CharacterConstantAstNode.of('m')
                     ))
                 )), GroupAstNode.Kind.CAPTURING, ""),
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                     SequenceAstNode.of(ImmutableList.of(
-                        CharacterLiteralAstNode.of('i'),
-                        CharacterLiteralAstNode.of('p'),
-                        CharacterLiteralAstNode.of('s'),
-                        CharacterLiteralAstNode.of('u'),
-                        CharacterLiteralAstNode.of('m')
+                        CharacterConstantAstNode.of('i'),
+                        CharacterConstantAstNode.of('p'),
+                        CharacterConstantAstNode.of('s'),
+                        CharacterConstantAstNode.of('u'),
+                        CharacterConstantAstNode.of('m')
                     ))
                 )), GroupAstNode.Kind.NON_CAPTURING, ""),
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                     SequenceAstNode.of(ImmutableList.of(
-                        CharacterLiteralAstNode.of('s'),
-                        CharacterLiteralAstNode.of('i'),
-                        CharacterLiteralAstNode.of('t')
+                        CharacterConstantAstNode.of('s'),
+                        CharacterConstantAstNode.of('i'),
+                        CharacterConstantAstNode.of('t')
                     ))
                 )), GroupAstNode.Kind.NAMED, "dolor"),
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                     SequenceAstNode.of(ImmutableList.of(
-                        CharacterLiteralAstNode.of('c'),
-                        CharacterLiteralAstNode.of('o'),
-                        CharacterLiteralAstNode.of('n'),
-                        CharacterLiteralAstNode.of('s'),
-                        CharacterLiteralAstNode.of('e'),
-                        CharacterLiteralAstNode.of('c'),
-                        CharacterLiteralAstNode.of('t'),
-                        CharacterLiteralAstNode.of('e'),
-                        CharacterLiteralAstNode.of('t'),
-                        CharacterLiteralAstNode.of('u'),
-                        CharacterLiteralAstNode.of('r')
+                        CharacterConstantAstNode.of('c'),
+                        CharacterConstantAstNode.of('o'),
+                        CharacterConstantAstNode.of('n'),
+                        CharacterConstantAstNode.of('s'),
+                        CharacterConstantAstNode.of('e'),
+                        CharacterConstantAstNode.of('c'),
+                        CharacterConstantAstNode.of('t'),
+                        CharacterConstantAstNode.of('e'),
+                        CharacterConstantAstNode.of('t'),
+                        CharacterConstantAstNode.of('u'),
+                        CharacterConstantAstNode.of('r')
                     ))
                 )), GroupAstNode.Kind.NAMED, "amet"),
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                     SequenceAstNode.of(ImmutableList.of(
-                        CharacterLiteralAstNode.of('e'),
-                        CharacterLiteralAstNode.of('l'),
-                        CharacterLiteralAstNode.of('i'),
-                        CharacterLiteralAstNode.of('t')
+                        CharacterConstantAstNode.of('e'),
+                        CharacterConstantAstNode.of('l'),
+                        CharacterConstantAstNode.of('i'),
+                        CharacterConstantAstNode.of('t')
                     ))
                 )), GroupAstNode.Kind.NAMED, "adipiscing")
             ))
@@ -195,48 +195,48 @@ class RegexParserTest {
         String pattern = "lorem(ipsum|(?:dolor(?<sit>amet)|consectetur))";
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.of(
-                CharacterLiteralAstNode.of('l'),
-                CharacterLiteralAstNode.of('o'),
-                CharacterLiteralAstNode.of('r'),
-                CharacterLiteralAstNode.of('e'),
-                CharacterLiteralAstNode.of('m'),
+                CharacterConstantAstNode.of('l'),
+                CharacterConstantAstNode.of('o'),
+                CharacterConstantAstNode.of('r'),
+                CharacterConstantAstNode.of('e'),
+                CharacterConstantAstNode.of('m'),
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                     SequenceAstNode.of(ImmutableList.of(
-                        CharacterLiteralAstNode.of('i'),
-                        CharacterLiteralAstNode.of('p'),
-                        CharacterLiteralAstNode.of('s'),
-                        CharacterLiteralAstNode.of('u'),
-                        CharacterLiteralAstNode.of('m')
+                        CharacterConstantAstNode.of('i'),
+                        CharacterConstantAstNode.of('p'),
+                        CharacterConstantAstNode.of('s'),
+                        CharacterConstantAstNode.of('u'),
+                        CharacterConstantAstNode.of('m')
                     )),
                     SequenceAstNode.of(ImmutableList.of(
                         GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                             SequenceAstNode.of(ImmutableList.of(
-                                CharacterLiteralAstNode.of('d'),
-                                CharacterLiteralAstNode.of('o'),
-                                CharacterLiteralAstNode.of('l'),
-                                CharacterLiteralAstNode.of('o'),
-                                CharacterLiteralAstNode.of('r'),
+                                CharacterConstantAstNode.of('d'),
+                                CharacterConstantAstNode.of('o'),
+                                CharacterConstantAstNode.of('l'),
+                                CharacterConstantAstNode.of('o'),
+                                CharacterConstantAstNode.of('r'),
                                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                                     SequenceAstNode.of(ImmutableList.of(
-                                        CharacterLiteralAstNode.of('a'),
-                                        CharacterLiteralAstNode.of('m'),
-                                        CharacterLiteralAstNode.of('e'),
-                                        CharacterLiteralAstNode.of('t')
+                                        CharacterConstantAstNode.of('a'),
+                                        CharacterConstantAstNode.of('m'),
+                                        CharacterConstantAstNode.of('e'),
+                                        CharacterConstantAstNode.of('t')
                                     ))
                                 )), GroupAstNode.Kind.NAMED, "sit")
                             )),
                             SequenceAstNode.of(ImmutableList.of(
-                                CharacterLiteralAstNode.of('c'),
-                                CharacterLiteralAstNode.of('o'),
-                                CharacterLiteralAstNode.of('n'),
-                                CharacterLiteralAstNode.of('s'),
-                                CharacterLiteralAstNode.of('e'),
-                                CharacterLiteralAstNode.of('c'),
-                                CharacterLiteralAstNode.of('t'),
-                                CharacterLiteralAstNode.of('e'),
-                                CharacterLiteralAstNode.of('t'),
-                                CharacterLiteralAstNode.of('u'),
-                                CharacterLiteralAstNode.of('r')
+                                CharacterConstantAstNode.of('c'),
+                                CharacterConstantAstNode.of('o'),
+                                CharacterConstantAstNode.of('n'),
+                                CharacterConstantAstNode.of('s'),
+                                CharacterConstantAstNode.of('e'),
+                                CharacterConstantAstNode.of('c'),
+                                CharacterConstantAstNode.of('t'),
+                                CharacterConstantAstNode.of('e'),
+                                CharacterConstantAstNode.of('t'),
+                                CharacterConstantAstNode.of('u'),
+                                CharacterConstantAstNode.of('r')
                             ))
                         )), GroupAstNode.Kind.NON_CAPTURING, "")
                     ))
@@ -252,9 +252,9 @@ class RegexParserTest {
         String pattern = "a?b*c+";
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.of(
-                QuantifiedAstNode.of(CharacterLiteralAstNode.of('a'), 0, 1),
-                QuantifiedAstNode.of(CharacterLiteralAstNode.of('b'), 0, QuantifiedAstNode.NO_UPPER_LIMIT),
-                QuantifiedAstNode.of(CharacterLiteralAstNode.of('c'), 1, QuantifiedAstNode.NO_UPPER_LIMIT)
+                QuantifiedAstNode.of(CharacterConstantAstNode.of('a'), 0, 1),
+                QuantifiedAstNode.of(CharacterConstantAstNode.of('b'), 0, QuantifiedAstNode.NO_UPPER_LIMIT),
+                QuantifiedAstNode.of(CharacterConstantAstNode.of('c'), 1, QuantifiedAstNode.NO_UPPER_LIMIT)
             ))
         ));
 
@@ -266,14 +266,14 @@ class RegexParserTest {
         String pattern = "a(b(c)?)";
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.of(
-                CharacterLiteralAstNode.of('a'),
+                CharacterConstantAstNode.of('a'),
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                     SequenceAstNode.of(ImmutableList.of(
-                        CharacterLiteralAstNode.of('b'),
+                        CharacterConstantAstNode.of('b'),
                         QuantifiedAstNode.of(
                             GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                                 SequenceAstNode.of(ImmutableList.of(
-                                    CharacterLiteralAstNode.of('c')
+                                    CharacterConstantAstNode.of('c')
                                 ))
                             )), GroupAstNode.Kind.CAPTURING, ""),
                         0, 1)
@@ -290,9 +290,9 @@ class RegexParserTest {
         String pattern = "a{3}b{1,4}c{2,}";
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.of(
-                QuantifiedAstNode.of(CharacterLiteralAstNode.of('a'), 3, 3),
-                QuantifiedAstNode.of(CharacterLiteralAstNode.of('b'), 1, 4),
-                QuantifiedAstNode.of(CharacterLiteralAstNode.of('c'), 2, QuantifiedAstNode.NO_UPPER_LIMIT)
+                QuantifiedAstNode.of(CharacterConstantAstNode.of('a'), 3, 3),
+                QuantifiedAstNode.of(CharacterConstantAstNode.of('b'), 1, 4),
+                QuantifiedAstNode.of(CharacterConstantAstNode.of('c'), 2, QuantifiedAstNode.NO_UPPER_LIMIT)
             ))
         ));
 
@@ -305,10 +305,10 @@ class RegexParserTest {
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.of(
                 AnchorAstNode.BEGIN_OF_INPUT,
-                QuantifiedAstNode.of(CharacterLiteralAstNode.of('\\'), 0, 1),
-                CharacterLiteralAstNode.of('\\'),
-                CharacterLiteralAstNode.of('?'),
-                CharacterLiteralAstNode.of('?'),
+                QuantifiedAstNode.of(CharacterConstantAstNode.of('\\'), 0, 1),
+                CharacterConstantAstNode.of('\\'),
+                CharacterConstantAstNode.of('?'),
+                CharacterConstantAstNode.of('?'),
                 AnchorAstNode.WORD_BOUNDARY,
                 BuiltinCharacterClassAstNode.VERTICAL_WHITESPACE,
                 LinebreakAstNode.instance()
@@ -323,8 +323,8 @@ class RegexParserTest {
         String pattern = "\\075e";
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.of(
-                CharacterLiteralAstNode.of('='),
-                CharacterLiteralAstNode.of('e')
+                CharacterConstantAstNode.of('='),
+                CharacterConstantAstNode.of('e')
             ))
         ));
 
@@ -338,7 +338,7 @@ class RegexParserTest {
             SequenceAstNode.of(ImmutableList.of(
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                     SequenceAstNode.of(ImmutableList.of(
-                        CharacterLiteralAstNode.of('a')
+                        CharacterConstantAstNode.of('a')
                     ))
                 )), GroupAstNode.Kind.CAPTURING, ""),
                 BackreferenceAstNode.of(1)
@@ -355,7 +355,7 @@ class RegexParserTest {
             SequenceAstNode.of(ImmutableList.of(
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
                     SequenceAstNode.of(ImmutableList.of(
-                        CharacterLiteralAstNode.of('a')
+                        CharacterConstantAstNode.of('a')
                     ))
                 )), GroupAstNode.Kind.NAMED, "x"),
                 NamedBackreferenceAstNode.of("x")

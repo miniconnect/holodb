@@ -1,15 +1,15 @@
 package hu.webarticum.holodb.regex.ast;
 
-public class CharacterLiteralAstNode implements AstNode {
+public class CharacterConstantAstNode implements AstNode {
 
     private final char value;
     
-    private CharacterLiteralAstNode(char value) {
+    private CharacterConstantAstNode(char value) {
         this.value = value;
     }
 
-    public static CharacterLiteralAstNode of(char value) {
-        return new CharacterLiteralAstNode(value);
+    public static CharacterConstantAstNode of(char value) {
+        return new CharacterConstantAstNode(value);
     }
 
     public char value() {
@@ -25,10 +25,10 @@ public class CharacterLiteralAstNode implements AstNode {
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
-        } else if (!(obj instanceof CharacterLiteralAstNode)) {
+        } else if (!(obj instanceof CharacterConstantAstNode)) {
             return false;
         }
-        CharacterLiteralAstNode other = (CharacterLiteralAstNode) obj;
+        CharacterConstantAstNode other = (CharacterConstantAstNode) obj;
         return value == other.value;
     }
 
