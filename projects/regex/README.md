@@ -48,3 +48,13 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 | Non-capturing group | `(?:abc)` | Modifiers are not supported |
 | Greedy quantifier | `?`, `*`, `+`, `{2,5}`, `{3,}` | Non-greedy quantifiers are not supported |
 | Alternation | `(a|bc)` | |
+
+## Normalizations
+
+Unlimited quantifiers are substituted with the magic number 12:
+
+- `*` &rarr; `{0,12}`
+- `+` &rarr; `{1,12}`
+- `{<n>,}` &rarr; `{<n>,<n+12>}` where `<n>` is any natural number
+
+Negative character classes uses the default universe set of ASCII [32..126].
