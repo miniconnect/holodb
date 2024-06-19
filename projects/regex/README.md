@@ -28,20 +28,20 @@ LargeInteger numberOfStrings = sortedInputGraph.size();
 String someString = sortedInputGraph.get(LargeInteger.of(534));
 ```
 
-## Supported regex constructs:
+## Supported constructs:
 
 | Name | Example | Comments |
 | ---- | ------- | -------- |
 | Character literal | `a` | |
-| Escaped literal | `\(` | For all special characters |
+| Escaped literal | `\(` | For anything else than ASCII letters and numbers |
 | Special literal | `\t`, `\n`, `\r`, `\f`, `\a`, `\e` | |
 | Control escape sequence | `\cM` | |
 | Octal escape sequence | `\043` | |
 | Hexadecimal escape sequence | `\xF5`, `\x{123}` | |
 | Unicode escape sequence | `\u00F5`, `\u{123}` | |
 | Unicode/POSIX character classes | `\p{Letter}` | |
-| Character class | `[a-z:=]` | |
 | Binary property character class | , `\p{IsJoin_Control}`, `\p{Digit}` | |
+| Bracketed character class | `[0-9]`, `[a-z:=[A-Z&&[^FH]]\p{Digit}]` | |
 | Line break | `\R` | Interpreted as `\n` |
 | Built-in anchors | `\w`, `\W`, `^`, `$`, `\A`, `\z`, `\Z`, `\G` | Limited support |
 | Capturing group | `(abc)` |  |
@@ -51,6 +51,19 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 | Alternation | `(a|bc)` | |
 | Numbered backreference | `\1` | Limited support |
 | Named backreference | `\k<name>` | Limited support |
+| Quoted fixed string | `\Qa.b?c\E` | Can't be used inside character classes |
+
+## Unsupported constructs:
+
+Here are some of the major features that aren't supported:
+
+- Modifiers
+- Non-greedy quantifiers
+- Lookahead and lookbehind
+- Recursion
+- Non-binary character properties
+- Atomic and other special groups
+- Backtracking control verbs
 
 ## Normalizations
 
