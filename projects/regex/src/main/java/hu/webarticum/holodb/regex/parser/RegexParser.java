@@ -14,16 +14,10 @@ import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
+import hu.webarticum.holodb.regex.ast.PropertyCharacterClassAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class RegexParser {
-
-    // TODO: simple hexadecimal escape sequence (\\x)
-    // TODO: Unicode escape sequence (\\u99, \\u{9999})
-    // TODO: POSIX/Unicode category character class
-    // TODO: named backreference
-    // TODO: quoted string
-    // TODO: control character (\\cx)
     
     public AstNode parse(String patternString) {
         ParserInput parserInput = new ParserInput(patternString);
@@ -31,7 +25,7 @@ public class RegexParser {
         if (parserInput.hasNext()) {
             int position = parserInput.position();
             char next = parserInput.next();
-            throw new RegexParserException(position, "Unexpected input at position " + position + ": " + next);
+            throw error(parserInput, position, "Unexpected input '" + next + "'");
         }
         return result;
     }
@@ -78,7 +72,7 @@ public class RegexParser {
         } else if (next == '\\') {
             return parseOpenedEscapeSequence(parserInput);
         } else if (next == '[') {
-            return parseOpenedCharacterClass(parserInput);
+            return parseOpenedBracketCharacterClass(parserInput);
         } else {
             return parseSingleInputCharacter(next);
         }
@@ -94,9 +88,7 @@ public class RegexParser {
         int afterPosition = parserInput.position();
         char after = parserInput.next();
         if (after != ')') {
-            throw new RegexParserException(
-                    afterPosition,
-                    "Unexpected input at position " + afterPosition + ": " + after);
+            throw error(parserInput, afterPosition, "Unexpected input '" + after + "' in group");
         }
         return GroupAstNode.of(alternation, kind, name);
     }
@@ -116,65 +108,22 @@ public class RegexParser {
             char nextNextNext = parserInput.next();
             if (nextNextNext != '<') {
                 int nextNextPosition = parserInput.position() - 1;
-                throw new RegexParserException(
-                        nextNextPosition,
-                        "Unexpected input inside P group at position " + nextNextPosition + ": " + nextNextNext);
+                throw error(parserInput, nextNextPosition, "Unexpected input '" + nextNextNext + "' inside P group");
             }
-            String name = parseOpenedGroupName(parserInput, '>');
+            String name = parseOpenedName(parserInput, '>');
             return new Object[] { GroupAstNode.Kind.NAMED, name };
         } else if (nextNext == '<') {
-            String name = parseOpenedGroupName(parserInput, '>');
+            String name = parseOpenedName(parserInput, '>');
             return new Object[] { GroupAstNode.Kind.NAMED, name };
         } else if (nextNext == '\'') {
-            String name = parseOpenedGroupName(parserInput, '\'');
+            String name = parseOpenedName(parserInput, '\'');
             return new Object[] { GroupAstNode.Kind.NAMED, name };
         } else {
             int nextPosition = parserInput.position() - 1;
-            throw new RegexParserException(
-                    nextPosition,
-                    "Unsupported special group modifier at position " + nextPosition + ": " + nextNext);
+            throw error(parserInput, nextPosition, "Unsupported special group modifier '" + nextNext + "'");
         }
     }
 
-    private String parseOpenedGroupName(ParserInput parserInput, char expectedEnd) {
-        StringBuilder nameBuilder = new StringBuilder();
-        requireNonEnd(parserInput);
-        char first = parserInput.next();
-        if (!isAllowedGroupNameFirstChar(first)) {
-            int firstPosition = parserInput.position() - 1;
-            throw new RegexParserException(
-                    firstPosition,
-                    "Invalid group name first character at position " + firstPosition + ": " + first);
-        }
-        nameBuilder.append(first);
-        while (parserInput.hasNext()) {
-            char next = parserInput.next();
-            if (next == expectedEnd) {
-                return nameBuilder.toString();
-            } else if (!isAllowedGroupNameFurtherChar(next)) {
-                int nextPosition = parserInput.position() - 1;
-                throw new RegexParserException(
-                        nextPosition,
-                        "Invalid group name further character at position " + nextPosition + ": " + first);
-            }
-            nameBuilder.append(next);
-        }
-        throw unexpectedEnd(parserInput.position());
-    }
-    
-    private boolean isAllowedGroupNameFirstChar(char c) {
-        return (
-                (c >= 'a' && c <= 'z') ||
-                (c >= 'A' && c <= 'Z') ||
-                c == '_');
-    }
-
-    private boolean isAllowedGroupNameFurtherChar(char c) {
-        return (
-                isAllowedGroupNameFirstChar(c) ||
-                (c >= '0' && c <= '9'));
-    }
-    
     private void requireNonQuantifier(ParserInput parserInput) {
         if (!parserInput.hasNext()) {
             return;
@@ -182,7 +131,7 @@ public class RegexParser {
         char next = parserInput.peek();
         if (next == '?' || next == '*' || next == '+' || next == '{') {
             int position = parserInput.position();
-            throw new RegexParserException(position, "Unexpected quantifer at position " + position + ": " + next);
+            throw error(parserInput, position, "Unexpected quantifer '" + next + "'");
         }
     }
     
@@ -248,30 +197,116 @@ public class RegexParser {
                 return CharacterConstantAstNode.of('\u0007');
             case 'e':
                 return CharacterConstantAstNode.of('\u001B');
+            case 'x':
+                return parseOpenedHexadecimalEscapeSequence(parserInput, 2);
+            case 'u':
+                return parseOpenedHexadecimalEscapeSequence(parserInput, 4);
+            case 'c':
+                return parseOpenedControlCharacterEscapeSequence(parserInput);
             case 'k':
-                requireNonEnd(parserInput);
-                int ltPosition = parserInput.position();
-                char ltChar = parserInput.next();
-                if (ltChar != '<') {
-                    throw new RegexParserException(
-                            ltPosition,
-                            "Unexpected character " + ltChar + " instead of backreference name" +
-                                    " at position " + ltPosition);
-                }
-                String groupName = parseOpenedGroupName(parserInput, '>');
-                return NamedBackreferenceAstNode.of(groupName);
+                return parseOpenedNamedBackreference(parserInput);
+            case 'Q':
+                return parseOpenedQuotedString(parserInput);
+            case 'p':
+            case 'P':
+                return parseOpenedProperyCharacterClass(parserInput, next == 'p');
             default:
-                throw new RegexParserException(
-                        position, "Unsupported escape sequence \\" + next + " at position:" + position);
+                throw error(parserInput, position, "Unsupported escape sequence '\\" + next + "'");
         }
         
     }
     
-    private AstNode parseOpenedCharacterClass(ParserInput parserInput) {
+    private CharacterConstantAstNode parseOpenedHexadecimalEscapeSequence(ParserInput parserInput, int unbracedLength) {
+        requireNonEnd(parserInput);
+        int position = parserInput.position() - 2;
+        int codePoint;
+        if (parserInput.next() == '{') {
+            codePoint = parseHexadecimalNumber(parserInput);
+            if (codePoint == -1) {
+                throw error(parserInput, position, "Invalid hexadecimal escape sequence");
+            }
+            requireNonEnd(parserInput);
+            if (parserInput.next() != '}') {
+                int trailingPosition = parserInput.position() - 1;
+                throw error(parserInput, trailingPosition, "Unexpected end of braced hexadecimal escape sequence");
+            }
+        } else {
+            parserInput.storno();
+            codePoint = parseHexadecimalNumber(parserInput, unbracedLength);
+        }
+        return CharacterConstantAstNode.of((char) codePoint);
+    }
+
+    private CharacterConstantAstNode parseOpenedControlCharacterEscapeSequence(ParserInput parserInput) {
+        requireNonEnd(parserInput);
+        char next = parserInput.next();
+        if ((next >= 'A' && next <= 'Z') || (next >= 'a' && next <= 'z')) {
+            int codePoint = next & 31;
+            return CharacterConstantAstNode.of((char) codePoint);
+        }
+        int namePosition = parserInput.position() - 1;
+        switch (next) {
+            case '@':
+                return CharacterConstantAstNode.of((char) 0);
+            case '[':
+                return CharacterConstantAstNode.of((char) 27);
+            case '\\':
+                return CharacterConstantAstNode.of((char) 28);
+            case ']':
+                return CharacterConstantAstNode.of((char) 29);
+            case '^':
+                return CharacterConstantAstNode.of((char) 30);
+            case '_':
+                return CharacterConstantAstNode.of((char) 31);
+            case '?':
+                return CharacterConstantAstNode.of((char) 127);
+            default:
+                throw error(parserInput, namePosition, "Invalid control character name '" + next + "'");
+        }
+    }
+    
+    private NamedBackreferenceAstNode parseOpenedNamedBackreference(ParserInput parserInput) {
+        requireNonEnd(parserInput);
+        int ltPosition = parserInput.position();
+        char ltChar = parserInput.next();
+        if (ltChar != '<') {
+            throw error(parserInput, ltPosition, "Unexpected character " + ltChar + " instead of backreference name");
+        }
+        String groupName = parseOpenedName(parserInput, '>');
+        return NamedBackreferenceAstNode.of(groupName);
+    }
+
+    private AstNode parseOpenedQuotedString(ParserInput parserInput) {
         requireNonEnd(parserInput);
         
         // TODO
-        throw new UnsupportedOperationException("Character class: not implemented yet");
+        throw error(parserInput, parserInput.position() - 2, "Missing feature: quoted string");
+        
+    }
+
+    private AstNode parseOpenedProperyCharacterClass(ParserInput parserInput, boolean positive) {
+        requireNonEnd(parserInput);
+        char next = parserInput.next();
+        if (next != '{') {
+            int bracePosition = parserInput.position() - 1;
+            throw error(parserInput, bracePosition, "Unexpected character " + next + " instead of opening brace");
+        }
+        int namePosition = parserInput.position();
+        String propertyName = parseOpenedName(parserInput, '}');
+        PropertyCharacterClassAstNode result;
+        try {
+            result = PropertyCharacterClassAstNode.of(propertyName, positive);
+        } catch (IllegalArgumentException e) {
+            throw error(parserInput, namePosition, e.getMessage(), e);
+        }
+        return result;
+    }
+    
+    private AstNode parseOpenedBracketCharacterClass(ParserInput parserInput) {
+        requireNonEnd(parserInput);
+        
+        // TODO
+        throw error(parserInput, parserInput.position() - 1, "Missing feature: bracket character class");
         
     }
     
@@ -301,7 +336,7 @@ public class RegexParser {
         } else if (next == '+') {
             result = new int[] { 1, QuantifiedAstNode.NO_UPPER_LIMIT };
         } else if (next == '{') {
-            result = parseOpenedCurlyQuantifier(parserInput);
+            result = parseOpenedBracedQuantifier(parserInput);
         } else {
             parserInput.storno();
             return null; // NOSONAR
@@ -309,21 +344,19 @@ public class RegexParser {
         if (parserInput.hasNext()) {
             char nextNext = parserInput.peek();
             if (nextNext == '?') {
-                throw new RegexParserException(
-                        position, "Lazy quantifiers are not supported, used at position " + position);
+                throw error(parserInput, position, "Lazy quantifiers are not supported");
             } else if (nextNext == '+') {
-                throw new RegexParserException(
-                        position, "Possessive quantifiers are not supported, used at position " + position);
+                throw error(parserInput, position, "Possessive quantifiers are not supported");
             }
         }
         return result;
     }
     
-    private int[] parseOpenedCurlyQuantifier(ParserInput parserInput) {
+    private int[] parseOpenedBracedQuantifier(ParserInput parserInput) {
         int position = parserInput.position();
         int num1 = parseDecimalNumber(parserInput);
         if (num1 == -1 || !parserInput.hasNext()) {
-            throw new RegexParserException(position, "Invalid quantifier at position " + position);
+            throw error(parserInput, position, "Invalid initial number in braced quantifier");
         }
         int afterNum1 = parserInput.next();
         if (afterNum1 == '}') {
@@ -331,15 +364,49 @@ public class RegexParser {
         } else if (afterNum1 == ',') {
             int num2Candidate = parseDecimalNumber(parserInput);
             if (!parserInput.hasNext() || parserInput.next() != '}') {
-                throw new RegexParserException(position, "Invalid quantifier at position " + position);
+                throw error(parserInput, position, "Incomplete two-component braced quantifier");
             }
             int num2 = (num2Candidate == -1) ? QuantifiedAstNode.NO_UPPER_LIMIT : num2Candidate;
             return new int[] { num1, num2 };
         } else {
-            throw new RegexParserException(position, "Invalid quantifier at position " + position);
+            throw error(parserInput, position, "Incomplete single-component braced quantifier");
         }
     }
+
+    private String parseOpenedName(ParserInput parserInput, char expectedEnd) {
+        StringBuilder nameBuilder = new StringBuilder();
+        requireNonEnd(parserInput);
+        char first = parserInput.next();
+        if (!isAllowedNameFirstChar(first)) {
+            int firstPosition = parserInput.position() - 1;
+            throw error(parserInput, firstPosition, "Invalid name first character '" + first + "'");
+        }
+        nameBuilder.append(first);
+        while (parserInput.hasNext()) {
+            char next = parserInput.next();
+            if (next == expectedEnd) {
+                return nameBuilder.toString();
+            } else if (!isAllowedNameFurtherChar(next)) {
+                int nextPosition = parserInput.position() - 1;
+                throw error(parserInput, nextPosition, "Invalid name further character '" + next + "'");
+            }
+            nameBuilder.append(next);
+        }
+        throw error(parserInput, parserInput.position(), "Unexpected end after name sequence");
+    }
     
+    private boolean isAllowedNameFirstChar(char c) {
+        return (
+                (c >= 'a' && c <= 'z') ||
+                (c >= 'A' && c <= 'Z') ||
+                c == '_');
+    }
+
+    private boolean isAllowedNameFurtherChar(char c) {
+        return (
+                isAllowedNameFirstChar(c) ||
+                (c >= '0' && c <= '9'));
+    }
     private int parseDecimalNumber(ParserInput parserInput) {
         StringBuilder digits = new StringBuilder();
         while (parserInput.hasNext()) {
@@ -376,14 +443,56 @@ public class RegexParser {
         }
     }
 
-    private void requireNonEnd(ParserInput parserInput) {
-        if (!parserInput.hasNext()) {
-            throw unexpectedEnd(parserInput.position());
+    private int parseHexadecimalNumber(ParserInput parserInput) {
+        StringBuilder digits = new StringBuilder();
+        while (parserInput.hasNext()) {
+            char next = parserInput.next();
+            if (
+                    (next >= '0' && next <= '9') ||
+                    (next >= 'A' && next <= 'F') ||
+                    (next >= 'a' && next <= 'f')) {
+                digits.append(next);
+            } else {
+                parserInput.storno();
+                break;
+            }
+        }
+        if (digits.length() == 0) {
+            return -1;
+        } else {
+            return Integer.parseInt(digits.toString(), 16);
         }
     }
-    
-    private RegexParserException unexpectedEnd(int position) {
-        return new RegexParserException(position, "Unexpected end at position " + position);
+
+    private int parseHexadecimalNumber(ParserInput parserInput, int length) {
+        int numberPosition = parserInput.position();
+        StringBuilder hexadecimalStringBuilder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            requireNonEnd(parserInput);
+            hexadecimalStringBuilder.append(parserInput.next());
+        }
+        String hexadecimalLiteral = hexadecimalStringBuilder.toString();
+        try {
+            return Integer.parseInt(hexadecimalLiteral, 16);
+        } catch (NumberFormatException e) {
+            throw error(parserInput, numberPosition, "Invalid hexadecimal literal '" + hexadecimalLiteral + "'", e);
+        }
     }
 
+    private void requireNonEnd(ParserInput parserInput) {
+        if (!parserInput.hasNext()) {
+            int position = parserInput.position();
+            throw error(parserInput, position, "Unexpected end");
+        }
+    }
+
+    private RegexParserException error(ParserInput parserInput, int position, String description) {
+        return error(parserInput, position, description, null);
+    }
+    
+    private RegexParserException error(ParserInput parserInput, int position, String description, Exception e) {
+        String message = description + " at position " + position + " in pattern " + parserInput.content();
+        return new RegexParserException(position, message, null);
+    }
+    
 }

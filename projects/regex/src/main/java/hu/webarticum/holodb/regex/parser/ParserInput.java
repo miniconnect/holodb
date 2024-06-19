@@ -13,6 +13,10 @@ public class ParserInput {
         this.characters = pattern.toCharArray();
     }
     
+    
+    public String content() {
+        return String.valueOf(characters);
+    }
 
     public int position() {
         return position;

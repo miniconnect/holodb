@@ -37,10 +37,11 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 | Special literal | `\t`, `\n`, `\r`, `\f`, `\a`, `\e` | |
 | Control escape sequence | `\cM` | |
 | Octal escape sequence | `\043` | |
-| Hexadecimal escape sequence | `\xF5`, `\x{1234}` | |
-| Unicode escape sequence | `\u1234` | |
+| Hexadecimal escape sequence | `\xF5`, `\x{123}` | |
+| Unicode escape sequence | `\u00F5`, `\u{123}` | |
 | Unicode/POSIX character classes | `\p{Letter}` | |
 | Character class | `[a-z:=]` | |
+| Binary property character class | , `\p{IsJoin_Control}`, `\p{Digit}` | |
 | Line break | `\R` | Interpreted as `\n` |
 | Built-in anchors | `\w`, `\W`, `^`, `$`, `\A`, `\z`, `\Z`, `\G` | Limited support |
 | Capturing group | `(abc)` |  |
@@ -48,6 +49,8 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 | Non-capturing group | `(?:abc)` | Modifiers are not supported |
 | Greedy quantifier | `?`, `*`, `+`, `{2,5}`, `{3,}` | Non-greedy quantifiers are not supported |
 | Alternation | `(a|bc)` | |
+| Numbered backreference | `\1` | Limited support |
+| Named backreference | `\k<name>` | Limited support |
 
 ## Normalizations
 
@@ -57,4 +60,7 @@ Unlimited quantifiers are substituted with the magic number 12:
 - `+` &rarr; `{1,12}`
 - `{<n>,}` &rarr; `{<n>,<n+12>}` where `<n>` is any natural number
 
-Negative character classes uses the default universe set of ASCII [32..126].
+Unicode property character classes are narrowed, if not empty, to their ASCII subset.
+
+By default, negative character classes are narrowed to the ASCII printable set.
+If the remaining set would be empty, the first few allowed printable codepoint will be included.

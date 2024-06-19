@@ -14,6 +14,7 @@ import hu.webarticum.holodb.regex.ast.CharacterConstantAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
+import hu.webarticum.holodb.regex.ast.PropertyCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -319,12 +320,76 @@ class RegexParserTest {
     }
 
     @Test
-    void testOctalEscapeSequences() {
+    void testOctalEscapeSequence() {
         String pattern = "\\075e";
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.of(
                 CharacterConstantAstNode.of('='),
                 CharacterConstantAstNode.of('e')
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+
+    @Test
+    void testHexadecimalEscapeSequences() {
+        String pattern = "\\x4C\\\\u\\u0050";
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterConstantAstNode.of('L'),
+                CharacterConstantAstNode.of('\\'),
+                CharacterConstantAstNode.of('u'),
+                CharacterConstantAstNode.of('P')
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+
+    @Test
+    void testBracedHexadecimalEscapeSequences() {
+        String pattern = "a\\x{10A}b\\u{10B}c";
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterConstantAstNode.of('a'),
+                CharacterConstantAstNode.of('Ċ'),
+                CharacterConstantAstNode.of('b'),
+                CharacterConstantAstNode.of('ċ'),
+                CharacterConstantAstNode.of('c')
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+
+    @Test
+    void testControlCharacterEscapeSequences() {
+        String pattern = "\\c@\\cj\\cAB\\c]\\c??";
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterConstantAstNode.of('\u0000'),
+                CharacterConstantAstNode.of('\n'),
+                CharacterConstantAstNode.of('\u0001'),
+                CharacterConstantAstNode.of('B'),
+                CharacterConstantAstNode.of('\u001D'),
+                QuantifiedAstNode.of(CharacterConstantAstNode.of('\u007F'), 0, 1)
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+    
+    @Test
+    void testProperyCharacterClasses() {
+        String pattern = "\\p{Digit}\\p{Alnum}x\\P{IsControl}y";
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                PropertyCharacterClassAstNode.of(PropertyCharacterClassAstNode.Property.DIGIT, true),
+                PropertyCharacterClassAstNode.of(PropertyCharacterClassAstNode.Property.ALNUM, true),
+                CharacterConstantAstNode.of('x'),
+                PropertyCharacterClassAstNode.of(PropertyCharacterClassAstNode.Property.CONTROL, false),
+                CharacterConstantAstNode.of('y')
             ))
         ));
 
@@ -366,7 +431,7 @@ class RegexParserTest {
     }
     
     @Test
-    void testExceptionCases() {
+    void testExceptionCases() { // NOSONAR this is easy to read
         testExceptionCase(")", 0);
         testExceptionCase("abc)", 3);
         testExceptionCase("(", 1);
@@ -387,6 +452,21 @@ class RegexParserTest {
         testExceptionCase("\\", 1);
         testExceptionCase("abc\\", 4);
         testExceptionCase("lorem\\ipsum", 5);
+        testExceptionCase("\\xz", 3);
+        testExceptionCase("\\x4", 3);
+        testExceptionCase("\\x4z", 2);
+        testExceptionCase("\\x3u", 2);
+        testExceptionCase("\\u111", 5);
+        testExceptionCase("\\u111u", 2);
+        testExceptionCase("\\x{A3", 5);
+        testExceptionCase("\\u{111X}", 6);
+        testExceptionCase("a\\kk", 3);
+        testExceptionCase("\\c", 2);
+        testExceptionCase("\\c!", 2);
+        testExceptionCase("\\p{Alnum", 8);
+        testExceptionCase("\\P{Alnum!}", 8);
+        testExceptionCase("\\p{Lorem}", 3);
+        testExceptionCase("\\\\p{Digit}", 4);
     }
     
     private void testExceptionCase(String pattern, int expectedPosition) {

@@ -51,7 +51,7 @@ public class GroupAstNode implements AstNode {
         GroupAstNode other = (GroupAstNode) obj;
         return (
                 alternation.equals(other.alternation) &&
-                kind.equals(other.kind) &&
+                kind == other.kind &&
                 name.equals(other.name));
     }
 
