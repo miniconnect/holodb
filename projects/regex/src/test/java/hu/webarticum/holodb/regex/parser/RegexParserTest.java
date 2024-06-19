@@ -11,6 +11,7 @@ import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.BackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterConstantAstNode;
+import hu.webarticum.holodb.regex.ast.FixedStringAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
@@ -390,6 +391,27 @@ class RegexParserTest {
                 CharacterConstantAstNode.of('x'),
                 PropertyCharacterClassAstNode.of(PropertyCharacterClassAstNode.Property.CONTROL, false),
                 CharacterConstantAstNode.of('y')
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+
+    @Test
+    void testQuotedFixedStrings() {
+        String pattern = "lorem\\Qipsum\\dolor.\\\\Esit\\Qamet";
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterConstantAstNode.of('l'),
+                CharacterConstantAstNode.of('o'),
+                CharacterConstantAstNode.of('r'),
+                CharacterConstantAstNode.of('e'),
+                CharacterConstantAstNode.of('m'),
+                FixedStringAstNode.of("ipsum\\dolor.\\"),
+                CharacterConstantAstNode.of('s'),
+                CharacterConstantAstNode.of('i'),
+                CharacterConstantAstNode.of('t'),
+                FixedStringAstNode.of("amet")
             ))
         ));
 

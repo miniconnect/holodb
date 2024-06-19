@@ -9,6 +9,7 @@ import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.BackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterConstantAstNode;
+import hu.webarticum.holodb.regex.ast.FixedStringAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
@@ -205,11 +206,11 @@ public class RegexParser {
                 return parseOpenedControlCharacterEscapeSequence(parserInput);
             case 'k':
                 return parseOpenedNamedBackreference(parserInput);
-            case 'Q':
-                return parseOpenedQuotedString(parserInput);
             case 'p':
             case 'P':
                 return parseOpenedProperyCharacterClass(parserInput, next == 'p');
+            case 'Q':
+                return parseOpenedQuotedString(parserInput);
             default:
                 throw error(parserInput, position, "Unsupported escape sequence '\\" + next + "'");
         }
@@ -276,14 +277,6 @@ public class RegexParser {
         return NamedBackreferenceAstNode.of(groupName);
     }
 
-    private AstNode parseOpenedQuotedString(ParserInput parserInput) {
-        requireNonEnd(parserInput);
-        
-        // TODO
-        throw error(parserInput, parserInput.position() - 2, "Missing feature: quoted string");
-        
-    }
-
     private AstNode parseOpenedProperyCharacterClass(ParserInput parserInput, boolean positive) {
         requireNonEnd(parserInput);
         char next = parserInput.next();
@@ -301,7 +294,24 @@ public class RegexParser {
         }
         return result;
     }
-    
+
+    private AstNode parseOpenedQuotedString(ParserInput parserInput) {
+        requireNonEnd(parserInput);
+        StringBuilder fixedStringBuilder = new StringBuilder();
+        char previous = '?';
+        while (parserInput.hasNext()) {
+            char next = parserInput.next();
+            if (next == 'E' && previous == '\\') {
+                fixedStringBuilder.setLength(fixedStringBuilder.length() - 1);
+                break;
+            }
+            fixedStringBuilder.append(next);
+            previous = next;
+        }
+        String fixedString = fixedStringBuilder.toString();
+        return FixedStringAstNode.of(fixedString);
+    }
+
     private AstNode parseOpenedBracketCharacterClass(ParserInput parserInput) {
         requireNonEnd(parserInput);
         
