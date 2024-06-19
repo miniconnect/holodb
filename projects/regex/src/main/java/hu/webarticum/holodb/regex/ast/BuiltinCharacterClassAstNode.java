@@ -1,6 +1,6 @@
 package hu.webarticum.holodb.regex.ast;
 
-public enum BuiltinCharacterClassAstNode implements AstNode {
+public enum BuiltinCharacterClassAstNode implements CharacterMatchAstNode {
 
     ANY,
     WORD,

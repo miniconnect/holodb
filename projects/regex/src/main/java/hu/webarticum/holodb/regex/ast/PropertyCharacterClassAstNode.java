@@ -3,7 +3,7 @@ package hu.webarticum.holodb.regex.ast;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class PropertyCharacterClassAstNode implements AstNode {
+public class PropertyCharacterClassAstNode implements CharacterMatchAstNode {
     
     public enum Property {
 

@@ -1,6 +1,6 @@
 package hu.webarticum.holodb.regex.ast;
 
-public class CharacterConstantAstNode implements AstNode {
+public class CharacterConstantAstNode implements CharacterMatchAstNode {
 
     private final char value;
     
