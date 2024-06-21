@@ -16,7 +16,8 @@ import hu.webarticum.holodb.regex.ast.FixedStringAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
-import hu.webarticum.holodb.regex.ast.PropertyCharacterClassAstNode;
+import hu.webarticum.holodb.regex.ast.PosixCharacterClassAstNode;
+import hu.webarticum.holodb.regex.ast.UnicodePropertyCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.RangeAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
@@ -384,15 +385,30 @@ class RegexParserTest {
     }
     
     @Test
-    void testProperyCharacterClasses() {
-        String pattern = "\\p{Digit}\\p{Alnum}x\\P{IsControl}y";
+    void testPosixProperyCharacterClasses() {
+        String pattern = "\\p{Digit}x\\P{Alnum}y";
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.of(
-                PropertyCharacterClassAstNode.of(PropertyCharacterClassAstNode.Property.DIGIT, true),
-                PropertyCharacterClassAstNode.of(PropertyCharacterClassAstNode.Property.ALNUM, true),
+                PosixCharacterClassAstNode.of(PosixCharacterClassAstNode.Property.DIGIT, true),
                 CharacterConstantAstNode.of('x'),
-                PropertyCharacterClassAstNode.of(PropertyCharacterClassAstNode.Property.CONTROL, false),
+                PosixCharacterClassAstNode.of(PosixCharacterClassAstNode.Property.ALNUM, false),
                 CharacterConstantAstNode.of('y')
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+
+    @Test
+    void testUnicodePropertyCharacterClasses() {
+        String pattern = "x\\P{IsLetter}y\\\\\\p{IsControl}";
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterConstantAstNode.of('x'),
+                UnicodePropertyCharacterClassAstNode.of(UnicodePropertyCharacterClassAstNode.Property.LETTER, false),
+                CharacterConstantAstNode.of('y'),
+                CharacterConstantAstNode.of('\\'),
+                UnicodePropertyCharacterClassAstNode.of(UnicodePropertyCharacterClassAstNode.Property.CONTROL, true)
             ))
         ));
 
@@ -426,7 +442,7 @@ class RegexParserTest {
                 CharacterConstantAstNode.of('x'),
                 CharacterClassAstNode.of(true, ImmutableList.of(
                     RangeAstNode.of('A', 'F'),
-                    PropertyCharacterClassAstNode.of(PropertyCharacterClassAstNode.Property.LETTER, true),
+                    UnicodePropertyCharacterClassAstNode.of(UnicodePropertyCharacterClassAstNode.Property.LETTER, true),
                     CharacterClassAstNode.of(false, ImmutableList.of(
                         CharacterConstantAstNode.of('x'),
                         CharacterConstantAstNode.of('?'),
@@ -508,7 +524,7 @@ class RegexParserTest {
 
     @Test
     void testComplexPattern() {
-        String pattern = "^a(b)c\\1\\..?\\b[fg[^t-z]]*\\P{Alnum}\\012\\u{7E}(?:A|B+(?<name>X))\\R\\k<name>\\z";
+        String pattern = "^a(b)c\\1\\..?\\b[fg[^t-z]]*\\P{Cntrl}\\012\\u{7E}(?:A|B+(?<name>X))\\R\\k<name>\\z";
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.of(
                 AnchorAstNode.BEGIN_OF_LINE,
@@ -530,7 +546,7 @@ class RegexParserTest {
                         RangeAstNode.of('t', 'z')
                     ))
                 )), 0, QuantifiedAstNode.NO_UPPER_LIMIT),
-                PropertyCharacterClassAstNode.of(PropertyCharacterClassAstNode.Property.ALNUM, false),
+                PosixCharacterClassAstNode.of(PosixCharacterClassAstNode.Property.CNTRL, false),
                 CharacterConstantAstNode.of('\n'),
                 CharacterConstantAstNode.of('~'),
                 GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(

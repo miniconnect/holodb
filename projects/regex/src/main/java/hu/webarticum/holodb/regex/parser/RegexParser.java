@@ -2,6 +2,7 @@ package hu.webarticum.holodb.regex.parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import hu.webarticum.holodb.regex.ast.AlternationAstNode;
 import hu.webarticum.holodb.regex.ast.AnchorAstNode;
@@ -15,10 +16,11 @@ import hu.webarticum.holodb.regex.ast.FixedStringAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
+import hu.webarticum.holodb.regex.ast.PosixCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.RangeAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
-import hu.webarticum.holodb.regex.ast.PropertyCharacterClassAstNode;
+import hu.webarticum.holodb.regex.ast.UnicodePropertyCharacterClassAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class RegexParser {
@@ -271,7 +273,7 @@ public class RegexParser {
         return NamedBackreferenceAstNode.of(groupName);
     }
 
-    private AstNode parseOpenedProperyCharacterClass(ParserInput parserInput, boolean positive) {
+    private CharacterMatchAstNode parseOpenedProperyCharacterClass(ParserInput parserInput, boolean positive) {
         requireNonEnd(parserInput);
         char next = parserInput.next();
         if (next != '{') {
@@ -280,16 +282,18 @@ public class RegexParser {
         }
         int namePosition = parserInput.position();
         String propertyName = parseOpenedName(parserInput, '}');
-        PropertyCharacterClassAstNode result;
-        try {
-            result = PropertyCharacterClassAstNode.of(propertyName, positive);
-        } catch (IllegalArgumentException e) {
-            throw error(parserInput, namePosition, e.getMessage(), e);
+        Optional<? extends CharacterMatchAstNode> optional = PosixCharacterClassAstNode.of(propertyName, positive);
+        if (optional.isPresent()) {
+            return optional.get();
         }
-        return result;
+        optional = UnicodePropertyCharacterClassAstNode.of(propertyName, positive);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        throw error(parserInput, namePosition, "Unknown property name '" + propertyName + "'");
     }
 
-    private AstNode parseOpenedQuotedString(ParserInput parserInput) {
+    private FixedStringAstNode parseOpenedQuotedString(ParserInput parserInput) {
         requireNonEnd(parserInput);
         StringBuilder fixedStringBuilder = new StringBuilder();
         while (parserInput.hasNext()) {

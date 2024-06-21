@@ -39,8 +39,8 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 | Octal escape sequence | `\043` | |
 | Hexadecimal escape sequence | `\xF5`, `\x{123}` | |
 | Unicode escape sequence | `\u00F5`, `\u{123}` | |
-| Unicode/POSIX character classes | `\p{Letter}` | |
-| Binary property character class | , `\p{IsJoin_Control}`, `\p{Digit}` | |
+| POSIX character classes | `\p{Alnum}` | |
+| Unicode property character class | `\p{IsDigit}`, `\p{IsJoin_Control}` | Binary only, limited support |
 | Bracketed character class | `[0-9]`, `[^a-z\d]` | |
 | Nested character class | `[a-z[A-Z[^FH]]\p{Digit}]` | |
 | Line break | `\R` | Interpreted as `\n` |
@@ -59,8 +59,9 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 Here are some features that aren't supported:
 
 - Modifiers
-- Non-binary character properties
 - Character class intersection and subtraction
+- Non-binary character properties
+- Unicode scripts, blocks, categories
 - Non-greedy quantifiers
 - Lookahead and lookbehind
 - Recursion
