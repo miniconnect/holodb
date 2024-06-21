@@ -41,7 +41,8 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 | Unicode escape sequence | `\u00F5`, `\u{123}` | |
 | Unicode/POSIX character classes | `\p{Letter}` | |
 | Binary property character class | , `\p{IsJoin_Control}`, `\p{Digit}` | |
-| Bracketed character class | `[0-9]`, `[a-z:=[A-Z&&[^FH]]\p{Digit}]` | |
+| Bracketed character class | `[0-9]`, `[^a-z\d]` | |
+| Nested character class | `[a-z[A-Z[^FH]]\p{Digit}]` | |
 | Line break | `\R` | Interpreted as `\n` |
 | Built-in anchors | `\w`, `\W`, `^`, `$`, `\A`, `\z`, `\Z`, `\G` | Limited support |
 | Capturing group | `(abc)` |  |
@@ -55,15 +56,18 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 
 ## Unsupported constructs:
 
-Here are some of the major features that aren't supported:
+Here are some features that aren't supported:
 
 - Modifiers
+- Non-binary character properties
+- Character class intersection and subtraction
 - Non-greedy quantifiers
 - Lookahead and lookbehind
 - Recursion
-- Non-binary character properties
 - Atomic and other special groups
 - Backtracking control verbs
+
+In the future, some of these may be implemented.
 
 ## Normalizations
 

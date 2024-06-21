@@ -38,6 +38,15 @@ public class ParserInput {
         return next;
     }
     
+    public boolean expect(char next) {
+        if (hasNext() && (characters[position] == next)) {
+            position++;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     private void requireNext() {
         if (!hasNext()) {
             throw new NoSuchElementException("There are no more characters");

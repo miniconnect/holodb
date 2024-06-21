@@ -10,6 +10,7 @@ import hu.webarticum.holodb.regex.ast.AnchorAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.BackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
+import hu.webarticum.holodb.regex.ast.CharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterConstantAstNode;
 import hu.webarticum.holodb.regex.ast.FixedStringAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
@@ -17,6 +18,7 @@ import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.PropertyCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
+import hu.webarticum.holodb.regex.ast.RangeAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
@@ -398,6 +400,58 @@ class RegexParserTest {
     }
 
     @Test
+    void testSimpleCharacterClass() {
+        String pattern = "x[a-zRST]y";
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterConstantAstNode.of('x'),
+                CharacterClassAstNode.of(true, ImmutableList.of(
+                    RangeAstNode.of('a', 'z'),
+                    CharacterConstantAstNode.of('R'),
+                    CharacterConstantAstNode.of('S'),
+                    CharacterConstantAstNode.of('T')
+                )),
+                CharacterConstantAstNode.of('y')
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+
+    @Test
+    void testComplexCharacterClass() {
+        String pattern = "x[A-F\\p{IsLetter}[^x?[].^-]][-T]o\\n]y";
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                CharacterConstantAstNode.of('x'),
+                CharacterClassAstNode.of(true, ImmutableList.of(
+                    RangeAstNode.of('A', 'F'),
+                    PropertyCharacterClassAstNode.of(PropertyCharacterClassAstNode.Property.LETTER, true),
+                    CharacterClassAstNode.of(false, ImmutableList.of(
+                        CharacterConstantAstNode.of('x'),
+                        CharacterConstantAstNode.of('?'),
+                        CharacterClassAstNode.of(true, ImmutableList.of(
+                            CharacterConstantAstNode.of(']'),
+                            CharacterConstantAstNode.of('.'),
+                            CharacterConstantAstNode.of('^'),
+                            CharacterConstantAstNode.of('-')
+                        ))
+                    )),
+                    CharacterClassAstNode.of(true, ImmutableList.of(
+                        CharacterConstantAstNode.of('-'),
+                        CharacterConstantAstNode.of('T')
+                    )),
+                    CharacterConstantAstNode.of('o'),
+                    CharacterConstantAstNode.of('\n')
+                )),
+                CharacterConstantAstNode.of('y')
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
+
+    @Test
     void testQuotedFixedStrings() {
         String pattern = "lorem\\Qipsum\\dolor.\\\\Esit\\Qamet";
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
@@ -451,6 +505,55 @@ class RegexParserTest {
 
         assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
     }
+
+    @Test
+    void testComplexPattern() {
+        String pattern = "^a(b)c\\1\\..?\\b[fg[^t-z]]*\\P{Alnum}\\012\\u{7E}(?:A|B+(?<name>X))\\R\\k<name>\\z";
+        AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
+            SequenceAstNode.of(ImmutableList.of(
+                AnchorAstNode.BEGIN_OF_LINE,
+                CharacterConstantAstNode.of('a'),
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterConstantAstNode.of('b')
+                    ))
+                )), GroupAstNode.Kind.CAPTURING, ""),
+                CharacterConstantAstNode.of('c'),
+                BackreferenceAstNode.of(1),
+                CharacterConstantAstNode.of('.'),
+                QuantifiedAstNode.of(BuiltinCharacterClassAstNode.ANY, 0, 1),
+                AnchorAstNode.WORD_BOUNDARY,
+                QuantifiedAstNode.of(CharacterClassAstNode.of(true, ImmutableList.of(
+                    CharacterConstantAstNode.of('f'),
+                    CharacterConstantAstNode.of('g'),
+                    CharacterClassAstNode.of(false, ImmutableList.of(
+                        RangeAstNode.of('t', 'z')
+                    ))
+                )), 0, QuantifiedAstNode.NO_UPPER_LIMIT),
+                PropertyCharacterClassAstNode.of(PropertyCharacterClassAstNode.Property.ALNUM, false),
+                CharacterConstantAstNode.of('\n'),
+                CharacterConstantAstNode.of('~'),
+                GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                    SequenceAstNode.of(ImmutableList.of(
+                        CharacterConstantAstNode.of('A')
+                    )),
+                    SequenceAstNode.of(ImmutableList.of(
+                        QuantifiedAstNode.of(CharacterConstantAstNode.of('B'), 1, QuantifiedAstNode.NO_UPPER_LIMIT),
+                        GroupAstNode.of(AlternationAstNode.of(ImmutableList.of(
+                            SequenceAstNode.of(ImmutableList.of(
+                                CharacterConstantAstNode.of('X')
+                            ))
+                        )), GroupAstNode.Kind.NAMED, "name")
+                    ))
+                )), GroupAstNode.Kind.NON_CAPTURING, ""),
+                LinebreakAstNode.instance(),
+                NamedBackreferenceAstNode.of("name"),
+                AnchorAstNode.END_OF_INPUT
+            ))
+        ));
+
+        assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
+    }
     
     @Test
     void testExceptionCases() { // NOSONAR this is easy to read
@@ -489,6 +592,10 @@ class RegexParserTest {
         testExceptionCase("\\P{Alnum!}", 8);
         testExceptionCase("\\p{Lorem}", 3);
         testExceptionCase("\\\\p{Digit}", 4);
+        testExceptionCase("[]", 2);
+        testExceptionCase("[xy", 3);
+        testExceptionCase("[x[]y]", 6);
+        testExceptionCase("[x\\by]", 2);
     }
     
     private void testExceptionCase(String pattern, int expectedPosition) {

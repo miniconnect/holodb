@@ -8,12 +8,15 @@ import hu.webarticum.holodb.regex.ast.AnchorAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.BackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
+import hu.webarticum.holodb.regex.ast.CharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterConstantAstNode;
+import hu.webarticum.holodb.regex.ast.CharacterMatchAstNode;
 import hu.webarticum.holodb.regex.ast.FixedStringAstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
+import hu.webarticum.holodb.regex.ast.RangeAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
 import hu.webarticum.holodb.regex.ast.PropertyCharacterClassAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -34,13 +37,8 @@ public class RegexParser {
     private AlternationAstNode parseAlternation(ParserInput parserInput) {
         List<SequenceAstNode> branches = new ArrayList<>(1);
         branches.add(parseSequence(parserInput));
-        while (parserInput.hasNext()) {
-            if (parserInput.next() == '|') {
-                branches.add(parseSequence(parserInput));
-            } else {
-                parserInput.storno();
-                break;
-            }
+        while (parserInput.expect('|')) {
+            branches.add(parseSequence(parserInput));
         }
         return AlternationAstNode.of(ImmutableList.fromCollection(branches));
     }
@@ -85,11 +83,8 @@ public class RegexParser {
         GroupAstNode.Kind kind = (GroupAstNode.Kind) groupMetadata[0];
         String name = (String) groupMetadata[1];
         AlternationAstNode alternation = parseAlternation(parserInput);
-        requireNonEnd(parserInput);
-        int afterPosition = parserInput.position();
-        char after = parserInput.next();
-        if (after != ')') {
-            throw error(parserInput, afterPosition, "Unexpected input '" + after + "' in group");
+        if (!parserInput.expect(')')) {
+            throw error(parserInput, parserInput.position(), "Unexpected end of group");
         }
         return GroupAstNode.of(alternation, kind, name);
     }
@@ -219,11 +214,11 @@ public class RegexParser {
     
     private CharacterConstantAstNode parseOpenedHexadecimalEscapeSequence(ParserInput parserInput, int unbracedLength) {
         requireNonEnd(parserInput);
-        int position = parserInput.position() - 2;
         int codePoint;
-        if (parserInput.next() == '{') {
+        if (parserInput.expect('{')) {
             codePoint = parseHexadecimalNumber(parserInput);
             if (codePoint == -1) {
+                int position = parserInput.position() - 3;
                 throw error(parserInput, position, "Invalid hexadecimal escape sequence");
             }
             requireNonEnd(parserInput);
@@ -232,7 +227,6 @@ public class RegexParser {
                 throw error(parserInput, trailingPosition, "Unexpected end of braced hexadecimal escape sequence");
             }
         } else {
-            parserInput.storno();
             codePoint = parseHexadecimalNumber(parserInput, unbracedLength);
         }
         return CharacterConstantAstNode.of((char) codePoint);
@@ -298,26 +292,78 @@ public class RegexParser {
     private AstNode parseOpenedQuotedString(ParserInput parserInput) {
         requireNonEnd(parserInput);
         StringBuilder fixedStringBuilder = new StringBuilder();
-        char previous = '?';
         while (parserInput.hasNext()) {
             char next = parserInput.next();
-            if (next == 'E' && previous == '\\') {
-                fixedStringBuilder.setLength(fixedStringBuilder.length() - 1);
+            if (next == '\\' && parserInput.expect('E')) {
                 break;
             }
             fixedStringBuilder.append(next);
-            previous = next;
         }
         String fixedString = fixedStringBuilder.toString();
         return FixedStringAstNode.of(fixedString);
     }
 
-    private AstNode parseOpenedBracketCharacterClass(ParserInput parserInput) {
+    private CharacterClassAstNode parseOpenedBracketCharacterClass( // NOSONAR intentional complexity
+            ParserInput parserInput) {
         requireNonEnd(parserInput);
-        
-        // TODO
-        throw error(parserInput, parserInput.position() - 1, "Missing feature: bracket character class");
-        
+        boolean positive = !parserInput.expect('^');
+        List<CharacterMatchAstNode> nodes = new ArrayList<>();
+        while (true) { // NOSONAR intentional complexity
+            requireNonEnd(parserInput);
+            char next = parserInput.next();
+            if (next == '-') {
+                boolean isFirst = nodes.isEmpty();
+                if (isFirst) {
+                    nodes.add(CharacterConstantAstNode.of(next));
+                } else {
+                    char nextNext = parserInput.next();
+                    if (nextNext == ']') {
+                        nodes.add(CharacterConstantAstNode.of(next));
+                        break;
+                    } else {
+                        int lastIndex = nodes.size() - 1;
+                        CharacterMatchAstNode lastNode = nodes.get(lastIndex);
+                        if (!(lastNode instanceof CharacterConstantAstNode)) {
+                            nodes.add(CharacterConstantAstNode.of(next));
+                            continue;
+                        }
+                        CharacterMatchAstNode nextNode = parseNextInCharacterClass(parserInput, nextNext);
+                        if (!(nextNode instanceof CharacterConstantAstNode)) {
+                            nodes.add(CharacterConstantAstNode.of(next));
+                            nodes.add(nextNode);
+                            continue;
+                        }
+                        char lowChar = ((CharacterConstantAstNode) lastNode).value();
+                        char highChar = ((CharacterConstantAstNode) nextNode).value();
+                        nodes.set(lastIndex, RangeAstNode.of(lowChar, highChar));
+                    }
+                }
+            } else if (next == ']') {
+                if (nodes.isEmpty()) {
+                    nodes.add(CharacterConstantAstNode.of(next));
+                } else {
+                    break;
+                }
+            } else {
+                nodes.add(parseNextInCharacterClass(parserInput, next));
+            }
+        }
+        return CharacterClassAstNode.of(positive, ImmutableList.fromCollection(nodes));
+    }
+    
+    private CharacterMatchAstNode parseNextInCharacterClass(ParserInput parserInput, char firstChar) {
+        if (firstChar == '\\') {
+            int position = parserInput.position() - 1;
+            AstNode escapedNode = parseOpenedEscapeSequence(parserInput);
+            if (!(escapedNode instanceof CharacterMatchAstNode)) {
+                throw error(parserInput, position, "Invalid escape sequence type inside character class");
+            }
+            return (CharacterMatchAstNode) escapedNode;
+        } else if (firstChar == '[') {
+            return parseOpenedBracketCharacterClass(parserInput);
+        } else {
+            return CharacterConstantAstNode.of(firstChar);
+        }
     }
     
     private AstNode parseSingleInputCharacter(char next) {
@@ -502,7 +548,7 @@ public class RegexParser {
     
     private RegexParserException error(ParserInput parserInput, int position, String description, Exception e) {
         String message = description + " at position " + position + " in pattern " + parserInput.content();
-        return new RegexParserException(position, message, null);
+        return new RegexParserException(position, message, e);
     }
     
 }
