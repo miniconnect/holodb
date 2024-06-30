@@ -38,7 +38,7 @@ public class ValueExtractor {
             return;
         }
         
-        LargeInteger[] quotientAndRemainder = index.divideAndRemainder(frozenNode.itemLength());
+        LargeInteger[] quotientAndRemainder = index.divideAndRemainder(nextNode.itemLength());
         LargeInteger itemIndex = quotientAndRemainder[0];
         LargeInteger subIndex = quotientAndRemainder[1];
         if (nodeData instanceof SortedValueSetNodeData) {

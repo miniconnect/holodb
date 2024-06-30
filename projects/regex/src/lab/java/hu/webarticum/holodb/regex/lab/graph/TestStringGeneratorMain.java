@@ -17,7 +17,9 @@ import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
 public class TestStringGeneratorMain {
 
     public static void main(String[] args) {
-        String regex = "(a|bc?){2}x{3,4}";
+        //String regex = "(a|bc?){2}x{3,4}";
+        String regex = "\\d{3}\\-\\d{4}(\\-(ABC|XXX)){3}";
+        
         System.out.println("Regex: " + regex);
         
         AstNode astNode = new RegexParser().parse(regex);
@@ -46,13 +48,23 @@ public class TestStringGeneratorMain {
         System.out.println();
         int end = extractor.size().min(LargeInteger.of(100)).intValue();
         for (int i = 0; i < end; i++) {
-            ImmutableList<CharacterValue> valueList = extractor.get(LargeInteger.of(i));
-            String value = String.join("", valueList.map(v -> Character.toString(v.value())));
+            String value = extractAt(extractor, LargeInteger.of(i));
             System.out.println("Value " + i + ": " + value);
         }
         if (LargeInteger.of(end).isLessThan(extractor.size())) {
             System.out.println("[...]");
         }
+
+        System.out.println("\n------------------------\n");
+        LargeInteger someIndex = extractor.size().divide(LargeInteger.of(17))
+                .add( extractor.size().divide(LargeInteger.of(11)));
+        String someValue = extractAt(extractor, someIndex);
+        System.out.println("Some value " + someIndex + ": " + someValue);
+    }
+    
+    private static String extractAt(ValueExtractor extractor, LargeInteger index) {
+        ImmutableList<CharacterValue> valueList = extractor.get(index);
+        return String.join("", valueList.map(v -> Character.toString(v.value())));
     }
     
 }
