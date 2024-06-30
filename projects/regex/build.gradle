@@ -4,12 +4,42 @@ plugins {
 
 description "Regular expression based value set provider"
 
+sourceSets {
+    lab {
+        compileClasspath += sourceSets.main.runtimeClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+configurations {
+    labImplementation.extendsFrom implementation
+    labRuntimeOnly.extendsFrom runtimeOnly
+}
+
 dependencies {
-    api project(':core')
     api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+    
+    labImplementation 'com.ibm.icu:icu4j:75.1'
+    labImplementation "hu.webarticum:tree-printer:3.2.1"
     
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.7.1'
     testImplementation 'org.assertj:assertj-core:3.24.2'
+}
+
+task downloadDucetFile {
+    doLast {
+        def destDir = file("${layout.buildDirectory.get()}/lab/unicode")
+        def destFile = file("${destDir}/allkeys.txt")
+        if (!destFile.exists()) {
+            destDir.mkdirs()
+            new URL("https://www.unicode.org/Public/UCA/latest/allkeys.txt").withInputStream { i ->
+                destFile.withOutputStream { it << i }
+            }
+            println "Downloaded DUCET table to ${destFile}"
+        } else {
+            println "DUCET table already exists at ${destFile}"
+        }
+    }
 }

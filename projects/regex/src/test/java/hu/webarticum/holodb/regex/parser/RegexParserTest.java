@@ -17,10 +17,10 @@ import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.PosixCharacterClassAstNode;
-import hu.webarticum.holodb.regex.ast.UnicodePropertyCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.RangeAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
+import hu.webarticum.holodb.regex.ast.UnicodePropertyCharacterClassAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 class RegexParserTest {

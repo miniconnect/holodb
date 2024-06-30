@@ -72,11 +72,14 @@ In the future, some of these may be implemented.
 
 ## Normalizations
 
-Unlimited quantifiers are substituted with the magic number 12:
+Upper bound of unlimited quantifiers is 3 for groups and 12 for anything other:
 
-- `*` &rarr; `{0,12}`
-- `+` &rarr; `{1,12}`
-- `{<n>,}` &rarr; `{<n>,<n+12>}` where `<n>` is any natural number
+- `x*` &rarr; `x{0,12}`
+- `x+` &rarr; `x{1,12}`
+- `x{<n>,}` &rarr; `x{<n>,<max(12,n+5)>}` where `<n>` is any natural number
+- `(xyz)*` &rarr; `(xyz){0,3}`
+- `(xyz)+` &rarr; `(xyz){1,3}`
+- `(xyz){<n>,}` &rarr; `(xyz){<n>,<max(3,n+1)>}` where `<n>` is any natural number
 
 Unicode property character classes are narrowed, if not empty, to their ASCII subset.
 

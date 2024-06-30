@@ -8,35 +8,35 @@ public class QuantifiedAstNode implements AstNode {
 
     private final AstNode node;
 
-    private final int minOccurences;
+    private final int minOccurrences;
 
-    private final int maxOccurences;
+    private final int maxOccurrences;
     
-    private QuantifiedAstNode(AstNode node, int minOccurences, int maxOccurences) {
+    private QuantifiedAstNode(AstNode node, int minOccurrences, int maxOccurrences) {
         this.node = node;
-        this.minOccurences = minOccurences;
-        this.maxOccurences = maxOccurences;
+        this.minOccurrences = minOccurrences;
+        this.maxOccurrences = maxOccurrences;
     }
 
-    public static QuantifiedAstNode of(AstNode node, int minOccurences, int maxOccurences) {
-        return new QuantifiedAstNode(node, minOccurences, maxOccurences);
+    public static QuantifiedAstNode of(AstNode node, int minOccurrences, int maxOccurrences) {
+        return new QuantifiedAstNode(node, minOccurrences, maxOccurrences);
     }
 
     public AstNode node() {
         return node;
     }
 
-    public int minOccurences() {
-        return minOccurences;
+    public int minOccurrences() {
+        return minOccurrences;
     }
 
-    public int maxOccurences() {
-        return maxOccurences;
+    public int maxOccurrences() {
+        return maxOccurrences;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(node, minOccurences, maxOccurences);
+        return Objects.hash(node, minOccurrences, maxOccurrences);
     }
     
     @Override
@@ -49,13 +49,13 @@ public class QuantifiedAstNode implements AstNode {
         QuantifiedAstNode other = (QuantifiedAstNode) obj;
         return (
                 node.equals(other.node) &&
-                minOccurences == other.minOccurences &&
-                maxOccurences == other.maxOccurences);
+                minOccurrences == other.minOccurrences &&
+                maxOccurrences == other.maxOccurrences);
     }
 
     @Override
     public String toString() {
-        return "quant{node: " + node + ", min:" + minOccurences + ", max: " + maxOccurences + "}";
+        return "quant{node: " + node + ", min:" + minOccurrences + ", max: " + maxOccurrences + "}";
     }
     
 }
