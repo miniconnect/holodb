@@ -44,11 +44,14 @@ public class TestStringGeneratorMain {
         System.out.println("\n------------------------\n");
         System.out.println("Size: " + extractor.size());
         System.out.println();
-        int end = extractor.size().max(LargeInteger.TEN).intValue();
+        int end = extractor.size().min(LargeInteger.of(100)).intValue();
         for (int i = 0; i < end; i++) {
             ImmutableList<CharacterValue> valueList = extractor.get(LargeInteger.of(i));
             String value = String.join("", valueList.map(v -> Character.toString(v.value())));
             System.out.println("Value " + i + ": " + value);
+        }
+        if (LargeInteger.of(end).isLessThan(extractor.size())) {
+            System.out.println("[...]");
         }
     }
     

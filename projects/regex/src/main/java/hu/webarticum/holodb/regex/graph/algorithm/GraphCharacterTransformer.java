@@ -12,6 +12,7 @@ import hu.webarticum.holodb.regex.ast.CharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterConstantAstNode;
 import hu.webarticum.holodb.regex.ast.CharacterMatchAstNode;
 import hu.webarticum.holodb.regex.ast.FixedStringAstNode;
+import hu.webarticum.holodb.regex.ast.LinebreakAstNode;
 import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.PosixCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.RangeAstNode;
@@ -84,6 +85,8 @@ public class GraphCharacterTransformer {
             return extractFromCharacterClass((CharacterClassAstNode) value);
         } else if (value instanceof CharacterConstantAstNode) {
             return extractFromCharacterConstant((CharacterConstantAstNode) value);
+        } else if (value instanceof LinebreakAstNode) {
+            return extractFromLineBreak((LinebreakAstNode) value);
         } else if (value instanceof PosixCharacterClassAstNode) {
             return extractFromPosixCharacterClass((PosixCharacterClassAstNode) value);
         } else if (value instanceof RangeAstNode) {
@@ -149,6 +152,10 @@ public class GraphCharacterTransformer {
 
     private TreeSet<Character> extractFromCharacterConstant(CharacterConstantAstNode node) {
         return chars(node.value());
+    }
+    
+    private TreeSet<Character> extractFromLineBreak(LinebreakAstNode node) {
+        return chars('\n');
     }
 
     private TreeSet<Character> extractFromPosixCharacterClass(PosixCharacterClassAstNode node) {
