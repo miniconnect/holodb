@@ -2,13 +2,13 @@ package hu.webarticum.holodb.regex.lab.graph;
 
 import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.extract.ValueExtractor;
-import hu.webarticum.holodb.regex.graph.algorithm.AstToGraphConverter;
-import hu.webarticum.holodb.regex.graph.algorithm.GraphCharacterTransformer;
-import hu.webarticum.holodb.regex.graph.algorithm.NodeFreezer;
-import hu.webarticum.holodb.regex.graph.data.CharacterValue;
-import hu.webarticum.holodb.regex.graph.data.FrozenNode;
-import hu.webarticum.holodb.regex.graph.data.MutableNode;
+import hu.webarticum.holodb.regex.graph.CharacterValue;
+import hu.webarticum.holodb.regex.graph.FrozenNode;
+import hu.webarticum.holodb.regex.graph.MutableNode;
 import hu.webarticum.holodb.regex.parser.RegexParser;
+import hu.webarticum.holodb.regex.transform.AstToGraphConverter;
+import hu.webarticum.holodb.regex.transform.GraphCharacterTransformer;
+import hu.webarticum.holodb.regex.transform.NodeFreezer;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;
@@ -41,7 +41,7 @@ public class TestStringGeneratorMain {
         System.out.println("\n------------------------\n");
         new TraditionalTreePrinter().print(new BorderTreeNodeDecorator(new FrozenNodeTreeNode(frozenGraph)));
         
-        ValueExtractor extractor = new ValueExtractor(frozenGraph);
+        ValueExtractor<FrozenNode> extractor = new ValueExtractor<>(frozenGraph);
 
         System.out.println("\n------------------------\n");
         System.out.println("Size: " + extractor.size());
@@ -62,7 +62,7 @@ public class TestStringGeneratorMain {
         System.out.println("Some value " + someIndex + ": " + someValue);
     }
     
-    private static String extractAt(ValueExtractor extractor, LargeInteger index) {
+    private static String extractAt(ValueExtractor<FrozenNode> extractor, LargeInteger index) {
         ImmutableList<CharacterValue> valueList = extractor.get(index);
         return String.join("", valueList.map(v -> Character.toString(v.value())));
     }

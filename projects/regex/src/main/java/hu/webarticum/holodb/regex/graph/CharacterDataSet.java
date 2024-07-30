@@ -1,28 +1,38 @@
-package hu.webarticum.holodb.regex.graph.data;
+package hu.webarticum.holodb.regex.graph;
 
+import hu.webarticum.holodb.regex.ast.extract.ExtractableValueSet;
+import hu.webarticum.holodb.regex.ast.extract.FindResult;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
-public class SortedValueSetNodeData implements NodeData {
+public class CharacterDataSet implements ExtractableValueSet {
     
     private ImmutableList<CharacterValue> values;
     
-    public SortedValueSetNodeData(ImmutableList<CharacterValue> values) {
+    public CharacterDataSet(ImmutableList<CharacterValue> values) {
         this.values = values;
     }
 
-    public LargeInteger length() {
+    @Override
+    public LargeInteger size() {
         return LargeInteger.of(values.size());
     }
     
+    @Override
     public CharacterValue get(LargeInteger index) {
         return values.get(index.intValue());
     }
 
-    public FindResult find(CharacterValue value) {
+    @Override
+    public FindResult find(Object value) {
+        if (!(value instanceof CharacterValue)) {
+            return FindResult.of(false, LargeInteger.ZERO);
+        }
+        
+        CharacterValue characterValue = (CharacterValue) value;
         int i = 0;
         for (CharacterValue valueItem : values) {
-            int cmp = value.compareTo(valueItem);
+            int cmp = characterValue.compareTo(valueItem);
             if (cmp == 0) {
                 return FindResult.of(true, LargeInteger.of(i));
             } else if (cmp < 0) {
@@ -35,7 +45,7 @@ public class SortedValueSetNodeData implements NodeData {
     
     @Override
     public String toString() {
-        return SortedValueSetNodeData.class.getSimpleName() + values.toString();
+        return CharacterDataSet.class.getSimpleName() + values.toString();
     }
 
 }

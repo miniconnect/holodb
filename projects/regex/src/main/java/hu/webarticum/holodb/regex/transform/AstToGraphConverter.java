@@ -1,23 +1,23 @@
-package hu.webarticum.holodb.regex.graph.algorithm;
+package hu.webarticum.holodb.regex.transform;
 
 import hu.webarticum.holodb.regex.ast.AlternationAstNode;
 import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.ast.SequenceAstNode;
-import hu.webarticum.holodb.regex.graph.data.FlagNodeData;
-import hu.webarticum.holodb.regex.graph.data.MutableNode;
+import hu.webarticum.holodb.regex.graph.MutableNode;
+import hu.webarticum.holodb.regex.graph.SpecialValue;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class AstToGraphConverter {
 
     public MutableNode convert(AstNode astNode) {
-        MutableNode node = convert(astNode, new MutableNode(FlagNodeData.END));
+        MutableNode node = convert(astNode, new MutableNode(SpecialValue.END));
         if (node.value == null) {
-            node.value = FlagNodeData.BEGIN;
+            node.value = SpecialValue.BEGIN;
             return node;
         } else {
-            return new MutableNode(FlagNodeData.BEGIN, node);
+            return new MutableNode(SpecialValue.BEGIN, node);
         }
     }
 

@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.regex.graph.data;
+package hu.webarticum.holodb.regex.ast.extract;
 
 import hu.webarticum.miniconnect.lang.LargeInteger;
 

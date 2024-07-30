@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.regex.graph.data;
+package hu.webarticum.holodb.regex.graph;
 
 // TODO: more possibilities, references etc.
 public class CharacterValue implements Comparable<CharacterValue> {
@@ -15,7 +15,7 @@ public class CharacterValue implements Comparable<CharacterValue> {
 
     @Override
     public int compareTo(CharacterValue other) {
-        return Character.compare(value, other.value);
+        return GraphValueComparator.compareCharacters(value, other.value);
     }
     
     @Override

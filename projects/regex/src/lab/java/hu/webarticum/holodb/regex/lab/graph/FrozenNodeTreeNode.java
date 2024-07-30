@@ -3,7 +3,7 @@ package hu.webarticum.holodb.regex.lab.graph;
 import java.util.List;
 import java.util.Objects;
 
-import hu.webarticum.holodb.regex.graph.data.FrozenNode;
+import hu.webarticum.holodb.regex.graph.FrozenNode;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.text.ConsoleText;
 

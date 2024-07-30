@@ -1,13 +1,15 @@
-package hu.webarticum.holodb.regex.graph.algorithm;
+package hu.webarticum.holodb.regex.transform;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 
-import hu.webarticum.holodb.regex.graph.data.FrozenNode;
-import hu.webarticum.holodb.regex.graph.data.MutableNode;
-import hu.webarticum.holodb.regex.graph.data.NodeData;
-import hu.webarticum.holodb.regex.graph.data.SortedValueSetNodeData;
+import hu.webarticum.holodb.regex.ast.extract.ExtractableValueSet;
+import hu.webarticum.holodb.regex.graph.FrozenNode;
+import hu.webarticum.holodb.regex.graph.MutableNode;
+import hu.webarticum.holodb.regex.graph.SpecialValue;
+import hu.webarticum.holodb.regex.graph.SpecialValueDataSet;
+import hu.webarticum.holodb.regex.graph.CharacterDataSet;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
@@ -32,25 +34,28 @@ public class NodeFreezer {
         if (mutableNode.children.isEmpty()) {
             itemLength = LargeInteger.ONE;
         }
-        NodeData nodeData = checkNodeData(mutableNode.value);
-        LargeInteger valueCount = extractValueCount(nodeData);
+        ExtractableValueSet extractableValueSet = convertNodeData(mutableNode.value);
+        LargeInteger valueCount = extractValueCount(extractableValueSet);
         LargeInteger length = itemLength.multiply(valueCount);
         ImmutableList<FrozenNode> children = ImmutableList.fromCollection(childrenBuilder);
-        FrozenNode result = new FrozenNode(nodeData, children, length, itemLength);
+        FrozenNode result = new FrozenNode(extractableValueSet, children, length, itemLength);
         cache.put(mutableNode, result);
         return result;
     }
     
-    private NodeData checkNodeData(Object value) {
-        if (!(value instanceof NodeData)) {
-            throw new IllegalArgumentException("Not a NodeData: " + value);
+    private ExtractableValueSet convertNodeData(Object value) {
+        if (value instanceof ExtractableValueSet) {
+            return (ExtractableValueSet) value;
+        } else if (value instanceof SpecialValue) {
+            return new SpecialValueDataSet((SpecialValue) value);
+        } else {
+            throw new IllegalArgumentException("Unexpected kind of node data: " + value);
         }
-        return (NodeData) value;
     }
 
-    private LargeInteger extractValueCount(NodeData nodeData) {
-        if (nodeData instanceof SortedValueSetNodeData) {
-            return ((SortedValueSetNodeData) nodeData).length();
+    private LargeInteger extractValueCount(ExtractableValueSet extractableValueSet) {
+        if (extractableValueSet instanceof CharacterDataSet) {
+            return ((CharacterDataSet) extractableValueSet).size();
         } else {
             return LargeInteger.ONE;
         }

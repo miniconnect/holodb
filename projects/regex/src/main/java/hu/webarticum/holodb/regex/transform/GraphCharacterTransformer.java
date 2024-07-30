@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.regex.graph.algorithm;
+package hu.webarticum.holodb.regex.transform;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,11 +17,11 @@ import hu.webarticum.holodb.regex.ast.NamedBackreferenceAstNode;
 import hu.webarticum.holodb.regex.ast.PosixCharacterClassAstNode;
 import hu.webarticum.holodb.regex.ast.RangeAstNode;
 import hu.webarticum.holodb.regex.ast.UnicodePropertyCharacterClassAstNode;
-import hu.webarticum.holodb.regex.graph.data.CharacterValue;
-import hu.webarticum.holodb.regex.graph.data.EmptyNodeData;
-import hu.webarticum.holodb.regex.graph.data.MutableNode;
-import hu.webarticum.holodb.regex.graph.data.NodeData;
-import hu.webarticum.holodb.regex.graph.data.SortedValueSetNodeData;
+import hu.webarticum.holodb.regex.ast.extract.ExtractableValueSet;
+import hu.webarticum.holodb.regex.graph.CharacterValue;
+import hu.webarticum.holodb.regex.graph.MutableNode;
+import hu.webarticum.holodb.regex.graph.CharacterDataSet;
+import hu.webarticum.holodb.regex.graph.SpecialValue;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class GraphCharacterTransformer {
@@ -41,7 +41,7 @@ public class GraphCharacterTransformer {
         String fixedString = ((FixedStringAstNode) node.value).value();
         int length = fixedString.length();
         if (length == 0) {
-            node.value = EmptyNodeData.EMPTY;
+            node.value = SpecialValue.EMPTY;
             return node;
         } else if (length == 1) {
             node.value = valueSetOf(chars(fixedString.charAt(0)));
@@ -50,7 +50,7 @@ public class GraphCharacterTransformer {
         MutableNode headNode = new MutableNode(valueSetOf(chars(fixedString.charAt(length - 1))));
         headNode.children = node.children;
         for (int i = length - 2; i >= 1; i--) {
-            NodeData valueSet = valueSetOf(chars(fixedString.charAt(i)));
+            ExtractableValueSet valueSet = valueSetOf(chars(fixedString.charAt(i)));
             headNode = new MutableNode(valueSet, headNode);
         }
         node.value = valueSetOf(chars(fixedString.charAt(0)));
@@ -58,15 +58,15 @@ public class GraphCharacterTransformer {
         return node;
     }
 
-    private NodeData convertValue(Object value) {
-        if (value instanceof NodeData) {
-            return (NodeData) value;
+    private Object convertValue(Object value) {
+        if (value instanceof ExtractableValueSet || value instanceof SpecialValue) {
+            return value;
         } else if (value == null) {
-            return EmptyNodeData.EMPTY;
+            return SpecialValue.EMPTY;
         } else if (value instanceof AnchorAstNode) {
             
             // FIXME
-            return EmptyNodeData.EMPTY;
+            return SpecialValue.EMPTY;
 
         } else if (value instanceof BackreferenceAstNode || value instanceof NamedBackreferenceAstNode) {
             
@@ -272,8 +272,8 @@ public class GraphCharacterTransformer {
         }
     }
 
-    private SortedValueSetNodeData valueSetOf(TreeSet<Character> characterSet) {
-        return new SortedValueSetNodeData(ImmutableList.fromCollection(characterSet).map(CharacterValue::new));
+    private CharacterDataSet valueSetOf(TreeSet<Character> characterSet) {
+        return new CharacterDataSet(ImmutableList.fromCollection(characterSet).map(CharacterValue::new));
     }
 
     // FIXME
