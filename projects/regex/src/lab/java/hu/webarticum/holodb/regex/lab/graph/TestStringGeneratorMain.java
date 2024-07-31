@@ -1,5 +1,7 @@
 package hu.webarticum.holodb.regex.lab.graph;
 
+import java.util.stream.Collectors;
+
 import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.ast.extract.ValueExtractor;
 import hu.webarticum.holodb.regex.graph.CharacterValue;
@@ -63,8 +65,15 @@ public class TestStringGeneratorMain {
     }
     
     private static String extractAt(ValueExtractor<FrozenNode> extractor, LargeInteger index) {
-        ImmutableList<CharacterValue> valueList = extractor.get(index);
-        return String.join("", valueList.map(v -> Character.toString(v.value())));
+        ImmutableList<Object> valueList = extractor.get(index);
+        return stringify(valueList);
+    }
+    
+    private static String stringify(ImmutableList<Object> valueList) {
+        return valueList.stream()
+                .filter(CharacterValue.class::isInstance).map(v -> (CharacterValue) v)
+                .map(v -> Character.toString(v.value()))
+                .collect(Collectors.joining(""));
     }
     
 }

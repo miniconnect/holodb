@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import hu.webarticum.holodb.regex.graph.CharacterValue;
-import hu.webarticum.holodb.regex.graph.CharacterDataSet;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
@@ -22,13 +20,13 @@ public class ValueExtractor<T extends ExtractableNode<T>> {
         return extractableNode.length();
     }
     
-    public ImmutableList<CharacterValue> get(LargeInteger index) {
-        List<CharacterValue> resultBuilder = new LinkedList<>();
+    public ImmutableList<Object> get(LargeInteger index) {
+        List<Object> resultBuilder = new LinkedList<>();
         getInternal(extractableNode, index, resultBuilder);
         return ImmutableList.fromCollection(resultBuilder);
     }
     
-    private void getInternal(T nextNode, LargeInteger index, List<CharacterValue> resultBuilder) {
+    private void getInternal(T nextNode, LargeInteger index, List<Object> resultBuilder) {
         ImmutableList<T> children = nextNode.children();
         if (children.isEmpty()) {
             return;
@@ -38,10 +36,8 @@ public class ValueExtractor<T extends ExtractableNode<T>> {
         LargeInteger[] quotientAndRemainder = index.divideAndRemainder(nextNode.subLength());
         LargeInteger itemIndex = quotientAndRemainder[0];
         LargeInteger subIndex = quotientAndRemainder[1];
-        if (extractableValueSet instanceof CharacterDataSet) {
-            CharacterValue nextValue = ((CharacterDataSet) extractableValueSet).get(itemIndex);
-            resultBuilder.add(nextValue);
-        }
+        Object nextValue = extractableValueSet.get(itemIndex);
+        resultBuilder.add(nextValue);
         LargeInteger remainingIndex = subIndex;
         for (T childNode : children) {
             LargeInteger subLength = childNode.length();
@@ -54,13 +50,13 @@ public class ValueExtractor<T extends ExtractableNode<T>> {
         throw new IndexOutOfBoundsException("Child count: " + nextNode.children().size() + ", index given: " + index);
     }
 
-    public FindResult find(ImmutableList<CharacterValue> values) {
+    public FindResult find(ImmutableList<Object> values) {
         InternalFindResult internalFindResult = findInternal(extractableNode, values.asList());
         boolean found = (internalFindResult.status == InternalFindResult.Status.FOUND);
         return FindResult.of(found, internalFindResult.position);
     }
 
-    public InternalFindResult findInternal(T nextNode, List<CharacterValue> values) {
+    public InternalFindResult findInternal(T nextNode, List<Object> values) {
         ExtractableValueSet extractableValueSet = nextNode.data();
         LargeInteger dataSetSize = extractableValueSet.size();
         if (values.isEmpty()) {
@@ -84,7 +80,7 @@ public class ValueExtractor<T extends ExtractableNode<T>> {
             return new InternalFindResult(status, bottomIndex);
         }
         for (T childNode : nextNode.children()) {
-            List<CharacterValue> subList = values.subList(1, values.size());
+            List<Object> subList = values.subList(1, values.size());
             InternalFindResult subResult = findInternal(childNode, subList);
             if (subResult.status != InternalFindResult.Status.AFTER) {
                 return alignResult(subResult, bottomIndex);

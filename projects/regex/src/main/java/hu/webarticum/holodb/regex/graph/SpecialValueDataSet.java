@@ -19,8 +19,8 @@ public class SpecialValueDataSet implements ExtractableValueSet {
 
     @Override
     public Object get(LargeInteger index) {
-        if (index != LargeInteger.ZERO) {
-            throw new IndexOutOfBoundsException();
+        if (index.isNonZero()) {
+            throw new IndexOutOfBoundsException("Only zero index is allowed for " + value + ", given index: " + index);
         }
         return value;
     }

@@ -20,7 +20,7 @@ public class GraphValueComparator implements Comparator<Object> {
             if (!(value2 instanceof SpecialValue)) {
                 return -1;
             } else if (value1 == value2) {
-                
+                return 0;
             }
             boolean value2FallsBefore = ((SpecialValue) value1).ordinal() > ((SpecialValue) value2).ordinal();
             return value2FallsBefore ? 1 : -1;
