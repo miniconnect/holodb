@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import hu.webarticum.miniconnect.lang.FindPositionResult;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
@@ -50,10 +51,10 @@ public class ValueExtractor<T extends ExtractableNode<T>> {
         throw new IndexOutOfBoundsException("Child count: " + nextNode.children().size() + ", index given: " + index);
     }
 
-    public FindResult find(ImmutableList<Object> values) {
+    public FindPositionResult find(ImmutableList<Object> values) {
         InternalFindResult internalFindResult = findInternal(extractableNode, values.asList());
         boolean found = (internalFindResult.status == InternalFindResult.Status.FOUND);
-        return FindResult.of(found, internalFindResult.position);
+        return FindPositionResult.of(found, internalFindResult.position);
     }
 
     public InternalFindResult findInternal(T nextNode, List<Object> values) {
@@ -67,7 +68,7 @@ public class ValueExtractor<T extends ExtractableNode<T>> {
             return new InternalFindResult(status, LargeInteger.ZERO);
         }
         LargeInteger itemLength = nextNode.subLength();
-        FindResult setResult = extractableValueSet.find(values.get(0));
+        FindPositionResult setResult = extractableValueSet.find(values.get(0));
         LargeInteger position = setResult.position();
         LargeInteger bottomIndex = position.multiply(itemLength);
         if (!setResult.found()) {

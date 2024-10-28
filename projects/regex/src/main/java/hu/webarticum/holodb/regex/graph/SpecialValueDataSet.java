@@ -1,7 +1,7 @@
 package hu.webarticum.holodb.regex.graph;
 
 import hu.webarticum.holodb.regex.ast.extract.ExtractableValueSet;
-import hu.webarticum.holodb.regex.ast.extract.FindResult;
+import hu.webarticum.miniconnect.lang.FindPositionResult;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class SpecialValueDataSet implements ExtractableValueSet {
@@ -26,14 +26,14 @@ public class SpecialValueDataSet implements ExtractableValueSet {
     }
 
     @Override
-    public FindResult find(Object value) {
+    public FindPositionResult find(Object value) {
         if (value == this.value) {
-            return FindResult.of(true, LargeInteger.ZERO);
+            return FindPositionResult.found(LargeInteger.ZERO);
         } else if (value instanceof SpecialValue) {
             boolean fallsBefore = ((SpecialValue) value).ordinal() < this.value.ordinal();
-            return FindResult.of(false, fallsBefore ? LargeInteger.ZERO : LargeInteger.ONE);
+            return FindPositionResult.notFound(fallsBefore ? LargeInteger.ZERO : LargeInteger.ONE);
         } else {
-            return FindResult.of(false, LargeInteger.ONE);
+            return FindPositionResult.notFound(LargeInteger.ONE);
         }
     }
 

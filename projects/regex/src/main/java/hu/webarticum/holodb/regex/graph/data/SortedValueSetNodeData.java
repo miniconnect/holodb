@@ -1,5 +1,6 @@
 package hu.webarticum.holodb.regex.graph.data;
 
+import hu.webarticum.miniconnect.lang.FindPositionResult;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
@@ -19,18 +20,18 @@ public class SortedValueSetNodeData implements NodeData {
         return values.get(index.intValue());
     }
 
-    public FindResult find(CharacterValue value) {
+    public FindPositionResult find(CharacterValue value) {
         int i = 0;
         for (CharacterValue valueItem : values) {
             int cmp = value.compareTo(valueItem);
             if (cmp == 0) {
-                return FindResult.of(true, LargeInteger.of(i));
+                return FindPositionResult.found(LargeInteger.of(i));
             } else if (cmp < 0) {
-                return FindResult.of(false, LargeInteger.of(i));
+                return FindPositionResult.notFound(LargeInteger.of(i));
             }
             i++;
         }
-        return FindResult.of(false, LargeInteger.of(i));
+        return FindPositionResult.notFound(LargeInteger.of(i));
     }
     
     @Override

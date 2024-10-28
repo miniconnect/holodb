@@ -1,5 +1,6 @@
 package hu.webarticum.holodb.regex.ast.extract;
 
+import hu.webarticum.miniconnect.lang.FindPositionResult;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public interface ExtractableValueSet {
@@ -8,6 +9,6 @@ public interface ExtractableValueSet {
     
     public Object get(LargeInteger index);
     
-    public FindResult find(Object value);
+    public FindPositionResult find(Object value);
     
 }

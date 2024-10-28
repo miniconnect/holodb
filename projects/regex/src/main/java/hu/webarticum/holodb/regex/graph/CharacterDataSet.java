@@ -1,7 +1,7 @@
 package hu.webarticum.holodb.regex.graph;
 
 import hu.webarticum.holodb.regex.ast.extract.ExtractableValueSet;
-import hu.webarticum.holodb.regex.ast.extract.FindResult;
+import hu.webarticum.miniconnect.lang.FindPositionResult;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
@@ -24,9 +24,9 @@ public class CharacterDataSet implements ExtractableValueSet {
     }
 
     @Override
-    public FindResult find(Object value) {
+    public FindPositionResult find(Object value) {
         if (!(value instanceof CharacterValue)) {
-            return FindResult.of(false, LargeInteger.ZERO);
+            return FindPositionResult.notFound(LargeInteger.ZERO);
         }
         
         CharacterValue characterValue = (CharacterValue) value;
@@ -34,13 +34,13 @@ public class CharacterDataSet implements ExtractableValueSet {
         for (CharacterValue valueItem : values) {
             int cmp = characterValue.compareTo(valueItem);
             if (cmp == 0) {
-                return FindResult.of(true, LargeInteger.of(i));
+                return FindPositionResult.found(LargeInteger.of(i));
             } else if (cmp < 0) {
-                return FindResult.of(false, LargeInteger.of(i));
+                return FindPositionResult.notFound(LargeInteger.of(i));
             }
             i++;
         }
-        return FindResult.of(false, LargeInteger.of(i));
+        return FindPositionResult.notFound(LargeInteger.of(i));
     }
     
     @Override
