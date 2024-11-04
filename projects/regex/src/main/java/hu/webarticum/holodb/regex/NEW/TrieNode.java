@@ -1,27 +1,61 @@
 package hu.webarticum.holodb.regex.NEW;
 
-import hu.webarticum.miniconnect.lang.FindPositionResult;
+import java.util.ArrayList;
+import java.util.List;
+
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
-public interface TrieNode {
+public class TrieNode {
 	
-	public LargeInteger size();
+	private final TrieValue value;
+	
+	private final ImmutableList<TrieNode> children;
+	
+	private LargeInteger size = null;
+	
+	private ImmutableList<LargeInteger> childMap = null;
+	
+	public TrieNode(TrieValue value, ImmutableList<TrieNode> children) {
+		this.value = value;
+		this.children = children;
+	}
+	
+	public TrieValue value() {
+		return value;
+	}
 
-	public Object value();
+	public ImmutableList<TrieNode> children() {
+		return children;
+	}
+
+	public LargeInteger size() {
+		if (size == null) {
+			calculateSize();
+		}
+		return size;
+	}
 	
-	public ImmutableList<TrieNode> children();
-	
-	public ImmutableList<LargeInteger> childMap();
-	
-	public ImmutableList<Object> traceAt(LargeInteger index);
-	
-	public Iterable<ImmutableList<Object>> traces();
-	
-	public Iterable<ImmutableList<Object>> traces(LargeInteger from);
-	
-	public Iterable<ImmutableList<Object>> traces(LargeInteger from, LargeInteger until);
-	
-	public FindPositionResult find(ImmutableList<Object> trace);
-	
+	public ImmutableList<LargeInteger> childMap() {
+		if (childMap == null) {
+			calculateSize();
+		}
+		return childMap;
+	}
+
+	private synchronized void calculateSize() {
+		if (size != null) {
+			return;
+		}
+		int childCount = children.size();
+		List<LargeInteger> childMapBuilder = new ArrayList<>(childCount);
+		LargeInteger subSize = LargeInteger.ZERO;
+		for (int i = 0; i < childCount; i++) {
+			subSize = subSize.add(children.get(i).size());
+			childMapBuilder.add(subSize);
+		}
+		size = subSize.max(LargeInteger.ONE).multiply(value.factor());
+		childMap = ImmutableList.fromCollection(childMapBuilder);
+	}
+
 }
