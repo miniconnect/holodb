@@ -1,23 +1,22 @@
 package hu.webarticum.holodb.regex.NEW;
 
-import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class CharClassValue implements TrieValue {
 	
-	private final ImmutableList<Character> characters;
+	private final CharClass charClass;
 
-	public CharClassValue(ImmutableList<Character> characters) {
-		this.characters = characters;
+	public CharClassValue(CharClass charClass) {
+		this.charClass = charClass;
 	}
 	
 	@Override
 	public LargeInteger factor() {
-		return LargeInteger.of(characters.size());
+		return charClass.size();
 	}
 	
-	public ImmutableList<Character> characters() {
-		return characters;
+	public CharClass charClass() {
+		return charClass;
 	}
 
 }
