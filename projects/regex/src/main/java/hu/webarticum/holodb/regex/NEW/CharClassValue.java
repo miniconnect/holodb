@@ -1,5 +1,6 @@
 package hu.webarticum.holodb.regex.NEW;
 
+import hu.webarticum.holodb.regex.NEW.charclass.CharClass;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class CharClassValue implements TrieValue {

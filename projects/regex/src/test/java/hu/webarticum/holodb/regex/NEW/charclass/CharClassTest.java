@@ -1,8 +1,9 @@
-package hu.webarticum.holodb.regex.NEW;
+package hu.webarticum.holodb.regex.NEW.charclass;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.assertj.core.util.Arrays;
+import java.util.Comparator;
+
 import org.junit.jupiter.api.Test;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -30,7 +31,37 @@ class CharClassTest {
 
     @Test
     void testCharacters() {
-    	assertThat(charClassOf("loremipsum").characters()).isEqualTo(ImmutableList.fromCharArray("eilmoprsu"));
+        assertThat(charClassOf("loremipsum").characters()).isEqualTo(ImmutableList.fromCharArray("eilmoprsu"));
+    }
+
+    @Test
+    void testCompareEqual() {
+        assertThat(charClassOf("abc")).isEqualByComparingTo(charClassOf("abc"));
+    }
+
+    @Test
+    void testCompareLeftPrefix() {
+        assertThat(charClassOf("abc")).isLessThan(charClassOf("abcdef"));
+    }
+
+    @Test
+    void testCompareRightPrefix() {
+        assertThat(charClassOf("abc")).isGreaterThan(charClassOf("ab"));
+    }
+
+    @Test
+    void testCompareCommonPrefix() {
+        assertThat(charClassOf("abcdef")).isLessThan(charClassOf("abcfgh"));
+    }
+
+    @Test
+    void testCompareNoCommonPrefix() {
+        assertThat(charClassOf("xz")).isGreaterThan(charClassOf("dg"));
+    }
+
+    @Test
+    void testCompareJump() {
+        assertThat(charClassOf("aklm")).isLessThan(charClassOf("cd"));
     }
 
     @Test
@@ -58,15 +89,8 @@ class CharClassTest {
     	assertThat(charClassOf("lorem").intersection(charClassOf("dolor"))).isEqualTo(charClassOf("lor"));
     }
 
-    @Test
-    void testSplit() {
-    	
-    	// TODO
-    	
-    }
-
     private CharClass charClassOf(String chars) {
-    	return CharClass.of(ImmutableList.fromCharArray(chars), (c1, c2) -> c1.compareTo(c2));
+    	return CharClass.of(ImmutableList.fromCharArray(chars), Comparator.naturalOrder());
     }
     
 }
