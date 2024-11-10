@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import hu.webarticum.holodb.spi.config.SourceFactory;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
-import hu.webarticum.miniconnect.util.ToStringBuilder;
+import hu.webarticum.miniconnect.lang.ToStringBuilder;
 
 public class HoloConfigColumn {
     

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
-import hu.webarticum.miniconnect.util.ToStringBuilder;
+import hu.webarticum.miniconnect.lang.ToStringBuilder;
 
 public class HoloConfigSchema {
 
