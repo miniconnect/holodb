@@ -22,7 +22,7 @@ public class ModuloPermutation implements Permutation {
             this.inverseDiff = LargeInteger.ZERO;
         } else {
             this.diff = calculateDiff(treeRandom, size);
-            this.prime = calculatePrime(size, this.diff);
+            this.prime = calculatePrime(treeRandom, size);
             this.inverseDiff = size.subtract(diff);
         }
     }
@@ -31,8 +31,8 @@ public class ModuloPermutation implements Permutation {
         return treeRandom.getNumber(size);
     }
 
-    private static LargeInteger calculatePrime(LargeInteger size, LargeInteger diff) {
-        LargeInteger p = diff.divide(LargeInteger.of(2L)).add(diff.divide(LargeInteger.of(4L)));
+    private static LargeInteger calculatePrime(TreeRandom treeRandom, LargeInteger size) {
+        LargeInteger p = treeRandom.getNumber(size);
         while (!size.gcd(p).equals(LargeInteger.ONE)) {
             p = p.nextProbablePrime();
         }

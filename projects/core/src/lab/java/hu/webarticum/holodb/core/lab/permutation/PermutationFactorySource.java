@@ -61,7 +61,7 @@ public class PermutationFactorySource {
                     new ModuloPermutation(rootRandom, s),
                     new BitShufflePermutation(rootRandom, s.bitLength()).resized(s),
                     new ModuloPermutation(rootRandom.sub(4324L), s),
-                    new BitXorPermutation(rootRandom.sub(4324L), s.bitLength()).resized(s)));
+                    new BitXorPermutation(rootRandom, s.bitLength()).resized(s)));
 
         return result;
     }
