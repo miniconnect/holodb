@@ -7,6 +7,7 @@ import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
@@ -15,6 +16,7 @@ import org.openjdk.jmh.infra.Blackhole;
 
 import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
 import hu.webarticum.holodb.core.data.binrel.monotonic.FastMonotonic;
+import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
 import hu.webarticum.holodb.core.data.binrel.monotonic.SurjectiveMonotonic;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
 import hu.webarticum.miniconnect.lang.LargeInteger;
@@ -32,46 +34,34 @@ public class MonotonicBenchmark {
     
     private static final LargeInteger DIVIDE = LargeInteger.of(20L);
     
-
-    private FastMonotonic fastMonotonic;
-
-    private SurjectiveMonotonic surjectiveMonotonic;
     
-    private BinomialMonotonic binomialMonotonic;
+    @Param({"Fast", "Surjective", "Binomial"})
+    private String type;
+    
+
+    private Monotonic monotonic;
     
     
     @Setup
     public void setup() {
-        fastMonotonic = new FastMonotonic(SIZE, IMAGE_SIZE);
-        surjectiveMonotonic = new SurjectiveMonotonic(new HasherTreeRandom(), SIZE, IMAGE_SIZE);
-        binomialMonotonic = new BinomialMonotonic(new HasherTreeRandom(), SIZE, IMAGE_SIZE);
+        if (type.equals("Fast")) {
+            this.monotonic = new FastMonotonic(SIZE, IMAGE_SIZE);
+        } else if (type.equals("Surjective")) {
+            this.monotonic = new SurjectiveMonotonic(new HasherTreeRandom(), SIZE, IMAGE_SIZE);
+        } else if (type.equals("Binomial")) {
+            this.monotonic = new BinomialMonotonic(new HasherTreeRandom(), SIZE, IMAGE_SIZE);
+        } else {
+            throw new IllegalArgumentException("Unknown benchmark type: " + type);
+        }
     }
     
 
     @Benchmark
-    public void benchmarkFastMonotonic(Blackhole blackhole) {
-        LargeInteger size = fastMonotonic.size();
+    public void benchmarkMonotonic(Blackhole blackhole) {
+        LargeInteger size = monotonic.size();
         LargeInteger step = size.divide(DIVIDE);
         for (LargeInteger i = LargeInteger.ZERO; i.isLessThan(size); i = i.add(step)) {
-            blackhole.consume(fastMonotonic.at(i));
-        }
-    }
-
-    @Benchmark
-    public void benchmarkSurjectiveMonotonic(Blackhole blackhole) {
-        LargeInteger size = surjectiveMonotonic.size();
-        LargeInteger step = size.divide(DIVIDE);
-        for (LargeInteger i = LargeInteger.ZERO; i.isLessThan(size); i = i.add(step)) {
-            blackhole.consume(surjectiveMonotonic.at(i));
-        }
-    }
-
-    @Benchmark
-    public void benchmarkBinomialMonotonic(Blackhole blackhole) {
-        LargeInteger size = binomialMonotonic.size();
-        LargeInteger step = size.divide(DIVIDE);
-        for (LargeInteger i = LargeInteger.ZERO; i.isLessThan(size); i = i.add(step)) {
-            blackhole.consume(binomialMonotonic.at(i));
+            blackhole.consume(monotonic.at(i));
         }
     }
 
