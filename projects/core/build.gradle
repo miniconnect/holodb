@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id 'me.champeau.gradle.jmh' version '0.5.0'
+    id 'me.champeau.jmh' version '0.7.2'
     id 'io.morethan.jmhreport' version '0.9.0'
 }
 
@@ -33,8 +33,8 @@ dependencies {
     
     labImplementation 'jfree:jfreechart:1.0.13'
     
-    jmh 'org.openjdk.jmh:jmh-core:1.34'
-    jmhRuntimeOnly 'org.openjdk.jmh:jmh-generator-annprocess:1.34'
+    jmh 'org.openjdk.jmh:jmh-core:1.37'
+    jmhRuntimeOnly 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
 }
 
 jmhJar {
@@ -42,7 +42,7 @@ jmhJar {
 }
 
 jmh {
-    duplicateClassesStrategy = 'exclude'
+    duplicateClassesStrategy = DuplicatesStrategy.EXCLUDE
     resultFormat = 'JSON'
 }
 
@@ -50,16 +50,12 @@ tasks.getByName('jmhJar').doFirst() {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
 
-def jmhReportHtmlDir = 'build/reports/jmh/html'
+def jmhReportHtmlDir = 'build/results/jmh/html'
 project.tasks.getByName("jmhReport").doFirst {
     project.file(jmhReportHtmlDir).mkdirs()
 }
 jmhReport {
-    jmhResultPath = project.file('build/reports/jmh/results.json')
+    jmhResultPath = project.file('build/results/jmh/results.json')
     jmhReportOutput = project.file(jmhReportHtmlDir)
-}
-
-tasks.getByName('jmhReport').doFirst() {
-    project.file('build/reports/jmh/html').mkdir()
 }
 
