@@ -19,7 +19,7 @@ class FeistelNetworkPermutationTest extends AbstractPermutationTest {
     
     @Test
     void testZeroLength() {
-        FeistelNetworkPermutation permutation = create(0, 1);
+        Permutation permutation = create(0, 1);
         checkSize(permutation, LargeInteger.ONE);
         checkPermutation(permutation);
         assertThat(permutation.at(LargeInteger.ZERO)).as("single item").isEqualTo(LargeInteger.ZERO);

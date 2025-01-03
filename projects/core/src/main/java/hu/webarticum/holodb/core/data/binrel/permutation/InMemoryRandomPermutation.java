@@ -1,6 +1,7 @@
 package hu.webarticum.holodb.core.data.binrel.permutation;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
@@ -43,6 +44,10 @@ public class InMemoryRandomPermutation implements Permutation {
         }
     }
 
+    
+    public int[] permutatedValues() {
+        return Arrays.copyOf(permutatedValues, permutatedValues.length);
+    }
     
     @Override
     public LargeInteger size() {

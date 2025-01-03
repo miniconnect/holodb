@@ -4,8 +4,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import hu.webarticum.holodb.core.data.binrel.permutation.BitShufflePermutation;
+import hu.webarticum.holodb.core.data.binrel.permutation.BitXorPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.FeistelNetworkPermutation;
+import hu.webarticum.holodb.core.data.binrel.permutation.IdentityPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.ModuloPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.PermutationComposition;
@@ -24,10 +27,11 @@ public class PermutationFactorySource {
     
 
     public static Map<String, Function<LargeInteger, Permutation>> createFactories() {
-        TreeRandom rootRandom = new HasherTreeRandom("lorem", new Sha256MacHasher());
+        TreeRandom rootRandom = new HasherTreeRandom("xlorem", new Sha256MacHasher());
         
         Map<String, Function<LargeInteger, Permutation>> result = new LinkedHashMap<>();
 
+        result.put("ID", s -> new IdentityPermutation(s));
         result.put("FPE1", s -> new DirtyFpePermutation(rootRandom.sub(1L), s));
         //result.put("FPE2", s -> new DirtyFpePermutation(rootRandom.sub(2L), s));
         result.put("MP1", s -> new ModuloPermutation(rootRandom.sub(3L), s));
@@ -49,8 +53,16 @@ public class PermutationFactorySource {
         result.put("FEI-S-2", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 2, new Sha256MacHasher()).resized(s));
         //result.put("FEI-S-3", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 3, new Sha256MacHasher()).resized(s));
         //result.put("FEI-S-4", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 4, new Sha256MacHasher()).resized(s));
-        result.put("SP", s -> new InMemoryRandomPermutation(rootRandom, s));
-        
+        result.put("MEM", s -> new InMemoryRandomPermutation(rootRandom, s));
+        result.put("BSP", s -> new BitShufflePermutation(rootRandom, s.bitLength()).resized(s));
+        result.put("BXP", s -> new BitXorPermutation(rootRandom, s.bitLength()).resized(s));
+
+        result.put("XXXX", s -> new PermutationComposition(
+                    new ModuloPermutation(rootRandom, s),
+                    new BitShufflePermutation(rootRandom, s.bitLength()).resized(s),
+                    new ModuloPermutation(rootRandom.sub(4324L), s),
+                    new BitXorPermutation(rootRandom.sub(4324L), s.bitLength()).resized(s)));
+
         return result;
     }
     

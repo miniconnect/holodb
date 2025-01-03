@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -44,9 +45,15 @@ public class PermutationBitmapMain {
         for (Map.Entry<String, Function<LargeInteger, Permutation>> entry : permutationFactories.entrySet()) {
             String name = entry.getKey();
             Function<LargeInteger, Permutation> factory = entry.getValue();
+            long before = System.currentTimeMillis();
             BufferedImage image = render(factory);
+            long after = System.currentTimeMillis();
+            long elapsed = after - before;
             ImagePanel imagePanel = new ImagePanel(image);
-            tabbedPane.addTab(name, imagePanel);
+            JPanel tabPanel = new JPanel(new BorderLayout());
+            tabPanel.add(new JLabel("Time: " + elapsed + "ms; Name: " + name), BorderLayout.NORTH);
+            tabPanel.add(imagePanel, BorderLayout.CENTER);
+            tabbedPane.addTab(name, tabPanel);
         }
         
         frame.pack();
