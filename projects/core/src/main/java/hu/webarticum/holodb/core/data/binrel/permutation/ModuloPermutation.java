@@ -13,6 +13,8 @@ public class ModuloPermutation implements Permutation {
     
     private final LargeInteger inverseDiff;
     
+    private final LargeInteger primeModInverse;
+    
 
     public ModuloPermutation(TreeRandom treeRandom, LargeInteger size) {
         this.size = size;
@@ -20,10 +22,12 @@ public class ModuloPermutation implements Permutation {
             this.prime = LargeInteger.ZERO;
             this.diff = LargeInteger.ZERO;
             this.inverseDiff = LargeInteger.ZERO;
+            this.primeModInverse = LargeInteger.ZERO;
         } else {
             this.diff = calculateDiff(treeRandom, size);
             this.prime = calculatePrime(treeRandom, size);
             this.inverseDiff = size.subtract(diff);
+            this.primeModInverse = this.prime.modInverse(size);
         }
     }
 
@@ -52,7 +56,13 @@ public class ModuloPermutation implements Permutation {
 
     @Override
     public LargeInteger indexOf(LargeInteger value) {
-        return prime.modInverse(size).multiply(value.add(inverseDiff)).mod(size);
+        LargeInteger multiplier;
+        if (value.isGreaterThan(diff)) {
+            multiplier = value.subtract(diff);
+        } else {
+            multiplier = value.add(inverseDiff);
+        }
+        return primeModInverse.multiply(multiplier).mod(size);
     }
     
 }
