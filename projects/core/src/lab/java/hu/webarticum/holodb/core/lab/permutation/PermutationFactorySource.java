@@ -27,14 +27,14 @@ public class PermutationFactorySource {
     
 
     public static Map<String, Function<LargeInteger, Permutation>> createFactories() {
-        TreeRandom rootRandom = new HasherTreeRandom("xlorem", new Sha256MacHasher());
+        TreeRandom rootRandom = new HasherTreeRandom("lorem", new FastHasher());
         
         Map<String, Function<LargeInteger, Permutation>> result = new LinkedHashMap<>();
 
         result.put("ID", s -> new IdentityPermutation(s));
-        result.put("FPE1", s -> new DirtyFpePermutation(rootRandom.sub(1L), s));
+        result.put("FPE1", s -> new DirtyFpePermutation(rootRandom, s));
         //result.put("FPE2", s -> new DirtyFpePermutation(rootRandom.sub(2L), s));
-        result.put("MP1", s -> new ModuloPermutation(rootRandom.sub(3L), s));
+        result.put("MP1", s -> new ModuloPermutation(rootRandom, s));
         //result.put("MP2", s -> new ModuloPermutation(rootRandom.sub(4L), s));
         //result.put("MPX", s -> new PermutationComposition(
         //        new ModuloPermutation(rootRandom.sub(3L), s),
