@@ -20,9 +20,17 @@ public class PermutationDumpMain {
         Map<String, Function<LargeInteger, Permutation>> permutationFactories =
                 PermutationFactorySource.createFactories();
 
-        System.out.print("Target directory: ");
-        String line = new BufferedReader(new InputStreamReader(System.in)).readLine();
-        File directory = new File(line);
+        String path;
+        if (args.length > 0) {
+            path = args[0];
+        } else {
+            System.out.print("Target directory: ");
+            path = new BufferedReader(new InputStreamReader(System.in)).readLine();
+        }
+
+        System.out.println(path);
+        
+        File directory = new File(path);
         directory.mkdirs();
         
         LargeInteger size = LargeInteger.of(PERMUTATION_SIZE);

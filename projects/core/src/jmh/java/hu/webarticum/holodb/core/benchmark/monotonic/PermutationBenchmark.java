@@ -58,7 +58,7 @@ public class PermutationBenchmark {
     
     @Setup
     public void setup() {
-        TreeRandom rootRandom = new HasherTreeRandom("lorem", new FastHasher(1849L));
+        TreeRandom rootRandom = new HasherTreeRandom("lorem", new FastHasher());
         if (type.equals("Identity")) {
             this.factory = s -> new IdentityPermutation(s);
         } else if (type.equals("Modulo")) {

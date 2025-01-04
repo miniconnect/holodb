@@ -27,7 +27,7 @@ public class PermutationFactorySource {
     
 
     public static Map<String, Function<LargeInteger, Permutation>> createFactories() {
-        TreeRandom rootRandom = new HasherTreeRandom("lorem", new FastHasher(1849L));
+        TreeRandom rootRandom = new HasherTreeRandom("lorem", new FastHasher());
         
         Map<String, Function<LargeInteger, Permutation>> result = new LinkedHashMap<>();
 
