@@ -44,7 +44,7 @@ public class PermutationBenchmark {
     private static final LargeInteger BIG_NON_POW_2 = LargeInteger.of("210463807346237083746");
     
     
-    @Param({"Identity", "Modulo", "DirtyFpe", "FeistelFastR4", "FeistelSha256R2", "BestComposition"})
+    @Param({"Identity", "Modulo", "DirtyFpe", "FeistelFastR4", "FeistelSha256R2", "BestComposition", "BS", "BX", "MPS"})
     private String type;
     
 
@@ -58,7 +58,7 @@ public class PermutationBenchmark {
     
     @Setup
     public void setup() {
-        TreeRandom rootRandom = new HasherTreeRandom("lorem", new FastHasher());
+        TreeRandom rootRandom = new HasherTreeRandom("lorem", new FastHasher(1849L));
         if (type.equals("Identity")) {
             this.factory = s -> new IdentityPermutation(s);
         } else if (type.equals("Modulo")) {
