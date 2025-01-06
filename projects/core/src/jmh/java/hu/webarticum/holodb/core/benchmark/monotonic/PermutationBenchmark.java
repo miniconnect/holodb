@@ -44,7 +44,10 @@ public class PermutationBenchmark {
     private static final LargeInteger BIG_NON_POW_2 = LargeInteger.of("210463807346237083746");
     
     
-    @Param({"Identity", "Modulo", "DirtyFpe", "FeistelFastR4", "FeistelSha256R2", "BestComposition", "BS", "BX", "MPS"})
+    @Param({
+        "Identity", "Modulo", "DirtyFpe", "FeistelFastR1", "FeistelFastR4", "FeistelSha256R2",
+        "BitShuffle", "BitXor", "BestComposition",
+    })
     private String type;
     
 
@@ -65,20 +68,26 @@ public class PermutationBenchmark {
             this.factory = s -> new ModuloPermutation(rootRandom, s);
         } else if (type.equals("DirtyFpe")) {
             this.factory = s -> new DirtyFpePermutation(rootRandom, s);
+        } else if (type.equals("FeistelFastR1")) {
+            this.factory = s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 1, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s);
         } else if (type.equals("FeistelFastR4")) {
             this.factory = s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 4, new FastHasher("", (s.bitLength() / 8) + 1)).resized(s);
         } else if (type.equals("FeistelSha256R2")) {
             this.factory = s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 2, new Sha256MacHasher()).resized(s);
+        } else if (type.equals("BitShuffle")) {
+            this.factory = s -> new BitShufflePermutation(rootRandom, s.decrement().bitLength()).resized(s);
+        } else if (type.equals("BitXor")) {
+            this.factory = s -> new BitXorPermutation(rootRandom, s.decrement().bitLength()).resized(s);
         } else if (type.equals("BestComposition")) {
             this.factory = s -> new PermutationComposition(
                     new ModuloPermutation(rootRandom, s),
-                    new BitShufflePermutation(rootRandom, s.bitLength()).resized(s),
+                    new BitShufflePermutation(rootRandom, s.decrement().bitLength()).resized(s),
                     new ModuloPermutation(rootRandom.sub(4324L), s),
-                    new BitXorPermutation(rootRandom, s.bitLength()).resized(s));
+                    new BitXorPermutation(rootRandom, s.decrement().bitLength()).resized(s));
         } else {
             throw new IllegalArgumentException("Unknown benchmark type: " + type);
         }
-        
+
         this.instanceSmallPow2 = this.factory.apply(SMALL_POW_2);
         this.instanceSmallNonPow2 = this.factory.apply(SMALL_NON_POW_2);
         this.instanceBigPow2 = this.factory.apply(BIG_POW_2);

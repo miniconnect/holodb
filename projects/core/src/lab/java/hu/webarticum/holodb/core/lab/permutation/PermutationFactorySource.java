@@ -54,14 +54,14 @@ public class PermutationFactorySource {
         //result.put("FEI-S-3", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 3, new Sha256MacHasher()).resized(s));
         //result.put("FEI-S-4", s -> new FeistelNetworkPermutation(rootRandom, s.decrement().bitLength(), 4, new Sha256MacHasher()).resized(s));
         result.put("MEM", s -> new InMemoryRandomPermutation(rootRandom, s));
-        result.put("BSP", s -> new BitShufflePermutation(rootRandom, s.bitLength()).resized(s));
-        result.put("BXP", s -> new BitXorPermutation(rootRandom, s.bitLength()).resized(s));
+        result.put("BSP", s -> new BitShufflePermutation(rootRandom, s.decrement().bitLength()).resized(s));
+        result.put("BXP", s -> new BitXorPermutation(rootRandom, s.decrement().bitLength()).resized(s));
 
         result.put("XXXX", s -> new PermutationComposition(
                     new ModuloPermutation(rootRandom, s),
-                    new BitShufflePermutation(rootRandom, s.bitLength()).resized(s),
+                    new BitShufflePermutation(rootRandom, s.decrement().bitLength()).resized(s),
                     new ModuloPermutation(rootRandom.sub(4324L), s),
-                    new BitXorPermutation(rootRandom, s.bitLength()).resized(s)));
+                    new BitXorPermutation(rootRandom, s.decrement().bitLength()).resized(s)));
 
         return result;
     }

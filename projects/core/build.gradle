@@ -32,6 +32,7 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.24.2'
     
     labImplementation 'jfree:jfreechart:1.0.13'
+    labImplementation 'org.openjdk.jol:jol-core:0.17'
     
     jmh 'org.openjdk.jmh:jmh-core:1.37'
     jmhRuntimeOnly 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
