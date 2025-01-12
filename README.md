@@ -254,7 +254,7 @@ python3 mysql_scanner.py -u your_user -p your_password -d your_database -w
 Use the `-h` or `--help` option for more details.
 
 
-## Run queries
+## Run queries in the REPL
 
 HoloDB is an implementation of the [minibase](https://github.com/miniconnect/minibase) framework
 and uses its SQL engine.
@@ -315,12 +315,16 @@ to learn more about the SQL features supported by the default query engine.
 Alternatively, you can try the experimental integration with the
 [Apache Calcite](https://github.com/miniconnect/calcite-integration) query planner.
 
+You can connect to HoloDB directly via the MiniConnect API.
+For more information,
+see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect?tab=readme-ov-file#getting-started-with-the-api).
+
 Also, you can use a MiniConnect server or even an existing MiniConnect `Session` via JDBC.
 For more information,
 see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect#jdbc-compatibility).
 
 
-## Embedded mode
+## Embedded mode via JDBC
 
 You can use HoloDB as an embedded database.
 
@@ -343,6 +347,31 @@ jdbc:holodb:embedded:file///path/to/config.yaml
 ```
 
 (Note: Number of slashes does matter.)
+
+Use the `hu.webarticum.holodb.embedded.HoloEmbeddedDriver` driver class if its explicit setting is mandatory.
+
+
+## Client-server mode via JDBC
+
+To achieve this, first add the required dependency:
+
+```gradle
+implementation "hu.webarticum.holodb:embedded:${holodbVersion}"
+```
+
+Set the JDBC connection URL, specifying a resource:
+
+```
+jdbc:miniconnect://localhost:3430
+```
+
+Or with selecting a specific schema:
+
+```
+jdbc:miniconnect://localhost:3430/university
+```
+
+In this case, use the `hu.webarticum.miniconnect.jdbc.MiniJdbcDriver` driver class if necessary.
 
 
 ## Mock JPA entities
