@@ -18,14 +18,14 @@ public class ModuloPermutation implements Permutation {
 
     public ModuloPermutation(TreeRandom treeRandom, LargeInteger size) {
         this.size = size;
-        if (size.equals(LargeInteger.ZERO)) {
+        if (size.isZero()) {
             this.prime = LargeInteger.ZERO;
             this.diff = LargeInteger.ZERO;
             this.inverseDiff = LargeInteger.ZERO;
             this.primeModInverse = LargeInteger.ZERO;
         } else {
             this.diff = calculateDiff(treeRandom, size);
-            this.prime = calculatePrime(treeRandom, size);
+            this.prime = calculateRelativePrime(treeRandom, size);
             this.inverseDiff = size.subtract(diff);
             this.primeModInverse = this.prime.modInverse(size);
         }
@@ -35,12 +35,18 @@ public class ModuloPermutation implements Permutation {
         return treeRandom.getNumber(size);
     }
 
-    private static LargeInteger calculatePrime(TreeRandom treeRandom, LargeInteger size) {
+    private static LargeInteger calculateRelativePrime(TreeRandom treeRandom, LargeInteger size) {
+        LargeInteger seven = LargeInteger.of(7L);
         LargeInteger p = treeRandom.getNumber(size);
+        int i = 0;
+        while (i < 4 && !size.gcd(p).equals(LargeInteger.ONE)) {
+            p = p.add(seven);
+            i++;
+        }
         while (!size.gcd(p).equals(LargeInteger.ONE)) {
             p = p.nextProbablePrime();
         }
-        return p;
+        return p.mod(size);
     }
 
 
