@@ -362,7 +362,7 @@ Use the `hu.webarticum.holodb.embedded.HoloEmbeddedDriver` driver class if its e
 To achieve this, first add the required dependency:
 
 ```gradle
-implementation "hu.webarticum.holodb:embedded:${holodbVersion}"
+implementation "hu.webarticum.miniconnect:jdbc:${miniConnectVersion}"
 ```
 
 Set the JDBC connection URL, specifying a resource:
