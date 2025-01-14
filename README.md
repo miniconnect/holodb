@@ -346,6 +346,12 @@ Or any file on the file system:
 jdbc:holodb:embedded:file///path/to/config.yaml
 ```
 
+Or with selecting a specific schema:
+
+```
+jdbc:holodb:embedded:resource://config.yaml?schema=university
+```
+
 (Note: Number of slashes does matter.)
 
 Use the `hu.webarticum.holodb.embedded.HoloEmbeddedDriver` driver class if its explicit setting is mandatory.
