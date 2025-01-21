@@ -1,7 +1,5 @@
 package hu.webarticum.holodb.regex.lab.characters;
 
-import java.text.CollationKey;
-
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.Normalizer2;

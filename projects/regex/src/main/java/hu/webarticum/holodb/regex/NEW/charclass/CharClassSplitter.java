@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import hu.webarticum.holodb.regex.NEW.SortedEntrySet;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class CharClassSplitter {

@@ -2,15 +2,15 @@ package hu.webarticum.holodb.regex.lab.graph;
 
 import java.util.stream.Collectors;
 
-import hu.webarticum.holodb.regex.ast.AstNode;
-import hu.webarticum.holodb.regex.ast.extract.ValueExtractor;
-import hu.webarticum.holodb.regex.graph.CharacterValue;
-import hu.webarticum.holodb.regex.graph.FrozenNode;
-import hu.webarticum.holodb.regex.graph.MutableNode;
-import hu.webarticum.holodb.regex.parser.RegexParser;
-import hu.webarticum.holodb.regex.transform.AstToGraphConverter;
-import hu.webarticum.holodb.regex.transform.GraphCharacterTransformer;
-import hu.webarticum.holodb.regex.transform.NodeFreezer;
+import hu.webarticum.holodb.regex.OLD.ast.AstNode;
+import hu.webarticum.holodb.regex.OLD.ast.extract.ValueExtractor;
+import hu.webarticum.holodb.regex.OLD.graph.CharacterValue;
+import hu.webarticum.holodb.regex.OLD.graph.FrozenNode;
+import hu.webarticum.holodb.regex.OLD.graph.MutableNode;
+import hu.webarticum.holodb.regex.OLD.parser.RegexParser;
+import hu.webarticum.holodb.regex.OLD.transform.AstToGraphConverter;
+import hu.webarticum.holodb.regex.OLD.transform.GraphCharacterTransformer;
+import hu.webarticum.holodb.regex.OLD.transform.NodeFreezer;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;

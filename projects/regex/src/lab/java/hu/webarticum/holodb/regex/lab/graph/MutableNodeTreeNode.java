@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import hu.webarticum.holodb.regex.graph.MutableNode;
+import hu.webarticum.holodb.regex.OLD.graph.MutableNode;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.text.ConsoleText;
 

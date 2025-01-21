@@ -6,7 +6,6 @@ import java.util.Comparator;
 
 import org.junit.jupiter.api.Test;
 
-import hu.webarticum.holodb.regex.NEW.SortedEntrySet;
 import hu.webarticum.holodb.regex.NEW.charclass.CharClassSplitter.Containment;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 

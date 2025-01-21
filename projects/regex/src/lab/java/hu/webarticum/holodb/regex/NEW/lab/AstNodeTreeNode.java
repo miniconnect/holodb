@@ -1,15 +1,15 @@
-package hu.webarticum.holodb.regex.lab.graph;
+package hu.webarticum.holodb.regex.NEW.lab;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import hu.webarticum.holodb.regex.OLD.ast.AlternationAstNode;
-import hu.webarticum.holodb.regex.OLD.ast.AstNode;
-import hu.webarticum.holodb.regex.OLD.ast.GroupAstNode;
-import hu.webarticum.holodb.regex.OLD.ast.QuantifiedAstNode;
-import hu.webarticum.holodb.regex.OLD.ast.SequenceAstNode;
+import hu.webarticum.holodb.regex.NEW.ast.AlternationAstNode;
+import hu.webarticum.holodb.regex.NEW.ast.AstNode;
+import hu.webarticum.holodb.regex.NEW.ast.GroupAstNode;
+import hu.webarticum.holodb.regex.NEW.ast.QuantifiedAstNode;
+import hu.webarticum.holodb.regex.NEW.ast.SequenceAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.text.ConsoleText;

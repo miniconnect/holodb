@@ -1,6 +1,5 @@
 package hu.webarticum.holodb.regex.NEW.charclass;
 
-import hu.webarticum.holodb.regex.NEW.SortedEntrySet;
 import hu.webarticum.holodb.regex.NEW.charclass.CharClassSplitter.Containment;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
@@ -24,7 +23,7 @@ public class CharClassEntrySetSplitter<T> {
         return entries;
     }
     
-    public SortedEntrySet<CharClass, ImmutableList<T>> splitNext(
+    private SortedEntrySet<CharClass, ImmutableList<T>> splitNext(
             SortedEntrySet<CharClass, ImmutableList<T>> listEntries,
             SortedEntrySet.Entry<CharClass, T> nextEntry) {
         SortedEntrySet<CharClass, ImmutableList<T>> result = new SortedEntrySet<>();
