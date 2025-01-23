@@ -1,6 +1,7 @@
 package hu.webarticum.holodb.regex.NEW.lab;
 
 import hu.webarticum.holodb.regex.NEW.algorithm.AstToTreeConverter;
+import hu.webarticum.holodb.regex.NEW.algorithm.TreeNodeUnlinker;
 import hu.webarticum.holodb.regex.NEW.ast.AlternationAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.AstNode;
 import hu.webarticum.holodb.regex.NEW.parser.RegexParser;
@@ -12,16 +13,19 @@ public class AstToTreeDemo {
 
     public static void main(String[] args) {
         String regex = "x|^[a-c](x|y)$";
-        RegexParser parser = new RegexParser();
-        AstNode ast = parser.parse(regex);
-        AstToTreeConverter converter = new AstToTreeConverter();
-        TreeNode tree = converter.convert((AlternationAstNode) ast);
+        AstNode ast = new RegexParser().parse(regex);
+        TreeNode tree = new AstToTreeConverter().convert((AlternationAstNode) ast);
+        TreeNode nullUnlinkedTree = new TreeNodeUnlinker(n -> n.value() == null).buildUnlinkedOf(tree).get(0);
 
         new TraditionalTreePrinter().print(new BorderTreeNodeDecorator(new AstNodeTreeNode(ast)));
         System.out.println();
         System.out.println("---------------------------------------------------------");
         System.out.println();
         new TraditionalTreePrinter().print(new BorderTreeNodeDecorator(new TreeNodeTreeNode(tree)));
+        System.out.println();
+        System.out.println("---------------------------------------------------------");
+        System.out.println();
+        new TraditionalTreePrinter().print(new BorderTreeNodeDecorator(new TreeNodeTreeNode(nullUnlinkedTree)));
     }
     
 }
