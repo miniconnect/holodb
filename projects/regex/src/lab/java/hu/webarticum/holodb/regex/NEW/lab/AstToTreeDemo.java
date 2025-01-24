@@ -12,8 +12,7 @@ import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
 public class AstToTreeDemo {
 
     public static void main(String[] args) {
-        //String regex = "x|^[a-c](x|y)$";
-        String regex = "\\Qasdf\\E";
+        String regex = "x\\d{3}a{1,3}|^[a-f123](xxx|yyy)$";
         AstNode ast = new RegexParser().parse(regex);
         TreeNode tree = new AstToTreeConverter().convert((AlternationAstNode) ast);
         TreeNode nullUnlinkedTree = new TreeNodeUnlinker(n -> n.value() == null).buildUnlinkedOf(tree).get(0);
