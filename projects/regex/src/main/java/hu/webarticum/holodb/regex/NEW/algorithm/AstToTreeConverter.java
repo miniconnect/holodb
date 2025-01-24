@@ -5,14 +5,18 @@ import java.util.ArrayList;
 import hu.webarticum.holodb.regex.NEW.ast.AlternationAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.AstNode;
 import hu.webarticum.holodb.regex.NEW.ast.CharacterConstantAstNode;
+import hu.webarticum.holodb.regex.NEW.ast.CharacterMatchAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.FixedStringAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.SequenceAstNode;
+import hu.webarticum.holodb.regex.NEW.charclass.CharClass;
 import hu.webarticum.holodb.regex.NEW.tree.TreeNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class AstToTreeConverter {
+    
+    private final AstToCharClassesConverter astToCharClassesConverter = new AstToCharClassesConverter(Character::compare);
 
     public TreeNode convert(AlternationAstNode astNode) {
         return convertAlternation(
@@ -103,10 +107,17 @@ public class AstToTreeConverter {
             int length = value.length();
             for (int i = 0; i < length; i++) {
                 char c = value.charAt(i);
-                AstNode nextAstNode = CharacterConstantAstNode.of(c);
-                headNodes = ImmutableList.of(convertAny(nextAstNode, headNodes));
+                CharacterConstantAstNode nextCharNode = CharacterConstantAstNode.of(c);
+                ImmutableList<CharClass> nextCharClasses = astToCharClassesConverter.convert(nextCharNode);
+                ImmutableList<TreeNode> prevHeadNodes = headNodes;
+                headNodes = nextCharClasses.map(cc -> new TreeNode(cc, prevHeadNodes));
             }
             return join(headNodes);
+        } else if (simpleNode instanceof CharacterMatchAstNode) {
+            CharacterMatchAstNode charNode = (CharacterMatchAstNode) simpleNode;
+            ImmutableList<CharClass> charClasses = astToCharClassesConverter.convert(charNode);
+            ImmutableList<TreeNode> charNodes = charClasses.map(cc -> new TreeNode(cc, nextNodes));
+            return join(charNodes);
         } else {
             return new TreeNode(simpleNode, nextNodes);
         }

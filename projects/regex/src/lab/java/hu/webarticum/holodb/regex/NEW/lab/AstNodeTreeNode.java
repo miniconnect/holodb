@@ -41,7 +41,7 @@ public class AstNodeTreeNode implements TreeNode {
         } else if (astNode instanceof QuantifiedAstNode) {
             return wrapOnlyChild(((QuantifiedAstNode) astNode).node());
         } else if (astNode instanceof SequenceAstNode) {
-                return wrapChildren(((SequenceAstNode) astNode).nodes());
+            return wrapChildren(((SequenceAstNode) astNode).nodes());
         } else {
             return Collections.emptyList();
         }

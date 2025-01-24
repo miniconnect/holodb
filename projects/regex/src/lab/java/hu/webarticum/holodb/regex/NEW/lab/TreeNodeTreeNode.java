@@ -2,6 +2,7 @@ package hu.webarticum.holodb.regex.NEW.lab;
 
 import java.util.List;
 
+import hu.webarticum.holodb.regex.NEW.charclass.CharClass;
 import hu.webarticum.holodb.regex.NEW.tree.TreeNode;
 import hu.webarticum.treeprinter.text.ConsoleText;
 
@@ -17,7 +18,15 @@ public class TreeNodeTreeNode implements hu.webarticum.treeprinter.TreeNode {
     public ConsoleText content() {
         StringBuilder labelBuilder = new StringBuilder();
         Object value = innerNode.value();
-        labelBuilder.append(value != null ? value.toString() : " .-. \n( × )\n `-' ");
+        String text;
+        if (value == null) {
+            text = " .-. \n( × )\n `-' ";
+        } else if (value instanceof CharClass) {
+            text = String.join("", ((CharClass) value).characters().map(c -> "" + c));
+        } else {
+            text = value.toString();
+        }
+        labelBuilder.append(text);
         return ConsoleText.of(labelBuilder.toString());
     }
 
