@@ -2,95 +2,86 @@ package hu.webarticum.holodb.regex.NEW.charclass;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Comparator;
-
 import org.junit.jupiter.api.Test;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 class CharClassTest {
+    
+    private CharComparator comparator = (a, b) -> Character.compare(a, b);
 
     @Test
-    void testOfAndCharacters() {
-    	ImmutableList<Character> characters = ImmutableList.fromCharArray(new char[] {'a', 'x'});
-    	CharClass charClass = CharClass.of(characters, (c1, c2) -> c1.compareTo(c2));
-    	assertThat(charClass.characters()).isEqualTo(characters);
+    void testComparator() {
+        ImmutableList<CharClass> inputs = ImmutableList.of(
+                CharClass.of("", comparator),
+                CharClass.of("lorem", comparator));
+        assertThat(inputs).allMatch(cc -> cc.charComparator() == comparator);
     }
 
     @Test
-    void testOfAndCharactersCustomComparator() {
-    	ImmutableList<Character> characters = ImmutableList.fromCharArray(new char[] {'a', 'x'});
-    	CharClass charClass = CharClass.of(characters, (c1, c2) -> 0);
-    	assertThat(charClass.characters()).isEqualTo(ImmutableList.fromCharArray(new char[] {'a'}));
+    void testOfAndCharactersSorted() {
+        ImmutableList<CharClass> inputs = ImmutableList.of(
+                CharClass.of("", comparator),
+                CharClass.of("abc", comparator),
+                CharClass.of("123456789", comparator));
+        assertThat(inputs.map(cc -> cc.chars())).containsExactly("", "abc", "123456789");
     }
 
     @Test
-    void testSize() {
-    	assertThat(charClassOf("axzx").size().intValueExact()).isEqualTo(3);
+    void testOfAndCharactersUnsorted() {
+        ImmutableList<CharClass> inputs = ImmutableList.of(
+                CharClass.of("xatsu", comparator),
+                CharClass.of("2563408917", comparator));
+        assertThat(inputs.map(cc -> cc.chars())).containsExactly("astux", "0123456789");
     }
 
     @Test
-    void testCharacters() {
-        assertThat(charClassOf("loremipsum").characters()).isEqualTo(ImmutableList.fromCharArray("eilmoprsu"));
-    }
-
-    @Test
-    void testCompareEqual() {
-        assertThat(charClassOf("abc")).isEqualByComparingTo(charClassOf("abc"));
-    }
-
-    @Test
-    void testCompareLeftPrefix() {
-        assertThat(charClassOf("abc")).isLessThan(charClassOf("abcdef"));
-    }
-
-    @Test
-    void testCompareRightPrefix() {
-        assertThat(charClassOf("abc")).isGreaterThan(charClassOf("ab"));
-    }
-
-    @Test
-    void testCompareCommonPrefix() {
-        assertThat(charClassOf("abcdef")).isLessThan(charClassOf("abcfgh"));
-    }
-
-    @Test
-    void testCompareNoCommonPrefix() {
-        assertThat(charClassOf("xz")).isGreaterThan(charClassOf("dg"));
-    }
-
-    @Test
-    void testCompareJump() {
-        assertThat(charClassOf("aklm")).isLessThan(charClassOf("cd"));
-    }
-
-    @Test
-    void testHashCode() {
-    	assertThat(charClassOf("loremipsum")).hasSameHashCodeAs(charClassOf("loremipsum"));
-    }
-
-    @Test
-    void testEquals() {
-    	assertThat(charClassOf("loremipsum")).isEqualTo(charClassOf("loremipsum"));
-    }
-
-    @Test
-    void testNotEquals() {
-    	assertThat(charClassOf("loremipsum")).isNotEqualTo(charClassOf("dolorsit"));
+    void testOfAndCharactersUnsortedNonUnique() {
+        ImmutableList<CharClass> inputs = ImmutableList.of(
+                CharClass.of("bcbxtsuuaa", comparator),
+                CharClass.of("2734637374682833", comparator));
+        assertThat(inputs.map(cc -> cc.chars())).containsExactly("abcstux", "234678");
     }
 
     @Test
     void testUnion() {
-    	assertThat(charClassOf("lorem").union(charClassOf("dolor"))).isEqualTo(charClassOf("delmor"));
+        CharClass empty = CharClass.of("", comparator);
+        CharClass early = CharClass.of("abdfh", comparator);
+        CharClass late = CharClass.of("kmpxz", comparator);
+        CharClass mixed1 = CharClass.of("aekpy", comparator);
+        CharClass mixed2 = CharClass.of("befst", comparator);
+        CharClass mixed3 = CharClass.of("bestu", comparator);
+        ImmutableList<CharClass> inputs = ImmutableList.of(
+                empty.union(empty),
+                empty.union(mixed1),
+                mixed2.union(empty),
+                mixed1.union(mixed1),
+                early.union(late),
+                early.union(mixed1),
+                mixed1.union(mixed2),
+                mixed2.union(mixed3));
+        assertThat(inputs.map(cc -> cc.chars())).containsExactly(
+                "", "aekpy", "befst", "aekpy", "abdfhkmpxz", "abdefhkpy", "abefkpsty", "befstu");
     }
 
     @Test
-    void testIntersection() {
-    	assertThat(charClassOf("lorem").intersection(charClassOf("dolor"))).isEqualTo(charClassOf("lor"));
+    void testIntersecion() {
+        CharClass empty = CharClass.of("", comparator);
+        CharClass early = CharClass.of("abdfh", comparator);
+        CharClass late = CharClass.of("kmpxz", comparator);
+        CharClass mixed1 = CharClass.of("aekpy", comparator);
+        CharClass mixed2 = CharClass.of("befst", comparator);
+        CharClass mixed3 = CharClass.of("bestu", comparator);
+        ImmutableList<CharClass> inputs = ImmutableList.of(
+                empty.intersection(empty),
+                empty.intersection(mixed1),
+                mixed2.intersection(empty),
+                mixed1.intersection(mixed1),
+                early.intersection(late),
+                early.intersection(mixed1),
+                mixed1.intersection(mixed2),
+                mixed2.intersection(mixed3));
+        assertThat(inputs.map(cc -> cc.chars())).containsExactly("", "", "", "aekpy", "", "a", "e", "best");
     }
 
-    private CharClass charClassOf(String chars) {
-    	return CharClass.of(ImmutableList.fromCharArray(chars), Comparator.naturalOrder());
-    }
-    
 }

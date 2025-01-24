@@ -1,31 +1,28 @@
 package hu.webarticum.holodb.regex.NEW.algorithm;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import hu.webarticum.holodb.regex.NEW.ast.CharacterConstantAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.CharacterMatchAstNode;
 import hu.webarticum.holodb.regex.NEW.charclass.CharClass;
+import hu.webarticum.holodb.regex.NEW.charclass.CharComparator;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class AstToCharClassesConverter {
     
-    private final Comparator<Character> characterComparator;
+    private final CharComparator charComparator;
 
-    public AstToCharClassesConverter(Comparator<Character> characterComparator) {
-        this.characterComparator = characterComparator;
+    public AstToCharClassesConverter(CharComparator charComparator) {
+        this.charComparator = charComparator;
     }
     
     public ImmutableList<CharClass> convert(CharacterMatchAstNode astNode) {
-        List<Character> charactersBuilder = new ArrayList<>();
+        StringBuilder charsBuilder = new StringBuilder();
         if (astNode instanceof CharacterConstantAstNode) {
-            charactersBuilder.add(((CharacterConstantAstNode) astNode).value());
+            charsBuilder.append(((CharacterConstantAstNode) astNode).value());
         } else {
             // TODO, FIXME
-            charactersBuilder.add('?');
+            charsBuilder.append('?');
         }
-        return ImmutableList.of(CharClass.of(ImmutableList.fromCollection(charactersBuilder), characterComparator));
+        return ImmutableList.of(CharClass.of(charsBuilder.toString(), charComparator));
     }
     
 }

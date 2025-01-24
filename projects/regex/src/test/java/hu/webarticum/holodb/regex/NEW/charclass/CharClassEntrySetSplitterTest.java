@@ -2,14 +2,14 @@ package hu.webarticum.holodb.regex.NEW.charclass;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Comparator;
-
 import org.junit.jupiter.api.Test;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 
 class CharClassEntrySetSplitterTest {
+
+    private CharComparator comparator = (a, b) -> Character.compare(a, b);
 
     @Test
     void testEmpty() {
@@ -112,7 +112,7 @@ class CharClassEntrySetSplitterTest {
     }
     
     private CharClass charClassOf(String chars) {
-        return CharClass.of(ImmutableList.fromCharArray(chars), Comparator.naturalOrder());
+        return CharClass.of(chars, comparator);
     }
     
     private <K extends Comparable<K>, V> SortedEntrySet.Entry<K, V> entryOf(K key, V value) {

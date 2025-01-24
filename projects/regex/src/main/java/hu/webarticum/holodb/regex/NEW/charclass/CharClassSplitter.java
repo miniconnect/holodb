@@ -1,10 +1,7 @@
 package hu.webarticum.holodb.regex.NEW.charclass;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-
-import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class CharClassSplitter {
 
@@ -25,19 +22,19 @@ public class CharClassSplitter {
     
     public SortedEntrySet<CharClass, Containment> split() {
         SortedEntrySet<CharClass, Containment> result = new SortedEntrySet<>();
-        Comparator<Character> comparator = leftCharClass.characterComparator();
+        CharComparator comparator = leftCharClass.charComparator();
         Containment currentContainment = Containment.LEFT;
         List<Character> currentBuilder = new ArrayList<>();
-        ImmutableList<Character> leftCharacters = leftCharClass.characters();
-        ImmutableList<Character> rightCharacters = rightCharClass.characters();
-        int leftSize = leftCharacters.size();
-        int rightSize = rightCharacters.size();
+        String leftCharacters = leftCharClass.chars();
+        String rightCharacters = rightCharClass.chars();
+        int leftSize = leftCharacters.length();
+        int rightSize = rightCharacters.length();
         int leftPos = 0;
         int rightPos = 0;
         while (leftPos < leftSize) {
-            Character left = leftCharacters.get(leftPos);
+            char left = leftCharacters.charAt(leftPos);
             while (rightPos < rightSize) {
-                Character right = rightCharacters.get(rightPos);
+                char right = rightCharacters.charAt(rightPos);
                 if (comparator.compare(left, right) > 0) {
                     currentBuilder = flushBuilder(result, currentBuilder, currentContainment, Containment.RIGHT);
                     currentContainment = Containment.RIGHT;
@@ -49,7 +46,7 @@ public class CharClassSplitter {
             }
             boolean wasBoth = false;
             if (rightPos < rightSize) {
-                Character right = rightCharacters.get(rightPos);
+                char right = rightCharacters.charAt(rightPos);
                 if (comparator.compare(left, right) == 0) {
                     currentBuilder = flushBuilder(result, currentBuilder, currentContainment, Containment.BOTH);
                     currentContainment = Containment.BOTH;
@@ -67,7 +64,7 @@ public class CharClassSplitter {
             }
         }
         while (rightPos < rightSize) {
-            Character right = rightCharacters.get(rightPos);
+            char right = rightCharacters.charAt(rightPos);
             currentBuilder = flushBuilder(result, currentBuilder, currentContainment, Containment.RIGHT);
             currentContainment = Containment.RIGHT;
             currentBuilder.add(right);
@@ -80,12 +77,23 @@ public class CharClassSplitter {
     private List<Character> flushBuilder(
             SortedEntrySet<CharClass, Containment> result, List<Character> currentBuilder, Containment currentContainment, Containment newContainment) {
         if (newContainment != currentContainment && !currentBuilder.isEmpty()) {
-            CharClass charClass = CharClass.of(currentBuilder, leftCharClass.characterComparator());
+            CharClass charClass = CharClass.of(characterListToString(currentBuilder), leftCharClass.charComparator());
             result.add(charClass, currentContainment);
             return new ArrayList<>();
         } else {
             return currentBuilder;
         }
+    }
+    
+    private String characterListToString(List<Character> characterList) {
+        int length = characterList.size();
+        char[] chars = new char[length];
+        int i = 0;
+        for (Character c : characterList) {
+            chars[i] = c;
+            i++;
+        }
+        return String.valueOf(chars);
     }
     
 }

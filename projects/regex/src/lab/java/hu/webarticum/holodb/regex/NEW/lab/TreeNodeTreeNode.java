@@ -22,7 +22,7 @@ public class TreeNodeTreeNode implements hu.webarticum.treeprinter.TreeNode {
         if (value == null) {
             text = " .-. \n( × )\n `-' ";
         } else if (value instanceof CharClass) {
-            text = String.join("", ((CharClass) value).characters().map(c -> "" + c));
+            text = ((CharClass) value).chars();
         } else {
             text = value.toString();
         }
