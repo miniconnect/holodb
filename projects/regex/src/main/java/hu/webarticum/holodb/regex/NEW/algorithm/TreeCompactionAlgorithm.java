@@ -11,7 +11,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 TODO
 
 === M1 (simple unordered version): ===
-* ensure that characters are sequentialized
+* create a rendered character-class class
 * eliminate everything that's not a character class, root, nor leaf (e.g., remove anchors)
 * implement recursive size calculation
 * implement the final tree and its creation for runtime use

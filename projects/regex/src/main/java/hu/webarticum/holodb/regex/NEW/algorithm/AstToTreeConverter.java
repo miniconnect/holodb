@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import hu.webarticum.holodb.regex.NEW.ast.AlternationAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.AstNode;
+import hu.webarticum.holodb.regex.NEW.ast.CharacterConstantAstNode;
+import hu.webarticum.holodb.regex.NEW.ast.FixedStringAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.SequenceAstNode;
@@ -94,7 +96,20 @@ public class AstToTreeConverter {
     }
 
     private TreeNode convertSimple(AstNode simpleNode, ImmutableList<TreeNode> nextNodes) {
-        return new TreeNode(simpleNode, nextNodes);
+        if (simpleNode instanceof FixedStringAstNode) {
+            FixedStringAstNode stringNode = (FixedStringAstNode) simpleNode;
+            ImmutableList<TreeNode> headNodes = nextNodes;
+            String value = stringNode.value();
+            int length = value.length();
+            for (int i = 0; i < length; i++) {
+                char c = value.charAt(i);
+                AstNode nextAstNode = CharacterConstantAstNode.of(c);
+                headNodes = ImmutableList.of(convertAny(nextAstNode, headNodes));
+            }
+            return join(headNodes);
+        } else {
+            return new TreeNode(simpleNode, nextNodes);
+        }
     }
 
 }
