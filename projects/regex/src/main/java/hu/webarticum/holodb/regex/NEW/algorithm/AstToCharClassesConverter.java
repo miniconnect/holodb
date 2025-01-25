@@ -52,20 +52,20 @@ public class AstToCharClassesConverter {
         int length = chars.length();
         int capacity = length > 16 ? 16 : length;
         StringBuilder othersBuilder = null;
-        StringBuilder digitsBuilder = null;
-        StringBuilder lettersBuilder = null;
+        StringBuilder alnumBuilder = null;
+        StringBuilder newLineBuilder = null;
         for (int i = 0; i < length; i++) {
             char c = chars.charAt(i);
-            if (Character.isDigit(c)) {
-                if (digitsBuilder == null) {
-                    digitsBuilder = new StringBuilder(capacity);
+            if (Character.isDigit(c) || Character.isAlphabetic(c)) {
+                if (alnumBuilder == null) {
+                    alnumBuilder = new StringBuilder(capacity);
                 }
-                digitsBuilder.append(c);
-            } else if (Character.isLetter(c)) {
-                if (lettersBuilder == null) {
-                    lettersBuilder = new StringBuilder(capacity);
+                alnumBuilder.append(c);
+            } else if (c == '\n') {
+                if (newLineBuilder == null) {
+                    newLineBuilder = new StringBuilder(1);
                 }
-                lettersBuilder.append(c);
+                newLineBuilder.append(c);
             } else {
                 if (othersBuilder == null) {
                     othersBuilder = new StringBuilder(capacity);
@@ -77,11 +77,11 @@ public class AstToCharClassesConverter {
         if (othersBuilder != null) {
             resultBuilder.add(CharClass.of(othersBuilder.toString(), charComparator));
         }
-        if (digitsBuilder != null) {
-            resultBuilder.add(CharClass.of(digitsBuilder.toString(), charComparator));
+        if (alnumBuilder != null) {
+            resultBuilder.add(CharClass.of(alnumBuilder.toString(), charComparator));
         }
-        if (lettersBuilder != null) {
-            resultBuilder.add(CharClass.of(lettersBuilder.toString(), charComparator));
+        if (newLineBuilder != null) {
+            resultBuilder.add(CharClass.of(newLineBuilder.toString(), charComparator));
         }
         
         if (resultBuilder.isEmpty()) {
