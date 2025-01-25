@@ -42,7 +42,11 @@ jmhJar {
     duplicatesStrategy = DuplicatesStrategy.WARN
 }
 
+String jmhIncludesPropertyValue = findProperty("jmhIncludes")
 jmh {
+    if (jmhIncludesPropertyValue != null) {
+        includes = jmhIncludesPropertyValue.split(",") as List
+    }
     duplicateClassesStrategy = DuplicatesStrategy.EXCLUDE
     resultFormat = 'JSON'
 }
