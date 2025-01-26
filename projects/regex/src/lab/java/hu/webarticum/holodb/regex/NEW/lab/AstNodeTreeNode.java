@@ -26,9 +26,6 @@ public class AstNodeTreeNode implements TreeNode {
     public ConsoleText content() {
         StringBuilder labelBuilder = new StringBuilder();
         labelBuilder.append(astNode.getClass().getSimpleName());
-        
-        // TODO
-        
         return ConsoleText.of(labelBuilder.toString());
     }
 

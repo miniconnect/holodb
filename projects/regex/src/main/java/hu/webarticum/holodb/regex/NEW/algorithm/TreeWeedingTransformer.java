@@ -12,36 +12,6 @@ import hu.webarticum.holodb.regex.NEW.charclass.CharClass;
 import hu.webarticum.holodb.regex.NEW.tree.TreeNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
-/*
-
-TODO
-
-=== M1 (simple unordered version): ===
-* implement the retriever algorithm
-* add retrieving tests for simple, already sorted regular expressions
-
-=== M2 (anchor-aware, ordered version): ===
-* implement sorting, splitting, and melting branches, using intensive caching
-* implement searching
-* add a corresponding SortedSource implementation, use this instead of strex (link strex to here)
-
-=== M3 (backreference-aware version): ===
-* implement possible-first-character extraction from the referenced groups's ast
-* add support for backreference nodes that:
-    * are atomic
-    * are dynamic-length
-    * reference to somewhere in the prefix, can repeat the already determined substring
-* handle first-character collision for backreferences (by elimination or shortcut with global error)
-
-=== M4 (basic UCA support): ===
-* implement a way to handle secondary/tertiary etc. orders, options:
-    * linked trees (as in the paper)
-    * dynamic subtree decorators
-    * static subtrees (how to handle the danger of memory explosion?)
-    * something else
-
-*/
-
 public class TreeWeedingTransformer {
     
     public ImmutableList<TreeNode> weed(TreeNode node) {
