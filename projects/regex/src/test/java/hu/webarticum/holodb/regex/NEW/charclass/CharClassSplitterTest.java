@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 
 import hu.webarticum.holodb.regex.NEW.charclass.CharClassSplitter.Containment;
+import hu.webarticum.holodb.regex.NEW.comparator.CharComparator;
 
 class CharClassSplitterTest {
 

@@ -3,6 +3,8 @@ package hu.webarticum.holodb.regex.NEW.charclass;
 import java.util.ArrayList;
 import java.util.List;
 
+import hu.webarticum.holodb.regex.NEW.comparator.CharComparator;
+
 public class CharClassSplitter {
 
     public enum Containment { LEFT, RIGHT, BOTH }

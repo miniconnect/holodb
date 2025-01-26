@@ -11,12 +11,17 @@ import hu.webarticum.holodb.regex.NEW.ast.GroupAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.QuantifiedAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.SequenceAstNode;
 import hu.webarticum.holodb.regex.NEW.charclass.CharClass;
+import hu.webarticum.holodb.regex.NEW.comparator.CharComparator;
 import hu.webarticum.holodb.regex.NEW.tree.TreeNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class AstToTreeConverter {
     
-    private final AstToCharClassesConverter astToCharClassesConverter = new AstToCharClassesConverter(Character::compare);
+    private final AstToCharClassesConverter astToCharClassesConverter;
+    
+    public AstToTreeConverter(CharComparator charComparator) {
+        astToCharClassesConverter = new AstToCharClassesConverter(charComparator);
+    }
 
     public TreeNode convert(AlternationAstNode astNode) {
         return convertAlternation(

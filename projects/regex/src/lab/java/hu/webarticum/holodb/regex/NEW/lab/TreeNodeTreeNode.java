@@ -10,8 +10,8 @@ public class TreeNodeTreeNode implements hu.webarticum.treeprinter.TreeNode {
     
     private final TreeNode innerNode;
     
-    public TreeNodeTreeNode(TreeNode mutableNode) {
-        this.innerNode = mutableNode;
+    public TreeNodeTreeNode(TreeNode innerNode) {
+        this.innerNode = innerNode;
     }
 
     @Override

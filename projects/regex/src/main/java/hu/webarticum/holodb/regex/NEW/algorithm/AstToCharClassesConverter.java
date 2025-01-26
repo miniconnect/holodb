@@ -13,7 +13,7 @@ import hu.webarticum.holodb.regex.NEW.ast.PosixCharacterClassAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.RangeAstNode;
 import hu.webarticum.holodb.regex.NEW.ast.UnicodePropertyCharacterClassAstNode;
 import hu.webarticum.holodb.regex.NEW.charclass.CharClass;
-import hu.webarticum.holodb.regex.NEW.charclass.CharComparator;
+import hu.webarticum.holodb.regex.NEW.comparator.CharComparator;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class AstToCharClassesConverter {

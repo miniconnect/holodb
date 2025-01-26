@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.regex.NEW.charclass;
+package hu.webarticum.holodb.regex.NEW.comparator;
 
 @FunctionalInterface
 public interface CharComparator {

@@ -17,10 +17,8 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 TODO
 
 === M1 (simple unordered version): ===
-* implement recursive size calculation
-* implement the final tree and its creation for runtime use (minimal memory and fast access)
 * implement the retriever algorithm
-* add retrieving tests for simple, pre.ordered regular expressions
+* add retrieving tests for simple, already sorted regular expressions
 
 === M2 (anchor-aware, ordered version): ===
 * implement sorting, splitting, and melting branches, using intensive caching
@@ -44,7 +42,7 @@ TODO
 
 */
 
-public class TreeWeedingAlgorithm {
+public class TreeWeedingTransformer {
     
     public ImmutableList<TreeNode> weed(TreeNode node) {
         return weedCached(node, null, new HashMap<>()).resultingChildren;
@@ -232,10 +230,10 @@ public class TreeWeedingAlgorithm {
         
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof AncestorInfo)) {
-                return false;
-            } else if (this == obj) {
+            if (this == obj) {
                 return true;
+            } else if (!(obj instanceof AncestorInfo)) {
+                return false;
             }
             AncestorInfo other = (AncestorInfo) obj;
             return Objects.equals(value, other.value) && Objects.equals(anchors, other.anchors);
@@ -261,10 +259,10 @@ public class TreeWeedingAlgorithm {
         
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof CacheKey)) {
-                return false;
-            } else if (this == obj) {
+            if (this == obj) {
                 return true;
+            } else if (!(obj instanceof CacheKey)) {
+                return false;
             }
             CacheKey other = (CacheKey) obj;
             return (treeNode == other.treeNode) && Objects.equals(ancestorInfo, other.ancestorInfo);

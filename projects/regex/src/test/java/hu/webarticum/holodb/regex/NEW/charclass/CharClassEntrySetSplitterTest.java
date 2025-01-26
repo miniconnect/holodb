@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
+import hu.webarticum.holodb.regex.NEW.comparator.CharComparator;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 

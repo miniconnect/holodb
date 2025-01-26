@@ -3,6 +3,7 @@ package hu.webarticum.holodb.regex.NEW.charclass;
 import java.util.Objects;
 import java.util.TreeSet;
 
+import hu.webarticum.holodb.regex.NEW.comparator.CharComparator;
 import hu.webarticum.miniconnect.lang.ToStringBuilder;
 
 public class CharClass implements Comparable<CharClass> {
