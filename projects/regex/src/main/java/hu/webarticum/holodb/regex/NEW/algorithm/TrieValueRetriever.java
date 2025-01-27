@@ -13,7 +13,7 @@ public class TrieValueRetriever {
         return resultBuilder.toString();
     }
     
-    public void retrieve(TrieNode trieNode, LargeInteger position, StringBuilder stringBuilder) {
+    private void retrieve(TrieNode trieNode, LargeInteger position, StringBuilder stringBuilder) {
         if (trieNode.isLeaf()) {
             return;
         }
