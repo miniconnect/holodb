@@ -14,8 +14,8 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
-import hu.webarticum.holodb.regex.NEW.comparator.CharComparator;
-import hu.webarticum.holodb.regex.NEW.comparator.DefaultCharComparator;
+import hu.webarticum.holodb.regex.comparator.CharComparator;
+import hu.webarticum.holodb.regex.comparator.DefaultCharComparator;
 
 @State(Scope.Benchmark)
 @Fork(value = 1)

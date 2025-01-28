@@ -22,8 +22,8 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
-import hu.webarticum.holodb.regex.NEW.comparator.CharStringComparator;
-import hu.webarticum.holodb.regex.NEW.comparator.DefaultCharComparator;
+import hu.webarticum.holodb.regex.comparator.CharStringComparator;
+import hu.webarticum.holodb.regex.comparator.DefaultCharComparator;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 @State(Scope.Benchmark)
