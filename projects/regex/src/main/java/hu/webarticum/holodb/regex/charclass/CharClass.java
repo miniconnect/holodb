@@ -101,10 +101,10 @@ public class CharClass implements Comparable<CharClass> {
         } else if (!(obj instanceof CharClass)) {
             return false;
         }
-        CharClass otherCharClass = (CharClass) obj;
+        CharClass other = (CharClass) obj;
         return
-                chars.equals(otherCharClass.chars) &&
-                Objects.equals(charComparator, otherCharClass.charComparator);
+                chars.equals(other.chars) &&
+                Objects.equals(charComparator, other.charComparator);
     }
     
     @Override
