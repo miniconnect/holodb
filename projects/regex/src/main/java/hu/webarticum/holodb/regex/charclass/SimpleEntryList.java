@@ -9,16 +9,11 @@ import java.util.Objects;
 
 import hu.webarticum.miniconnect.lang.ToStringBuilder;
 
-public class SortedEntrySet<K extends Comparable<K>, V> implements Iterable<SortedEntrySet.Entry<K, V>> {
+public class SimpleEntryList<K, V> implements Iterable<SimpleEntryList.Entry<K, V>> {
     
-    private final List<SortedEntrySet.Entry<K, V>> entries = new ArrayList<SortedEntrySet.Entry<K,V>>();
-    
-    private K lastKey = null;
+    private final List<SimpleEntryList.Entry<K, V>> entries = new ArrayList<>();
     
     public void add(K key, V value) {
-        if (lastKey != null && key.compareTo(lastKey) <= 0) {
-            throw new IllegalArgumentException("Next key must be greater than the last existing key");
-        }
         entries.add(new Entry<>(key, value));
     }
     
@@ -50,10 +45,10 @@ public class SortedEntrySet<K extends Comparable<K>, V> implements Iterable<Sort
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        } else if (!(obj instanceof SortedEntrySet)) {
+        } else if (!(obj instanceof SimpleEntryList)) {
             return false;
         }
-        SortedEntrySet<?, ?> otherEntrySet = (SortedEntrySet<?, ?>) obj;
+        SimpleEntryList<?, ?> otherEntrySet = (SimpleEntryList<?, ?>) obj;
         return entries.equals(otherEntrySet.entries);
     }
     
@@ -64,7 +59,7 @@ public class SortedEntrySet<K extends Comparable<K>, V> implements Iterable<Sort
                 .build();
     }
     
-    public static class Entry<K extends Comparable<K>, V> {
+    public static class Entry<K, V> {
         
         private final K key;
         

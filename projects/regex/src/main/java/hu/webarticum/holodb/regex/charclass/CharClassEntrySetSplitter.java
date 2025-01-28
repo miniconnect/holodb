@@ -5,29 +5,29 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class CharClassEntrySetSplitter<T> {
 
-    private final SortedEntrySet<CharClass, T> charClassEntrySet;
+    private final SimpleEntryList<CharClass, T> charClassEntrySet;
     
-    private CharClassEntrySetSplitter(SortedEntrySet<CharClass, T> charClassMap) {
+    private CharClassEntrySetSplitter(SimpleEntryList<CharClass, T> charClassMap) {
         this.charClassEntrySet = charClassMap;
     }
 
-    public static <T> CharClassEntrySetSplitter<T> of(SortedEntrySet<CharClass, T> charClassMap) {
+    public static <T> CharClassEntrySetSplitter<T> of(SimpleEntryList<CharClass, T> charClassMap) {
         return new CharClassEntrySetSplitter<>(charClassMap);
     }
     
-    public SortedEntrySet<CharClass, ImmutableList<T>> split() {
-        SortedEntrySet<CharClass, ImmutableList<T>> entries = new SortedEntrySet<>();
-        for (SortedEntrySet.Entry<CharClass, T> sourceEntry : charClassEntrySet) {
+    public SimpleEntryList<CharClass, ImmutableList<T>> split() {
+        SimpleEntryList<CharClass, ImmutableList<T>> entries = new SimpleEntryList<>();
+        for (SimpleEntryList.Entry<CharClass, T> sourceEntry : charClassEntrySet) {
             entries = splitNext(entries, sourceEntry);
         }
         return entries;
     }
     
-    private SortedEntrySet<CharClass, ImmutableList<T>> splitNext(
-            SortedEntrySet<CharClass, ImmutableList<T>> listEntries,
-            SortedEntrySet.Entry<CharClass, T> nextEntry) {
-        SortedEntrySet<CharClass, ImmutableList<T>> result = new SortedEntrySet<>();
-        for (SortedEntrySet.Entry<CharClass, ImmutableList<T>> listEntry : listEntries) {
+    private SimpleEntryList<CharClass, ImmutableList<T>> splitNext(
+            SimpleEntryList<CharClass, ImmutableList<T>> listEntries,
+            SimpleEntryList.Entry<CharClass, T> nextEntry) {
+        SimpleEntryList<CharClass, ImmutableList<T>> result = new SimpleEntryList<>();
+        for (SimpleEntryList.Entry<CharClass, ImmutableList<T>> listEntry : listEntries) {
             CharClass previousCharClass = listEntry.key();
             ImmutableList<T> previousValues = listEntry.value();
             if (nextEntry == null) {
@@ -36,15 +36,16 @@ public class CharClassEntrySetSplitter<T> {
             }
             CharClass nextCharClass = nextEntry.key();
             T nextValue = nextEntry.value();
-            SortedEntrySet<CharClass, Containment> headEntries = CharClassSplitter.of(previousCharClass, nextCharClass).split();
-            SortedEntrySet.Entry<CharClass, Containment> tailEntry = headEntries.last();
+            SimpleEntryList<CharClass, Containment> headEntries =
+                    CharClassSplitter.of(previousCharClass, nextCharClass).split();
+            SimpleEntryList.Entry<CharClass, Containment> tailEntry = headEntries.last();
             if (tailEntry.value() == Containment.RIGHT) {
                 headEntries.removeLast();
-                nextEntry = SortedEntrySet.Entry.of(tailEntry.key(), nextValue);
+                nextEntry = SimpleEntryList.Entry.of(tailEntry.key(), nextValue);
             } else {
                 nextEntry = null;
             }
-            for (SortedEntrySet.Entry<CharClass, Containment> headEntry : headEntries) {
+            for (SimpleEntryList.Entry<CharClass, Containment> headEntry : headEntries) {
                 ImmutableList<T> mergedValues;
                 switch (headEntry.value()) {
                     case LEFT:

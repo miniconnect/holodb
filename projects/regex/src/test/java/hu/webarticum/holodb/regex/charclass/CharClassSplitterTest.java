@@ -132,8 +132,8 @@ class CharClassSplitterTest {
         return CharClass.of(chars, comparator);
     }
     
-    private <K extends Comparable<K>, V> SortedEntrySet.Entry<K, V> entryOf(K key, V value) {
-        return SortedEntrySet.Entry.of(key, value);
+    private <K extends Comparable<K>, V> SimpleEntryList.Entry<K, V> entryOf(K key, V value) {
+        return SimpleEntryList.Entry.of(key, value);
     }
     
 }

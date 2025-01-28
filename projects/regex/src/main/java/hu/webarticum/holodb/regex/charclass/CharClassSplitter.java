@@ -22,8 +22,8 @@ public class CharClassSplitter {
         return new CharClassSplitter(leftCharClass, rightCharClass);
     }
     
-    public SortedEntrySet<CharClass, Containment> split() {
-        SortedEntrySet<CharClass, Containment> result = new SortedEntrySet<>();
+    public SimpleEntryList<CharClass, Containment> split() {
+        SimpleEntryList<CharClass, Containment> result = new SimpleEntryList<>();
         CharComparator comparator = leftCharClass.charComparator();
         Containment currentContainment = Containment.LEFT;
         List<Character> currentBuilder = new ArrayList<>();
@@ -77,7 +77,7 @@ public class CharClassSplitter {
     }
     
     private List<Character> flushBuilder(
-            SortedEntrySet<CharClass, Containment> result, List<Character> currentBuilder, Containment currentContainment, Containment newContainment) {
+            SimpleEntryList<CharClass, Containment> result, List<Character> currentBuilder, Containment currentContainment, Containment newContainment) {
         if (newContainment != currentContainment && !currentBuilder.isEmpty()) {
             CharClass charClass = CharClass.of(characterListToString(currentBuilder), leftCharClass.charComparator());
             result.add(charClass, currentContainment);

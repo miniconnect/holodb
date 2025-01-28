@@ -10,30 +10,30 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 
 class CharClassEntrySetSplitterTest {
 
-    private CharComparator comparator = (a, b) -> Character.compare(a, b);
+    private CharComparator comparator = Character::compare;
 
     @Test
     void testEmpty() {
-        SortedEntrySet<CharClass, Integer> entrySet = new SortedEntrySet<>();
-        SortedEntrySet<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entrySet).split();
+        SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
         assertThat(expected).isEmpty();
     }
 
     @Test
     void testSingle() {
-        SortedEntrySet<CharClass, Integer> entrySet = new SortedEntrySet<>();
-        entrySet.add(charClassOf("abc"), 1);
-        SortedEntrySet<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entrySet).split();
+        SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
+        entries.add(charClassOf("abc"), 1);
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("abc"), ImmutableList.of(1)));
     }
 
     @Test
     void testTwoSimpleIntersection() {
-        SortedEntrySet<CharClass, Integer> entrySet = new SortedEntrySet<>();
-        entrySet.add(charClassOf("abcdef"), 1);
-        entrySet.add(charClassOf("defghi"), 2);
-        SortedEntrySet<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entrySet).split();
+        SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
+        entries.add(charClassOf("abcdef"), 1);
+        entries.add(charClassOf("defghi"), 2);
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("abc"), ImmutableList.of(1)),
                 entryOf(charClassOf("def"), ImmutableList.of(1, 2)),
@@ -42,10 +42,10 @@ class CharClassEntrySetSplitterTest {
 
     @Test
     void testTwoSimpleIntersectionSameValue() {
-        SortedEntrySet<CharClass, Integer> entrySet = new SortedEntrySet<>();
-        entrySet.add(charClassOf("abcdef"), 1);
-        entrySet.add(charClassOf("defghi"), 1);
-        SortedEntrySet<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entrySet).split();
+        SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
+        entries.add(charClassOf("abcdef"), 1);
+        entries.add(charClassOf("defghi"), 1);
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("abc"), ImmutableList.of(1)),
                 entryOf(charClassOf("def"), ImmutableList.of(1, 1)),
@@ -54,10 +54,10 @@ class CharClassEntrySetSplitterTest {
 
     @Test
     void testTwoJump() {
-        SortedEntrySet<CharClass, Integer> entrySet = new SortedEntrySet<>();
-        entrySet.add(charClassOf("abcghi"), 1);
-        entrySet.add(charClassOf("defjkl"), 2);
-        SortedEntrySet<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entrySet).split();
+        SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
+        entries.add(charClassOf("abcghi"), 1);
+        entries.add(charClassOf("defjkl"), 2);
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("abc"), ImmutableList.of(1)),
                 entryOf(charClassOf("def"), ImmutableList.of(2)),
@@ -67,12 +67,12 @@ class CharClassEntrySetSplitterTest {
 
     @Test
     void testContainment() {
-        SortedEntrySet<CharClass, Integer> entrySet = new SortedEntrySet<>();
-        entrySet.add(charClassOf("def"), 1);
-        entrySet.add(charClassOf("ghi"), 2);
-        entrySet.add(charClassOf("abcdefghijklmno"), 3);
-        entrySet.add(charClassOf("jkl"), 4);
-        SortedEntrySet<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entrySet).split();
+        SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
+        entries.add(charClassOf("def"), 1);
+        entries.add(charClassOf("ghi"), 2);
+        entries.add(charClassOf("abcdefghijklmno"), 3);
+        entries.add(charClassOf("jkl"), 4);
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("abc"), ImmutableList.of(3)),
                 entryOf(charClassOf("def"), ImmutableList.of(1, 3)),
@@ -84,19 +84,19 @@ class CharClassEntrySetSplitterTest {
 
     @Test
     void testComplex() {
-        SortedEntrySet<CharClass, Integer> entrySet = new SortedEntrySet<>();
-        entrySet.add(charClassOf("abcd"), 1);
-        entrySet.add(charClassOf("abcd"), 1);
-        entrySet.add(charClassOf("abcd"), 2);
-        entrySet.add(charClassOf("fvwx"), 99);
-        entrySet.add(charClassOf("cdefgh"), 4);
-        entrySet.add(charClassOf("fhi"), 4);
-        entrySet.add(charClassOf("ab"), 5);
-        entrySet.add(charClassOf("afi"), 6);
-        entrySet.add(charClassOf("cdef"), 7);
-        entrySet.add(charClassOf("y"), 7);
-        entrySet.add(charClassOf("z"), 7);
-        SortedEntrySet<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entrySet).split();
+        SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
+        entries.add(charClassOf("abcd"), 1);
+        entries.add(charClassOf("abcd"), 1);
+        entries.add(charClassOf("abcd"), 2);
+        entries.add(charClassOf("fvwx"), 99);
+        entries.add(charClassOf("cdefgh"), 4);
+        entries.add(charClassOf("fhi"), 4);
+        entries.add(charClassOf("ab"), 5);
+        entries.add(charClassOf("afi"), 6);
+        entries.add(charClassOf("cdef"), 7);
+        entries.add(charClassOf("y"), 7);
+        entries.add(charClassOf("z"), 7);
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("a"), ImmutableList.of(1, 1, 2, 5, 6)),
                 entryOf(charClassOf("b"), ImmutableList.of(1, 1, 2, 5)),
@@ -116,8 +116,8 @@ class CharClassEntrySetSplitterTest {
         return CharClass.of(chars, comparator);
     }
     
-    private <K extends Comparable<K>, V> SortedEntrySet.Entry<K, V> entryOf(K key, V value) {
-        return SortedEntrySet.Entry.of(key, value);
+    private <K extends Comparable<K>, V> SimpleEntryList.Entry<K, V> entryOf(K key, V value) {
+        return SimpleEntryList.Entry.of(key, value);
     }
     
 }
