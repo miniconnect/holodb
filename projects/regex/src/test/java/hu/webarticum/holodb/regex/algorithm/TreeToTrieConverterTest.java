@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 class TreeToTrieConverterTest {
 
-        @Test
-        void testXXXXXXX() {
-            // TODO
-        }
-        
+    @Test
+    void testXXXXXXX() {
+        // TODO
+    }
+    
 }
