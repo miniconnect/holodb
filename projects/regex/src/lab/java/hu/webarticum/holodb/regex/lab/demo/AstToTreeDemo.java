@@ -51,7 +51,7 @@ public class AstToTreeDemo {
         AstNode ast = new RegexParser().parse(regex);
         CharComparator charComparator = new DefaultCharComparator();
         TreeNode tree = new AstToTreeConverter(charComparator).convert((AlternationAstNode) ast);
-        TreeNode compactTree = new TreeWeedingTransformer().weed(tree).get(0);
+        TreeNode compactTree = new TreeWeedingTransformer().weed(tree);
         TrieNode trie = new TreeToTrieConverter(charComparator).convert(compactTree);
 
         LargeInteger size = trie.size();

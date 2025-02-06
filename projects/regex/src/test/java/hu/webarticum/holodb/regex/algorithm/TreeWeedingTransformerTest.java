@@ -19,9 +19,8 @@ class TreeWeedingTransformerTest {
         TreeWeedingTransformer transformer = new TreeWeedingTransformer();
         TreeNode leafNode = new TreeNode(SpecialTreeValues.LEAF, ImmutableList.empty());
         TreeNode rootNode = new TreeNode(SpecialTreeValues.ROOT, ImmutableList.of(leafNode));
-        ImmutableList<TreeNode> resultNodes = transformer.weed(rootNode);
-        assertThat(resultNodes).hasSize(1);
-        assertThat(resultNodes.get(0)).isEqualTo(new TreeNode(SpecialTreeValues.ROOT, ImmutableList.of(
+        TreeNode resultNode = transformer.weed(rootNode);
+        assertThat(resultNode).isEqualTo(new TreeNode(SpecialTreeValues.ROOT, ImmutableList.of(
                 new TreeNode(SpecialTreeValues.LEAF, ImmutableList.empty()))));
     }
 
@@ -54,9 +53,8 @@ class TreeWeedingTransformerTest {
                                         leafNode,
                                         new TreeNode(CharClass.of("z", charComparator), ImmutableList.of(leafNode))
         ))))));
-        ImmutableList<TreeNode> resultNodes = transformer.weed(rootNode);
-        assertThat(resultNodes).hasSize(1);
-        assertThat(resultNodes.get(0)).isEqualTo(expectedTreeNode);
+        TreeNode resultNode = transformer.weed(rootNode);
+        assertThat(resultNode).isEqualTo(expectedTreeNode);
     }
 
     @Test
@@ -74,9 +72,8 @@ class TreeWeedingTransformerTest {
                 new TreeNode(CharClass.of("a", charComparator), ImmutableList.of(
                         new TreeNode(CharClass.of("=", charComparator), ImmutableList.of(leafNode))
         ))));
-        ImmutableList<TreeNode> resultNodes = transformer.weed(rootNode);
-        assertThat(resultNodes).hasSize(1);
-        assertThat(resultNodes.get(0)).isEqualTo(expectedTreeNode);
+        TreeNode resultNodes = transformer.weed(rootNode);
+        assertThat(resultNodes).isEqualTo(expectedTreeNode);
     }
 
 }

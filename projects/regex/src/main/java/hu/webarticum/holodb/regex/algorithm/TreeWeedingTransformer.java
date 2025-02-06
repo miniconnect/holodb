@@ -14,8 +14,8 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class TreeWeedingTransformer {
     
-    public ImmutableList<TreeNode> weed(TreeNode node) {
-        return weedCached(node, null, new HashMap<>()).resultingChildren;
+    public TreeNode weed(TreeNode node) {
+        return weedCached(node, null, new HashMap<>()).resultingChildren.get(0);
     }
     
     private UnlinkResult weedCached(
