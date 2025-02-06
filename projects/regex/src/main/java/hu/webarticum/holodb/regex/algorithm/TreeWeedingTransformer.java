@@ -51,14 +51,14 @@ public class TreeWeedingTransformer {
             AnchorAstNode achorValue = (AnchorAstNode) value;
             EnumSet<AnchorAstNode> nextAnchors = EnumSet.copyOf(ancestorInfo.anchors);
             nextAnchors.add(achorValue);
-            nextAncestorInfo = new AncestorInfo(ancestorInfo.value, nextAnchors);
+            nextAncestorInfo = new AncestorInfo(ancestorInfo.kind, nextAnchors);
         } else if (value == null) {
             nextAncestorInfo = ancestorInfo;
         } else {
             if (!checkAnchors(ancestorInfo, value)) {
                 return new UnlinkResult(true, ImmutableList.empty());
             }
-            nextAncestorInfo = new AncestorInfo(value, EnumSet.noneOf(AnchorAstNode.class));
+            nextAncestorInfo = new AncestorInfo(kindOf(value), EnumSet.noneOf(AnchorAstNode.class));
         }
         ImmutableList<TreeNode> children = node.children();
         int countOfChildren = children.size();
@@ -104,27 +104,44 @@ public class TreeWeedingTransformer {
         }
     }
     
+    private CharAnchorKind kindOf(Object value) {
+        if (value == SpecialTreeValues.ROOT) {
+            return CharAnchorKind.BEGIN;
+        } else if (value == SpecialTreeValues.LEAF) {
+            return CharAnchorKind.END;
+        } else if (!(value instanceof CharClass)) {
+            throw new IllegalArgumentException("Non-anchorable value type: " + value);
+        }
+        CharClass charClass = (CharClass) value;
+        String chars = charClass.chars();
+        if (chars.isEmpty()) {
+            throw new IllegalArgumentException("Empty char class is not anchorable");
+        }
+        char c = chars.charAt(0);
+        return CharAnchorKind.of(c);
+    }
+    
     private boolean checkAnchors(AncestorInfo ancestorInfo, Object value) {
         if (ancestorInfo == null) {
             return true;
         }
-        Object previousValue = ancestorInfo.value;
+        CharAnchorKind previousKind = ancestorInfo.kind;
         for (AnchorAstNode anchor : ancestorInfo.anchors) {
-            if (!checkAnchor(anchor, previousValue, value)) {
+            if (!checkAnchor(anchor, previousKind, value)) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean checkAnchor(AnchorAstNode anchor, Object previousValue, Object value) {
+    private boolean checkAnchor(AnchorAstNode anchor, CharAnchorKind previousKind, Object value) {
         switch (anchor) {
             case WORD_BOUNDARY:
-                return checkWordBoundaryAnchor(previousValue, value);
+                return checkWordBoundaryAnchor(previousKind, value);
             case NON_WORD_BOUNDARY:
-                return !checkWordBoundaryAnchor(previousValue, value);
+                return !checkWordBoundaryAnchor(previousKind, value);
             case BEGIN_OF_LINE:
-                return checkBeginOfLineAnchor(previousValue, value);
+                return checkBeginOfLineAnchor(previousKind, value);
             case END_OF_LINE:
                 return checkEndOfLineAnchor(value);
             case BEGIN_OF_INPUT:
@@ -140,27 +157,23 @@ public class TreeWeedingTransformer {
         }
     }
     
-    private boolean checkWordBoundaryAnchor(Object previousValue, Object value) {
-        return (isAlnumValue(value) != isAlnumValue(previousValue));
+    private boolean checkWordBoundaryAnchor(CharAnchorKind previousKind, Object value) {
+        boolean previousIsWordChar = previousKind == CharAnchorKind.WORD;
+        boolean currentIsWordChar = isWordCharValue(value);
+        return currentIsWordChar != previousIsWordChar;
     }
     
-    private boolean isAlnumValue(Object value) {
+    private boolean isWordCharValue(Object value) {
         if (!(value instanceof CharClass)) {
             return false;
         }
         String chars = ((CharClass) value).chars();
         char c = chars.charAt(0);
-        return Character.isDigit(c) || Character.isAlphabetic(c);
+        return CharAnchorKind.WORD.accept(c);
     }
     
-    private boolean checkBeginOfLineAnchor(Object previousValue, Object value) {
-        if (previousValue == SpecialTreeValues.ROOT) {
-            return true;
-        } else if (!(value instanceof CharClass)) {
-            return false;
-        }
-        String chars = ((CharClass) previousValue).chars();
-        return chars.equals("\n");
+    private boolean checkBeginOfLineAnchor(CharAnchorKind previousKind, Object value) {
+        return previousKind == CharAnchorKind.BEGIN || previousKind == CharAnchorKind.NEWLINE;
     }
     
     private boolean checkEndOfLineAnchor(Object value) {
@@ -183,19 +196,18 @@ public class TreeWeedingTransformer {
     
     private static class AncestorInfo {
         
-        // TODO: it's enough to store the kind of the node value
-        final Object value;
+        final CharAnchorKind kind;
         
         final EnumSet<AnchorAstNode> anchors;
         
-        AncestorInfo(Object value, EnumSet<AnchorAstNode> anchors) {
-            this.value = value;
+        AncestorInfo(CharAnchorKind kind, EnumSet<AnchorAstNode> anchors) {
+            this.kind = kind;
             this.anchors = anchors;
         }
         
         @Override
         public int hashCode() {
-            return Objects.hash(value, anchors);
+            return Objects.hash(kind, anchors);
         }
         
         @Override
@@ -206,7 +218,7 @@ public class TreeWeedingTransformer {
                 return false;
             }
             AncestorInfo other = (AncestorInfo) obj;
-            return Objects.equals(value, other.value) && Objects.equals(anchors, other.anchors);
+            return kind == other.kind && Objects.equals(anchors, other.anchors);
         }
         
     }

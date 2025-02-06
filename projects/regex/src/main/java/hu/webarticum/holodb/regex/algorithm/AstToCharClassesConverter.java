@@ -1,7 +1,5 @@
 package hu.webarticum.holodb.regex.algorithm;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Predicate;
 
 import hu.webarticum.holodb.regex.ast.BuiltinCharacterClassAstNode;
@@ -49,49 +47,7 @@ public class AstToCharClassesConverter {
     }
 
     private ImmutableList<CharClass> separatedCharClassesOf(String chars) {
-        int length = chars.length();
-        int capacity = length > 16 ? 16 : length;
-        StringBuilder othersBuilder = null;
-        StringBuilder alnumBuilder = null;
-        StringBuilder newLineBuilder = null;
-        for (int i = 0; i < length; i++) {
-            char c = chars.charAt(i);
-            if (Character.isDigit(c) || Character.isAlphabetic(c)) {
-                if (alnumBuilder == null) {
-                    alnumBuilder = new StringBuilder(capacity);
-                }
-                alnumBuilder.append(c);
-            } else if (c == '\n') {
-                if (newLineBuilder == null) {
-                    newLineBuilder = new StringBuilder(1);
-                }
-                newLineBuilder.append(c);
-            } else {
-                if (othersBuilder == null) {
-                    othersBuilder = new StringBuilder(capacity);
-                }
-                othersBuilder.append(c);
-            }
-        }
-        List<CharClass> resultBuilder = new ArrayList<>(3);
-        if (othersBuilder != null) {
-            resultBuilder.add(CharClass.of(othersBuilder.toString(), charComparator));
-        }
-        if (alnumBuilder != null) {
-            resultBuilder.add(CharClass.of(alnumBuilder.toString(), charComparator));
-        }
-        if (newLineBuilder != null) {
-            resultBuilder.add(CharClass.of(newLineBuilder.toString(), charComparator));
-        }
-        
-        if (resultBuilder.isEmpty()) {
-            
-            // FIXME
-            resultBuilder.add(CharClass.of("?", charComparator));
-            
-        }
-        
-        return ImmutableList.fromCollection(resultBuilder);
+        return CharAnchorKind.separate(chars).map(s -> CharClass.of(s, charComparator));
     }
     
     private String charsFromCharacterMatch(CharacterMatchAstNode astNode) {
