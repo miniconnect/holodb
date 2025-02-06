@@ -17,17 +17,17 @@ class TreeToTrieConverterTest {
     @Test
     void testSomeConversion() {
         TreeToTrieConverter converter = new TreeToTrieConverter(charComparator);
-        TreeNode treeLeaf = new TreeNode(SpecialTreeValues.LEAF, ImmutableList.empty());
-        TreeNode tree = new TreeNode(SpecialTreeValues.ROOT, ImmutableList.of(
-                new TreeNode(CharClass.of("a", charComparator), ImmutableList.of(
-                        new TreeNode(CharClass.of("b", charComparator), ImmutableList.of(
-                                new TreeNode(CharClass.of("c", charComparator), ImmutableList.of(treeLeaf)))))),
-                        new TreeNode(CharClass.of("m", charComparator), ImmutableList.of(
-                                new TreeNode(CharClass.of("n", charComparator), ImmutableList.of(treeLeaf)))),
-                        new TreeNode(CharClass.of("x", charComparator), ImmutableList.of(
-                                new TreeNode(CharClass.of("y", charComparator), ImmutableList.of(
+        TreeNode treeLeaf = TreeNode.of(SpecialTreeValues.LEAF, ImmutableList.empty());
+        TreeNode tree = TreeNode.of(SpecialTreeValues.ROOT, ImmutableList.of(
+                TreeNode.of(CharClass.of("a", charComparator), ImmutableList.of(
+                        TreeNode.of(CharClass.of("b", charComparator), ImmutableList.of(
+                                TreeNode.of(CharClass.of("c", charComparator), ImmutableList.of(treeLeaf)))))),
+                        TreeNode.of(CharClass.of("m", charComparator), ImmutableList.of(
+                                TreeNode.of(CharClass.of("n", charComparator), ImmutableList.of(treeLeaf)))),
+                        TreeNode.of(CharClass.of("x", charComparator), ImmutableList.of(
+                                TreeNode.of(CharClass.of("y", charComparator), ImmutableList.of(
                                         treeLeaf,
-                                        new TreeNode(CharClass.of("z", charComparator), ImmutableList.of(treeLeaf))
+                                        TreeNode.of(CharClass.of("z", charComparator), ImmutableList.of(treeLeaf))
         ))))));
         TrieNode trieLeaf = TrieNode.leafOf(charComparator);
         TrieNode trie = TrieNode.rootOf(charComparator, ImmutableList.of(

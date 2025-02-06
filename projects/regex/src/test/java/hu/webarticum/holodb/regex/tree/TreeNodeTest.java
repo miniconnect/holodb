@@ -10,25 +10,25 @@ class TreeNodeTest {
 
     @Test
     void testConstructorValueAndChildren() {
-        TreeNode treeNode = new TreeNode("123", ImmutableList.of(new TreeNode("xxx"), new TreeNode("yyy")));
+        TreeNode treeNode = TreeNode.of("123", ImmutableList.of(TreeNode.of("xxx"), TreeNode.of("yyy")));
         assertThat(treeNode.value()).isEqualTo("123");
-        assertThat(treeNode.children()).isEqualTo(ImmutableList.of(new TreeNode("xxx"), new TreeNode("yyy")));
+        assertThat(treeNode.children()).isEqualTo(ImmutableList.of(TreeNode.of("xxx"), TreeNode.of("yyy")));
     }
 
     @Test
     void testHashCode() {
-        TreeNode treeNode1 = new TreeNode("123", ImmutableList.of(new TreeNode("xxx"), new TreeNode("yyy")));
-        TreeNode treeNode2 = new TreeNode("123", ImmutableList.of(new TreeNode("xxx"), new TreeNode("yyy")));
+        TreeNode treeNode1 = TreeNode.of("123", ImmutableList.of(TreeNode.of("xxx"), TreeNode.of("yyy")));
+        TreeNode treeNode2 = TreeNode.of("123", ImmutableList.of(TreeNode.of("xxx"), TreeNode.of("yyy")));
         assertThat(treeNode1).hasSameHashCodeAs(treeNode2);
     }
 
     @Test
     void testEquals() {
-        TreeNode treeNode1 = new TreeNode("123", ImmutableList.of(new TreeNode("xxx"), new TreeNode("yyy")));
-        TreeNode treeNode2 = new TreeNode("123", ImmutableList.of(new TreeNode("xxx"), new TreeNode("yyy")));
-        TreeNode treeNode3 = new TreeNode("123", ImmutableList.of(new TreeNode("xxxX"), new TreeNode("yyy")));
-        TreeNode treeNode4 = new TreeNode("1234", ImmutableList.of(new TreeNode("xxx"), new TreeNode("yyy")));
-        TreeNode treeNode5 = new TreeNode("1234", ImmutableList.of(new TreeNode("xxx"), new TreeNode("yyyY")));
+        TreeNode treeNode1 = TreeNode.of("123", ImmutableList.of(TreeNode.of("xxx"), TreeNode.of("yyy")));
+        TreeNode treeNode2 = TreeNode.of("123", ImmutableList.of(TreeNode.of("xxx"), TreeNode.of("yyy")));
+        TreeNode treeNode3 = TreeNode.of("123", ImmutableList.of(TreeNode.of("xxxX"), TreeNode.of("yyy")));
+        TreeNode treeNode4 = TreeNode.of("1234", ImmutableList.of(TreeNode.of("xxx"), TreeNode.of("yyy")));
+        TreeNode treeNode5 = TreeNode.of("1234", ImmutableList.of(TreeNode.of("xxx"), TreeNode.of("yyyY")));
         assertThat(treeNode1)
                 .isEqualTo(treeNode1)
                 .isEqualTo(treeNode2)

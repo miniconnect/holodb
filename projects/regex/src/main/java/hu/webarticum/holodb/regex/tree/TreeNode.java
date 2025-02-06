@@ -10,14 +10,20 @@ public class TreeNode {
     
     private final ImmutableList<TreeNode> children;
 
-    public TreeNode(Object value) {
-        this(value, ImmutableList.empty());
-    }
     
-    public TreeNode(Object value, ImmutableList<TreeNode> children) {
+    private TreeNode(Object value, ImmutableList<TreeNode> children) {
         this.value = value;
         this.children = children;
     }
+
+    public static TreeNode of(Object value) {
+        return new TreeNode(value, ImmutableList.empty());
+    }
+    
+    public static TreeNode of(Object value, ImmutableList<TreeNode> children) {
+        return new TreeNode(value, children);
+    }
+    
     
     public Object value() {
         return value;

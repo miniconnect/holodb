@@ -5,17 +5,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class CharClassEntrySetSplitter<T> {
 
-    private final SimpleEntryList<CharClass, T> charClassEntrySet;
-    
-    private CharClassEntrySetSplitter(SimpleEntryList<CharClass, T> charClassMap) {
-        this.charClassEntrySet = charClassMap;
-    }
-
-    public static <T> CharClassEntrySetSplitter<T> of(SimpleEntryList<CharClass, T> charClassMap) {
-        return new CharClassEntrySetSplitter<>(charClassMap);
-    }
-    
-    public SimpleEntryList<CharClass, ImmutableList<T>> split() {
+    public SimpleEntryList<CharClass, ImmutableList<T>> split(SimpleEntryList<CharClass, T> charClassEntrySet) {
         SimpleEntryList<CharClass, ImmutableList<T>> entries = new SimpleEntryList<>();
         for (SimpleEntryList.Entry<CharClass, T> sourceEntry : charClassEntrySet) {
             entries = splitNext(entries, sourceEntry);

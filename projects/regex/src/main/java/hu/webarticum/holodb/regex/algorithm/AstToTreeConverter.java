@@ -27,7 +27,7 @@ public class AstToTreeConverter {
         return convertAlternation(
                 astNode,
                 SpecialTreeValues.ROOT,
-                ImmutableList.of(new TreeNode(SpecialTreeValues.LEAF)));
+                ImmutableList.of(TreeNode.of(SpecialTreeValues.LEAF)));
     }
 
     private TreeNode convertAny(AstNode astNode, ImmutableList<TreeNode> nextNodes) {
@@ -55,7 +55,7 @@ public class AstToTreeConverter {
         for (SequenceAstNode branch : alternationNode.branches()) {
             children.add(convertSequence(branch, nextNodes));
         }
-        return new TreeNode(value, ImmutableList.fromCollection(children));
+        return TreeNode.of(value, ImmutableList.fromCollection(children));
     }
 
     private TreeNode convertGroup(GroupAstNode groupNode, ImmutableList<TreeNode> nextNodes) {
@@ -100,7 +100,7 @@ public class AstToTreeConverter {
         if (nextNodes.size() == 1) {
             return nextNodes.get(0);
         } else {
-            return new TreeNode(null, nextNodes);
+            return TreeNode.of(null, nextNodes);
         }
     }
 
@@ -115,16 +115,16 @@ public class AstToTreeConverter {
                 CharacterConstantAstNode nextCharNode = CharacterConstantAstNode.of(c);
                 ImmutableList<CharClass> nextCharClasses = astToCharClassesConverter.convert(nextCharNode);
                 ImmutableList<TreeNode> prevHeadNodes = headNodes;
-                headNodes = nextCharClasses.map(cc -> new TreeNode(cc, prevHeadNodes));
+                headNodes = nextCharClasses.map(cc -> TreeNode.of(cc, prevHeadNodes));
             }
             return join(headNodes);
         } else if (simpleNode instanceof CharacterMatchAstNode) {
             CharacterMatchAstNode charNode = (CharacterMatchAstNode) simpleNode;
             ImmutableList<CharClass> charClasses = astToCharClassesConverter.convert(charNode);
-            ImmutableList<TreeNode> charNodes = charClasses.map(cc -> new TreeNode(cc, nextNodes));
+            ImmutableList<TreeNode> charNodes = charClasses.map(cc -> TreeNode.of(cc, nextNodes));
             return join(charNodes);
         } else {
-            return new TreeNode(simpleNode, nextNodes);
+            return TreeNode.of(simpleNode, nextNodes);
         }
     }
 

@@ -77,7 +77,10 @@ public class CharClassSplitter {
     }
     
     private List<Character> flushBuilder(
-            SimpleEntryList<CharClass, Containment> result, List<Character> currentBuilder, Containment currentContainment, Containment newContainment) {
+            SimpleEntryList<CharClass, Containment> result,
+            List<Character> currentBuilder,
+            Containment currentContainment,
+            Containment newContainment) {
         if (newContainment != currentContainment && !currentBuilder.isEmpty()) {
             CharClass charClass = CharClass.of(characterListToString(currentBuilder), leftCharClass.charComparator());
             result.add(charClass, currentContainment);

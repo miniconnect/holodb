@@ -23,8 +23,8 @@ class AstToTreeConverterTest {
         AstToTreeConverter converter = new AstToTreeConverter(charComparator);
         AlternationAstNode alternationNode =
                 AlternationAstNode.of(ImmutableList.of(SequenceAstNode.of(ImmutableList.empty())));
-        TreeNode leafNode = new TreeNode(SpecialTreeValues.LEAF, ImmutableList.empty());
-        TreeNode expectedTreeNode = new TreeNode(SpecialTreeValues.ROOT, ImmutableList.of(leafNode));
+        TreeNode leafNode = TreeNode.of(SpecialTreeValues.LEAF, ImmutableList.empty());
+        TreeNode expectedTreeNode = TreeNode.of(SpecialTreeValues.ROOT, ImmutableList.of(leafNode));
         assertThat(converter.convert(alternationNode)).isEqualTo(expectedTreeNode);
     }
 
@@ -44,16 +44,16 @@ class AstToTreeConverterTest {
                         CharacterConstantAstNode.of('y'),
                         CharacterConstantAstNode.of('z')))
         ));
-        TreeNode leafNode = new TreeNode(SpecialTreeValues.LEAF, ImmutableList.empty());
-        TreeNode expectedTreeNode = new TreeNode(SpecialTreeValues.ROOT, ImmutableList.of(
-                new TreeNode(CharClass.of("a", charComparator), ImmutableList.of(
-                        new TreeNode(CharClass.of("b", charComparator), ImmutableList.of(
-                                new TreeNode(CharClass.of("c", charComparator), ImmutableList.of(leafNode)))))),
-                new TreeNode(CharClass.of("m", charComparator), ImmutableList.of(
-                        new TreeNode(CharClass.of("n", charComparator), ImmutableList.of(leafNode)))),
-                new TreeNode(CharClass.of("x", charComparator), ImmutableList.of(
-                        new TreeNode(CharClass.of("y", charComparator), ImmutableList.of(
-                                new TreeNode(CharClass.of("z", charComparator), ImmutableList.of(leafNode))))))));
+        TreeNode leafNode = TreeNode.of(SpecialTreeValues.LEAF, ImmutableList.empty());
+        TreeNode expectedTreeNode = TreeNode.of(SpecialTreeValues.ROOT, ImmutableList.of(
+                TreeNode.of(CharClass.of("a", charComparator), ImmutableList.of(
+                        TreeNode.of(CharClass.of("b", charComparator), ImmutableList.of(
+                                TreeNode.of(CharClass.of("c", charComparator), ImmutableList.of(leafNode)))))),
+                TreeNode.of(CharClass.of("m", charComparator), ImmutableList.of(
+                        TreeNode.of(CharClass.of("n", charComparator), ImmutableList.of(leafNode)))),
+                TreeNode.of(CharClass.of("x", charComparator), ImmutableList.of(
+                        TreeNode.of(CharClass.of("y", charComparator), ImmutableList.of(
+                                TreeNode.of(CharClass.of("z", charComparator), ImmutableList.of(leafNode))))))));
         assertThat(converter.convert(alternationNode)).isEqualTo(expectedTreeNode);
     }
 
@@ -72,15 +72,15 @@ class AstToTreeConverterTest {
                         )
                 ))
         ));
-        TreeNode leafNode = new TreeNode(SpecialTreeValues.LEAF, ImmutableList.empty());
-        TreeNode expectedTreeNode = new TreeNode(SpecialTreeValues.ROOT, ImmutableList.of(
-                new TreeNode(null, ImmutableList.of(
-                        new TreeNode(CharClass.of("s", charComparator), ImmutableList.of(
-                                new TreeNode(CharClass.of("t", charComparator), ImmutableList.of(
+        TreeNode leafNode = TreeNode.of(SpecialTreeValues.LEAF, ImmutableList.empty());
+        TreeNode expectedTreeNode = TreeNode.of(SpecialTreeValues.ROOT, ImmutableList.of(
+                TreeNode.of(null, ImmutableList.of(
+                        TreeNode.of(CharClass.of("s", charComparator), ImmutableList.of(
+                                TreeNode.of(CharClass.of("t", charComparator), ImmutableList.of(
                                         leafNode,
-                                        new TreeNode(null, ImmutableList.of(
-                                            new TreeNode(CharClass.of("s", charComparator), ImmutableList.of(
-                                                    new TreeNode(CharClass.of("t", charComparator),
+                                        TreeNode.of(null, ImmutableList.of(
+                                            TreeNode.of(CharClass.of("s", charComparator), ImmutableList.of(
+                                                    TreeNode.of(CharClass.of("t", charComparator),
                                                             ImmutableList.of(leafNode)
                                                     )
                                             ))

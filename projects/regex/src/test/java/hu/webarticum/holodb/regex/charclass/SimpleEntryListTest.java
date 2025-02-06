@@ -13,6 +13,8 @@ class SimpleEntryListTest {
     void testEmpty() {
         SimpleEntryList<Integer, String> entries = new SimpleEntryList<>();
         assertThat(entries).isEmpty();
+        assertThat(entries.isEmpty()).isTrue();
+        assertThat(entries.size()).isZero();
         assertThat(entries.iterator()).isExhausted();
         assertThatThrownBy(entries::last).isInstanceOf(NoSuchElementException.class);
         assertThatThrownBy(entries::removeLast).isInstanceOf(NoSuchElementException.class);
@@ -26,12 +28,16 @@ class SimpleEntryListTest {
         SimpleEntryList<Integer, String> entriesDouble = new SimpleEntryList<>();
         entriesDouble.add(4, "lorem");
         assertThat(entries).isNotEmpty();
+        assertThat(entries.isEmpty()).isFalse();
+        assertThat(entries.size()).isEqualTo(1);
         assertThat(entries.iterator()).hasNext();
         assertThat(entries).containsExactly(SimpleEntryList.Entry.of(4, "lorem"));
         assertThat(entries.last()).isEqualTo(SimpleEntryList.Entry.of(4, "lorem"));
         assertThat(entries).isEqualTo(entriesDouble);
         entries.removeLast();
         assertThat(entries).isEmpty();
+        assertThat(entries.isEmpty()).isTrue();
+        assertThat(entries.size()).isZero();
         assertThat(entries.iterator()).isExhausted();
         assertThatThrownBy(entries::last).isInstanceOf(NoSuchElementException.class);
         assertThatThrownBy(entries::removeLast).isInstanceOf(NoSuchElementException.class);
@@ -49,6 +55,8 @@ class SimpleEntryListTest {
         entriesDouble.add(3, "ipsum");
         entriesDouble.add(4, "dolor");
         assertThat(entries).isNotEmpty();
+        assertThat(entries.isEmpty()).isFalse();
+        assertThat(entries.size()).isEqualTo(3);
         assertThat(entries.iterator()).hasNext();
         assertThat(entries).containsExactly(
                 SimpleEntryList.Entry.of(2, "lorem"),
@@ -57,11 +65,17 @@ class SimpleEntryListTest {
         assertThat(entries.last()).isEqualTo(SimpleEntryList.Entry.of(4, "dolor"));
         assertThat(entries).isEqualTo(entriesDouble);
         entries.removeLast();
+        assertThat(entries.isEmpty()).isFalse();
+        assertThat(entries.size()).isEqualTo(2);
         assertThat(entries.last()).isEqualTo(SimpleEntryList.Entry.of(3, "ipsum"));
         entries.removeLast();
+        assertThat(entries.isEmpty()).isFalse();
+        assertThat(entries.size()).isEqualTo(1);
         assertThat(entries.last()).isEqualTo(SimpleEntryList.Entry.of(2, "lorem"));
         entries.removeLast();
         assertThat(entries).isEmpty();
+        assertThat(entries.isEmpty()).isTrue();
+        assertThat(entries.size()).isZero();
         assertThatThrownBy(entries::last).isInstanceOf(NoSuchElementException.class);
         assertThatThrownBy(entries::removeLast).isInstanceOf(NoSuchElementException.class);
     }

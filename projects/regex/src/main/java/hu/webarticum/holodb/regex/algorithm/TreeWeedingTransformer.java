@@ -18,7 +18,7 @@ public class TreeWeedingTransformer {
         return weedCached(node, null, new HashMap<>()).resultingChildren.get(0);
     }
     
-    private UnlinkResult weedCached(
+    private TransformResult weedCached(
             TreeNode node, AncestorInfo ancestorInfo, Map<CacheKey, ImmutableList<TreeNode>> cache) {
         Object value = node.value();
         if (!(value instanceof CharClass) && value != SpecialTreeValues.LEAF) {
@@ -28,9 +28,9 @@ public class TreeWeedingTransformer {
         ImmutableList<TreeNode> cachedChildren = cache.get(cacheKey);
         if (cachedChildren != null) {
             boolean wasChanged = (cachedChildren.size() != 1) || cachedChildren.get(0) != node;
-            return new UnlinkResult(wasChanged, cachedChildren);
+            return new TransformResult(wasChanged, cachedChildren);
         }
-        UnlinkResult result = weedInternal(node, ancestorInfo, cache);
+        TransformResult result = weedInternal(node, ancestorInfo, cache);
         cache.put(cacheKey, result.resultingChildren);
         return result;
     }
@@ -43,7 +43,7 @@ public class TreeWeedingTransformer {
         return new CacheKey(node, normalizedAncestorInfo);
     }
 
-    private UnlinkResult weedInternal(
+    private TransformResult weedInternal(
             TreeNode node, AncestorInfo ancestorInfo, Map<CacheKey, ImmutableList<TreeNode>> cache) {
         Object value = node.value();
         AncestorInfo nextAncestorInfo;
@@ -56,7 +56,7 @@ public class TreeWeedingTransformer {
             nextAncestorInfo = ancestorInfo;
         } else {
             if (!checkAnchors(ancestorInfo, value)) {
-                return new UnlinkResult(true, ImmutableList.empty());
+                return new TransformResult(true, ImmutableList.empty());
             }
             nextAncestorInfo = new AncestorInfo(kindOf(value), EnumSet.noneOf(AnchorAstNode.class));
         }
@@ -66,7 +66,7 @@ public class TreeWeedingTransformer {
         int i = 0;
         while (i < countOfChildren) {
             TreeNode childNode = children.get(i);
-            UnlinkResult result = weedCached(childNode, nextAncestorInfo, cache);
+            TransformResult result = weedCached(childNode, nextAncestorInfo, cache);
             if (result.wasChanged) {
                 firstChangedChildren = result.resultingChildren;
                 break;
@@ -85,7 +85,7 @@ public class TreeWeedingTransformer {
             i++;
             while (i < countOfChildren) {
                 TreeNode childNode = children.get(i);
-                UnlinkResult result = weedCached(childNode, nextAncestorInfo, cache);
+                TransformResult result = weedCached(childNode, nextAncestorInfo, cache);
                 resultChildrenListBuilder.addAll(result.resultingChildren.asList());
                 i++;
             }
@@ -95,12 +95,12 @@ public class TreeWeedingTransformer {
                 value == null ||
                 value instanceof AnchorAstNode ||
                 (value != SpecialTreeValues.LEAF && resultChildren.isEmpty())) {
-            return new UnlinkResult(true, resultChildren);
+            return new TransformResult(true, resultChildren);
         } else if (!wasChanged) {
-            return new UnlinkResult(false, ImmutableList.of(node));
+            return new TransformResult(false, ImmutableList.of(node));
         } else {
-            TreeNode newNode = new TreeNode(value, resultChildren);
-            return new UnlinkResult(true, ImmutableList.of(newNode));
+            TreeNode newNode = TreeNode.of(value, resultChildren);
+            return new TransformResult(true, ImmutableList.of(newNode));
         }
     }
     
@@ -248,19 +248,6 @@ public class TreeWeedingTransformer {
             }
             CacheKey other = (CacheKey) obj;
             return (treeNode == other.treeNode) && Objects.equals(ancestorInfo, other.ancestorInfo);
-        }
-        
-    }
-    
-    private static class UnlinkResult {
-        
-        final boolean wasChanged;
-        
-        final ImmutableList<TreeNode> resultingChildren;
-        
-        UnlinkResult(boolean wasChanged, ImmutableList<TreeNode> resultingChildren)  {
-            this.wasChanged = wasChanged;
-            this.resultingChildren = resultingChildren;
         }
         
     }

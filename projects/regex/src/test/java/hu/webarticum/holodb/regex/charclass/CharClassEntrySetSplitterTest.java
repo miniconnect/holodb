@@ -9,13 +9,15 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 
 
 class CharClassEntrySetSplitterTest {
+    
+    private final CharClassEntrySetSplitter<Integer> splitter = new CharClassEntrySetSplitter<>();
 
-    private CharComparator comparator = Character::compare;
+    private final CharComparator comparator = Character::compare;
 
     @Test
     void testEmpty() {
         SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
-        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = splitter.split(entries);
         assertThat(expected).isEmpty();
     }
 
@@ -23,7 +25,7 @@ class CharClassEntrySetSplitterTest {
     void testSingle() {
         SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
         entries.add(charClassOf("abc"), 1);
-        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = splitter.split(entries);
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("abc"), ImmutableList.of(1)));
     }
@@ -33,7 +35,7 @@ class CharClassEntrySetSplitterTest {
         SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
         entries.add(charClassOf("abcdef"), 1);
         entries.add(charClassOf("defghi"), 2);
-        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = splitter.split(entries);
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("abc"), ImmutableList.of(1)),
                 entryOf(charClassOf("def"), ImmutableList.of(1, 2)),
@@ -45,7 +47,7 @@ class CharClassEntrySetSplitterTest {
         SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
         entries.add(charClassOf("abcdef"), 1);
         entries.add(charClassOf("defghi"), 1);
-        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = splitter.split(entries);
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("abc"), ImmutableList.of(1)),
                 entryOf(charClassOf("def"), ImmutableList.of(1, 1)),
@@ -57,7 +59,7 @@ class CharClassEntrySetSplitterTest {
         SimpleEntryList<CharClass, Integer> entries = new SimpleEntryList<>();
         entries.add(charClassOf("abcghi"), 1);
         entries.add(charClassOf("defjkl"), 2);
-        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = splitter.split(entries);
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("abc"), ImmutableList.of(1)),
                 entryOf(charClassOf("def"), ImmutableList.of(2)),
@@ -72,7 +74,7 @@ class CharClassEntrySetSplitterTest {
         entries.add(charClassOf("ghi"), 2);
         entries.add(charClassOf("abcdefghijklmno"), 3);
         entries.add(charClassOf("jkl"), 4);
-        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = splitter.split(entries);
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("abc"), ImmutableList.of(3)),
                 entryOf(charClassOf("def"), ImmutableList.of(1, 3)),
@@ -96,7 +98,7 @@ class CharClassEntrySetSplitterTest {
         entries.add(charClassOf("cdef"), 7);
         entries.add(charClassOf("y"), 7);
         entries.add(charClassOf("z"), 7);
-        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = CharClassEntrySetSplitter.of(entries).split();
+        SimpleEntryList<CharClass, ImmutableList<Integer>> expected = splitter.split(entries);
         assertThat(expected).containsExactly(
                 entryOf(charClassOf("a"), ImmutableList.of(1, 1, 2, 5, 6)),
                 entryOf(charClassOf("b"), ImmutableList.of(1, 1, 2, 5)),

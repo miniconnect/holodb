@@ -22,6 +22,14 @@ public class SimpleEntryList<K, V> implements Iterable<SimpleEntryList.Entry<K, 
         return Collections.unmodifiableList(entries).iterator();
     }
 
+    public boolean isEmpty() {
+        return entries.isEmpty();
+    }
+
+    public int size() {
+        return entries.size();
+    }
+
     public Entry<K, V> last() {
         if (entries.isEmpty()) {
             throw new NoSuchElementException("Can't get the last element because there are no elements");

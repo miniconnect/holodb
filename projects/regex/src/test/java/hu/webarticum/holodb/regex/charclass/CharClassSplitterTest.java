@@ -9,7 +9,7 @@ import hu.webarticum.holodb.regex.comparator.CharComparator;
 
 class CharClassSplitterTest {
 
-    private CharComparator comparator = (a, b) -> Character.compare(a, b);
+    private CharComparator comparator = Character::compare;
     
     @Test
     void testBothEmpty() {
