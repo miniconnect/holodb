@@ -70,7 +70,7 @@ public class SimpleEntryList<K, V> implements Iterable<SimpleEntryList.Entry<K, 
             this.value = value;
         }
 
-        public static <K extends Comparable<K>, V> Entry<K, V> of(K key, V value) {
+        public static <K, V> Entry<K, V> of(K key, V value) {
             return new Entry<>(key, value);
         }
 
