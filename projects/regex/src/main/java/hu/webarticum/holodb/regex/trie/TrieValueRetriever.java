@@ -1,7 +1,6 @@
-package hu.webarticum.holodb.regex.algorithm;
+package hu.webarticum.holodb.regex.trie;
 
 import hu.webarticum.holodb.regex.charclass.CharClass;
-import hu.webarticum.holodb.regex.trie.TrieNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 

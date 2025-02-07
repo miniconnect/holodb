@@ -14,6 +14,36 @@ class TrieNodeTest {
     private final CharComparator charComparator = Character::compare;
 
     @Test
+    void testIsRoot() {
+        TrieNode leaf = TrieNode.leafOf(charComparator);
+        TrieNode inner = TrieNode.of(CharClass.of("abcd", charComparator), ImmutableList.of(leaf));
+        TrieNode root = TrieNode.rootOf(charComparator, ImmutableList.of(inner));
+        assertThat(root.isRoot()).isTrue();
+        assertThat(inner.isRoot()).isFalse();
+        assertThat(leaf.isRoot()).isFalse();
+    }
+
+    @Test
+    void testIsLeaf() {
+        TrieNode leaf = TrieNode.leafOf(charComparator);
+        TrieNode inner = TrieNode.of(CharClass.of("abcd", charComparator), ImmutableList.of(leaf));
+        TrieNode root = TrieNode.rootOf(charComparator, ImmutableList.of(inner));
+        assertThat(root.isLeaf()).isFalse();
+        assertThat(inner.isLeaf()).isFalse();
+        assertThat(leaf.isLeaf()).isTrue();
+    }
+
+    @Test
+    void testIsInner() {
+        TrieNode leaf = TrieNode.leafOf(charComparator);
+        TrieNode inner = TrieNode.of(CharClass.of("abcd", charComparator), ImmutableList.of(leaf));
+        TrieNode root = TrieNode.rootOf(charComparator, ImmutableList.of(inner));
+        assertThat(root.isInner()).isFalse();
+        assertThat(inner.isInner()).isTrue();
+        assertThat(leaf.isInner()).isFalse();
+    }
+    
+    @Test
     void testCharClass() {
         CharClass charClass = CharClass.of("xyz", charComparator);
         TrieNode leaf = TrieNode.leafOf(charComparator);

@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.regex.algorithm;
+package hu.webarticum.holodb.regex.trie;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import hu.webarticum.holodb.regex.charclass.CharClass;
 import hu.webarticum.holodb.regex.comparator.CharComparator;
-import hu.webarticum.holodb.regex.trie.TrieNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 

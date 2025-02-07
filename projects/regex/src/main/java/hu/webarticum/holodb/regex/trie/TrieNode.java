@@ -97,6 +97,17 @@ public class TrieNode {
         String chars = charClass.chars();
         return (chars.length() == 1) && (chars.charAt(0) == LEAF_CHAR) && (children.get(0) == null);
     }
+
+    public boolean isInner() {
+        String chars = charClass.chars();
+        if (chars.length() != 1) {
+            return true;
+        } else if (chars.charAt(0) == ROOT_CHAR) {
+            return false;
+        } else {
+            return (chars.charAt(0) != LEAF_CHAR) || (children.get(0) != null);
+        }
+    }
     
     @Override
     public int hashCode() {
