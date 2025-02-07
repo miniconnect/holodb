@@ -118,7 +118,6 @@ public class TreeSortingTransformer {
         TreeNode transformedNode = sortCached(originalNode, cache);
         newChildrenBuilder.add(transformedNode);
         return transformedNode != originalNode;
-        
     }
 
     private boolean handleSplittingBranches(
@@ -131,7 +130,7 @@ public class TreeSortingTransformer {
         ImmutableList<TreeNode> sortedSubChildren = sortChildren(deduplicatedSubChildren, cache).resultingChildren;
         TreeNode newChildNode = TreeNode.of(charClass, sortedSubChildren);
         newChildrenBuilder.add(newChildNode);
-        return false;
+        return true;
     }
 
     private ImmutableList<TreeNode> deduplicateSub(ImmutableList<TreeNode> splittedChildren) {

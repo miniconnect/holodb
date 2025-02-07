@@ -1,10 +1,10 @@
 package hu.webarticum.holodb.regex.lab.demo;
 
 import hu.webarticum.holodb.regex.algorithm.AstToTreeConverter;
+import hu.webarticum.holodb.regex.algorithm.TreeSortingTransformer;
 import hu.webarticum.holodb.regex.algorithm.TreeToTrieConverter;
 import hu.webarticum.holodb.regex.algorithm.TreeWeedingTransformer;
 import hu.webarticum.holodb.regex.ast.AlternationAstNode;
-import hu.webarticum.holodb.regex.ast.AstNode;
 import hu.webarticum.holodb.regex.comparator.CharComparator;
 import hu.webarticum.holodb.regex.comparator.DefaultCharComparator;
 import hu.webarticum.holodb.regex.parser.RegexParser;
@@ -17,17 +17,10 @@ import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
 
 /*
 
-TODO
+# TODO
 
-=== M1 (unordered version): ===
-* add retrieving tests for simple, already sorted regular expressions
+## Back-references
 
-=== M2 (ordered version): ===
-* implement sorting, splitting, and melting branches, using intensive caching
-* implement searching
-* add a corresponding SortedSource implementation, use this instead of strex (link strex to here)
-
-=== M3 (backreference-aware version): ===
 * implement possible-first-character extraction from the referenced groups's ast
 * add support for backreference nodes that:
     * are atomic
@@ -35,7 +28,8 @@ TODO
     * reference to somewhere in the prefix, can repeat the already determined substring
 * handle first-character collision for backreferences (by elimination or shortcut with global error)
 
-=== M4 (basic UCA support): ===
+## basic UCA support
+
 * implement a way to handle secondary/tertiary etc. orders, options:
     * linked trees (as in the paper)
     * dynamic subtree decorators
@@ -47,28 +41,33 @@ TODO
 public class AstToTreeDemo {
 
     public static void main(String[] args) {
-        String regex = "x\\d{3}a{1,3}|^[a-f123]([a-c,=]\\b){3,4}$";
-        AstNode ast = new RegexParser().parse(regex);
+        String regex = "f{0,2}[ra](t[tu]|tue?)s?"; // "x\\d{3}a{1,3}|^[a-f123]([a-c,=]\\b){3,4}$";
+        AlternationAstNode ast = (AlternationAstNode) new RegexParser().parse(regex);
         CharComparator charComparator = new DefaultCharComparator();
-        TreeNode tree = new AstToTreeConverter(charComparator).convert((AlternationAstNode) ast);
-        TreeNode compactTree = new TreeWeedingTransformer().weed(tree);
-        TrieNode trie = new TreeToTrieConverter(charComparator).convert(compactTree);
+        TreeNode rawTree = new AstToTreeConverter(charComparator).convert(ast);
+        TreeNode compactTree = new TreeWeedingTransformer().weed(rawTree);
+        TreeNode sortedTree = new TreeSortingTransformer().sort(compactTree);
+        TrieNode trie = new TreeToTrieConverter(charComparator).convert(sortedTree);
 
         LargeInteger size = trie.size();
         LargeInteger sampleSize = LargeInteger.TEN.min(size);
         LargeInteger stepDiv = LargeInteger.of(37);
-        LargeInteger step = size.divide(stepDiv);
+        LargeInteger step = size.divide(stepDiv).max(LargeInteger.ONE);
         TrieValueRetriever retriever = new TrieValueRetriever();
 
         new TraditionalTreePrinter().print(new BorderTreeNodeDecorator(new AstNodeTreeNode(ast)));
         System.out.println();
         System.out.println("---------------------------------------------------------");
         System.out.println();
-        new TraditionalTreePrinter().print(new BorderTreeNodeDecorator(new TreeNodeTreeNode(tree)));
+        new TraditionalTreePrinter().print(new BorderTreeNodeDecorator(new TreeNodeTreeNode(rawTree)));
         System.out.println();
         System.out.println("---------------------------------------------------------");
         System.out.println();
         new TraditionalTreePrinter().print(new BorderTreeNodeDecorator(new TreeNodeTreeNode(compactTree)));
+        System.out.println();
+        System.out.println("---------------------------------------------------------");
+        System.out.println();
+        new TraditionalTreePrinter().print(new BorderTreeNodeDecorator(new TreeNodeTreeNode(sortedTree)));
         System.out.println();
         System.out.println("---------------------------------------------------------");
         System.out.println();

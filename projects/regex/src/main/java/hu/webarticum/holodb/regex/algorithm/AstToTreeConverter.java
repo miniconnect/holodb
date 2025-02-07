@@ -17,10 +17,24 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class AstToTreeConverter {
     
+    public static final int DEFAULT_REPEAT_LIMIT = 12;
+    
+    public static final int DEFAULT_GROUP_REPEAT_LIMIT = 3;
+    
     private final AstToCharClassesConverter astToCharClassesConverter;
     
+    private final int repeatLimit;
+    
+    private final int groupRepeatLimit;
+    
     public AstToTreeConverter(CharComparator charComparator) {
+        this(charComparator, DEFAULT_REPEAT_LIMIT, DEFAULT_GROUP_REPEAT_LIMIT);
+    }
+    
+    public AstToTreeConverter(CharComparator charComparator, int repeatLimit, int groupRepeatLimit) {
         astToCharClassesConverter = new AstToCharClassesConverter(charComparator);
+        this.repeatLimit = repeatLimit;
+        this.groupRepeatLimit = groupRepeatLimit;
     }
 
     public TreeNode convert(AlternationAstNode astNode) {
@@ -70,7 +84,7 @@ public class AstToTreeConverter {
         }
         AstNode astNode = quantifiedNode.node();
         if (maxOccurrences == QuantifiedAstNode.NO_UPPER_LIMIT) {
-            int atLeastMax = (astNode instanceof GroupAstNode) ? 3 : 12;
+            int atLeastMax = (astNode instanceof GroupAstNode) ? groupRepeatLimit : repeatLimit;
             maxOccurrences = Math.max(atLeastMax, minOccurrences);
         }
         int optionalOccurrences = maxOccurrences - minOccurrences;
