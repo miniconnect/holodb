@@ -40,10 +40,10 @@ public class TreeSortingTransformer {
         }
         ImmutableList<TreeNode> children = node.children();
         TransformResult result = sortChildren(children, cache);
-        if (!result.wasChanged) {
-            return node;
-        } else {
+        if (result.wasChanged) {
             return TreeNode.of(value, result.resultingChildren);
+        } else {
+            return node;
         }
     }
 
@@ -77,7 +77,7 @@ public class TreeSortingTransformer {
             ImmutableList<TreeNode> newChildren = ImmutableList.fromCollection(newChildrenBuilder);
             return new TransformResult(true, newChildren);
         } else {
-            return new TransformResult(true, children);
+            return new TransformResult(false, children);
         }
     }
 
@@ -117,7 +117,7 @@ public class TreeSortingTransformer {
             TreeNode originalNode, List<TreeNode> newChildrenBuilder, Map<TreeNode, TreeNode> cache) {
         TreeNode transformedNode = sortCached(originalNode, cache);
         newChildrenBuilder.add(transformedNode);
-        return transformedNode == originalNode;
+        return transformedNode != originalNode;
         
     }
 
