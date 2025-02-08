@@ -122,4 +122,29 @@ class TrieValueLocatorTest {
                 .extracting(r -> r.position().intValue()).isEqualTo(unmatchingPositions.asList());
     }
 
+    @Test
+    void testHuge() {
+        int numberOfDigits = 50;
+        TrieNode leafNode = TrieNode.leafOf(charComparator);
+        TrieNode tailNode = TrieNode.of(CharClass.of("z", charComparator), ImmutableList.of(leafNode));
+        TrieNode rootNode = TestUtil.generateDigitsTrie(numberOfDigits, ImmutableList.of(tailNode), charComparator);
+        ImmutableList<String> matchingStrings = ImmutableList.of(
+                "00000000000000000000000000000000000000000000000000z",
+                "00000000000000000000000000000000000000000042673801z",
+                "00000000000000000008943627807618729003764578349272z",
+                "11111111111111111111111111111111111111111111111111z",
+                "46728392764587027817464700136781970367078291834607z",
+                "99999999999999999999999999999999999999999999999999z");
+        ImmutableList<String> matchingPositions = ImmutableList.of(
+                "0",
+                "42673801",
+                "8943627807618729003764578349272",
+                "11111111111111111111111111111111111111111111111111",
+                "46728392764587027817464700136781970367078291834607",
+                "99999999999999999999999999999999999999999999999999");
+        TrieValueLocator locator = new TrieValueLocator();
+        assertThat(matchingStrings.map(s -> locator.locate(rootNode, s))).allMatch(r -> r.found())
+                .extracting(r -> r.position().toString()).isEqualTo(matchingPositions.asList());
+    }
+    
 }

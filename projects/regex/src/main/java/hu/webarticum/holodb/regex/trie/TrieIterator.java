@@ -84,7 +84,6 @@ public class TrieIterator implements Iterator<String> {
                 try {
                     c = charClass.chars().charAt(stackEntry.charPosition);
                 } catch (Exception e) {
-                    System.out.println(resultBuilder.toString() + " // " + charClass.chars() + " // " + stackEntry.charPosition);
                     throw e;
                 }
                 resultBuilder.append(c);

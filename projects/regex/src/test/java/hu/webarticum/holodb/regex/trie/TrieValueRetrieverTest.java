@@ -93,5 +93,27 @@ class TrieValueRetrieverTest {
         assertThat(ImmutableList.fill(11, i -> retriever.retrieve(root, LargeInteger.of(i))))
                 .containsExactly("=zuw", "=zuz", "=fuw", "=fuz", "~zuw", "~zuz", "~fuw", "~fuz", "ax1", "ax7", "axby");
     }
+
+    @Test
+    void testHuge() {
+        int numberOfDigits = 40;
+        TrieNode leafNode = TrieNode.leafOf(charComparator);
+        TrieNode tailNode = TrieNode.of(CharClass.of("x", charComparator), ImmutableList.of(leafNode));
+        TrieNode rootNode = TestUtil.generateDigitsTrie(numberOfDigits, ImmutableList.of(tailNode), charComparator);
+        ImmutableList<String> positions = ImmutableList.of(
+                "0",
+                "54",
+                "67332956743856493478",
+                "4690176287371636299340861763759629325046",
+                "9999999999999999999999999999999999999999");
+        TrieValueRetriever retriever = new TrieValueRetriever();
+        assertThat(positions.map(s -> retriever.retrieve(rootNode, LargeInteger.of(s))))
+                .containsExactly(
+                        "0000000000000000000000000000000000000000x",
+                        "0000000000000000000000000000000000000054x",
+                        "0000000000000000000067332956743856493478x",
+                        "4690176287371636299340861763759629325046x",
+                        "9999999999999999999999999999999999999999x");
+    }
     
 }
