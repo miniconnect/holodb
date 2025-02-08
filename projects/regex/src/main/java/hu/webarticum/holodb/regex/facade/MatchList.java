@@ -13,14 +13,14 @@ import hu.webarticum.holodb.regex.trie.TrieIterator;
 import hu.webarticum.holodb.regex.parser.RegexParser;
 import hu.webarticum.holodb.regex.tree.TreeNode;
 import hu.webarticum.holodb.regex.trie.TrieNode;
+import hu.webarticum.holodb.regex.trie.TrieValueLocator;
 import hu.webarticum.holodb.regex.trie.TrieValueRetriever;
+import hu.webarticum.miniconnect.lang.FindPositionResult;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class MatchList implements Iterable<String> {
     
     private final TrieNode trie;
-    
-    private final TrieValueRetriever retriever;
 
     private MatchList(Builder builder, String pattern) {
         CharComparator charComparator = builder.supplyCharComparator();
@@ -31,7 +31,6 @@ public class MatchList implements Iterable<String> {
         TreeNode compactTree = new TreeWeedingTransformer().weed(rawTree);
         TreeNode sortedTree = new TreeSortingTransformer().sort(compactTree);
         this.trie = new TreeToTrieConverter(charComparator).convert(sortedTree);
-        this.retriever = new TrieValueRetriever();
     }
     
     public static MatchList of(String pattern) {
@@ -52,7 +51,11 @@ public class MatchList implements Iterable<String> {
     }
 
     public String get(LargeInteger i) {
-        return retriever.retrieve(trie, i);
+        return new TrieValueRetriever().retrieve(trie, i);
+    }
+    
+    public FindPositionResult find(String value) {
+        return new TrieValueLocator().locate(trie, value);
     }
 
     @Override
