@@ -9,7 +9,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 
 class CharClassTest {
     
-    private CharComparator comparator = (a, b) -> Character.compare(a, b);
+    private CharComparator comparator = Character::compare;
 
     @Test
     void testComparator() {
@@ -42,6 +42,38 @@ class CharClassTest {
                 CharClass.of("bcbxtsuuaa", comparator),
                 CharClass.of("2734637374682833", comparator));
         assertThat(inputs.map(cc -> cc.chars())).containsExactly("abcstux", "234678");
+    }
+
+    @Test
+    void testIndexOfEmpty() {
+        CharClass charClass = CharClass.of("", comparator);
+        assertThat(ImmutableList.of('a', 'b', 'c', 'd', 'e', 'f').map(charClass::indexOf)).containsExactly(
+                -1, -1, -1, -1, -1, -1);
+    }
+
+    @Test
+    void testIndexOfSingle() {
+        CharClass charClass = CharClass.of("d", comparator);
+        assertThat(ImmutableList.of('a', 'b', 'c', 'd', 'e', 'f').map(charClass::indexOf)).containsExactly(
+                -1, -1, -1, 0, -2, -2);
+    }
+
+    @Test
+    void testIndexOfTwoChars() {
+        CharClass charClass = CharClass.of("ce", comparator);
+        assertThat(ImmutableList.of('a', 'b', 'c', 'd', 'e', 'f').map(charClass::indexOf)).containsExactly(
+                -1, -1, 0, -2, 1, -3);
+    }
+
+    @Test
+    void testIndexOfManyChars() {
+        CharClass charClass = CharClass.of("befghkmpstwx", comparator);
+        assertThat(ImmutableList.of(
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+                'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+        ).map(charClass::indexOf)).containsExactly(
+                -1, 0, -2, -2, 1, 2, 3, 4, -6, -6, 5, -7, 6, -8,
+                -8, 7, -9, -9, 8, 9, -11, -11, 10, 11, -13, -13);
     }
 
     @Test

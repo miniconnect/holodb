@@ -52,12 +52,53 @@ public class CharClass implements Comparable<CharClass> {
         return resultBuilder.toString();
     }
 
+    public String chars() {
+        return chars;
+    }
+
     public int size() {
         return chars.length();
     }
 
-    public String chars() {
-        return chars;
+    public int indexOf(char c) {
+        int length = chars.length();
+        if (length == 0) {
+            return -1;
+        }
+        char firstChar = chars.charAt(0);
+        int firstCmp = charComparator.compare(c, firstChar);
+        if (firstCmp == 0) {
+            return 0;
+        } else if (firstCmp < 0) {
+            return -1;
+        }
+        if (length == 1) {
+            return -2;
+        }
+        int lastPos = length - 1;
+        char lastChar = chars.charAt(lastPos);
+        int lastCmp = charComparator.compare(c, lastChar);
+        if (lastCmp == 0) {
+            return lastPos;
+        } else if (lastCmp > 0) {
+            return -2 - lastPos;
+        }
+        int low = 0;
+        int high = lastPos;
+        int diff;
+        while ((diff = (high - low)) > 1) {
+            int middle = low + (diff >>> 1);
+            char middleChar = chars.charAt(middle);
+            int middleCmp = charComparator.compare(c, middleChar);
+            if (middleCmp == 0) {
+                return middle;
+            } else if (middleCmp < 0) {
+                high = middle;
+            } else {
+                low = middle;
+            }
+        }
+        return -1 - high;
     }
 
     public CharComparator charComparator() {
