@@ -7,18 +7,18 @@ import java.util.Optional;
 
 import hu.webarticum.holodb.core.data.selection.Range;
 import hu.webarticum.holodb.core.data.source.SortedSource;
+import hu.webarticum.holodb.regex.facade.MatchList;
+import hu.webarticum.miniconnect.lang.FindPositionResult;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
-import hu.webarticum.strex.Strex;
 
-// TODO: extract its general part to the core project
-public class StrexSource implements SortedSource<String> {
+public class MatchListSource implements SortedSource<String> {
 
-    private final Strex strex;
+    private final MatchList matchList;
     
 
-    public StrexSource(Strex strex) {
-        this.strex = strex;
+    public MatchListSource(MatchList matchList) {
+        this.matchList = matchList;
     }
     
     
@@ -29,12 +29,12 @@ public class StrexSource implements SortedSource<String> {
     
     @Override
     public LargeInteger size() {
-        return LargeInteger.of(strex.size());
+        return matchList.size();
     }
 
     @Override
     public String get(LargeInteger index) {
-        return strex.get(index.bigIntegerValue());
+        return matchList.get(index);
     }
     
     @Override
@@ -49,11 +49,9 @@ public class StrexSource implements SortedSource<String> {
     
     @Override
     public Range find(Object value) {
-        String stringValue = (String) value;
-        LargeInteger position = LargeInteger.of(strex.indexOf(stringValue));
-        return position.isNonNegative() ?
-                Range.fromSize(position, LargeInteger.ONE) :
-                Range.fromSize(position.negate().subtract(LargeInteger.ONE), LargeInteger.ZERO);
+        String stringValue = value == null ? null : value.toString();
+        FindPositionResult result = matchList.find(stringValue);
+        return Range.fromSize(result.position(), result.found() ? LargeInteger.ONE : LargeInteger.ZERO);
     }
 
     @Override

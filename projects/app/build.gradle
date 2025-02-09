@@ -24,6 +24,7 @@ configurations {
 dependencies {
     implementation project(':config')
     implementation project(':core')
+    implementation project(':regex')
     implementation project(':spi')
     implementation project(':storage')
     implementation project(':values')
@@ -35,7 +36,6 @@ dependencies {
     implementation "hu.webarticum.miniconnect:server:${miniConnectVersion}"
     implementation "hu.webarticum.minibase:engine:${miniBaseVersion}"
     
-    implementation 'hu.webarticum.strex:strex:1.2.0'
     implementation 'com.github.mifmif:generex:1.0.2'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'

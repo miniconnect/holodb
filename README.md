@@ -99,8 +99,8 @@ For each **column**, these subkeys are supported:
 | `valuesResource` | `String` | name of a java resource which contains the values line by line |
 | `valuesBundle` | `String` | short name of a bundled value resource, otherwise similar to `valuesResource` (see below) |
 | `valuesRange` | `LargeInteger[]` | start and end value of a numeric value range |
-| `valuesPattern` | `String` | [strex](https://github.com/davidsusu/strex) regex pattern for values (reverse indexed) |
-| `valuesDynamicPattern` | `String` | arbitrary regex pattern for values (not reverse indexed) |
+| `valuesPattern` | `String` | regex pattern for values (reverse indexed) |
+| `valuesDynamicPattern` | `String` | regex pattern processed by [Generex](https://github.com/mifmif/Generex) (not reverse indexed) |
 | `valuesForeignColumn` | `String[]` | use value set of a foreign `COUNTER` column |
 | `distributionQuality` | `String` | distribution quality: `LOW`, `MEDIUM`, or `HIGH` (global default: `MEDIUM`) |
 | `shuffleQuality` | `String` | shuffle quality: `NOOP`, `VERY_LOW`, `LOW`, `MEDIUM`, `HIGH`, or `VERY_HIGH` (global default: `MEDIUM`) |

@@ -25,7 +25,7 @@ import hu.webarticum.holodb.app.config.HoloConfigColumn.DistributionQuality;
 import hu.webarticum.holodb.app.config.HoloConfigColumn.ShuffleQuality;
 import hu.webarticum.holodb.app.launch.HolodbServerMain;
 import hu.webarticum.holodb.app.misc.GenerexSource;
-import hu.webarticum.holodb.app.misc.StrexSource;
+import hu.webarticum.holodb.app.misc.MatchListSource;
 import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;
@@ -44,6 +44,7 @@ import hu.webarticum.holodb.core.data.source.Source;
 import hu.webarticum.holodb.core.data.source.TransformingSortedSource;
 import hu.webarticum.holodb.core.data.source.TransformingSource;
 import hu.webarticum.holodb.core.data.source.UniqueSource;
+import hu.webarticum.holodb.regex.facade.MatchList;
 import hu.webarticum.holodb.spi.config.ColumnLocation;
 import hu.webarticum.holodb.spi.config.SourceFactory;
 import hu.webarticum.holodb.storage.GenericNamedResourceStore;
@@ -65,7 +66,6 @@ import hu.webarticum.minibase.storage.impl.simple.SimpleResourceManager;
 import hu.webarticum.minibase.storage.impl.simple.SimpleSchema;
 import hu.webarticum.minibase.storage.impl.simple.SimpleStorageAccess;
 import hu.webarticum.miniconnect.record.converter.Converter;
-import hu.webarticum.strex.Strex;
 
 // TODO: split to builder and sub-builders
 public class StorageAccessFactory {
@@ -305,7 +305,7 @@ public class StorageAccessFactory {
         if (factoryClazz != null) {
             SourceFactory sourceFactory;
             try {
-                sourceFactory = factoryClazz.newInstance();
+                sourceFactory = factoryClazz.getDeclaredConstructor().newInstance();
             } catch (ReflectiveOperationException e) {
                 throw new IllegalStateException("Factory instatiation failed", e);
             }
@@ -418,13 +418,13 @@ public class StorageAccessFactory {
     }
 
     private static SortedSource<?> loadPatternSource(HoloConfigColumn columnConfig, Converter converter) {
-        StrexSource strexSource = new StrexSource(Strex.compile(columnConfig.valuesPattern()));
+        MatchListSource matchListSource = new MatchListSource(MatchList.of(columnConfig.valuesPattern()));
         Class<?> type = extractType(columnConfig);
         if (type == String.class) {
-            return strexSource;
+            return matchListSource;
         } else {
             return new TransformingSortedSource<String, Object>( // NOSONAR explicit type parameters are necessary
-                    strexSource,
+                    matchListSource,
                     type,
                     v -> (String) converter.convert(v, String.class),
                     b -> converter.convert(b, type));
