@@ -1,6 +1,7 @@
 package hu.webarticum.holodb.regex.facade;
 
 import java.util.Iterator;
+import java.util.Random;
 
 import hu.webarticum.holodb.regex.algorithm.AstToTreeConverter;
 import hu.webarticum.holodb.regex.algorithm.TreeSortingTransformer;
@@ -21,12 +22,15 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public class MatchList implements Iterable<String> {
     
     private final TrieNode trie;
+    
+    private volatile Random random;
 
     private MatchList(Builder builder, String pattern) {
         CharComparator charComparator = builder.supplyCharComparator();
         AlternationAstNode ast = (AlternationAstNode) new RegexParser().parse(pattern);
         int repeatLimit = builder.repeatLimit;
         int groupRepeatLimit = builder.groupRepeatLimit;
+        this.random = builder.random;
         TreeNode rawTree = new AstToTreeConverter(charComparator, repeatLimit, groupRepeatLimit).convert(ast);
         TreeNode compactTree = new TreeWeedingTransformer().weed(rawTree);
         TreeNode sortedTree = new TreeSortingTransformer().sort(compactTree);
@@ -57,7 +61,7 @@ public class MatchList implements Iterable<String> {
     public FindPositionResult find(String value) {
         return new TrieValueLocator().locate(trie, value);
     }
-
+    
     @Override
     public Iterator<String> iterator() {
         return TrieIterator.fromBeginning(trie);
@@ -70,7 +74,23 @@ public class MatchList implements Iterable<String> {
     public Iterator<String> iterator(LargeInteger position) {
         return TrieIterator.fromPosition(trie, position);
     }
+
+    public String random() {
+        LargeInteger position = generateRandomPosition();
+        return get(position);
+    }
+
+    private synchronized LargeInteger generateRandomPosition() {
+        return trie.size().random(requireRandom());
+    }
     
+    private synchronized Random requireRandom() {
+        if (random == null) {
+            random = new Random();
+        }
+        return random;
+    }
+
     
     public static class Builder {
         
@@ -79,6 +99,8 @@ public class MatchList implements Iterable<String> {
         private int repeatLimit = AstToTreeConverter.DEFAULT_REPEAT_LIMIT;
         
         private int groupRepeatLimit = AstToTreeConverter.DEFAULT_GROUP_REPEAT_LIMIT;
+        
+        private Random random = null;
         
         public Builder charComparator(CharComparator charComparator) {
             this.charComparator = charComparator;
@@ -92,6 +114,16 @@ public class MatchList implements Iterable<String> {
 
         public Builder groupRepeatLimit(int groupRepeatLimit) {
             this.groupRepeatLimit = groupRepeatLimit;
+            return this;
+        }
+
+        public Builder random(Random random) {
+            this.random = random;
+            return this;
+        }
+
+        public Builder seed(long seed) {
+            this.random = new Random(seed);
             return this;
         }
         

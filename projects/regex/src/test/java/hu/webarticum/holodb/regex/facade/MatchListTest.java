@@ -146,5 +146,20 @@ class MatchListTest {
                 .containsExactly("zlorenuu999999999997", "zlorenuu999999999998", "zlorenuu999999999999");
         assertThat((Iterable<String>) () -> matchList.iterator(expectedSize)).isEmpty();
     }
+
+    @Test
+    void testRandom() {
+        MatchList matchList = MatchList.builder().seed(42).build("f{0,2}[ra](t[tu]|tue?)s?");
+        assertThat(matchList.size()).isEqualTo(LargeInteger.of(36));
+        ImmutableList<String> matches = ImmutableList.of(
+                "att", "atts", "atu", "atue", "atues", "atus",
+                "fatt", "fatts", "fatu", "fatue", "fatues", "fatus",
+                "ffatt", "ffatts", "ffatu", "ffatue", "ffatues", "ffatus",
+                "ffrtt", "ffrtts", "ffrtu", "ffrtue", "ffrtues", "ffrtus",
+                "frtt", "frtts", "frtu", "frtue", "frtues", "frtus",
+                "rtt", "rtts", "rtu", "rtue", "rtues", "rtus"
+        );
+        assertThat(ImmutableList.fill(1000, i -> matchList.random())).isSubsetOf(matches);
+    }
     
 }
