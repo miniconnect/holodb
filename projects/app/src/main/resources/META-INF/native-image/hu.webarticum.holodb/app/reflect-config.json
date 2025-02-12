@@ -1,0 +1,62 @@
+[
+    {
+        "name": "hu.webarticum.holodb.app.config.HoloConfig",
+        "allDeclaredConstructors": true,
+        "allPublicMethods": true        ,
+        "allPublicFields": true
+    },
+    {
+        "name": "hu.webarticum.holodb.app.config.HoloConfigSchema",
+        "allDeclaredConstructors": true,
+        "allPublicMethods": true        ,
+        "allPublicFields": true
+    },
+    {
+        "name": "hu.webarticum.holodb.app.config.HoloConfigSchema[]",
+        "allDeclaredConstructors": true,
+        "allPublicMethods": true        ,
+        "allPublicFields": true
+    },
+    {
+        "name": "hu.webarticum.holodb.app.config.HoloConfigTable",
+        "allDeclaredConstructors": true,
+        "allPublicMethods": true        ,
+        "allPublicFields": true
+    },
+    {
+        "name": "hu.webarticum.holodb.app.config.HoloConfigTable[]",
+        "allDeclaredConstructors": true,
+        "allPublicMethods": true        ,
+        "allPublicFields": true
+    },
+    {
+        "name": "hu.webarticum.holodb.app.config.HoloConfigColumn",
+        "allDeclaredConstructors": true,
+        "allPublicMethods": true        ,
+        "allPublicFields": true
+    },
+    {
+        "name": "hu.webarticum.holodb.app.config.HoloConfigColumn[]",
+        "allDeclaredConstructors": true,
+        "allPublicMethods": true        ,
+        "allPublicFields": true
+    },
+    {
+        "name": "hu.webarticum.holodb.app.config.HoloConfigColumn$ColumnMode",
+        "allDeclaredConstructors": true,
+        "allPublicMethods": true,
+        "allPublicFields": true
+    },
+    {
+        "name": "hu.webarticum.holodb.app.config.HoloConfigColumn$DistributionQuality",
+        "allDeclaredConstructors": true,
+        "allPublicMethods": true,
+        "allPublicFields": true
+    },
+    {
+        "name": "hu.webarticum.holodb.app.config.HoloConfigColumn$ShuffleQuality",
+        "allDeclaredConstructors": true,
+        "allPublicMethods": true,
+        "allPublicFields": true
+    }
+]

@@ -62,3 +62,10 @@ jib {
         mainClass = project.ext.mainClass
     }
 }
+
+task dockerBuildGraal(type: Exec) {
+    dependsOn shadowJar
+    workingDir = projectDir
+    // commandLine 'docker', 'buildx', 'build', '--platform', 'linux/amd64', '-t', 'miniconnect/holodb-graal:latest', '-f', 'Dockerfile.graal', '.'
+    commandLine 'docker', 'build', '-t', 'miniconnect/holodb-graal:latest', '-f', 'Dockerfile.graal', '.'
+}
