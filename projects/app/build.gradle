@@ -63,9 +63,77 @@ jib {
     }
 }
 
-task dockerBuildGraal(type: Exec) {
+ext.graalDockerName = 'miniconnect/holodb-graal'
+ext.graalDockerPlatforms = [
+
+    // these are supported by the normal native-image-edition docker (while the musl version is not multi-platform):
+    'linux/amd64',
+    'linux/arm64',
+    
+    /*
+    'linux/arm64/v8',
+    'linux/arm/v7',
+    'linux/386',
+    'linux/ppc64le',
+    'linux/s390x',*/
+]
+
+task graalDockerBuild(type: Exec) {
     dependsOn shadowJar
     workingDir = projectDir
-    // commandLine 'docker', 'buildx', 'build', '--platform', 'linux/amd64', '-t', 'miniconnect/holodb-graal:latest', '-f', 'Dockerfile.graal', '.'
-    commandLine 'docker', 'build', '-t', 'miniconnect/holodb-graal:latest', '-f', 'Dockerfile.graal', '.'
+    commandLine(
+        'docker', 'build',
+        '-t', "${graalDockerName}:latest",
+        '-f', 'Dockerfile.graal',
+        '.',
+    )
+}
+
+task graalDockerBuildMultiplatform(type: Exec) {
+    dependsOn shadowJar
+    workingDir = projectDir
+    commandLine(
+        'docker', 'buildx', 'build',
+        '--platform', graalDockerPlatforms.join(','),
+        '-t', "${graalDockerName}:latest",
+        '-f', 'Dockerfile.graal',
+        '.',
+    )
+}
+
+task graalDockerExtractBinaries {
+    doLast {
+        def versionStr = project.version ?: "SNAPSHOT"
+        def outputDir = file("${buildDir}/native-image/bin")
+        outputDir.mkdirs()
+        graalDockerPlatforms.each { platformName ->
+            def platformTag = platformName.replaceAll('/', '_')
+            def imageName = "${graalDockerName}:latest-${platformTag}"
+            def outputFileName = "holodb-${versionStr}-${platformTag}"
+            def outputPath = new File(outputDir, outputFileName).absolutePath
+            println "Extract native executable for platform '${platformName}' to ${outputPath}"
+            def containerIdOutput = new ByteArrayOutputStream()
+            exec {
+                commandLine(
+                    'docker', 'buildx', 'build',
+                    '--platform', platformName,
+                    '-t', "${graalDockerName}:latest-${platformTag}",
+                    '--load',
+                    '-f', 'Dockerfile.graal',
+                    '.',
+                )
+            }
+            exec {
+                commandLine 'docker', 'create', '--platform', platformName, imageName
+                standardOutput = containerIdOutput
+            }
+            def containerId = containerIdOutput.toString().trim()
+            if (containerId.isEmpty()) {
+                throw new GradleException("Failed to create container for platform: ${platformName}")
+            }
+            exec { commandLine 'docker', 'cp', "${containerId}:/app/app", outputPath }
+            exec { commandLine 'docker', 'rm', containerId }
+            exec { commandLine 'docker', 'image', 'rm', imageName }
+        }
+    }
 }
