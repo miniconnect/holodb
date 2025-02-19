@@ -134,7 +134,7 @@ public class HasherTreeRandom implements TreeRandom {
         ByteSourceBitSource bitSource = createBitSource();
         
         LargeInteger partition = exponentOfTwo > 0 ?
-                LargeInteger.nonNegativeOf(bitSource.fetch(exponentOfTwo)) :
+                LargeInteger.ofUnsigned(bitSource.fetch(exponentOfTwo)) :
                 LargeInteger.ZERO;
         LargeInteger offset = LargeInteger.ZERO;
         for (int i = 0; i < RANDOM_NUMBER_MAX_RETRIES; i++) {

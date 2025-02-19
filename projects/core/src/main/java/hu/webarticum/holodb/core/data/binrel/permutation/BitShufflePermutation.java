@@ -65,7 +65,7 @@ public class BitShufflePermutation implements Permutation {
         for (int i = sourceBitSet.nextSetBit(0); i >= 0; i = sourceBitSet.nextSetBit(i + 1)) {
             targetBitSet.set(targets[i]);
         }
-        return LargeInteger.nonNegativeOf(targetBitSet);
+        return LargeInteger.ofUnsigned(targetBitSet);
     }
 
 }

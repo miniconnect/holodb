@@ -106,7 +106,7 @@ public class FeistelNetworkPermutation implements Permutation {
         for (int bi = leftBits.previousSetBit(leftSize); bi != -1; bi = leftBits.previousSetBit(bi - 1)) {
             resultBits.set(rightSize + bi);
         }
-        return LargeInteger.nonNegativeOf(resultBits);
+        return LargeInteger.ofUnsigned(resultBits);
     }
     
 }

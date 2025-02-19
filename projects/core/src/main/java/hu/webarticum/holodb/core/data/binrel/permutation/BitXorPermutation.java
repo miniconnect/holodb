@@ -23,7 +23,7 @@ public class BitXorPermutation implements Permutation {
     
     public BitXorPermutation(BitSet xorMask, int bitLength) {
         this.size = LargeInteger.TWO.pow(bitLength);
-        this.xorMask = LargeInteger.nonNegativeOf(xorMask);
+        this.xorMask = LargeInteger.ofUnsigned(xorMask);
     }
     
     public BitXorPermutation(LargeInteger xorMask, int bitLength) {
