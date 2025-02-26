@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-import hu.webarticum.holodb.app.config.HoloConfig;
+import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.miniconnect.lang.jackson.JacksonSupport;
 
 public class ConfigLoader {

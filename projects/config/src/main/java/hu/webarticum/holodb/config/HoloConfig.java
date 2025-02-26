@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.app.config;
+package hu.webarticum.holodb.config;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;

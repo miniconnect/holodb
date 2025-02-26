@@ -1,6 +1,6 @@
 package hu.webarticum.holodb.app.factory;
 
-import hu.webarticum.holodb.app.config.HoloConfigColumn.DistributionQuality;
+import hu.webarticum.holodb.config.HoloConfigColumn.DistributionQuality;
 import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;
 import hu.webarticum.holodb.core.data.binrel.monotonic.FastMonotonic;
 import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;

@@ -1,6 +1,6 @@
 package hu.webarticum.holodb.app.factory;
 
-import hu.webarticum.holodb.app.config.HoloConfigColumn.ShuffleQuality;
+import hu.webarticum.holodb.config.HoloConfigColumn.ShuffleQuality;
 import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.FeistelNetworkPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.IdentityPermutation;

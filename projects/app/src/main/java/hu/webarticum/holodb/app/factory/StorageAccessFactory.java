@@ -16,16 +16,16 @@ import java.util.stream.Collectors;
 
 import com.mifmif.common.regex.Generex;
 
-import hu.webarticum.holodb.app.config.HoloConfig;
-import hu.webarticum.holodb.app.config.HoloConfigColumn;
-import hu.webarticum.holodb.app.config.HoloConfigSchema;
-import hu.webarticum.holodb.app.config.HoloConfigTable;
-import hu.webarticum.holodb.app.config.HoloConfigColumn.ColumnMode;
-import hu.webarticum.holodb.app.config.HoloConfigColumn.DistributionQuality;
-import hu.webarticum.holodb.app.config.HoloConfigColumn.ShuffleQuality;
 import hu.webarticum.holodb.app.launch.HolodbServerMain;
 import hu.webarticum.holodb.app.misc.GenerexSource;
 import hu.webarticum.holodb.app.misc.MatchListSource;
+import hu.webarticum.holodb.config.HoloConfig;
+import hu.webarticum.holodb.config.HoloConfigColumn;
+import hu.webarticum.holodb.config.HoloConfigSchema;
+import hu.webarticum.holodb.config.HoloConfigTable;
+import hu.webarticum.holodb.config.HoloConfigColumn.ColumnMode;
+import hu.webarticum.holodb.config.HoloConfigColumn.DistributionQuality;
+import hu.webarticum.holodb.config.HoloConfigColumn.ShuffleQuality;
 import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
 import hu.webarticum.holodb.core.data.random.HasherTreeRandom;

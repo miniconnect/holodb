@@ -1,6 +1,6 @@
 package hu.webarticum.holodb.app.factory;
 
-import hu.webarticum.holodb.app.config.HoloConfig;
+import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.minibase.engine.api.Engine;
 import hu.webarticum.minibase.engine.impl.SimpleEngine;
 import hu.webarticum.minibase.execution.QueryExecutor;
