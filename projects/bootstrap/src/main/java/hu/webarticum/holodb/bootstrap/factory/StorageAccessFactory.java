@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.app.factory;
+package hu.webarticum.holodb.bootstrap.factory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,9 +16,8 @@ import java.util.stream.Collectors;
 
 import com.mifmif.common.regex.Generex;
 
-import hu.webarticum.holodb.app.launch.HolodbServerMain;
-import hu.webarticum.holodb.app.misc.GenerexSource;
-import hu.webarticum.holodb.app.misc.MatchListSource;
+import hu.webarticum.holodb.bootstrap.misc.GenerexSource;
+import hu.webarticum.holodb.bootstrap.misc.MatchListSource;
 import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.holodb.config.HoloConfigColumn;
 import hu.webarticum.holodb.config.HoloConfigSchema;
@@ -460,7 +459,7 @@ public class StorageAccessFactory {
     }
     
     private static ImmutableList<Object> loadValuesFromResource(String resource) {
-        ClassLoader classLoader = HolodbServerMain.class.getClassLoader();
+        ClassLoader classLoader = StorageAccessFactory.class.getClassLoader();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
                 classLoader.getResourceAsStream(resource)))) {
             List<Object> values = new LinkedList<>();

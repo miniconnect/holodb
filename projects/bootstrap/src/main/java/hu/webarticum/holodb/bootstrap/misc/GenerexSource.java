@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.app.misc;
+package hu.webarticum.holodb.bootstrap.misc;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.app.factory;
+package hu.webarticum.holodb.bootstrap.factory;
 
 import hu.webarticum.holodb.config.HoloConfigColumn.ShuffleQuality;
 import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;

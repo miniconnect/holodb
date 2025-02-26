@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.app.factory;
+package hu.webarticum.holodb.bootstrap.factory;
 
 import hu.webarticum.holodb.config.HoloConfigColumn.DistributionQuality;
 import hu.webarticum.holodb.core.data.binrel.monotonic.BinomialMonotonic;

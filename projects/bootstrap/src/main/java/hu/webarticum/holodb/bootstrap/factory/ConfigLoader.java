@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.app.factory;
+package hu.webarticum.holodb.bootstrap.factory;
 
 import java.io.File;
 import java.io.FileInputStream;

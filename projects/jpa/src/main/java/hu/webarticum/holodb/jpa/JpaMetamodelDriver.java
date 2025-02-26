@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 import javax.persistence.metamodel.Metamodel;
 
-import hu.webarticum.holodb.app.factory.StorageAccessFactory;
+import hu.webarticum.holodb.bootstrap.factory.StorageAccessFactory;
 import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.minibase.engine.api.Engine;
 import hu.webarticum.minibase.engine.facade.FrameworkSession;

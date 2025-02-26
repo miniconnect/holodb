@@ -6,8 +6,8 @@ import java.lang.invoke.MethodHandles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hu.webarticum.holodb.app.factory.ConfigLoader;
-import hu.webarticum.holodb.app.factory.EngineBuilder;
+import hu.webarticum.holodb.bootstrap.factory.ConfigLoader;
+import hu.webarticum.holodb.bootstrap.factory.EngineBuilder;
 import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.minibase.engine.api.Engine;
 import hu.webarticum.minibase.engine.facade.FrameworkSessionManager;

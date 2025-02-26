@@ -16,8 +16,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import hu.webarticum.holodb.app.factory.ConfigLoader;
-import hu.webarticum.holodb.app.factory.EngineBuilder;
+import hu.webarticum.holodb.bootstrap.factory.ConfigLoader;
+import hu.webarticum.holodb.bootstrap.factory.EngineBuilder;
 import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.minibase.engine.api.Engine;
 import hu.webarticum.minibase.engine.facade.FrameworkSession;
