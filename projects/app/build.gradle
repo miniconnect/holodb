@@ -36,6 +36,7 @@ dependencies {
     implementation "hu.webarticum.miniconnect:server:${miniConnectVersion}"
     implementation "hu.webarticum.minibase:engine:${miniBaseVersion}"
     
+    implementation 'org.slf4j:slf4j-api:1.7.35'
     implementation 'com.github.mifmif:generex:1.0.2'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
