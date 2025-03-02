@@ -31,8 +31,5 @@ task generateSchema(type: JavaExec) {
     dependsOn classes
     mainClass = "hu.webarticum.holodb.config.gradle.schemagen.SchemaGeneratorMain"
     classpath = sourceSets.schemaGen.runtimeClasspath
-    args = [
-        "hu.webarticum.holodb.config.HoloConfig",
-        "${buildDir}/schemas/holodb-config.schema.json",
-    ]
+    args = [ "${buildDir}/schemas/holodb-config.schema.json" ]
 }
