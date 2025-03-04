@@ -23,7 +23,7 @@ public class MatchList implements Iterable<String> {
     
     private final TrieNode trie;
     
-    private volatile Random random;
+    private Random random;
 
     private MatchList(Builder builder, String pattern) {
         CharComparator charComparator = builder.supplyCharComparator();
