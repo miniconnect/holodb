@@ -1,34 +1,109 @@
-# HoloDB
+# HoloDB - the on-the-fly relational database
 
-**Relational database - seemingly filled with random data.**
-
-However, by default, this data does not actually take up any space in memory or on a volume
-(to use an analogy, it is as if the data set is projected as a hologram from a simple configuration).
-
-The base layer is an arbitrarily large, read-only data set that is readable and searchable, and yet fully consistent.
-Any pieces of data and index lookups are calculated on-the-fly.
-
-An optional second layer is built on top of this, allowing read-write access
-(stores differences while maintains consistency and searchability).
-
-So, you can start an arbitrarily large database in moments, with minimal effort;
-all you need is a configuration file.
+No data generation.
+No storage costs.
+No migrations.
+Simply describe your data as a declarative configuration,
+and it's there in a flash.
+HoloDB is a full-featured relational database engine
+with a completely virtual starting dataset,
+computed on the fly based on the given configuration in a highly efficient way.
+Further modifications are stored in diff layers.
+Start from zero and immediately work with realistic, arbitrarily large, fully queryable data.
 
 
-## Use with Docker
+**What is all this for?**
 
-HoloDB is available on [DockerHub](https://hub.docker.com/r/miniconnect/holodb).
-You just need a configuration file (YAML, by default), and a Dockerfile like this:
+- **prototyping**: include the database in your stack, even in live mode
+- **demonstration**: showcase your app with realistic data, without materializing it
+- **integration testing**: add a full-featured relational database to your pipeline
+- **mocking**: put a functional database into the stack, even based on ORM entities
+- **feeding**: use it as a data source to populate a traditional database
+- **teaching**: provide a dummy database for your students
 
-```dockerfile
-FROM miniconnect/holodb:latest
+**How to try it out quickly?**
 
-COPY config.yaml /app/config.yaml
+You can use HoloDB in many ways,
+e.g. in embedded mode or as a server, from a program,
+from an ORM system, or interactively with a REPL.
+But the easiest way to try it out is using Docker.
+
+You can download a ready-made configuration file from the example projects:
+
+```bash
+curl -o /tmp/config.yaml https://raw.githubusercontent.com/miniconnect/general-docs/refs/heads/main/examples/holodb-standalone/config.yaml
 ```
 
-For some self-contained demos
-[look at the examples](https://github.com/miniconnect/general-docs/blob/main/examples/README.md).
+Then, just load the configuration into a HoloDB container:
 
+```bash
+docker run --rm -p 3430:3430 -v /tmp/config.yaml:/app/config.yaml miniconnect/holodb
+```
+
+Then use the `micl` command from [miniconnect-client](https://github.com/miniconnect/miniconnect-client) to run queries in a REPL:
+
+```
+$ micl
+
+Welcome in miniConnect SQL REPL! - localhost:3430
+
+SQL > SHOW SCHEMAS
+
+  Query was successfully executed!
+
+  ┌─────────┐
+  │ Schemas │
+  ├─────────┤
+  │ economy │
+  └─────────┘
+
+SQL > USE economy
+
+  Query was successfully executed!
+
+SQL > SHOW TABLES;
+
+  Query was successfully executed!
+
+  ┌───────────────────┐
+  │ Tables_in_economy │
+  ├───────────────────┤
+  │ companies         │
+  │ employees         │
+  │ sales             │
+  └───────────────────┘
+
+SQL > SELECT * FROM companies;
+
+  Query was successfully executed!
+
+  ┌────┬──────────────────────┬──────────────┬─────────────────┐
+  │ id │ name                 │ headquarters │ contact_phone   │
+  ├────┼──────────────────────┼──────────────┼─────────────────┤
+  │  1 │ Fav Fruits Inc.      │ Stockholm    │ [NULL]          │
+  │  2 │ Fru-fru Sales Inc.   │ Tel Aviv     │ +1 143-339-0981 │
+  │  3 │ Fructose Palace Inc. │ Baku         │ +1 295-272-4854 │
+  │  4 │ Vega Veterans Inc.   │ New York     │ +1 413-876-4936 │
+  │  5 │ Goods of Nature Inc. │ Paris        │ [NULL]          │
+  └────┴──────────────────────┴──────────────┴─────────────────┘
+
+SQL > exit
+
+Bye-bye!
+```
+
+Visit the [SQL guide](https://github.com/miniconnect/minibase/blob/master/SQL.md)
+to learn more about the SQL features supported by the default query engine.
+Alternatively, you can try the experimental integration with the
+[Apache Calcite](https://github.com/miniconnect/calcite-integration) query planner.
+
+You can connect to HoloDB directly via the MiniConnect API.
+For more information,
+see [MiniConnect API](https://github.com/miniconnect/miniconnect?tab=readme-ov-file#getting-started-with-the-api).
+
+Also, you can use a MiniConnect server or even an existing MiniConnect `Session` via JDBC.
+For more information,
+see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect#jdbc-compatibility).
 
 ## Configuration
 
@@ -252,76 +327,6 @@ python3 mysql_scanner.py -u your_user -p your_password -d your_database -w
 ```
 
 Use the `-h` or `--help` option for more details.
-
-
-## Run queries in the REPL
-
-HoloDB is an implementation of the [minibase](https://github.com/miniconnect/minibase) framework
-and uses its SQL engine.
-
-You can execute queries against HoloDB (or any other miniConnect server)
-via [miniconnect-client](https://github.com/miniconnect/miniconnect-client).
-
-```
-Welcome in miniConnect SQL REPL! - localhost:3430
-
-SQL > SHOW SCHEMAS
-
-  Query was successfully executed!
-
-  ┌─────────┐
-  │ Schemas │
-  ├─────────┤
-  │ economy │
-  └─────────┘
-
-SQL > USE economy
-
-  Query was successfully executed!
-
-SQL > SHOW TABLES;
-
-  Query was successfully executed!
-
-  ┌───────────────────┐
-  │ Tables_in_economy │
-  ├───────────────────┤
-  │ companies         │
-  │ employees         │
-  │ sales             │
-  └───────────────────┘
-
-SQL > SELECT * FROM companies;
-
-  Query was successfully executed!
-
-  ┌────┬──────────────────────┬──────────────┬─────────────────┐
-  │ id │ name                 │ headquarters │ contact_phone   │
-  ├────┼──────────────────────┼──────────────┼─────────────────┤
-  │  1 │ Fav Fruits Inc.      │ Stockholm    │ [NULL]          │
-  │  2 │ Fru-fru Sales Inc.   │ Tel Aviv     │ +1 143-339-0981 │
-  │  3 │ Fructose Palace Inc. │ Baku         │ +1 295-272-4854 │
-  │  4 │ Vega Veterans Inc.   │ New York     │ +1 413-876-4936 │
-  │  5 │ Goods of Nature Inc. │ Paris        │ [NULL]          │
-  └────┴──────────────────────┴──────────────┴─────────────────┘
-
-SQL > exit
-
-Bye-bye!
-```
-
-Visit the [SQL guide](https://github.com/miniconnect/minibase/blob/master/SQL.md)
-to learn more about the SQL features supported by the default query engine.
-Alternatively, you can try the experimental integration with the
-[Apache Calcite](https://github.com/miniconnect/calcite-integration) query planner.
-
-You can connect to HoloDB directly via the MiniConnect API.
-For more information,
-see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect?tab=readme-ov-file#getting-started-with-the-api).
-
-Also, you can use a MiniConnect server or even an existing MiniConnect `Session` via JDBC.
-For more information,
-see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect#jdbc-compatibility).
 
 
 ## Embedded mode via JDBC
