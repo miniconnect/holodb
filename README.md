@@ -352,7 +352,7 @@ jdbc:holodb:embedded:resource://config.yaml
 Or any file on the file system:
 
 ```
-jdbc:holodb:embedded:file///path/to/config.yaml
+jdbc:holodb:embedded:file:///path/to/config.yaml
 ```
 
 Or with selecting a specific schema:
