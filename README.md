@@ -3,13 +3,17 @@
 No data generation.
 No storage costs.
 No migrations.
+Start from zero and immediately work with
+realistic, arbitrarily large, fully queryable data.
 Simply describe your data as a declarative configuration,
 and it's there in a flash.
+
 HoloDB is a full-featured relational database engine
-with a completely virtual starting dataset,
-computed on the fly based on the given configuration in a highly efficient way.
-Further modifications are stored in diff layers.
-Start from zero and immediately work with realistic, arbitrarily large, fully queryable data.
+with a completely virtual starting dataset.
+Field values and query results are calculated on the fly,
+based on the given configuration in a highly efficient way.
+Further modifications are stored in diff layers,
+making the database effectively writable.
 
 
 **What is all this for?**
