@@ -5,7 +5,8 @@
    height="351px"
    viewBox="-0.5 -0.5 501 351"
    id="svg624"
-   sodipodi:docname="distribution-xxx.svg"
+   sodipodi:docname="column-data-layers.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -20,96 +21,29 @@
      inkscape:showpageshadow="2"
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1" />
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.8353491"
+     inkscape:cx="290.40796"
+     inkscape:cy="216.30762"
+     inkscape:window-width="1920"
+     inkscape:window-height="1135"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg624" />
   <defs
      id="defs2" />
+  <rect
+     style="fill:#ffffff;stroke-width:2"
+     id="rect657"
+     width="501.40158"
+     height="356.58713"
+     x="-1.3424007"
+     y="-1.7523569" />
   <g
-     id="g614">
-    <path
-       d="m 421.5,319.5 15,7 -15,7 z"
-       fill="#ffffff"
-       stroke="none"
-       transform="rotate(-90,429,326.5)"
-       pointer-events="all"
-       id="path4" />
-    <path
-       d="m 281.5,319.5 15,7 -15,7 z"
-       fill="#ffffff"
-       stroke="none"
-       transform="rotate(-90,289,326.5)"
-       pointer-events="all"
-       id="path6" />
-    <path
-       d="m 135.5,319.5 15,7 -15,7 z"
-       fill="#ffffff"
-       stroke="none"
-       transform="rotate(-90,143,326.5)"
-       pointer-events="all"
-       id="path8" />
-    <path
-       d="m 381,335 v 1 h 48 v -14"
-       fill="none"
-       stroke="#ffffff"
-       stroke-width="3"
-       stroke-miterlimit="10"
-       pointer-events="stroke"
-       id="path10" />
-    <path
-       d="m 303,327 v 9 h 46"
-       fill="none"
-       stroke="#ffffff"
-       stroke-width="3"
-       stroke-miterlimit="10"
-       pointer-events="stroke"
-       id="path12" />
-    <path
-       d="m 120,336 h 23 v -14"
-       fill="none"
-       stroke="#ffffff"
-       stroke-width="3"
-       stroke-miterlimit="10"
-       pointer-events="stroke"
-       id="path14" />
-    <path
-       d="m 241,335 v 1 h 48 v -14"
-       fill="none"
-       stroke="#ffffff"
-       stroke-width="3"
-       stroke-miterlimit="10"
-       pointer-events="stroke"
-       id="path16" />
-    <path
-       d="m 38,327 h -1 v 9 h 20"
-       fill="none"
-       stroke="#ffffff"
-       stroke-width="3"
-       stroke-miterlimit="10"
-       pointer-events="stroke"
-       id="path18" />
-    <path
-       d="m 162,327 v 9 h 46"
-       fill="none"
-       stroke="#ffffff"
-       stroke-width="3"
-       stroke-miterlimit="10"
-       pointer-events="stroke"
-       id="path20" />
-    <path
-       id="rect22"
-       style="fill:#ffffff"
-       d="m 366,307 h 117 v 16 H 366 Z" />
-    <path
-       id="rect24"
-       style="fill:#ffffff"
-       d="m 252,307 h 80 v 16 h -80 z" />
-    <path
-       id="rect26"
-       style="fill:#ffffff"
-       d="m 115,307 h 88 v 16 h -88 z" />
-    <path
-       id="rect28"
-       style="fill:#ffffff"
-       d="m 0,307 h 78 v 16 H 0 Z" />
+     id="g614"
+     transform="translate(8,-2)">
     <path
        d="M 403,65 385,44"
        fill="none"
@@ -2913,7 +2847,8 @@
     </g>
   </g>
   <switch
-     id="switch622">
+     id="switch622"
+     transform="translate(8,-2)">
     <g
        requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
        id="g616" />
