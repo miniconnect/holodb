@@ -504,24 +504,56 @@ public class Company {
 ```
 
 
-## How does it work?
+## How does HoloDB work?
 
-HoloDB introduces the concept of *holographic databases*.
-A holographic database stores no real data and calculates field values and reverse indexes on-the-fly.
-Nonetheless, you as a user experience a consistent, searchable (and optionally writable) database.
-Such a database consumes little memory (even for large "data") and needs near-zero startup time.
-Additionally, by changing the root seed the entire dataset can be shuffled.
+HoloDB is a flexible virtual relational database engine written in Java.
 
-So, HoloDB provides an arbitrarily large relational database filled with constrained random data.
-Parameters and constraints can be specified in a configuration file.
-Initialization ("filling" with data) of the tables is a no-op.
-Query results are calculated on-the-fly.
-Value providers are encouraged to calculate any single field of a column
-practically in `O(1)`, but at most in `O(log(tableSize))` time.
+Like other relational database engines,
+HoloDB is a collection of tools built on top of a query engine
+layered over a structured data access API.
+But in the case of HoloDB, this API does not access a real pre-populated data storage,
+but dynamically computes data on-the-fly directly from your configuration.
+However, unlike simplistic SQL mocking techniques,
+multiple queries yield realistic, mutually consistent results, computed dynamically yet reproducibly.
 
-As initialization is a no-op, it's particularly suitable for demonstrations, testing
-and, in the case of a read-only database,
-flexible orchestration, replication like some static content.
+Typically, this computation is done on a column-by-column basis.
+The column then refers to an ordered, searchable base set of values.
+This is then distributed over the size of the table controlled by distribution
+and null-management strategies preserving order and searchability.
+Finally, a shuffling layer applies an invertible permutation,
+leveraging concepts borrowed from cryptography
+to efficiently distribute values without precomputing them.
+
+The base value set for a column is expected to be ordered and searchable.
+Such a value set can be as simple as a numerical range
+or as sophisticated as the huge space of strings matching to a complex regular expression.
+
+The simplest but yet efficient distribution strategy is linear interpolation.
+However a more fine-tuned distribution can be parameterized
+with value frequency and some level of pseudo-randomness.
+You can also explicitly configure the amount of null values mixed in.
+
+The shuffling layer ensures realistic randomness through a pair of functions:
+a permutation and its inverse.
+High-quality implementations are typically based on Feistel cipher
+and independently scalable hash functions.
+However, simpler and more performant implementations such as linear congruential methods often suffice.
+Exploring the trade-off between seemingly strong randomization and efficiency
+is one of the project's intriguing areas.
+
+Writable tables utilize a diff layer,
+transparently tracking inserts, updates, and deletions separate from the immutable virtual baseline.
+Concurrent modifications are managed by a lightweight transaction management layer,
+ideal for short-lived writable datasets.
+
+The on-the-fly computations rely heavily on arithmetic-centric operations
+rather than data storage and retrieval.
+For numeric efficiency, HoloDB introduces specialized types and algorithms, most of which can be used standalone too.
+For example, LargeInteger is an arbitrarily large numeric data type
+somewhat inspired by similar double-nature implementations
+such as SafeLong from the Spire library, BigInt from the Scala standard library, and others.
+Compared to these, LargeInteger is more efficient in case of
+frequent operations on smaller numbers.
 
 
 ## Changelog
