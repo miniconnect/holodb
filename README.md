@@ -524,6 +524,8 @@ Finally, a shuffling layer applies an invertible permutation,
 leveraging concepts borrowed from cryptography
 to efficiently distribute values without precomputing them.
 
+![Default method of providing column data](img/column-data-layers.svg)
+
 The base value set for a column is expected to be ordered and searchable.
 Such a value set can be as simple as a numerical range
 or as sophisticated as the huge space of strings matching to a complex regular expression.
