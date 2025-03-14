@@ -22,10 +22,6 @@ import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.minibase.engine.api.Engine;
 import hu.webarticum.minibase.engine.facade.FrameworkSession;
 import hu.webarticum.minibase.engine.facade.FrameworkSessionManager;
-import hu.webarticum.minibase.execution.QueryExecutor;
-import hu.webarticum.minibase.execution.impl.IntegratedQueryExecutor;
-import hu.webarticum.minibase.query.parser.AntlrSqlParser;
-import hu.webarticum.minibase.query.parser.SqlParser;
 import hu.webarticum.miniconnect.jdbc.MiniJdbcConnection;
 import hu.webarticum.miniconnect.jdbc.MiniJdbcDriver;
 import hu.webarticum.miniconnect.jdbc.provider.DatabaseProvider;
@@ -97,19 +93,14 @@ public class HoloEmbeddedDriver implements Driver {
         
         Map<String, String> properties = parseProperties(matcher.group(PROPERTIES_GROUPNAME));
 
-        SqlParser sqlParser = new AntlrSqlParser();
-        QueryExecutor queryExecutor = new IntegratedQueryExecutor();
-        DatabaseProvider databaseProvider = new BlanketDatabaseProvider();
         HoloConfig config = configLoader.load();
-        Engine engine = EngineBuilder.ofConfig(config)
-                .sqlParser(sqlParser)
-                .queryExecutor(queryExecutor)
-                .build();
+        Engine engine = EngineBuilder.ofConfig(config).build();
         FrameworkSessionManager sessionManager = new FrameworkSessionManager(engine);
         FrameworkSession session = sessionManager.openSession();
         if (properties.containsKey(SCHEMA_KEYNAME)) {
             session.engineSession().state().setCurrentSchema(properties.get(SCHEMA_KEYNAME));
         }
+        DatabaseProvider databaseProvider = new BlanketDatabaseProvider();
         return new MiniJdbcConnection(session, databaseProvider);
     }
     

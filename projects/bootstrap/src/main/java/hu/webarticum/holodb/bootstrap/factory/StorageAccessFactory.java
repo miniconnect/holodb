@@ -65,10 +65,15 @@ import hu.webarticum.minibase.storage.impl.simple.SimpleResourceManager;
 import hu.webarticum.minibase.storage.impl.simple.SimpleSchema;
 import hu.webarticum.minibase.storage.impl.simple.SimpleStorageAccess;
 import hu.webarticum.miniconnect.record.converter.Converter;
+import hu.webarticum.miniconnect.record.converter.DefaultConverter;
 
 // TODO: split to builder and sub-builders
 public class StorageAccessFactory {
 
+    public static StorageAccess createStorageAccess(HoloConfig config) {
+        return createStorageAccess(config, new DefaultConverter());
+    }
+    
     public static StorageAccess createStorageAccess(HoloConfig config, Converter converter) {
         SimpleStorageAccess storageAccess =  new SimpleStorageAccess();
         SimpleResourceManager<Schema> schemaManager = storageAccess.schemas();

@@ -1,7 +1,10 @@
 package hu.webarticum.holodb.bootstrap.factory;
 
+import java.util.function.Supplier;
+
 import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.minibase.engine.api.Engine;
+import hu.webarticum.minibase.engine.impl.DynamicStorageEngine;
 import hu.webarticum.minibase.engine.impl.SimpleEngine;
 import hu.webarticum.minibase.execution.QueryExecutor;
 import hu.webarticum.minibase.execution.impl.IntegratedQueryExecutor;
@@ -18,29 +21,40 @@ public class EngineBuilder {
     private final Converter converter;
     
     private final StorageAccess storageAccess;
+    
+    private final Supplier<StorageAccess> storageAccessSupplier;
 
     private SqlParser sqlParser = null;
     
     private QueryExecutor queryExecutor = null;
     
     
-    private EngineBuilder(HoloConfig config, Converter converter, StorageAccess storageAccess) {
+    private EngineBuilder(
+            HoloConfig config,
+            Converter converter,
+            StorageAccess storageAccess,
+            Supplier<StorageAccess> storageAccessSupplier) {
         this.config = config;
         this.converter = converter;
         this.storageAccess = storageAccess;
+        this.storageAccessSupplier = storageAccessSupplier;
     }
     
     
     public static EngineBuilder ofConfig(HoloConfig config) {
-        return new EngineBuilder(config, null, null);
+        return new EngineBuilder(config, null, null, null);
     }
 
     public static EngineBuilder ofConfig(HoloConfig config, Converter converter) {
-        return new EngineBuilder(config, converter, null);
+        return new EngineBuilder(config, converter, null, null);
     }
 
     public static EngineBuilder ofStorageAccess(StorageAccess storageAccess) {
-        return new EngineBuilder(null, null, storageAccess);
+        return new EngineBuilder(null, null, storageAccess, null);
+    }
+    
+    public static EngineBuilder ofStorageAccessSupplier(Supplier<StorageAccess> storageAccessSupplier) {
+        return new EngineBuilder(null, null, null, storageAccessSupplier);
     }
     
     
@@ -58,8 +72,12 @@ public class EngineBuilder {
     public Engine build() {
         SqlParser sqlParserToInject = sqlParser != null ? sqlParser : buildDefaultSqlParser();
         QueryExecutor queryExecutorToInject = queryExecutor != null ? queryExecutor : buildDefaultQueryExecutor();
-        StorageAccess storageAccessToInject = storageAccess != null ? storageAccess : buildStorageAccessFromConfig();
-        return new SimpleEngine(sqlParserToInject, queryExecutorToInject, storageAccessToInject);
+        if (storageAccessSupplier != null) {
+            return new DynamicStorageEngine(sqlParserToInject, queryExecutorToInject, storageAccessSupplier);
+        } else {
+            StorageAccess storageAccessToInject = storageAccess != null ? storageAccess : buildStorageAccessFromConfig();
+            return new SimpleEngine(sqlParserToInject, queryExecutorToInject, storageAccessToInject);
+        }
     }
 
     private SqlParser buildDefaultSqlParser() {
