@@ -1,5 +1,30 @@
 # Changelog
 
+## Version 0.6.0
+
+Released on *2025-03-15*
+
+### Added:
+
+- Added a new regex based value generator (`regex` subproject)
+- Added the `--watch` option for live reloading
+- Added `BitShufflePermutation` and `BitXorPermutation`
+- Added the separate `bootstrap` project
+- Added basic GraalVM support
+
+### Improved:
+
+- Improve logging
+- Improve performance of permutations and other computations
+- Changed `ValueExtractor` to be fully value agnostic
+
+## Development:
+
+- Upgrade to gradle 8
+- Improved the config JSON schema generator task
+- Extended and improved benchmarks
+
+
 ## Version 0.5.0
 
 Released on *2023-12-16*
