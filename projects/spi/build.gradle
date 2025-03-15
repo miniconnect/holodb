@@ -1,0 +1,10 @@
+plugins {
+    id 'java-library'
+}
+
+description "HoloDB service provider interfaces"
+
+dependencies {
+    api project(':core')
+    api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+}

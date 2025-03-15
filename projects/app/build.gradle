@@ -1,0 +1,126 @@
+plugins {
+    id 'java-library'
+    id 'application'
+    id 'com.google.cloud.tools.jib' version '3.3.1'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+description "HoloDB standalone app"
+
+ext.mainClass = 'hu.webarticum.holodb.app.launch.HolodbServerMain'
+
+sourceSets {
+    lab {
+        compileClasspath += sourceSets.main.runtimeClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+configurations {
+    labImplementation.extendsFrom implementation
+    labRuntimeOnly.extendsFrom runtimeOnly
+}
+
+dependencies {
+    implementation project(':bootstrap')
+    
+    implementation 'info.picocli:picocli:4.7.6'
+    implementation 'org.slf4j:slf4j-api:1.7.35'
+    implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.24.3'
+}
+
+application {
+    mainClass = project.ext.mainClass
+}
+
+jib {
+    to {
+        image = 'miniconnect/holodb'
+        tags = [version, 'latest']
+        auth {
+            username = findProperty('dockerHubUsername') ?: ''
+            password = findProperty('dockerHubPassword') ?: ''
+        }
+    }
+    container {
+        ports = ['3430']
+        args = ['/app/config.yaml']
+        mainClass = project.ext.mainClass
+    }
+}
+
+ext.graalDockerName = 'miniconnect/holodb-graal'
+ext.graalDockerPlatforms = [
+
+    // these are supported by the normal native-image-edition docker (while the musl version is not multi-platform):
+    'linux/amd64',
+    'linux/arm64',
+    
+    /*
+    'linux/arm64/v8',
+    'linux/arm/v7',
+    'linux/386',
+    'linux/ppc64le',
+    'linux/s390x',*/
+]
+
+task graalDockerBuild(type: Exec) {
+    dependsOn shadowJar
+    workingDir = projectDir
+    commandLine(
+        'docker', 'build',
+        '-t', "${graalDockerName}:latest",
+        '-f', 'Dockerfile.graal',
+        '.',
+    )
+}
+
+task graalDockerBuildMultiplatform(type: Exec) {
+    dependsOn shadowJar
+    workingDir = projectDir
+    commandLine(
+        'docker', 'buildx', 'build',
+        '--platform', graalDockerPlatforms.join(','),
+        '-t', "${graalDockerName}:latest",
+        '-f', 'Dockerfile.graal',
+        '.',
+    )
+}
+
+task graalDockerExtractBinaries {
+    doLast {
+        def versionStr = project.version ?: "SNAPSHOT"
+        def outputDir = file("${buildDir}/native-image/bin")
+        outputDir.mkdirs()
+        graalDockerPlatforms.each { platformName ->
+            def platformTag = platformName.replaceAll('/', '_')
+            def imageName = "${graalDockerName}:latest-${platformTag}"
+            def outputFileName = "holodb-${versionStr}-${platformTag}"
+            def outputPath = new File(outputDir, outputFileName).absolutePath
+            println "Extract native executable for platform '${platformName}' to ${outputPath}"
+            def containerIdOutput = new ByteArrayOutputStream()
+            exec {
+                commandLine(
+                    'docker', 'buildx', 'build',
+                    '--platform', platformName,
+                    '-t', "${graalDockerName}:latest-${platformTag}",
+                    '--load',
+                    '-f', 'Dockerfile.graal',
+                    '.',
+                )
+            }
+            exec {
+                commandLine 'docker', 'create', '--platform', platformName, imageName
+                standardOutput = containerIdOutput
+            }
+            def containerId = containerIdOutput.toString().trim()
+            if (containerId.isEmpty()) {
+                throw new GradleException("Failed to create container for platform: ${platformName}")
+            }
+            exec { commandLine 'docker', 'cp', "${containerId}:/app/app", outputPath }
+            exec { commandLine 'docker', 'rm', containerId }
+            exec { commandLine 'docker', 'image', 'rm', imageName }
+        }
+    }
+}

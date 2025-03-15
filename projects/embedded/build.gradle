@@ -1,0 +1,9 @@
+plugins {
+    id 'java-library'
+}
+
+description "HoloDB embedded functionality"
+
+dependencies {
+    implementation project(':bootstrap')
+}

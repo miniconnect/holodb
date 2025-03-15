@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+}
+
+description "MiniBase storage implementation"
+
+sourceSets {
+    lab {
+        compileClasspath += sourceSets.main.runtimeClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+configurations {
+    labImplementation.extendsFrom implementation
+    labRuntimeOnly.extendsFrom runtimeOnly
+}
+
+dependencies {
+    implementation project(':core')
+    implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+    implementation "hu.webarticum.minibase:engine:${miniBaseVersion}"
+}

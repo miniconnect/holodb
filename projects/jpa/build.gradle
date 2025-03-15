@@ -1,0 +1,29 @@
+plugins {
+    id 'java-library'
+}
+
+description "HoloDB JPA loader functionality"
+
+java {
+    registerFeature('malleableDependencies') {
+        usingSourceSet(sourceSets.main)
+    }
+}
+
+dependencies {
+    api project(':config')
+    api project(':jpa-annotations')
+    api project(':spi')
+    api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+    
+    implementation project(':bootstrap')
+    implementation "hu.webarticum.miniconnect.api:api:${miniConnectApiVersion}"
+    implementation "hu.webarticum.miniconnect:jdbc:${miniConnectVersion}"
+    implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
+    implementation "hu.webarticum.minibase:engine:${miniBaseVersion}"
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+    
+    malleableDependenciesImplementation 'javax.persistence:javax.persistence-api:2.2'
+    malleableDependenciesImplementation 'org.hibernate:hibernate-core:5.4.31.Final'
+}

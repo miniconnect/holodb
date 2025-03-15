@@ -1,0 +1,2945 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="501px"
+   height="351px"
+   viewBox="-0.5 -0.5 501 351"
+   id="svg624"
+   sodipodi:docname="column-data-layers.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <sodipodi:namedview
+     id="namedview626"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.8353491"
+     inkscape:cx="290.40796"
+     inkscape:cy="216.30762"
+     inkscape:window-width="1920"
+     inkscape:window-height="1135"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg624" />
+  <defs
+     id="defs2" />
+  <rect
+     style="fill:#ffffff;stroke-width:2"
+     id="rect657"
+     width="501.40158"
+     height="356.58713"
+     x="-1.3424007"
+     y="-1.7523569" />
+  <g
+     id="g614"
+     transform="translate(8,-2)">
+    <path
+       d="M 403,65 385,44"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 3"
+       pointer-events="stroke"
+       id="path30" />
+    <path
+       d="M 403,45 385,24"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 3"
+       pointer-events="stroke"
+       id="path32" />
+    <path
+       d="M 403,25 385,4"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 3"
+       pointer-events="stroke"
+       id="path34" />
+    <path
+       d="m 381,335 v 1 h 48 v -7.63"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="stroke"
+       id="path36" />
+    <path
+       d="m 429,323.12 3.5,7 -3.5,-1.75 -3.5,1.75 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path38" />
+    <path
+       d="m 303,327 v 9 h 46"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="stroke"
+       id="path40" />
+    <path
+       id="rect42"
+       style="fill:#bac8d3;stroke:#23445d"
+       d="m 267,85 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g48">
+      <switch
+         id="switch46">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 95px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: #666666; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 9px; font-family: Helvetica; color: rgb(102, 102, 102); line-height: 1.2; pointer-events: all; font-style: italic; white-space: normal; overflow-wrap: normal;">NULL</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="NULL"
+           id="text44"
+           style="font-style:italic;font-size:9px;font-family:Helvetica;text-anchor:middle;fill:#666666">
+          <path
+             d="m 287.707,91.439 h -0.801 l -1.143,5.382 -2.25,-5.382 h -0.936 L 281.182,98 h 0.801 l 1.134,-5.319 2.241,5.319 h 0.954 z"
+             id="path633" />
+          <path
+             d="m 293.35,91.439 -0.981,4.608 c -0.144,0.684 -0.603,1.161 -1.296,1.35 -0.198,0.054 -0.414,0.081 -0.648,0.081 -0.774,0 -1.296,-0.306 -1.422,-0.828 -0.018,-0.072 -0.027,-0.144 -0.027,-0.207 0,-0.126 0.018,-0.261 0.045,-0.396 l 0.981,-4.608 h -0.846 l -0.918,4.302 c -0.063,0.315 -0.126,0.72 -0.126,0.864 0,0.369 0.207,0.819 0.495,1.08 0.369,0.333 0.963,0.522 1.656,0.522 1.512,0 2.673,-0.846 2.952,-2.16 l 0.981,-4.608 z"
+             id="path635" />
+          <path
+             d="m 296.455,91.439 h -0.846 L 294.214,98 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path637" />
+          <path
+             d="m 301.459,91.439 h -0.846 L 299.218,98 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path639" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect50"
+       style="fill:#bac8d3;stroke:#23445d"
+       d="m 267,125 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g56">
+      <switch
+         id="switch54">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 135px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: #666666; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 9px; font-family: Helvetica; color: rgb(102, 102, 102); line-height: 1.2; pointer-events: all; font-style: italic; white-space: normal; overflow-wrap: normal;">NULL</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="NULL"
+           id="text52"
+           style="font-style:italic;font-size:9px;font-family:Helvetica;text-anchor:middle;fill:#666666">
+          <path
+             d="m 287.707,131.439 h -0.801 l -1.143,5.382 -2.25,-5.382 h -0.936 L 281.182,138 h 0.801 l 1.134,-5.319 2.241,5.319 h 0.954 z"
+             id="path643" />
+          <path
+             d="m 293.35,131.439 -0.981,4.608 c -0.144,0.684 -0.603,1.161 -1.296,1.35 -0.198,0.054 -0.414,0.081 -0.648,0.081 -0.774,0 -1.296,-0.306 -1.422,-0.828 -0.018,-0.072 -0.027,-0.144 -0.027,-0.207 0,-0.126 0.018,-0.261 0.045,-0.396 l 0.981,-4.608 h -0.846 l -0.918,4.302 c -0.063,0.315 -0.126,0.72 -0.126,0.864 0,0.369 0.207,0.819 0.495,1.08 0.369,0.333 0.963,0.522 1.656,0.522 1.512,0 2.673,-0.846 2.952,-2.16 l 0.981,-4.608 z"
+             id="path645" />
+          <path
+             d="m 296.455,131.439 h -0.846 L 294.214,138 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path647" />
+          <path
+             d="m 301.459,131.439 h -0.846 L 299.218,138 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path649" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect58"
+       style="fill:#bac8d3;stroke:#23445d"
+       d="m 267,205 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g64">
+      <switch
+         id="switch62">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 215px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: #666666; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 9px; font-family: Helvetica; color: rgb(102, 102, 102); line-height: 1.2; pointer-events: all; font-style: italic; white-space: normal; overflow-wrap: normal;">NULL</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="NULL"
+           id="text60"
+           style="font-style:italic;font-size:9px;font-family:Helvetica;text-anchor:middle;fill:#666666">
+          <path
+             d="m 287.707,211.439 h -0.801 l -1.143,5.382 -2.25,-5.382 h -0.936 L 281.182,218 h 0.801 l 1.134,-5.319 2.241,5.319 h 0.954 z"
+             id="path653" />
+          <path
+             d="m 293.35,211.439 -0.981,4.608 c -0.144,0.684 -0.603,1.161 -1.296,1.35 -0.198,0.054 -0.414,0.081 -0.648,0.081 -0.774,0 -1.296,-0.306 -1.422,-0.828 -0.018,-0.072 -0.027,-0.144 -0.027,-0.207 0,-0.126 0.018,-0.261 0.045,-0.396 l 0.981,-4.608 h -0.846 l -0.918,4.302 c -0.063,0.315 -0.126,0.72 -0.126,0.864 0,0.369 0.207,0.819 0.495,1.08 0.369,0.333 0.963,0.522 1.656,0.522 1.512,0 2.673,-0.846 2.952,-2.16 l 0.981,-4.608 z"
+             id="path655" />
+          <path
+             d="m 296.455,211.439 h -0.846 L 294.214,218 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path657" />
+          <path
+             d="m 301.459,211.439 h -0.846 L 299.218,218 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path659" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect66"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 13,285 h 50 v 20 H 13 Z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g72">
+      <switch
+         id="switch70">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 295px; margin-left: 14px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">A</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="A"
+           id="text68"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 39.686001,296.372 0.9,2.628 h 1.248 l -3.072,-8.748 h -1.44 l -3.12,8.748 h 1.188 l 0.924,-2.628 z m -0.312,-0.936 h -2.784 l 1.44,-3.984 z"
+             id="path663" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect74"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 13,265 h 50 v 20 H 13 Z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g80">
+      <switch
+         id="switch78">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 275px; margin-left: 14px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">B</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="B"
+           id="text76"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 34.946001,279 h 3.948 c 0.828,0 1.44,-0.228 1.908,-0.732 0.432,-0.456 0.672,-1.08 0.672,-1.764 0,-1.056 -0.48,-1.692 -1.596,-2.124 0.804,-0.372 1.212,-1.008 1.212,-1.908 0,-0.648 -0.24,-1.2 -0.696,-1.608 -0.468,-0.42 -1.056,-0.612 -1.896,-0.612 h -3.552 z m 1.116,-4.98 v -2.784 h 2.16 c 0.624,0 0.972,0.084 1.272,0.312 0.312,0.24 0.48,0.6 0.48,1.08 0,0.48 -0.168,0.84 -0.48,1.08 -0.3,0.228 -0.648,0.312 -1.272,0.312 z m 0,3.996 v -3.012 h 2.724 c 0.984,0 1.572,0.564 1.572,1.512 0,0.936 -0.588,1.5 -1.572,1.5 z"
+             id="path667" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect82"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 13,245 h 50 v 20 H 13 Z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g88">
+      <switch
+         id="switch86">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 255px; margin-left: 14px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">C</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="C"
+           id="text84"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 41.611999,252.964 c -0.348,-1.92 -1.452,-2.856 -3.372,-2.856 -1.176,0 -2.124,0.372 -2.772,1.092 -0.792,0.864 -1.224,2.112 -1.224,3.528 0,1.44 0.444,2.676 1.26,3.528 0.684,0.696 1.548,1.02 2.688,1.02 2.136,0 3.336,-1.152 3.6,-3.468 h -1.152 c -0.096,0.6 -0.216,1.008 -0.396,1.356 -0.36,0.72 -1.104,1.128 -2.04,1.128 -1.74,0 -2.844,-1.392 -2.844,-3.576 0,-2.244 1.044,-3.624 2.748,-3.624 0.708,0 1.368,0.204 1.728,0.552 0.324,0.3 0.504,0.66 0.636,1.32 z"
+             id="path671" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect90"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 13,225 h 50 v 20 H 13 Z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g96">
+      <switch
+         id="switch94">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 235px; margin-left: 14px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">D</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="D"
+           id="text92"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 34.735999,239 h 3.372 c 2.208,0 3.564,-1.656 3.564,-4.38 0,-2.712 -1.344,-4.368 -3.564,-4.368 h -3.372 z m 1.116,-0.984 v -6.78 h 2.064 c 1.728,0 2.64,1.164 2.64,3.396 0,2.22 -0.912,3.384 -2.64,3.384 z"
+             id="path675" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect98"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 13,205 h 50 v 20 H 13 Z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g104">
+      <switch
+         id="switch102">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 215px; margin-left: 14px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">E</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="E"
+           id="text100"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 36.194001,215.016 h 4.764 v -0.984 h -4.764 v -2.796 h 4.944 v -0.984 h -6.06 V 219 h 6.276 v -0.984 h -5.16 z"
+             id="path679" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect106"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 133,285 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g112">
+      <switch
+         id="switch110">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 295px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">A</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="A"
+           id="text108"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 159.686,296.372 0.9,2.628 h 1.248 l -3.072,-8.748 h -1.44 l -3.12,8.748 h 1.188 l 0.924,-2.628 z m -0.312,-0.936 h -2.784 l 1.44,-3.984 z"
+             id="path683" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect114"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 133,265 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g120">
+      <switch
+         id="switch118">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 275px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">A</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="A"
+           id="text116"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 159.686,276.372 0.9,2.628 h 1.248 l -3.072,-8.748 h -1.44 l -3.12,8.748 h 1.188 l 0.924,-2.628 z m -0.312,-0.936 h -2.784 l 1.44,-3.984 z"
+             id="path687" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect122"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 133,245 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g128">
+      <switch
+         id="switch126">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 255px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">B</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="B"
+           id="text124"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 154.946,259 h 3.948 c 0.828,0 1.44,-0.228 1.908,-0.732 0.432,-0.456 0.672,-1.08 0.672,-1.764 0,-1.056 -0.48,-1.692 -1.596,-2.124 0.804,-0.372 1.212,-1.008 1.212,-1.908 0,-0.648 -0.24,-1.2 -0.696,-1.608 -0.468,-0.42 -1.056,-0.612 -1.896,-0.612 h -3.552 z m 1.116,-4.98 v -2.784 h 2.16 c 0.624,0 0.972,0.084 1.272,0.312 0.312,0.24 0.48,0.6 0.48,1.08 0,0.48 -0.168,0.84 -0.48,1.08 -0.3,0.228 -0.648,0.312 -1.272,0.312 z m 0,3.996 v -3.012 h 2.724 c 0.984,0 1.572,0.564 1.572,1.512 0,0.936 -0.588,1.5 -1.572,1.5 z"
+             id="path691" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect130"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 133,225 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g136">
+      <switch
+         id="switch134">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 235px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">B</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="B"
+           id="text132"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 154.946,239 h 3.948 c 0.828,0 1.44,-0.228 1.908,-0.732 0.432,-0.456 0.672,-1.08 0.672,-1.764 0,-1.056 -0.48,-1.692 -1.596,-2.124 0.804,-0.372 1.212,-1.008 1.212,-1.908 0,-0.648 -0.24,-1.2 -0.696,-1.608 -0.468,-0.42 -1.056,-0.612 -1.896,-0.612 h -3.552 z m 1.116,-4.98 v -2.784 h 2.16 c 0.624,0 0.972,0.084 1.272,0.312 0.312,0.24 0.48,0.6 0.48,1.08 0,0.48 -0.168,0.84 -0.48,1.08 -0.3,0.228 -0.648,0.312 -1.272,0.312 z m 0,3.996 v -3.012 h 2.724 c 0.984,0 1.572,0.564 1.572,1.512 0,0.936 -0.588,1.5 -1.572,1.5 z"
+             id="path695" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect138"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 133,205 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g144">
+      <switch
+         id="switch142">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 215px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">C</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="C"
+           id="text140"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 161.612,212.964 c -0.348,-1.92 -1.452,-2.856 -3.372,-2.856 -1.176,0 -2.124,0.372 -2.772,1.092 -0.792,0.864 -1.224,2.112 -1.224,3.528 0,1.44 0.444,2.676 1.26,3.528 0.684,0.696 1.548,1.02 2.688,1.02 2.136,0 3.336,-1.152 3.6,-3.468 h -1.152 c -0.096,0.6 -0.216,1.008 -0.396,1.356 -0.36,0.72 -1.104,1.128 -2.04,1.128 -1.74,0 -2.844,-1.392 -2.844,-3.576 0,-2.244 1.044,-3.624 2.748,-3.624 0.708,0 1.368,0.204 1.728,0.552 0.324,0.3 0.504,0.66 0.636,1.32 z"
+             id="path699" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect146"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 133,185 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g152">
+      <switch
+         id="switch150">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 195px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">C</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="C"
+           id="text148"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 161.612,192.964 c -0.348,-1.92 -1.452,-2.856 -3.372,-2.856 -1.176,0 -2.124,0.372 -2.772,1.092 -0.792,0.864 -1.224,2.112 -1.224,3.528 0,1.44 0.444,2.676 1.26,3.528 0.684,0.696 1.548,1.02 2.688,1.02 2.136,0 3.336,-1.152 3.6,-3.468 h -1.152 c -0.096,0.6 -0.216,1.008 -0.396,1.356 -0.36,0.72 -1.104,1.128 -2.04,1.128 -1.74,0 -2.844,-1.392 -2.844,-3.576 0,-2.244 1.044,-3.624 2.748,-3.624 0.708,0 1.368,0.204 1.728,0.552 0.324,0.3 0.504,0.66 0.636,1.32 z"
+             id="path703" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect154"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 133,165 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g160">
+      <switch
+         id="switch158">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 175px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">C</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="C"
+           id="text156"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 161.612,172.964 c -0.348,-1.92 -1.452,-2.856 -3.372,-2.856 -1.176,0 -2.124,0.372 -2.772,1.092 -0.792,0.864 -1.224,2.112 -1.224,3.528 0,1.44 0.444,2.676 1.26,3.528 0.684,0.696 1.548,1.02 2.688,1.02 2.136,0 3.336,-1.152 3.6,-3.468 h -1.152 c -0.096,0.6 -0.216,1.008 -0.396,1.356 -0.36,0.72 -1.104,1.128 -2.04,1.128 -1.74,0 -2.844,-1.392 -2.844,-3.576 0,-2.244 1.044,-3.624 2.748,-3.624 0.708,0 1.368,0.204 1.728,0.552 0.324,0.3 0.504,0.66 0.636,1.32 z"
+             id="path707" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect162"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 133,145 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g168">
+      <switch
+         id="switch166">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 155px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">D</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="D"
+           id="text164"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 154.736,159 h 3.372 c 2.208,0 3.564,-1.656 3.564,-4.38 0,-2.712 -1.344,-4.368 -3.564,-4.368 h -3.372 z m 1.116,-0.984 v -6.78 h 2.064 c 1.728,0 2.64,1.164 2.64,3.396 0,2.22 -0.912,3.384 -2.64,3.384 z"
+             id="path711" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect170"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 133,125 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g176">
+      <switch
+         id="switch174">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 135px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">F</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="F"
+           id="text172"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 156.53,135.016 h 4.176 v -0.984 h -4.176 v -2.796 h 4.752 v -0.984 h -5.868 V 139 h 1.116 z"
+             id="path715" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect178"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 133,105 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g184">
+      <switch
+         id="switch182">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 115px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">F</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="F"
+           id="text180"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 156.53,115.016 h 4.176 v -0.984 h -4.176 v -2.796 h 4.752 v -0.984 h -5.868 V 119 h 1.116 z"
+             id="path719" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect186"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 133,85 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g192">
+      <switch
+         id="switch190">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 95px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">G</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="G"
+           id="text188"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 161.84,94.38 h -3.648 v 0.984 h 2.664 v 0.24 c 0,1.56 -1.152,2.688 -2.748,2.688 -0.888,0 -1.692,-0.324 -2.208,-0.888 -0.576,-0.624 -0.924,-1.668 -0.924,-2.748 0,-2.148 1.224,-3.564 3.072,-3.564 1.332,0 2.292,0.684 2.532,1.812 h 1.14 c -0.312,-1.776 -1.656,-2.796 -3.66,-2.796 -1.068,0 -1.932,0.276 -2.616,0.84 -1.02,0.84 -1.584,2.196 -1.584,3.768 0,2.688 1.644,4.56 4.008,4.56 1.188,0 2.124,-0.444 2.988,-1.392 l 0.276,1.164 h 0.708 z"
+             id="path723" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect194"
+       style="fill:#bac8d3;stroke:#23445d"
+       d="m 133,65 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g200">
+      <switch
+         id="switch198">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 75px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: #666666; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 9px; font-family: Helvetica; color: rgb(102, 102, 102); line-height: 1.2; pointer-events: all; font-style: italic; white-space: normal; overflow-wrap: normal;">NULL</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="NULL"
+           id="text196"
+           style="font-style:italic;font-size:9px;font-family:Helvetica;text-anchor:middle;fill:#666666">
+          <path
+             d="m 153.707,71.439 h -0.801 l -1.143,5.382 -2.25,-5.382 h -0.936 L 147.182,78 h 0.801 l 1.134,-5.319 2.241,5.319 h 0.954 z"
+             id="path727" />
+          <path
+             d="m 159.35,71.439 -0.981,4.608 c -0.144,0.684 -0.603,1.161 -1.296,1.35 -0.198,0.054 -0.414,0.081 -0.648,0.081 -0.774,0 -1.296,-0.306 -1.422,-0.828 -0.018,-0.072 -0.027,-0.144 -0.027,-0.207 0,-0.126 0.018,-0.261 0.045,-0.396 l 0.981,-4.608 h -0.846 l -0.918,4.302 c -0.063,0.315 -0.126,0.72 -0.126,0.864 0,0.369 0.207,0.819 0.495,1.08 0.369,0.333 0.963,0.522 1.656,0.522 1.512,0 2.673,-0.846 2.952,-2.16 l 0.981,-4.608 z"
+             id="path729" />
+          <path
+             d="m 162.455,71.439 h -0.846 L 160.214,78 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path731" />
+          <path
+             d="m 167.459,71.439 h -0.846 L 165.218,78 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path733" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect202"
+       style="fill:#bac8d3;stroke:#23445d"
+       d="m 133,45 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g208">
+      <switch
+         id="switch206">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 55px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: #666666; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 9px; font-family: Helvetica; color: rgb(102, 102, 102); line-height: 1.2; pointer-events: all; font-style: italic; white-space: normal; overflow-wrap: normal;">NULL</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="NULL"
+           id="text204"
+           style="font-style:italic;font-size:9px;font-family:Helvetica;text-anchor:middle;fill:#666666">
+          <path
+             d="m 153.707,51.439 h -0.801 l -1.143,5.382 -2.25,-5.382 h -0.936 L 147.182,58 h 0.801 l 1.134,-5.319 2.241,5.319 h 0.954 z"
+             id="path737" />
+          <path
+             d="m 159.35,51.439 -0.981,4.608 c -0.144,0.684 -0.603,1.161 -1.296,1.35 -0.198,0.054 -0.414,0.081 -0.648,0.081 -0.774,0 -1.296,-0.306 -1.422,-0.828 -0.018,-0.072 -0.027,-0.144 -0.027,-0.207 0,-0.126 0.018,-0.261 0.045,-0.396 l 0.981,-4.608 h -0.846 l -0.918,4.302 c -0.063,0.315 -0.126,0.72 -0.126,0.864 0,0.369 0.207,0.819 0.495,1.08 0.369,0.333 0.963,0.522 1.656,0.522 1.512,0 2.673,-0.846 2.952,-2.16 l 0.981,-4.608 z"
+             id="path739" />
+          <path
+             d="m 162.455,51.439 h -0.846 L 160.214,58 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path741" />
+          <path
+             d="m 167.459,51.439 h -0.846 L 165.218,58 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path743" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect210"
+       style="fill:#bac8d3;stroke:#23445d"
+       d="m 133,25 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g216">
+      <switch
+         id="switch214">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 35px; margin-left: 134px;">
+            <xhtml:div
+               data-drawio-colors="color: #666666; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 9px; font-family: Helvetica; color: rgb(102, 102, 102); line-height: 1.2; pointer-events: all; font-style: italic; white-space: normal; overflow-wrap: normal;">NULL</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="NULL"
+           id="text212"
+           style="font-style:italic;font-size:9px;font-family:Helvetica;text-anchor:middle;fill:#666666">
+          <path
+             d="m 153.707,31.439 h -0.801 l -1.143,5.382 -2.25,-5.382 h -0.936 L 147.182,38 h 0.801 l 1.134,-5.319 2.241,5.319 h 0.954 z"
+             id="path747" />
+          <path
+             d="m 159.35,31.439 -0.981,4.608 c -0.144,0.684 -0.603,1.161 -1.296,1.35 -0.198,0.054 -0.414,0.081 -0.648,0.081 -0.774,0 -1.296,-0.306 -1.422,-0.828 -0.018,-0.072 -0.027,-0.144 -0.027,-0.207 0,-0.126 0.018,-0.261 0.045,-0.396 l 0.981,-4.608 h -0.846 l -0.918,4.302 c -0.063,0.315 -0.126,0.72 -0.126,0.864 0,0.369 0.207,0.819 0.495,1.08 0.369,0.333 0.963,0.522 1.656,0.522 1.512,0 2.673,-0.846 2.952,-2.16 l 0.981,-4.608 z"
+             id="path749" />
+          <path
+             d="m 162.455,31.439 h -0.846 L 160.214,38 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path751" />
+          <path
+             d="m 167.459,31.439 h -0.846 L 165.218,38 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path753" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect218"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 13,185 h 50 v 20 H 13 Z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g224">
+      <switch
+         id="switch222">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 195px; margin-left: 14px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">F</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="F"
+           id="text220"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 36.53,195.016 h 4.176 v -0.984 H 36.53 v -2.796 h 4.752 v -0.984 H 35.414 V 199 h 1.116 z"
+             id="path757" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect226"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 13,165 h 50 v 20 H 13 Z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g232">
+      <switch
+         id="switch230">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 175px; margin-left: 14px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">G</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="G"
+           id="text228"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 41.840001,174.38 h -3.648 v 0.984 h 2.664 v 0.24 c 0,1.56 -1.152,2.688 -2.748,2.688 -0.888,0 -1.692,-0.324 -2.208,-0.888 -0.576,-0.624 -0.924,-1.668 -0.924,-2.748 0,-2.148 1.224,-3.564 3.072,-3.564 1.332,0 2.292,0.684 2.532,1.812 h 1.14 c -0.312,-1.776 -1.656,-2.796 -3.66,-2.796 -1.068,0 -1.932,0.276 -2.616,0.84 -1.02,0.84 -1.584,2.196 -1.584,3.768 0,2.688 1.644,4.56 4.008,4.56 1.188,0 2.124,-0.444 2.988,-1.392 l 0.276,1.164 h 0.708 z"
+             id="path761" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect234"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 267,145 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g240">
+      <switch
+         id="switch238">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 155px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">A</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="A"
+           id="text236"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 293.686,156.372 0.9,2.628 h 1.248 l -3.072,-8.748 h -1.44 l -3.12,8.748 h 1.188 l 0.924,-2.628 z m -0.312,-0.936 h -2.784 l 1.44,-3.984 z"
+             id="path765" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect242"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 267,245 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g248">
+      <switch
+         id="switch246">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 255px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">A</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="A"
+           id="text244"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 293.686,256.372 0.9,2.628 h 1.248 l -3.072,-8.748 h -1.44 l -3.12,8.748 h 1.188 l 0.924,-2.628 z m -0.312,-0.936 h -2.784 l 1.44,-3.984 z"
+             id="path769" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect250"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 267,265 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g256">
+      <switch
+         id="switch254">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 275px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">B</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="B"
+           id="text252"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 288.946,279 h 3.948 c 0.828,0 1.44,-0.228 1.908,-0.732 0.432,-0.456 0.672,-1.08 0.672,-1.764 0,-1.056 -0.48,-1.692 -1.596,-2.124 0.804,-0.372 1.212,-1.008 1.212,-1.908 0,-0.648 -0.24,-1.2 -0.696,-1.608 -0.468,-0.42 -1.056,-0.612 -1.896,-0.612 h -3.552 z m 1.116,-4.98 v -2.784 h 2.16 c 0.624,0 0.972,0.084 1.272,0.312 0.312,0.24 0.48,0.6 0.48,1.08 0,0.48 -0.168,0.84 -0.48,1.08 -0.3,0.228 -0.648,0.312 -1.272,0.312 z m 0,3.996 v -3.012 h 2.724 c 0.984,0 1.572,0.564 1.572,1.512 0,0.936 -0.588,1.5 -1.572,1.5 z"
+             id="path773" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect258"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 267,225 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g264">
+      <switch
+         id="switch262">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 235px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">B</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="B"
+           id="text260"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 288.946,239 h 3.948 c 0.828,0 1.44,-0.228 1.908,-0.732 0.432,-0.456 0.672,-1.08 0.672,-1.764 0,-1.056 -0.48,-1.692 -1.596,-2.124 0.804,-0.372 1.212,-1.008 1.212,-1.908 0,-0.648 -0.24,-1.2 -0.696,-1.608 -0.468,-0.42 -1.056,-0.612 -1.896,-0.612 h -3.552 z m 1.116,-4.98 v -2.784 h 2.16 c 0.624,0 0.972,0.084 1.272,0.312 0.312,0.24 0.48,0.6 0.48,1.08 0,0.48 -0.168,0.84 -0.48,1.08 -0.3,0.228 -0.648,0.312 -1.272,0.312 z m 0,3.996 v -3.012 h 2.724 c 0.984,0 1.572,0.564 1.572,1.512 0,0.936 -0.588,1.5 -1.572,1.5 z"
+             id="path777" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect266"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 267,285 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g272">
+      <switch
+         id="switch270">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 295px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">C</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="C"
+           id="text268"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 295.612,292.964 c -0.348,-1.92 -1.452,-2.856 -3.372,-2.856 -1.176,0 -2.124,0.372 -2.772,1.092 -0.792,0.864 -1.224,2.112 -1.224,3.528 0,1.44 0.444,2.676 1.26,3.528 0.684,0.696 1.548,1.02 2.688,1.02 2.136,0 3.336,-1.152 3.6,-3.468 h -1.152 c -0.096,0.6 -0.216,1.008 -0.396,1.356 -0.36,0.72 -1.104,1.128 -2.04,1.128 -1.74,0 -2.844,-1.392 -2.844,-3.576 0,-2.244 1.044,-3.624 2.748,-3.624 0.708,0 1.368,0.204 1.728,0.552 0.324,0.3 0.504,0.66 0.636,1.32 z"
+             id="path781" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect274"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 267,185 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g280">
+      <switch
+         id="switch278">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 195px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">C</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="C"
+           id="text276"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 295.612,192.964 c -0.348,-1.92 -1.452,-2.856 -3.372,-2.856 -1.176,0 -2.124,0.372 -2.772,1.092 -0.792,0.864 -1.224,2.112 -1.224,3.528 0,1.44 0.444,2.676 1.26,3.528 0.684,0.696 1.548,1.02 2.688,1.02 2.136,0 3.336,-1.152 3.6,-3.468 h -1.152 c -0.096,0.6 -0.216,1.008 -0.396,1.356 -0.36,0.72 -1.104,1.128 -2.04,1.128 -1.74,0 -2.844,-1.392 -2.844,-3.576 0,-2.244 1.044,-3.624 2.748,-3.624 0.708,0 1.368,0.204 1.728,0.552 0.324,0.3 0.504,0.66 0.636,1.32 z"
+             id="path785" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect282"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 267,105 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g288">
+      <switch
+         id="switch286">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 115px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">C</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="C"
+           id="text284"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 295.612,112.964 c -0.348,-1.92 -1.452,-2.856 -3.372,-2.856 -1.176,0 -2.124,0.372 -2.772,1.092 -0.792,0.864 -1.224,2.112 -1.224,3.528 0,1.44 0.444,2.676 1.26,3.528 0.684,0.696 1.548,1.02 2.688,1.02 2.136,0 3.336,-1.152 3.6,-3.468 h -1.152 c -0.096,0.6 -0.216,1.008 -0.396,1.356 -0.36,0.72 -1.104,1.128 -2.04,1.128 -1.74,0 -2.844,-1.392 -2.844,-3.576 0,-2.244 1.044,-3.624 2.748,-3.624 0.708,0 1.368,0.204 1.728,0.552 0.324,0.3 0.504,0.66 0.636,1.32 z"
+             id="path789" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect290"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 267,65 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g296">
+      <switch
+         id="switch294">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 75px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">D</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="D"
+           id="text292"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 288.736,79 h 3.372 c 2.208,0 3.564,-1.656 3.564,-4.38 0,-2.712 -1.344,-4.368 -3.564,-4.368 h -3.372 z m 1.116,-0.984 v -6.78 h 2.064 c 1.728,0 2.64,1.164 2.64,3.396 0,2.22 -0.912,3.384 -2.64,3.384 z"
+             id="path793" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect298"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 267,45 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g304">
+      <switch
+         id="switch302">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 55px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">F</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="F"
+           id="text300"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 290.53,55.016 h 4.176 v -0.984 h -4.176 v -2.796 h 4.752 v -0.984 h -5.868 V 59 h 1.116 z"
+             id="path797" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect306"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 267,165 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g312">
+      <switch
+         id="switch310">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 175px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">F</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="F"
+           id="text308"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 290.53,175.016 h 4.176 v -0.984 h -4.176 v -2.796 h 4.752 v -0.984 h -5.868 V 179 h 1.116 z"
+             id="path801" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect314"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 267,25 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g320">
+      <switch
+         id="switch318">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 35px; margin-left: 268px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">G</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="G"
+           id="text316"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 295.84,34.38 h -3.648 v 0.984 h 2.664 v 0.24 c 0,1.56 -1.152,2.688 -2.748,2.688 -0.888,0 -1.692,-0.324 -2.208,-0.888 -0.576,-0.624 -0.924,-1.668 -0.924,-2.748 0,-2.148 1.224,-3.564 3.072,-3.564 1.332,0 2.292,0.684 2.532,1.812 h 1.14 c -0.312,-1.776 -1.656,-2.796 -3.66,-2.796 -1.068,0 -1.932,0.276 -2.616,0.84 -1.02,0.84 -1.584,2.196 -1.584,3.768 0,2.688 1.644,4.56 4.008,4.56 1.188,0 2.124,-0.444 2.988,-1.392 l 0.276,1.164 h 0.708 z"
+             id="path805" />
+        </g>
+      </switch>
+    </g>
+    <path
+       d="m 120,336 h 23 v -7.63"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="stroke"
+       id="path322" />
+    <path
+       d="m 143,323.12 3.5,7 -3.5,-1.75 -3.5,1.75 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path324" />
+    <path
+       d="m 63,305 h 70"
+       fill="none"
+       stroke="#000000"
+       stroke-width="0.5"
+       stroke-miterlimit="10"
+       stroke-dasharray="1.5, 1.5"
+       pointer-events="stroke"
+       id="path326" />
+    <path
+       d="m 63,285 70,-20"
+       fill="none"
+       stroke="#000000"
+       stroke-width="0.5"
+       stroke-miterlimit="10"
+       stroke-dasharray="1.5, 1.5"
+       pointer-events="stroke"
+       id="path328" />
+    <path
+       d="m 63,265 70,-40"
+       fill="none"
+       stroke="#000000"
+       stroke-width="0.5"
+       stroke-miterlimit="10"
+       stroke-dasharray="1.5, 1.5"
+       pointer-events="stroke"
+       id="path330" />
+    <path
+       d="m 63,245 70,-80"
+       fill="none"
+       stroke="#000000"
+       stroke-width="0.5"
+       stroke-miterlimit="10"
+       stroke-dasharray="1.5, 1.5"
+       pointer-events="stroke"
+       id="path332" />
+    <path
+       d="m 63,225 70,-80"
+       fill="none"
+       stroke="#000000"
+       stroke-width="0.5"
+       stroke-miterlimit="10"
+       stroke-dasharray="1.5, 1.5"
+       pointer-events="stroke"
+       id="path334" />
+    <path
+       d="m 63,205 70,-60"
+       fill="none"
+       stroke="#000000"
+       stroke-width="0.5"
+       stroke-miterlimit="10"
+       stroke-dasharray="1.5, 1.5"
+       pointer-events="stroke"
+       id="path336" />
+    <path
+       d="m 63,185 70,-80"
+       fill="none"
+       stroke="#000000"
+       stroke-width="0.5"
+       stroke-miterlimit="10"
+       stroke-dasharray="1.5, 1.5"
+       pointer-events="stroke"
+       id="path338" />
+    <path
+       d="M 63,165 133,85"
+       fill="none"
+       stroke="#000000"
+       stroke-width="0.5"
+       stroke-miterlimit="10"
+       stroke-dasharray="1.5, 1.5"
+       pointer-events="stroke"
+       id="path340" />
+    <path
+       d="M 183,295 264.5,159.17"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path342" />
+    <path
+       d="m 266.42,155.96 -1.14,5.14 -0.78,-1.93 -2.08,0.22 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path344" />
+    <path
+       d="m 183,275 79.26,-18.87"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path346" />
+    <path
+       d="m 265.91,255.26 -4.48,2.78 0.83,-1.91 -1.6,-1.33 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path348" />
+    <path
+       d="m 183,255 79.26,18.87"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path350" />
+    <path
+       d="m 265.91,274.74 -5.25,0.46 1.6,-1.33 -0.83,-1.91 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path352" />
+    <path
+       d="m 183,235 h 79.13"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path354" />
+    <path
+       d="m 265.88,235 -5,1.67 1.25,-1.67 -1.25,-1.67 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path356" />
+    <path
+       d="m 183,215 80.47,76.64"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path358" />
+    <path
+       d="m 266.19,294.23 -4.77,-2.24 2.05,-0.35 0.25,-2.07 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path360" />
+    <path
+       d="m 183,195 h 79.13"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path362" />
+    <path
+       d="m 265.88,195 -5,1.67 1.25,-1.67 -1.25,-1.67 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path364" />
+    <path
+       d="m 183,175 80.04,-57.17"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path366" />
+    <path
+       d="m 266.09,115.65 -3.1,4.26 0.05,-2.08 -1.99,-0.63 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path368" />
+    <path
+       d="M 183,155 263.47,78.36"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path370" />
+    <path
+       d="m 266.19,75.77 -2.47,4.66 -0.25,-2.07 -2.05,-0.35 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path372" />
+    <path
+       d="M 183,135 263.47,58.36"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path374" />
+    <path
+       d="m 266.19,55.77 -2.47,4.66 -0.25,-2.07 -2.05,-0.35 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path376" />
+    <path
+       d="m 183,115 80.04,57.17"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path378" />
+    <path
+       d="m 266.09,174.35 -5.04,-1.55 1.99,-0.63 -0.05,-2.08 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path380" />
+    <path
+       d="M 183,95 263.04,37.83"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path382" />
+    <path
+       d="m 266.09,35.65 -3.1,4.26 0.05,-2.08 -1.99,-0.63 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path384" />
+    <path
+       d="m 183,75 81.5,135.83"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path386" />
+    <path
+       d="m 266.42,214.04 -4,-3.43 2.08,0.22 0.78,-1.93 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path388" />
+    <path
+       d="m 183,55 80.47,76.64"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path390" />
+    <path
+       d="m 266.19,134.23 -4.77,-2.24 2.05,-0.35 0.25,-2.07 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path392" />
+    <path
+       d="m 183,35 80.04,57.17"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       stroke-dasharray="1, 1"
+       pointer-events="stroke"
+       id="path394" />
+    <path
+       d="m 266.09,94.35 -5.04,-1.55 1.99,-0.63 -0.05,-2.08 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path396" />
+    <path
+       id="rect398"
+       style="fill:none"
+       d="m 1,299 h 75 v 30 H 1 Z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g404">
+      <switch
+         id="switch402">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 73px; height: 1px; padding-top: 314px; margin-left: 2px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 10px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Base value set</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="Base value set"
+           id="text400"
+           style="font-size:10px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 7.1250143,317 h 3.2899997 c 0.69,0 1.2,-0.19 1.59,-0.61 0.36,-0.38 0.56,-0.9 0.56,-1.47 0,-0.88 -0.4,-1.41 -1.33,-1.77 0.67,-0.31 1.01,-0.84 1.01,-1.59 0,-0.54 -0.2,-1 -0.58,-1.34 -0.39,-0.35 -0.88,-0.51 -1.58,-0.51 H 7.1250143 Z m 0.93,-4.15 v -2.32 h 1.8 c 0.5199997,0 0.8099997,0.07 1.0599997,0.26 0.26,0.2 0.4,0.5 0.4,0.9 0,0.4 -0.14,0.7 -0.4,0.9 -0.25,0.19 -0.54,0.26 -1.0599997,0.26 z m 0,3.33 v -2.51 h 2.2699997 c 0.82,0 1.31,0.47 1.31,1.26 0,0.78 -0.49,1.25 -1.31,1.25 z"
+             id="path809" />
+          <path
+             d="m 18.355013,316.51 c -0.09,0.02 -0.13,0.02 -0.18,0.02 -0.29,0 -0.45,-0.15 -0.45,-0.41 v -3.08 c 0,-0.93 -0.68,-1.43 -1.97,-1.43 -0.77,0 -1.38,0.22 -1.74,0.61 -0.24,0.27 -0.34,0.57 -0.36,1.09 h 0.84 c 0.07,-0.64 0.45,-0.93 1.23,-0.93 0.76,0 1.17,0.28 1.17,0.78 v 0.22 c -0.01,0.36 -0.19,0.49 -0.87,0.58 -1.18,0.15 -1.36,0.19 -1.68,0.32 -0.61,0.26 -0.92,0.72 -0.92,1.4 0,0.95 0.66,1.55 1.72,1.55 0.66,0 1.19,-0.23 1.78,-0.77 0.06,0.54 0.32,0.77 0.86,0.77 0.18,0 0.29,-0.02 0.57,-0.09 z m -1.46,-1.16 c 0,0.28 -0.08,0.45 -0.33,0.68 -0.34,0.31 -0.75,0.47 -1.24,0.47 -0.65,0 -1.03,-0.31 -1.03,-0.84 0,-0.55 0.36,-0.83 1.26,-0.96 0.89,-0.12 1.06,-0.16 1.34,-0.29 z"
+             id="path811" />
+          <path
+             d="m 22.94501,313.22 c -0.01,-1.03 -0.69,-1.61 -1.9,-1.61 -1.22,0 -2.01,0.63 -2.01,1.6 0,0.82 0.42,1.21 1.66,1.51 l 0.78,0.19 c 0.58,0.14 0.81,0.35 0.81,0.72 0,0.5 -0.49,0.83 -1.22,0.83 -0.45,0 -0.83,-0.13 -1.04,-0.35 -0.13,-0.15 -0.19,-0.3 -0.24,-0.67 h -0.88 c 0.04,1.21 0.72,1.79 2.09,1.79 1.32,0 2.16,-0.65 2.16,-1.66 0,-0.78 -0.44,-1.21 -1.48,-1.46 l -0.8,-0.19 c -0.68,-0.16 -0.97,-0.38 -0.97,-0.75 0,-0.49 0.43,-0.79 1.11,-0.79 0.67,0 1.03,0.29 1.05,0.84 z"
+             id="path813" />
+          <path
+             d="m 28.69501,314.66 c 0,-0.8 -0.06,-1.28 -0.21,-1.67 -0.34,-0.86 -1.14,-1.38 -2.12,-1.38 -1.46,0 -2.4,1.11 -2.4,2.84 0,1.73 0.9,2.78 2.38,2.78 1.2,0 2.03,-0.68 2.24,-1.82 h -0.84 c -0.23,0.69 -0.7,1.05 -1.37,1.05 -0.53,0 -0.98,-0.24 -1.26,-0.68 -0.2,-0.3 -0.27,-0.6 -0.28,-1.12 z m -3.84,-0.68 c 0.07,-0.97 0.66,-1.6 1.5,-1.6 0.85,0 1.44,0.66 1.44,1.6 z"
+             id="path815" />
+          <path
+             d="m 34.755006,317 2.01,-5.24 h -0.94 l -1.48,4.25 -1.4,-4.25 h -0.94 l 1.84,5.24 z"
+             id="path817" />
+          <path
+             d="m 42.085004,316.51 c -0.09,0.02 -0.13,0.02 -0.18,0.02 -0.29,0 -0.45,-0.15 -0.45,-0.41 v -3.08 c 0,-0.93 -0.68,-1.43 -1.97,-1.43 -0.77,0 -1.38,0.22 -1.74,0.61 -0.24,0.27 -0.34,0.57 -0.36,1.09 h 0.84 c 0.07,-0.64 0.45,-0.93 1.23,-0.93 0.76,0 1.17,0.28 1.17,0.78 v 0.22 c -0.01,0.36 -0.19,0.49 -0.87,0.58 -1.18,0.15 -1.36,0.19 -1.68,0.32 -0.61,0.26 -0.92,0.72 -0.92,1.4 0,0.95 0.66,1.55 1.72,1.55 0.66,0 1.19,-0.23 1.78,-0.77 0.06,0.54 0.32,0.77 0.86,0.77 0.18,0 0.29,-0.02 0.57,-0.09 z m -1.46,-1.16 c 0,0.28 -0.08,0.45 -0.33,0.68 -0.34,0.31 -0.75,0.47 -1.24,0.47 -0.65,0 -1.03,-0.31 -1.03,-0.84 0,-0.55 0.36,-0.83 1.26,-0.96 0.89,-0.12 1.06,-0.16 1.34,-0.29 z"
+             id="path819" />
+          <path
+             d="m 43.815002,309.71 h -0.84 V 317 h 0.84 z"
+             id="path821" />
+          <path
+             d="m 49.335003,317 v -5.24 h -0.83 v 2.97 c 0,1.07 -0.56,1.77 -1.43,1.77 -0.66,0 -1.08,-0.4 -1.08,-1.03 v -3.71 h -0.83 v 4.04 c 0,0.87 0.65,1.43 1.67,1.43 0.77,0 1.26,-0.27 1.75,-0.96 V 317 Z"
+             id="path823" />
+          <path
+             d="m 55.205001,314.66 c 0,-0.8 -0.06,-1.28 -0.21,-1.67 -0.34,-0.86 -1.14,-1.38 -2.12,-1.38 -1.46,0 -2.4,1.11 -2.4,2.84 0,1.73 0.9,2.78 2.38,2.78 1.2,0 2.03,-0.68 2.24,-1.82 h -0.84 c -0.23,0.69 -0.7,1.05 -1.37,1.05 -0.53,0 -0.98,-0.24 -1.26,-0.68 -0.2,-0.3 -0.27,-0.6 -0.28,-1.12 z m -3.84,-0.68 c 0.07,-0.97 0.66,-1.6 1.5,-1.6 0.85,0 1.44,0.66 1.44,1.6 z"
+             id="path825" />
+          <path
+             d="m 62.794997,313.22 c -0.01,-1.03 -0.69,-1.61 -1.9,-1.61 -1.22,0 -2.01,0.63 -2.01,1.6 0,0.82 0.42,1.21 1.66,1.51 l 0.78,0.19 c 0.58,0.14 0.81,0.35 0.81,0.72 0,0.5 -0.49,0.83 -1.22,0.83 -0.45,0 -0.83,-0.13 -1.04,-0.35 -0.13,-0.15 -0.19,-0.3 -0.24,-0.67 h -0.88 c 0.04,1.21 0.72,1.79 2.09,1.79 1.32,0 2.16,-0.65 2.16,-1.66 0,-0.78 -0.44,-1.21 -1.48,-1.46 l -0.8,-0.19 c -0.68,-0.16 -0.97,-0.38 -0.97,-0.75 0,-0.49 0.43,-0.79 1.11,-0.79 0.67,0 1.03,0.29 1.05,0.84 z"
+             id="path827" />
+          <path
+             d="m 68.544997,314.66 c 0,-0.8 -0.06,-1.28 -0.21,-1.67 -0.34,-0.86 -1.14,-1.38 -2.12,-1.38 -1.46,0 -2.4,1.11 -2.4,2.84 0,1.73 0.9,2.78 2.38,2.78 1.2,0 2.03,-0.68 2.24,-1.82 h -0.84 c -0.23,0.69 -0.7,1.05 -1.37,1.05 -0.53,0 -0.98,-0.24 -1.26,-0.68 -0.2,-0.3 -0.27,-0.6 -0.28,-1.12 z m -3.84,-0.68 c 0.07,-0.97 0.66,-1.6 1.5,-1.6 0.85,0 1.44,0.66 1.44,1.6 z"
+             id="path829" />
+          <path
+             d="m 71.424987,311.76 h -0.86 v -1.44 h -0.83 v 1.44 h -0.71 v 0.68 h 0.71 v 3.96 c 0,0.54 0.36,0.83 1.01,0.83 0.22,0 0.4,-0.02 0.68,-0.07 v -0.7 c -0.12,0.03 -0.23,0.04 -0.4,0.04 -0.36,0 -0.46,-0.1 -0.46,-0.47 v -3.59 h 0.86 z"
+             id="path831" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect406"
+       style="fill:none"
+       d="m 122,299 h 75 v 30 h -75 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g412">
+      <switch
+         id="switch410">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 73px; height: 1px; padding-top: 314px; margin-left: 123px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 10px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Distributed data</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="Distributed data"
+           id="text408"
+           style="font-size:10px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 126.06501,317 h 2.81 c 1.84,0 2.97,-1.38 2.97,-3.65 0,-2.26 -1.12,-3.64 -2.97,-3.64 h -2.81 z m 0.93,-0.82 v -5.65 h 1.72 c 1.44,0 2.2,0.97 2.2,2.83 0,1.85 -0.76,2.82 -2.2,2.82 z"
+             id="path835" />
+          <path
+             d="m 133.89501,311.76 h -0.83 V 317 h 0.83 z m 0,-2.05 h -0.84 v 1.05 h 0.84 z"
+             id="path837" />
+          <path
+             d="m 138.99501,313.22 c -0.01,-1.03 -0.69,-1.61 -1.9,-1.61 -1.22,0 -2.01,0.63 -2.01,1.6 0,0.82 0.42,1.21 1.66,1.51 l 0.78,0.19 c 0.58,0.14 0.81,0.35 0.81,0.72 0,0.5 -0.49,0.83 -1.22,0.83 -0.45,0 -0.83,-0.13 -1.04,-0.35 -0.13,-0.15 -0.19,-0.3 -0.24,-0.67 h -0.88 c 0.04,1.21 0.72,1.79 2.09,1.79 1.32,0 2.16,-0.65 2.16,-1.66 0,-0.78 -0.44,-1.21 -1.48,-1.46 l -0.8,-0.19 c -0.68,-0.16 -0.97,-0.38 -0.97,-0.75 0,-0.49 0.43,-0.79 1.11,-0.79 0.67,0 1.03,0.29 1.05,0.84 z"
+             id="path839" />
+          <path
+             d="m 142.12501,311.76 h -0.86 v -1.44 h -0.83 v 1.44 h -0.71 v 0.68 h 0.71 v 3.96 c 0,0.54 0.36,0.83 1.01,0.83 0.22,0 0.4,-0.02 0.68,-0.07 v -0.7 c -0.12,0.03 -0.23,0.04 -0.4,0.04 -0.36,0 -0.46,-0.1 -0.46,-0.47 v -3.59 h 0.86 z"
+             id="path841" />
+          <path
+             d="M 143.00502,311.76 V 317 h 0.84 v -2.72 c 0.01,-1.26 0.53,-1.82 1.68,-1.79 v -0.85 c -0.14,-0.02 -0.22,-0.03 -0.32,-0.03 -0.54,0 -0.95,0.32 -1.43,1.1 v -0.95 z"
+             id="path843" />
+          <path
+             d="m 147.15501,311.76 h -0.83 V 317 h 0.83 z m 0,-2.05 h -0.84 v 1.05 h 0.84 z"
+             id="path845" />
+          <path
+             d="M 148.41501,309.71 V 317 h 0.75 v -0.67 c 0.4,0.61 0.93,0.9 1.66,0.9 1.38,0 2.28,-1.13 2.28,-2.87 0,-1.7 -0.85,-2.75 -2.24,-2.75 -0.72,0 -1.23,0.27 -1.62,0.86 v -2.76 z m 2.29,2.68 c 0.93,0 1.53,0.81 1.53,2.06 0,1.19 -0.62,2 -1.53,2 -0.89,0 -1.46,-0.8 -1.46,-2.03 0,-1.23 0.57,-2.03 1.46,-2.03 z"
+             id="path847" />
+          <path
+             d="m 158.25501,317 v -5.24 h -0.83 v 2.97 c 0,1.07 -0.56,1.77 -1.43,1.77 -0.66,0 -1.08,-0.4 -1.08,-1.03 v -3.71 h -0.83 v 4.04 c 0,0.87 0.65,1.43 1.67,1.43 0.77,0 1.26,-0.27 1.75,-0.96 V 317 Z"
+             id="path849" />
+          <path
+             d="m 161.53501,311.76 h -0.86 v -1.44 h -0.83 v 1.44 h -0.71 v 0.68 h 0.71 v 3.96 c 0,0.54 0.36,0.83 1.01,0.83 0.22,0 0.4,-0.02 0.68,-0.07 v -0.7 c -0.12,0.03 -0.23,0.04 -0.4,0.04 -0.36,0 -0.46,-0.1 -0.46,-0.47 v -3.59 h 0.86 z"
+             id="path851" />
+          <path
+             d="m 166.76501,314.66 c 0,-0.8 -0.06,-1.28 -0.21,-1.67 -0.34,-0.86 -1.14,-1.38 -2.12,-1.38 -1.46,0 -2.4,1.11 -2.4,2.84 0,1.73 0.9,2.78 2.38,2.78 1.2,0 2.03,-0.68 2.24,-1.82 h -0.84 c -0.23,0.69 -0.7,1.05 -1.37,1.05 -0.53,0 -0.98,-0.24 -1.26,-0.68 -0.2,-0.3 -0.27,-0.6 -0.28,-1.12 z m -3.84,-0.68 c 0.07,-0.97 0.66,-1.6 1.5,-1.6 0.85,0 1.44,0.66 1.44,1.6 z"
+             id="path853" />
+          <path
+             d="m 172.14501,309.71 h -0.83 v 2.71 c -0.35,-0.53 -0.91,-0.81 -1.61,-0.81 -1.36,0 -2.25,1.09 -2.25,2.76 0,1.77 0.86,2.86 2.28,2.86 0.72,0 1.22,-0.27 1.67,-0.92 V 317 h 0.74 z m -2.3,2.68 c 0.9,0 1.47,0.79 1.47,2.05 0,1.21 -0.58,2.01 -1.46,2.01 -0.92,0 -1.53,-0.81 -1.53,-2.03 0,-1.22 0.61,-2.03 1.52,-2.03 z"
+             id="path855" />
+          <path
+             d="m 180.485,309.71 h -0.83 v 2.71 c -0.35,-0.53 -0.91,-0.81 -1.61,-0.81 -1.36,0 -2.25,1.09 -2.25,2.76 0,1.77 0.86,2.86 2.28,2.86 0.72,0 1.22,-0.27 1.67,-0.92 V 317 h 0.74 z m -2.3,2.68 c 0.9,0 1.47,0.79 1.47,2.05 0,1.21 -0.58,2.01 -1.46,2.01 -0.92,0 -1.53,-0.81 -1.53,-2.03 0,-1.22 0.61,-2.03 1.52,-2.03 z"
+             id="path857" />
+          <path
+             d="m 186.405,316.51 c -0.09,0.02 -0.13,0.02 -0.18,0.02 -0.29,0 -0.45,-0.15 -0.45,-0.41 v -3.08 c 0,-0.93 -0.68,-1.43 -1.97,-1.43 -0.77,0 -1.38,0.22 -1.74,0.61 -0.24,0.27 -0.34,0.57 -0.36,1.09 h 0.84 c 0.07,-0.64 0.45,-0.93 1.23,-0.93 0.76,0 1.17,0.28 1.17,0.78 v 0.22 c -0.01,0.36 -0.19,0.49 -0.87,0.58 -1.18,0.15 -1.36,0.19 -1.68,0.32 -0.61,0.26 -0.92,0.72 -0.92,1.4 0,0.95 0.66,1.55 1.72,1.55 0.66,0 1.19,-0.23 1.78,-0.77 0.06,0.54 0.32,0.77 0.86,0.77 0.18,0 0.29,-0.02 0.57,-0.09 z m -1.46,-1.16 c 0,0.28 -0.08,0.45 -0.33,0.68 -0.34,0.31 -0.75,0.47 -1.24,0.47 -0.65,0 -1.03,-0.31 -1.03,-0.84 0,-0.55 0.36,-0.83 1.26,-0.96 0.89,-0.12 1.06,-0.16 1.34,-0.29 z"
+             id="path859" />
+          <path
+             d="m 189.045,311.76 h -0.86 v -1.44 h -0.83 v 1.44 h -0.71 v 0.68 h 0.71 v 3.96 c 0,0.54 0.36,0.83 1.01,0.83 0.22,0 0.4,-0.02 0.68,-0.07 v -0.7 c -0.12,0.03 -0.23,0.04 -0.4,0.04 -0.36,0 -0.46,-0.1 -0.46,-0.47 v -3.59 h 0.86 z"
+             id="path861" />
+          <path
+             d="m 194.61499,316.51 c -0.09,0.02 -0.13,0.02 -0.18,0.02 -0.29,0 -0.45,-0.15 -0.45,-0.41 v -3.08 c 0,-0.93 -0.68,-1.43 -1.97,-1.43 -0.77,0 -1.38,0.22 -1.74,0.61 -0.24,0.27 -0.34,0.57 -0.36,1.09 h 0.84 c 0.07,-0.64 0.45,-0.93 1.23,-0.93 0.76,0 1.17,0.28 1.17,0.78 v 0.22 c -0.01,0.36 -0.19,0.49 -0.87,0.58 -1.18,0.15 -1.36,0.19 -1.68,0.32 -0.61,0.26 -0.92,0.72 -0.92,1.4 0,0.95 0.66,1.55 1.72,1.55 0.66,0 1.19,-0.23 1.78,-0.77 0.06,0.54 0.32,0.77 0.86,0.77 0.18,0 0.29,-0.02 0.57,-0.09 z m -1.46,-1.16 c 0,0.28 -0.08,0.45 -0.33,0.68 -0.34,0.31 -0.75,0.47 -1.24,0.47 -0.65,0 -1.03,-0.31 -1.03,-0.84 0,-0.55 0.36,-0.83 1.26,-0.96 0.89,-0.12 1.06,-0.16 1.34,-0.29 z"
+             id="path863" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect414"
+       style="fill:none"
+       d="m 255,299 h 75 v 30 h -75 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g420">
+      <switch
+         id="switch418">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 73px; height: 1px; padding-top: 314px; margin-left: 256px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 10px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Shuffled data</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="Shuffled data"
+           id="text416"
+           style="font-size:10px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 269.60501,311.85 c 0,-0.5 -0.03,-0.64 -0.19,-0.98 -0.4,-0.84 -1.25,-1.28 -2.48,-1.28 -1.6,0 -2.59,0.82 -2.59,2.14 0,0.89 0.47,1.45 1.43,1.7 l 1.81,0.48 c 0.93,0.24 1.34,0.61 1.34,1.18 0,0.39 -0.21,0.79 -0.52,1.01 -0.29,0.21 -0.75,0.31 -1.34,0.31 -0.8,0 -1.33,-0.19 -1.68,-0.61 -0.27,-0.32 -0.39,-0.67 -0.38,-1.12 h -0.88 c 0.01,0.67 0.14,1.11 0.43,1.51 0.5,0.69 1.34,1.04 2.45,1.04 0.87,0 1.58,-0.2 2.05,-0.56 0.49,-0.39 0.8,-1.04 0.8,-1.67 0,-0.9 -0.56,-1.56 -1.55,-1.83 l -1.83,-0.49 c -0.88,-0.24 -1.2,-0.52 -1.2,-1.08 0,-0.74 0.65,-1.23 1.63,-1.23 1.16,0 1.81,0.52 1.82,1.48 z"
+             id="path867" />
+          <path
+             d="M 270.96501,309.71 V 317 h 0.83 v -2.89 c 0,-1.07 0.56,-1.77 1.42,-1.77 0.28,0 0.54,0.08 0.74,0.23 0.24,0.18 0.34,0.43 0.34,0.8 V 317 h 0.83 v -3.96 c 0,-0.88 -0.63,-1.43 -1.65,-1.43 -0.74,0 -1.19,0.23 -1.68,0.87 v -2.77 z"
+             id="path869" />
+          <path
+             d="m 280.64501,317 v -5.24 h -0.83 v 2.97 c 0,1.07 -0.56,1.77 -1.43,1.77 -0.66,0 -1.08,-0.4 -1.08,-1.03 v -3.71 h -0.83 v 4.04 c 0,0.87 0.65,1.43 1.67,1.43 0.77,0 1.26,-0.27 1.75,-0.96 V 317 Z"
+             id="path871" />
+          <path
+             d="m 283.96501,311.76 h -0.87 v -0.82 c 0,-0.35 0.19,-0.53 0.58,-0.53 0.07,0 0.1,0 0.29,0.01 v -0.69 c -0.19,-0.04 -0.3,-0.05 -0.47,-0.05 -0.77,0 -1.23,0.44 -1.23,1.19 v 0.89 h -0.7 v 0.68 h 0.7 V 317 h 0.83 v -4.56 h 0.87 z m 2.78,0 h -0.87 v -0.82 c 0,-0.35 0.19,-0.53 0.58,-0.53 0.07,0 0.1,0 0.29,0.01 v -0.69 c -0.19,-0.04 -0.3,-0.05 -0.47,-0.05 -0.77,0 -1.23,0.44 -1.23,1.19 v 0.89 h -0.7 v 0.68 h 0.7 V 317 h 0.83 v -4.56 h 0.87 z m 1.72,-2.05 h -0.84 V 317 h 0.84 z"
+             id="path873" />
+          <path
+             d="m 294.29501,314.66 c 0,-0.8 -0.06,-1.28 -0.21,-1.67 -0.34,-0.86 -1.14,-1.38 -2.12,-1.38 -1.46,0 -2.4,1.11 -2.4,2.84 0,1.73 0.9,2.78 2.38,2.78 1.2,0 2.03,-0.68 2.24,-1.82 h -0.84 c -0.23,0.69 -0.7,1.05 -1.37,1.05 -0.53,0 -0.98,-0.24 -1.26,-0.68 -0.2,-0.3 -0.27,-0.6 -0.28,-1.12 z m -3.84,-0.68 c 0.07,-0.97 0.66,-1.6 1.5,-1.6 0.85,0 1.44,0.66 1.44,1.6 z"
+             id="path875" />
+          <path
+             d="m 299.67501,309.71 h -0.83 v 2.71 c -0.35,-0.53 -0.91,-0.81 -1.61,-0.81 -1.36,0 -2.25,1.09 -2.25,2.76 0,1.77 0.86,2.86 2.28,2.86 0.72,0 1.22,-0.27 1.67,-0.92 V 317 h 0.74 z m -2.3,2.68 c 0.9,0 1.47,0.79 1.47,2.05 0,1.21 -0.58,2.01 -1.46,2.01 -0.92,0 -1.53,-0.81 -1.53,-2.03 0,-1.22 0.61,-2.03 1.52,-2.03 z"
+             id="path877" />
+          <path
+             d="m 308.015,309.71 h -0.83 v 2.71 c -0.35,-0.53 -0.91,-0.81 -1.61,-0.81 -1.36,0 -2.25,1.09 -2.25,2.76 0,1.77 0.86,2.86 2.28,2.86 0.72,0 1.22,-0.27 1.67,-0.92 V 317 h 0.74 z m -2.3,2.68 c 0.9,0 1.47,0.79 1.47,2.05 0,1.21 -0.58,2.01 -1.46,2.01 -0.92,0 -1.53,-0.81 -1.53,-2.03 0,-1.22 0.61,-2.03 1.52,-2.03 z"
+             id="path879" />
+          <path
+             d="m 313.935,316.51 c -0.09,0.02 -0.13,0.02 -0.18,0.02 -0.29,0 -0.45,-0.15 -0.45,-0.41 v -3.08 c 0,-0.93 -0.68,-1.43 -1.97,-1.43 -0.77,0 -1.38,0.22 -1.74,0.61 -0.24,0.27 -0.34,0.57 -0.36,1.09 h 0.84 c 0.07,-0.64 0.45,-0.93 1.23,-0.93 0.76,0 1.17,0.28 1.17,0.78 v 0.22 c -0.01,0.36 -0.19,0.49 -0.87,0.58 -1.18,0.15 -1.36,0.19 -1.68,0.32 -0.61,0.26 -0.92,0.72 -0.92,1.4 0,0.95 0.66,1.55 1.72,1.55 0.66,0 1.19,-0.23 1.78,-0.77 0.06,0.54 0.32,0.77 0.86,0.77 0.18,0 0.29,-0.02 0.57,-0.09 z m -1.46,-1.16 c 0,0.28 -0.08,0.45 -0.33,0.68 -0.34,0.31 -0.75,0.47 -1.24,0.47 -0.65,0 -1.03,-0.31 -1.03,-0.84 0,-0.55 0.36,-0.83 1.26,-0.96 0.89,-0.12 1.06,-0.16 1.34,-0.29 z"
+             id="path881" />
+          <path
+             d="m 316.575,311.76 h -0.86 v -1.44 h -0.83 v 1.44 h -0.71 v 0.68 h 0.71 v 3.96 c 0,0.54 0.36,0.83 1.01,0.83 0.22,0 0.4,-0.02 0.68,-0.07 v -0.7 c -0.12,0.03 -0.23,0.04 -0.4,0.04 -0.36,0 -0.46,-0.1 -0.46,-0.47 v -3.59 h 0.86 z"
+             id="path883" />
+          <path
+             d="m 322.14499,316.51 c -0.09,0.02 -0.13,0.02 -0.18,0.02 -0.29,0 -0.45,-0.15 -0.45,-0.41 v -3.08 c 0,-0.93 -0.68,-1.43 -1.97,-1.43 -0.77,0 -1.38,0.22 -1.74,0.61 -0.24,0.27 -0.34,0.57 -0.36,1.09 h 0.84 c 0.07,-0.64 0.45,-0.93 1.23,-0.93 0.76,0 1.17,0.28 1.17,0.78 v 0.22 c -0.01,0.36 -0.19,0.49 -0.87,0.58 -1.18,0.15 -1.36,0.19 -1.68,0.32 -0.61,0.26 -0.92,0.72 -0.92,1.4 0,0.95 0.66,1.55 1.72,1.55 0.66,0 1.19,-0.23 1.78,-0.77 0.06,0.54 0.32,0.77 0.86,0.77 0.18,0 0.29,-0.02 0.57,-0.09 z m -1.46,-1.16 c 0,0.28 -0.08,0.45 -0.33,0.68 -0.34,0.31 -0.75,0.47 -1.24,0.47 -0.65,0 -1.03,-0.31 -1.03,-0.84 0,-0.55 0.36,-0.83 1.26,-0.96 0.89,-0.12 1.06,-0.16 1.34,-0.29 z"
+             id="path885" />
+        </g>
+      </switch>
+    </g>
+    <path
+       d="m 241,335 v 1 h 48 v -7.63"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="stroke"
+       id="path422" />
+    <path
+       d="m 289,323.12 3.5,7 -3.5,-1.75 -3.5,1.75 z"
+       fill="#000000"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="all"
+       id="path424" />
+    <path
+       d="M 37.52,326.96 37.5,336 H 57"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="stroke"
+       id="path426" />
+    <path
+       d="m 162,327 v 9 h 46"
+       fill="none"
+       stroke="#000000"
+       stroke-miterlimit="10"
+       pointer-events="stroke"
+       id="path428" />
+    <path
+       id="rect430"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 57,323 h 68 v 26 H 57 Z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g436">
+      <switch
+         id="switch434">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 66px; height: 1px; padding-top: 336px; margin-left: 58px;">
+            <xhtml:div
+               data-drawio-colors="color: #333333; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 10px; font-family: &quot;Courier New&quot;; color: rgb(51, 51, 51); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Monotonic</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="Monotonic"
+           id="text432"
+           style="font-size:10px;font-family:'Courier New';text-anchor:middle;fill:#333333">
+          <path
+             d="m 68.570801,339 v -4.23828 q 0,-0.65918 0.01465,-0.98145 l 0.01465,-0.48828 q -0.3125,1.00586 -0.463868,1.4209 l -0.800781,2.13867 h -0.668945 l -0.810547,-2.13867 q -0.08789,-0.22461 -0.46875,-1.4209 l 0.01953,1.46973 V 339 h -0.78125 v -6.58691 h 1.157227 l 0.90332,2.38769 q 0.102539,0.25879 0.332031,1.12793 l 0.126954,-0.43945 0.214843,-0.6836 0.903321,-2.39257 h 1.098632 V 339 Z"
+             id="path889" />
+          <path
+             d="m 75.353027,336.35352 q 0,1.333 -0.615234,2.04101 -0.610352,0.70313 -1.767578,0.70313 -1.132813,0 -1.738281,-0.71289 -0.600586,-0.7129 -0.600586,-2.03125 0,-1.36231 0.615234,-2.0459 0.620117,-0.68848 1.75293,-0.68848 1.191406,0 1.772461,0.67871 0.581054,0.67871 0.581054,2.05567 z m -0.922851,0 q 0,-1.04981 -0.336914,-1.56739 -0.332032,-0.51758 -1.079102,-0.51758 -0.756836,0 -1.108398,0.52735 -0.351563,0.52734 -0.351563,1.55762 0,1.02539 0.351563,1.5625 0.351562,0.53222 1.054687,0.53222 0.776367,0 1.123047,-0.52246 0.34668,-0.52246 0.34668,-1.57226 z"
+             id="path891" />
+          <path
+             d="m 80.23584,339 v -3.39355 q 0,-0.66407 -0.258789,-0.98633 -0.253906,-0.32227 -0.81543,-0.32227 -0.605469,0 -0.996094,0.44434 -0.385742,0.43945 -0.385742,1.19629 V 339 h -0.878906 v -4.15527 q 0,-0.92286 -0.0293,-1.12793 h 0.830078 q 0.0049,0.0244 0.0098,0.13183 0.0049,0.10742 0.0098,0.24903 0.0098,0.13671 0.01953,0.52246 h 0.01465 q 0.512695,-1.00098 1.689453,-1.00098 0.844727,0 1.259766,0.45898 0.415039,0.45411 0.415039,1.40137 V 339 Z"
+             id="path893" />
+          <path
+             d="m 87.35498,336.35352 q 0,1.333 -0.615234,2.04101 -0.610351,0.70313 -1.767578,0.70313 -1.132813,0 -1.738281,-0.71289 -0.600586,-0.7129 -0.600586,-2.03125 0,-1.36231 0.615234,-2.0459 0.620117,-0.68848 1.75293,-0.68848 1.191406,0 1.772461,0.67871 0.581054,0.67871 0.581054,2.05567 z m -0.922851,0 q 0,-1.04981 -0.336914,-1.56739 -0.332031,-0.51758 -1.079102,-0.51758 -0.756836,0 -1.108398,0.52735 -0.351563,0.52734 -0.351563,1.55762 0,1.02539 0.351563,1.5625 0.351562,0.53222 1.054687,0.53222 0.776368,0 1.123047,-0.52246 0.34668,-0.52246 0.34668,-1.57226 z"
+             id="path895" />
+          <path
+             d="m 88.927246,334.41016 v -0.69336 h 0.830078 l 0.283203,-1.37696 h 0.585938 v 1.37696 h 2.109375 v 0.69336 h -2.109375 v 3.18359 q 0,0.38574 0.205078,0.57129 0.209961,0.18555 0.683594,0.18555 0.654297,0 1.450195,-0.16602 v 0.66895 q -0.825195,0.2246 -1.635742,0.2246 -0.791016,0 -1.186524,-0.33203 -0.395507,-0.33691 -0.395507,-1.05957 v -3.27636 z"
+             id="path897" />
+          <path
+             d="m 99.356934,336.35352 q 0,1.333 -0.615235,2.04101 -0.610351,0.70313 -1.767578,0.70313 -1.132812,0 -1.738281,-0.71289 -0.600586,-0.7129 -0.600586,-2.03125 0,-1.36231 0.615234,-2.0459 0.620117,-0.68848 1.75293,-0.68848 1.191406,0 1.772461,0.67871 0.581055,0.67871 0.581055,2.05567 z m -0.922852,0 q 0,-1.04981 -0.336914,-1.56739 -0.332031,-0.51758 -1.079102,-0.51758 -0.756836,0 -1.108398,0.52735 -0.351563,0.52734 -0.351563,1.55762 0,1.02539 0.351563,1.5625 0.351562,0.53222 1.054687,0.53222 0.776368,0 1.123047,-0.52246 0.34668,-0.52246 0.34668,-1.57226 z"
+             id="path899" />
+          <path
+             d="m 104.23975,339 v -3.39355 q 0,-0.66407 -0.25879,-0.98633 -0.25391,-0.32227 -0.81543,-0.32227 -0.60547,0 -0.9961,0.44434 -0.38574,0.43945 -0.38574,1.19629 V 339 h -0.8789 v -4.15527 q 0,-0.92286 -0.0293,-1.12793 h 0.83008 q 0.005,0.0244 0.01,0.13183 0.005,0.10742 0.01,0.24903 0.01,0.13671 0.0195,0.52246 h 0.0147 q 0.51269,-1.00098 1.68945,-1.00098 0.84473,0 1.25977,0.45898 0.41504,0.45411 0.41504,1.40137 V 339 Z"
+             id="path901" />
+          <path
+             d="m 109.64014,338.30664 h 1.85547 V 339 h -4.79493 v -0.69336 h 2.06055 v -3.89648 h -1.55762 v -0.69336 h 2.43653 z m -0.97657,-5.61523 v -0.9375 h 0.97657 v 0.9375 z"
+             id="path903" />
+          <path
+             d="m 112.63818,336.35352 q 0,-1.31836 0.62989,-2.02637 0.62988,-0.70801 1.82129,-0.70801 0.88867,0 1.46484,0.42969 0.57617,0.4248 0.71289,1.14746 l -0.9375,0.0684 q -0.0781,-0.44434 -0.39063,-0.69824 -0.3125,-0.25879 -0.88867,-0.25879 -0.77148,0 -1.13281,0.47851 -0.35644,0.47852 -0.35644,1.54785 0,1.08399 0.35644,1.58692 0.36133,0.49805 1.12793,0.49805 0.52734,0 0.87402,-0.25879 0.34668,-0.25879 0.42969,-0.79102 l 0.92774,0.0586 q -0.0635,0.46875 -0.35645,0.8545 -0.28809,0.38086 -0.7666,0.60058 -0.47852,0.21485 -1.06934,0.21485 -1.19629,0 -1.82129,-0.70313 -0.625,-0.70312 -0.625,-2.04101 z"
+             id="path905" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect438"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 183,323 h 80 v 26 h -80 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g444">
+      <switch
+         id="switch442">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 78px; height: 1px; padding-top: 336px; margin-left: 184px;">
+            <xhtml:div
+               data-drawio-colors="color: #333333; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 10px; font-family: &quot;Courier New&quot;; color: rgb(51, 51, 51); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Permutation</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="Permutation"
+           id="text440"
+           style="font-size:10px;font-family:'Courier New';text-anchor:middle;fill:#333333">
+          <path
+             d="m 195.4585,334.38574 q 0,0.61035 -0.29297,1.08887 -0.28809,0.47851 -0.83008,0.74707 -0.53711,0.26855 -1.24512,0.26855 h -1.37207 V 339 h -0.93262 v -6.58691 h 2.2461 q 1.16211,0 1.79199,0.52246 0.63477,0.51757 0.63477,1.45019 z m -0.9375,0.0147 q 0,-1.24023 -1.60157,-1.24023 h -1.20117 v 2.59277 h 1.24024 q 0.72754,0 1.14257,-0.35645 0.41993,-0.35644 0.41993,-0.99609 z"
+             id="path909" />
+          <path
+             d="m 197.56787,336.54395 q 0,0.88867 0.39063,1.3916 0.3955,0.50293 1.0791,0.50293 0.50293,0 0.8789,-0.21485 0.38086,-0.21972 0.50782,-0.5957 l 0.77148,0.21973 q -0.21484,0.60546 -0.79101,0.92773 -0.57129,0.32227 -1.36719,0.32227 -1.15235,0 -1.77246,-0.71778 -0.62012,-0.71777 -0.62012,-2.05566 0,-1.30371 0.60547,-2.00195 0.61035,-0.70313 1.75781,-0.70313 1.14746,0 1.73828,0.69824 0.59082,0.69824 0.59082,2.10938 v 0.11719 z m 1.4502,-2.2754 q -0.6543,0 -1.03516,0.42969 -0.38086,0.42481 -0.40527,1.17188 h 2.85156 q -0.13672,-1.60157 -1.41113,-1.60157 z"
+             id="path911" />
+          <path
+             d="m 207.09912,334.51758 q -0.54687,-0.0928 -1.03516,-0.0928 -0.78613,0 -1.26953,0.59082 -0.48339,0.59083 -0.48339,1.50391 V 339 h -0.87891 v -3.42285 q 0,-0.3711 -0.0684,-0.87403 -0.0635,-0.50292 -0.18555,-0.98632 h 0.83496 q 0.19532,0.67382 0.23438,1.2207 h 0.0244 q 0.24414,-0.54688 0.47852,-0.80078 0.23437,-0.25879 0.55664,-0.38574 0.32226,-0.13184 0.78613,-0.13184 0.50781,0 1.00586,0.083 z"
+             id="path913" />
+          <path
+             d="m 210.59033,339 v -3.34961 q 0,-0.75195 -0.12207,-1.0498 -0.11719,-0.30274 -0.43457,-0.30274 -0.3125,0 -0.50781,0.46875 -0.19043,0.46875 -0.19043,1.26953 V 339 h -0.8252 v -4.15527 q 0,-0.92286 -0.0293,-1.12793 h 0.72754 l 0.0293,0.62011 v 0.23438 h 0.01 q 0.16601,-0.49805 0.41992,-0.72266 0.25391,-0.22949 0.63477,-0.22949 0.42968,0 0.63964,0.23438 0.21485,0.23437 0.30762,0.72265 h 0.01 q 0.19531,-0.51758 0.46386,-0.7373 0.27344,-0.21973 0.68848,-0.21973 0.57617,0 0.8252,0.41992 0.24902,0.41992 0.24902,1.44043 V 339 h -0.82031 v -3.34961 q 0,-0.75195 -0.12207,-1.0498 -0.11719,-0.30274 -0.43457,-0.30274 -0.32227,0 -0.5127,0.41016 -0.18555,0.41015 -0.18555,1.23047 V 339 Z"
+             id="path915" />
+          <path
+             d="m 215.78076,333.7168 v 3.34961 q 0,0.76171 0.23926,1.05957 0.23926,0.29297 0.85449,0.29297 0.62988,0 0.9961,-0.42969 0.36621,-0.42969 0.36621,-1.21094 v -3.06152 h 0.88379 v 4.15527 q 0,0.92285 0.0293,1.12793 h -0.83008 q -0.005,-0.0244 -0.01,-0.13184 -0.005,-0.10742 -0.0146,-0.24414 -0.005,-0.1416 -0.0147,-0.52734 h -0.0146 q -0.30273,0.54687 -0.70312,0.77637 -0.39551,0.22461 -0.98633,0.22461 -0.86914,0 -1.27441,-0.42969 -0.40039,-0.43457 -0.40039,-1.43067 v -3.5205 z"
+             id="path917" />
+          <path
+             d="m 220.92725,334.41016 v -0.69336 h 0.83007 l 0.28321,-1.37696 h 0.58593 v 1.37696 h 2.10938 v 0.69336 h -2.10938 v 3.18359 q 0,0.38574 0.20508,0.57129 0.20996,0.18555 0.6836,0.18555 0.65429,0 1.45019,-0.16602 v 0.66895 q -0.82519,0.2246 -1.63574,0.2246 -0.79102,0 -1.18652,-0.33203 -0.39551,-0.33691 -0.39551,-1.05957 v -3.27636 z"
+             id="path919" />
+          <path
+             d="m 231.37646,338.45801 q 0.12696,0 0.28809,-0.0342 v 0.54687 q -0.33203,0.0781 -0.67871,0.0781 -0.48828,0 -0.71289,-0.25391 -0.21973,-0.25879 -0.24902,-0.80566 h -0.0293 q -0.31738,0.59082 -0.75195,0.84961 -0.42969,0.25879 -1.06446,0.25879 -0.77148,0 -1.16211,-0.41993 -0.39062,-0.41992 -0.39062,-1.15234 0,-1.7041 2.2168,-1.72852 l 1.15234,-0.0195 v -0.28808 q 0,-0.63965 -0.25879,-0.91797 -0.25879,-0.2832 -0.8252,-0.2832 -0.57617,0 -0.83007,0.20507 -0.25391,0.20508 -0.30274,0.63477 l -0.91797,-0.083 q 0.22461,-1.42578 2.06543,-1.42578 0.97657,0 1.46485,0.45898 0.49316,0.45411 0.49316,1.31836 v 2.27539 q 0,0.39063 0.10254,0.59083 0.10254,0.19531 0.39062,0.19531 z m -2.97363,-0.0293 q 0.46875,0 0.83008,-0.22461 0.36133,-0.22461 0.56152,-0.60058 0.2002,-0.37598 0.2002,-0.77637 v -0.43457 l -0.92774,0.0195 q -0.57617,0.01 -0.8789,0.12695 -0.30274,0.11719 -0.47363,0.36133 -0.16602,0.23926 -0.16602,0.63965 0,0.40039 0.21484,0.64453 0.21973,0.24414 0.63965,0.24414 z"
+             id="path921" />
+          <path
+             d="m 232.9292,334.41016 v -0.69336 h 0.83008 l 0.2832,-1.37696 h 0.58594 v 1.37696 h 2.10937 v 0.69336 h -2.10937 v 3.18359 q 0,0.38574 0.20508,0.57129 0.20996,0.18555 0.68359,0.18555 0.6543,0 1.4502,-0.16602 v 0.66895 q -0.8252,0.2246 -1.63575,0.2246 -0.79101,0 -1.18652,-0.33203 -0.39551,-0.33691 -0.39551,-1.05957 v -3.27636 z"
+             id="path923" />
+          <path
+             d="m 241.64014,338.30664 h 1.85547 V 339 h -4.79493 v -0.69336 h 2.06055 v -3.89648 h -1.55762 v -0.69336 h 2.43653 z m -0.97657,-5.61523 v -0.9375 h 0.97657 v 0.9375 z"
+             id="path925" />
+          <path
+             d="m 249.35986,336.35352 q 0,1.333 -0.61523,2.04101 -0.61035,0.70313 -1.76758,0.70313 -1.13281,0 -1.73828,-0.71289 -0.60059,-0.7129 -0.60059,-2.03125 0,-1.36231 0.61524,-2.0459 0.62012,-0.68848 1.75293,-0.68848 1.1914,0 1.77246,0.67871 0.58105,0.67871 0.58105,2.05567 z m -0.92285,0 q 0,-1.04981 -0.33691,-1.56739 -0.33203,-0.51758 -1.0791,-0.51758 -0.75684,0 -1.1084,0.52735 -0.35156,0.52734 -0.35156,1.55762 0,1.02539 0.35156,1.5625 0.35156,0.53222 1.05469,0.53222 0.77636,0 1.12304,-0.52246 0.34668,-0.52246 0.34668,-1.57226 z"
+             id="path927" />
+          <path
+             d="m 254.24268,339 v -3.39355 q 0,-0.66407 -0.25879,-0.98633 -0.25391,-0.32227 -0.81543,-0.32227 -0.60547,0 -0.9961,0.44434 -0.38574,0.43945 -0.38574,1.19629 V 339 h -0.87891 v -4.15527 q 0,-0.92286 -0.0293,-1.12793 h 0.83008 q 0.005,0.0244 0.01,0.13183 0.005,0.10742 0.01,0.24903 0.01,0.13671 0.0195,0.52246 h 0.0147 q 0.51269,-1.00098 1.68945,-1.00098 0.84473,0 1.25977,0.45898 0.41503,0.45411 0.41503,1.40137 V 339 Z"
+             id="path929" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect446"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 330,323 h 70 v 26 h -70 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g452">
+      <switch
+         id="switch450">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 68px; height: 1px; padding-top: 336px; margin-left: 331px;">
+            <xhtml:div
+               data-drawio-colors="color: #333333; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 10px; font-family: &quot;Courier New&quot;; color: rgb(51, 51, 51); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Changes</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="Changes"
+           id="text448"
+           style="font-size:10px;font-family:'Courier New';text-anchor:middle;fill:#333333">
+          <path
+             d="m 345.52979,335.6748 q 0,1.33301 0.41503,2.00196 0.41993,0.66406 1.2793,0.66406 0.49317,0 0.89356,-0.33203 0.40039,-0.33692 0.67871,-1.04492 l 0.77636,0.31738 q -0.72754,1.81641 -2.35839,1.81641 -1.28418,0 -1.97754,-0.88379 -0.68848,-0.88379 -0.68848,-2.53907 0,-3.36425 2.61719,-3.36425 1.65527,0 2.27539,1.63574 l -0.82031,0.31738 q -0.18067,-0.55176 -0.56641,-0.86914 -0.38086,-0.32226 -0.88379,-0.32226 -0.83496,0 -1.24023,0.62988 -0.40039,0.62988 -0.40039,1.97265 z"
+             id="path933" />
+          <path
+             d="m 350.90088,331.75391 h 0.88379 v 1.90429 q 0,0.28809 -0.0439,0.96192 h 0.0147 q 0.5127,-1.00098 1.65527,-1.00098 1.70899,0 1.70899,1.86035 V 339 h -0.88379 v -3.39355 q 0,-0.66407 -0.25879,-0.98633 -0.25391,-0.32227 -0.81543,-0.32227 -0.60547,0 -0.99609,0.44434 -0.38574,0.43945 -0.38574,1.19629 V 339 h -0.87891 z"
+             id="path935" />
+          <path
+             d="m 361.37451,338.45801 q 0.12695,0 0.28809,-0.0342 v 0.54687 q -0.33203,0.0781 -0.67871,0.0781 -0.48828,0 -0.71289,-0.25391 -0.21973,-0.25879 -0.24903,-0.80566 h -0.0293 q -0.31739,0.59082 -0.75196,0.84961 -0.42968,0.25879 -1.06445,0.25879 -0.77148,0 -1.16211,-0.41993 -0.39062,-0.41992 -0.39062,-1.15234 0,-1.7041 2.21679,-1.72852 l 1.15235,-0.0195 v -0.28808 q 0,-0.63965 -0.25879,-0.91797 -0.25879,-0.2832 -0.8252,-0.2832 -0.57617,0 -0.83008,0.20507 -0.2539,0.20508 -0.30273,0.63477 l -0.91797,-0.083 q 0.22461,-1.42578 2.06543,-1.42578 0.97656,0 1.46484,0.45898 0.49317,0.45411 0.49317,1.31836 v 2.27539 q 0,0.39063 0.10254,0.59083 0.10254,0.19531 0.39062,0.19531 z m -2.97363,-0.0293 q 0.46875,0 0.83008,-0.22461 0.36133,-0.22461 0.56152,-0.60058 0.2002,-0.37598 0.2002,-0.77637 v -0.43457 l -0.92774,0.0195 q -0.57617,0.01 -0.8789,0.12695 -0.30274,0.11719 -0.47364,0.36133 -0.16601,0.23926 -0.16601,0.63965 0,0.40039 0.21484,0.64453 0.21973,0.24414 0.63965,0.24414 z"
+             id="path937" />
+          <path
+             d="m 366.23779,339 v -3.39355 q 0,-0.66407 -0.25879,-0.98633 -0.2539,-0.32227 -0.81543,-0.32227 -0.60546,0 -0.99609,0.44434 -0.38574,0.43945 -0.38574,1.19629 V 339 h -0.87891 v -4.15527 q 0,-0.92286 -0.0293,-1.12793 h 0.83007 q 0.005,0.0244 0.01,0.13183 0.005,0.10742 0.01,0.24903 0.01,0.13671 0.0195,0.52246 h 0.0146 q 0.5127,-1.00098 1.68946,-1.00098 0.84472,0 1.25976,0.45898 0.41504,0.45411 0.41504,1.40137 V 339 Z"
+             id="path939" />
+          <path
+             d="m 371.00342,341.07031 q -0.82031,0 -1.31836,-0.33691 -0.49805,-0.33692 -0.63477,-0.9668 l 0.89844,-0.12207 q 0.083,0.36621 0.35645,0.56152 0.27832,0.2002 0.72753,0.2002 1.21094,0 1.21094,-1.53809 v -0.94726 h -0.01 q -0.23926,0.50293 -0.66407,0.76172 -0.4248,0.25879 -1.01074,0.25879 -0.96679,0 -1.41601,-0.62989 -0.44434,-0.63476 -0.44434,-1.99218 0,-1.38184 0.47852,-2.03125 0.47851,-0.6543 1.47461,-0.6543 0.55175,0 0.95703,0.25879 0.41015,0.2539 0.62988,0.72754 h 0.0147 q 0,-0.14649 0.0195,-0.49317 0.0195,-0.35156 0.0391,-0.41015 h 0.83496 q -0.0293,0.26367 -0.0293,1.09375 v 4.0332 q 0,1.1084 -0.51758,1.66504 -0.51758,0.56152 -1.59668,0.56152 z m 1.24023,-4.76074 q 0,-0.94238 -0.36621,-1.47949 -0.36621,-0.54199 -1.00586,-0.54199 -0.66894,0 -0.96679,0.46875 -0.29786,0.46386 -0.29786,1.55273 0,0.7373 0.12207,1.16699 0.12696,0.42481 0.39063,0.62012 0.26367,0.19531 0.7373,0.19531 0.41504,0 0.72754,-0.22949 0.31739,-0.23438 0.48828,-0.67871 0.1709,-0.44922 0.1709,-1.07422 z"
+             id="path941" />
+          <path
+             d="m 375.57373,336.54395 q 0,0.88867 0.39063,1.3916 0.3955,0.50293 1.0791,0.50293 0.50293,0 0.8789,-0.21485 0.38086,-0.21972 0.50782,-0.5957 l 0.77148,0.21973 q -0.21484,0.60546 -0.79102,0.92773 -0.57128,0.32227 -1.36718,0.32227 -1.15235,0 -1.77246,-0.71778 -0.62012,-0.71777 -0.62012,-2.05566 0,-1.30371 0.60547,-2.00195 0.61035,-0.70313 1.75781,-0.70313 1.14746,0 1.73828,0.69824 0.59082,0.69824 0.59082,2.10938 v 0.11719 z m 1.4502,-2.2754 q -0.6543,0 -1.03516,0.42969 -0.38086,0.42481 -0.40527,1.17188 h 2.85156 q -0.13672,-1.60157 -1.41113,-1.60157 z"
+             id="path943" />
+          <path
+             d="m 385.17822,337.49121 q 0,0.75195 -0.57129,1.18164 -0.5664,0.42481 -1.57226,0.42481 -1.00586,0 -1.53321,-0.3125 -0.52246,-0.31739 -0.68359,-0.9961 l 0.77637,-0.15136 q 0.0928,0.41992 0.39551,0.61523 0.30761,0.19043 1.04492,0.19043 1.31836,0 1.31836,-0.83496 0,-0.3125 -0.23926,-0.50293 -0.23926,-0.19531 -0.73242,-0.31738 -1.28906,-0.31739 -1.63574,-0.49805 -0.34668,-0.18067 -0.53223,-0.44922 -0.18555,-0.27344 -0.18555,-0.67871 0,-0.71777 0.51758,-1.12305 0.51758,-0.40527 1.49902,-0.40527 0.85938,0 1.37207,0.32715 0.5127,0.32226 0.63965,0.94238 l -0.79101,0.0977 q -0.0537,-0.35157 -0.34668,-0.53223 -0.29297,-0.18066 -0.87403,-0.18066 -1.19629,0 -1.19629,0.7373 0,0.29297 0.2002,0.46875 0.20508,0.17578 0.6543,0.2832 l 0.58105,0.15137 q 0.7959,0.19531 1.14258,0.38574 0.35156,0.19043 0.55176,0.47852 0.20019,0.2832 0.20019,0.69824 z"
+             id="path945" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect454"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 337,225 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g460">
+      <switch
+         id="switch458">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 235px; margin-left: 338px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">A</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="A"
+           id="text456"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 363.686,236.372 0.9,2.628 h 1.248 l -3.072,-8.748 h -1.44 l -3.12,8.748 h 1.188 l 0.924,-2.628 z m -0.312,-0.936 h -2.784 l 1.44,-3.984 z"
+             id="path949" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect462"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 337,125 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g468">
+      <switch
+         id="switch466">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 135px; margin-left: 338px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">H</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="H"
+           id="text464"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="M 364.28,135.016 V 139 h 1.116 v -8.748 h -1.116 v 3.78 h -4.5 v -3.78 h -1.116 V 139 h 1.116 v -3.984 z"
+             id="path953" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect470"
+       style="fill:none"
+       d="m 343,40 h 40 v 30 h -40 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g476">
+      <switch
+         id="switch474">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 38px; height: 1px; padding-top: 55px; margin-left: 344px;">
+            <xhtml:div
+               data-drawio-colors="color: #CC0000; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 23px; font-family: Helvetica; color: rgb(204, 0, 0); line-height: 1.2; pointer-events: all; font-weight: bold; white-space: normal; overflow-wrap: normal;">×</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="×"
+           id="text472"
+           style="font-weight:bold;font-size:23px;font-family:Helvetica;text-anchor:middle;fill:#cc0000">
+          <path
+             d="m 365.967,51.788 -2.967,2.967 -2.967,-2.967 -1.932,1.955 2.967,2.944 -2.944,2.944 1.932,1.932 2.944,-2.944 2.944,2.967 1.932,-1.932 -2.944,-2.967 2.967,-2.967 z"
+             id="path957" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect478"
+       style="fill:#66cc00;stroke:#000000"
+       d="m 337,5 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g484">
+      <switch
+         id="switch482">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 15px; margin-left: 338px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">B</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="B"
+           id="text480"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 358.946,19 h 3.948 c 0.828,0 1.44,-0.228 1.908,-0.732 0.432,-0.456 0.672,-1.08 0.672,-1.764 0,-1.056 -0.48,-1.692 -1.596,-2.124 0.804,-0.372 1.212,-1.008 1.212,-1.908 0,-0.648 -0.24,-1.2 -0.696,-1.608 -0.468,-0.42 -1.056,-0.612 -1.896,-0.612 h -3.552 z m 1.116,-4.98 v -2.784 h 2.16 c 0.624,0 0.972,0.084 1.272,0.312 0.312,0.24 0.48,0.6 0.48,1.08 0,0.48 -0.168,0.84 -0.48,1.08 -0.3,0.228 -0.648,0.312 -1.272,0.312 z m 0,3.996 v -3.012 h 2.724 c 0.984,0 1.572,0.564 1.572,1.512 0,0.936 -0.588,1.5 -1.572,1.5 z"
+             id="path961" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect486"
+       style="fill:none"
+       d="m 304,0 h 40 v 30 h -40 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g492">
+      <switch
+         id="switch490">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 15px; margin-left: 324px;">
+            <xhtml:div
+               data-drawio-colors="color: #1A3300; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 23px; font-family: Helvetica; color: rgb(26, 51, 0); line-height: 1.2; pointer-events: all; font-weight: bold; white-space: nowrap;">+</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="+"
+           id="text488"
+           style="font-weight:bold;font-size:23px;font-family:Helvetica;text-anchor:middle;fill:#1a3300">
+          <path
+             d="m 329.543,15.307 h -4.186 v -4.186 h -2.737 v 4.186 h -4.186 v 2.737 h 4.186 v 4.186 h 2.737 v -4.186 h 4.186 z"
+             id="path965" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect494"
+       style="fill:#bac8d3;stroke:#23445d"
+       d="m 403,85 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g500">
+      <switch
+         id="switch498">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 95px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: #666666; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 9px; font-family: Helvetica; color: rgb(102, 102, 102); line-height: 1.2; pointer-events: all; font-style: italic; white-space: normal; overflow-wrap: normal;">NULL</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="NULL"
+           id="text496"
+           style="font-style:italic;font-size:9px;font-family:Helvetica;text-anchor:middle;fill:#666666">
+          <path
+             d="m 423.707,91.439 h -0.801 l -1.143,5.382 -2.25,-5.382 h -0.936 L 417.182,98 h 0.801 l 1.134,-5.319 2.241,5.319 h 0.954 z"
+             id="path969" />
+          <path
+             d="m 429.35,91.439 -0.981,4.608 c -0.144,0.684 -0.603,1.161 -1.296,1.35 -0.198,0.054 -0.414,0.081 -0.648,0.081 -0.774,0 -1.296,-0.306 -1.422,-0.828 -0.018,-0.072 -0.027,-0.144 -0.027,-0.207 0,-0.126 0.018,-0.261 0.045,-0.396 l 0.981,-4.608 h -0.846 l -0.918,4.302 c -0.063,0.315 -0.126,0.72 -0.126,0.864 0,0.369 0.207,0.819 0.495,1.08 0.369,0.333 0.963,0.522 1.656,0.522 1.512,0 2.673,-0.846 2.952,-2.16 l 0.981,-4.608 z"
+             id="path971" />
+          <path
+             d="m 432.455,91.439 h -0.846 L 430.214,98 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path973" />
+          <path
+             d="m 437.459,91.439 h -0.846 L 435.218,98 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path975" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect502"
+       style="fill:#bac8d3;stroke:#23445d"
+       d="m 403,205 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g508">
+      <switch
+         id="switch506">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 215px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: #666666; "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 9px; font-family: Helvetica; color: rgb(102, 102, 102); line-height: 1.2; pointer-events: all; font-style: italic; white-space: normal; overflow-wrap: normal;">NULL</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="NULL"
+           id="text504"
+           style="font-style:italic;font-size:9px;font-family:Helvetica;text-anchor:middle;fill:#666666">
+          <path
+             d="m 423.707,211.439 h -0.801 l -1.143,5.382 -2.25,-5.382 h -0.936 L 417.182,218 h 0.801 l 1.134,-5.319 2.241,5.319 h 0.954 z"
+             id="path979" />
+          <path
+             d="m 429.35,211.439 -0.981,4.608 c -0.144,0.684 -0.603,1.161 -1.296,1.35 -0.198,0.054 -0.414,0.081 -0.648,0.081 -0.774,0 -1.296,-0.306 -1.422,-0.828 -0.018,-0.072 -0.027,-0.144 -0.027,-0.207 0,-0.126 0.018,-0.261 0.045,-0.396 l 0.981,-4.608 h -0.846 l -0.918,4.302 c -0.063,0.315 -0.126,0.72 -0.126,0.864 0,0.369 0.207,0.819 0.495,1.08 0.369,0.333 0.963,0.522 1.656,0.522 1.512,0 2.673,-0.846 2.952,-2.16 l 0.981,-4.608 z"
+             id="path981" />
+          <path
+             d="m 432.455,211.439 h -0.846 L 430.214,218 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path983" />
+          <path
+             d="m 437.459,211.439 h -0.846 L 435.218,218 h 4.086 l 0.153,-0.738 h -3.24 z"
+             id="path985" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect510"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,145 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g516">
+      <switch
+         id="switch514">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 155px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">A</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="A"
+           id="text512"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 429.686,156.372 0.9,2.628 h 1.248 l -3.072,-8.748 h -1.44 l -3.12,8.748 h 1.188 l 0.924,-2.628 z m -0.312,-0.936 h -2.784 l 1.44,-3.984 z"
+             id="path989" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect518"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,245 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g524">
+      <switch
+         id="switch522">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 255px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">A</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="A"
+           id="text520"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 429.686,256.372 0.9,2.628 h 1.248 l -3.072,-8.748 h -1.44 l -3.12,8.748 h 1.188 l 0.924,-2.628 z m -0.312,-0.936 h -2.784 l 1.44,-3.984 z"
+             id="path993" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect526"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,265 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g532">
+      <switch
+         id="switch530">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 275px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">B</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="B"
+           id="text528"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 424.946,279 h 3.948 c 0.828,0 1.44,-0.228 1.908,-0.732 0.432,-0.456 0.672,-1.08 0.672,-1.764 0,-1.056 -0.48,-1.692 -1.596,-2.124 0.804,-0.372 1.212,-1.008 1.212,-1.908 0,-0.648 -0.24,-1.2 -0.696,-1.608 -0.468,-0.42 -1.056,-0.612 -1.896,-0.612 h -3.552 z m 1.116,-4.98 v -2.784 h 2.16 c 0.624,0 0.972,0.084 1.272,0.312 0.312,0.24 0.48,0.6 0.48,1.08 0,0.48 -0.168,0.84 -0.48,1.08 -0.3,0.228 -0.648,0.312 -1.272,0.312 z m 0,3.996 v -3.012 h 2.724 c 0.984,0 1.572,0.564 1.572,1.512 0,0.936 -0.588,1.5 -1.572,1.5 z"
+             id="path997" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect534"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,225 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g540">
+      <switch
+         id="switch538">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 235px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">A</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="A"
+           id="text536"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 429.686,236.372 0.9,2.628 h 1.248 l -3.072,-8.748 h -1.44 l -3.12,8.748 h 1.188 l 0.924,-2.628 z m -0.312,-0.936 h -2.784 l 1.44,-3.984 z"
+             id="path1001" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect542"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,285 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g548">
+      <switch
+         id="switch546">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 295px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">C</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="C"
+           id="text544"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 431.612,292.964 c -0.348,-1.92 -1.452,-2.856 -3.372,-2.856 -1.176,0 -2.124,0.372 -2.772,1.092 -0.792,0.864 -1.224,2.112 -1.224,3.528 0,1.44 0.444,2.676 1.26,3.528 0.684,0.696 1.548,1.02 2.688,1.02 2.136,0 3.336,-1.152 3.6,-3.468 h -1.152 c -0.096,0.6 -0.216,1.008 -0.396,1.356 -0.36,0.72 -1.104,1.128 -2.04,1.128 -1.74,0 -2.844,-1.392 -2.844,-3.576 0,-2.244 1.044,-3.624 2.748,-3.624 0.708,0 1.368,0.204 1.728,0.552 0.324,0.3 0.504,0.66 0.636,1.32 z"
+             id="path1005" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect550"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,185 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g556">
+      <switch
+         id="switch554">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 195px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">C</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="C"
+           id="text552"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 431.612,192.964 c -0.348,-1.92 -1.452,-2.856 -3.372,-2.856 -1.176,0 -2.124,0.372 -2.772,1.092 -0.792,0.864 -1.224,2.112 -1.224,3.528 0,1.44 0.444,2.676 1.26,3.528 0.684,0.696 1.548,1.02 2.688,1.02 2.136,0 3.336,-1.152 3.6,-3.468 h -1.152 c -0.096,0.6 -0.216,1.008 -0.396,1.356 -0.36,0.72 -1.104,1.128 -2.04,1.128 -1.74,0 -2.844,-1.392 -2.844,-3.576 0,-2.244 1.044,-3.624 2.748,-3.624 0.708,0 1.368,0.204 1.728,0.552 0.324,0.3 0.504,0.66 0.636,1.32 z"
+             id="path1009" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect558"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,105 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g564">
+      <switch
+         id="switch562">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 115px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">C</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="C"
+           id="text560"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 431.612,112.964 c -0.348,-1.92 -1.452,-2.856 -3.372,-2.856 -1.176,0 -2.124,0.372 -2.772,1.092 -0.792,0.864 -1.224,2.112 -1.224,3.528 0,1.44 0.444,2.676 1.26,3.528 0.684,0.696 1.548,1.02 2.688,1.02 2.136,0 3.336,-1.152 3.6,-3.468 h -1.152 c -0.096,0.6 -0.216,1.008 -0.396,1.356 -0.36,0.72 -1.104,1.128 -2.04,1.128 -1.74,0 -2.844,-1.392 -2.844,-3.576 0,-2.244 1.044,-3.624 2.748,-3.624 0.708,0 1.368,0.204 1.728,0.552 0.324,0.3 0.504,0.66 0.636,1.32 z"
+             id="path1013" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect566"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,65 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g572">
+      <switch
+         id="switch570">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 75px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">D</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="D"
+           id="text568"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 424.736,79 h 3.372 c 2.208,0 3.564,-1.656 3.564,-4.38 0,-2.712 -1.344,-4.368 -3.564,-4.368 h -3.372 z m 1.116,-0.984 v -6.78 h 2.064 c 1.728,0 2.64,1.164 2.64,3.396 0,2.22 -0.912,3.384 -2.64,3.384 z"
+             id="path1017" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect574"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,45 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g580">
+      <switch
+         id="switch578">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 55px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">G</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="G"
+           id="text576"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 431.84,54.38 h -3.648 v 0.984 h 2.664 v 0.24 c 0,1.56 -1.152,2.688 -2.748,2.688 -0.888,0 -1.692,-0.324 -2.208,-0.888 -0.576,-0.624 -0.924,-1.668 -0.924,-2.748 0,-2.148 1.224,-3.564 3.072,-3.564 1.332,0 2.292,0.684 2.532,1.812 h 1.14 c -0.312,-1.776 -1.656,-2.796 -3.66,-2.796 -1.068,0 -1.932,0.276 -2.616,0.84 -1.02,0.84 -1.584,2.196 -1.584,3.768 0,2.688 1.644,4.56 4.008,4.56 1.188,0 2.124,-0.444 2.988,-1.392 l 0.276,1.164 h 0.708 z"
+             id="path1021" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect582"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,165 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g588">
+      <switch
+         id="switch586">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 175px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">F</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="F"
+           id="text584"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 426.53,175.016 h 4.176 v -0.984 h -4.176 v -2.796 h 4.752 v -0.984 h -5.868 V 179 h 1.116 z"
+             id="path1025" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect590"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,25 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g596">
+      <switch
+         id="switch594">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 35px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">B</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="B"
+           id="text592"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 424.946,39 h 3.948 c 0.828,0 1.44,-0.228 1.908,-0.732 0.432,-0.456 0.672,-1.08 0.672,-1.764 0,-1.056 -0.48,-1.692 -1.596,-2.124 0.804,-0.372 1.212,-1.008 1.212,-1.908 0,-0.648 -0.24,-1.2 -0.696,-1.608 -0.468,-0.42 -1.056,-0.612 -1.896,-0.612 h -3.552 z m 1.116,-4.98 v -2.784 h 2.16 c 0.624,0 0.972,0.084 1.272,0.312 0.312,0.24 0.48,0.6 0.48,1.08 0,0.48 -0.168,0.84 -0.48,1.08 -0.3,0.228 -0.648,0.312 -1.272,0.312 z m 0,3.996 v -3.012 h 2.724 c 0.984,0 1.572,0.564 1.572,1.512 0,0.936 -0.588,1.5 -1.572,1.5 z"
+             id="path1029" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect598"
+       style="fill:#ffffff;stroke:#000000"
+       d="m 403,125 h 50 v 20 h -50 z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g604">
+      <switch
+         id="switch602">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 48px; height: 1px; padding-top: 135px; margin-left: 404px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">H</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="H"
+           id="text600"
+           style="font-size:12px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="M 430.28,135.016 V 139 h 1.116 v -8.748 h -1.116 v 3.78 h -4.5 v -3.78 h -1.116 V 139 h 1.116 v -3.984 z"
+             id="path1033" />
+        </g>
+      </switch>
+    </g>
+    <path
+       id="rect606"
+       style="fill:none"
+       d="m 352,299 h 148 v 30 H 352 Z" />
+    <g
+       transform="translate(-0.5,-0.5)"
+       id="g612">
+      <switch
+         id="switch610">
+        <foreignObject
+           pointer-events="none"
+           width="100%"
+           height="100%"
+           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+           style="overflow: visible; text-align: left;">
+          <xhtml:div
+             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 146px; height: 1px; padding-top: 314px; margin-left: 353px;">
+            <xhtml:div
+               data-drawio-colors="color: rgb(0, 0, 0); "
+               style="box-sizing: border-box; font-size: 0px; text-align: center;">
+              <xhtml:div
+                 style="display: inline-block; font-size: 10px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Final column content</xhtml:div>
+            </xhtml:div>
+          </xhtml:div>
+        </foreignObject>
+        <g
+           aria-label="Final column content"
+           id="text608"
+           style="font-size:10px;font-family:Helvetica;text-anchor:middle">
+          <path
+             d="m 381.74002,313.68 h 3.48 v -0.82 h -3.48 v -2.33 h 3.96 v -0.82 h -4.89 V 317 h 0.93 z"
+             id="path1037" />
+          <path
+             d="m 387.42002,311.76 h -0.83 V 317 h 0.83 z m 0,-2.05 h -0.84 v 1.05 h 0.84 z"
+             id="path1039" />
+          <path
+             d="M 388.84002,311.76 V 317 h 0.84 v -2.89 c 0,-1.07 0.56,-1.77 1.42,-1.77 0.66,0 1.08,0.4 1.08,1.03 V 317 h 0.83 v -3.96 c 0,-0.87 -0.65,-1.43 -1.66,-1.43 -0.78,0 -1.28,0.3 -1.74,1.03 v -0.88 z"
+             id="path1041" />
+          <path
+             d="m 399.05001,316.51 c -0.09,0.02 -0.13,0.02 -0.18,0.02 -0.29,0 -0.45,-0.15 -0.45,-0.41 v -3.08 c 0,-0.93 -0.68,-1.43 -1.97,-1.43 -0.77,0 -1.38,0.22 -1.74,0.61 -0.24,0.27 -0.34,0.57 -0.36,1.09 h 0.84 c 0.07,-0.64 0.45,-0.93 1.23,-0.93 0.76,0 1.17,0.28 1.17,0.78 v 0.22 c -0.01,0.36 -0.19,0.49 -0.87,0.58 -1.18,0.15 -1.36,0.19 -1.68,0.32 -0.61,0.26 -0.92,0.72 -0.92,1.4 0,0.95 0.66,1.55 1.72,1.55 0.66,0 1.19,-0.23 1.78,-0.77 0.06,0.54 0.32,0.77 0.86,0.77 0.18,0 0.29,-0.02 0.57,-0.09 z m -1.46,-1.16 c 0,0.28 -0.08,0.45 -0.33,0.68 -0.34,0.31 -0.75,0.47 -1.24,0.47 -0.65,0 -1.03,-0.31 -1.03,-0.84 0,-0.55 0.36,-0.83 1.26,-0.96 0.89,-0.12 1.06,-0.16 1.34,-0.29 z"
+             id="path1043" />
+          <path
+             d="m 400.78001,309.71 h -0.84 V 317 h 0.84 z"
+             id="path1045" />
+          <path
+             d="m 408.97001,313.52 c -0.04,-0.51 -0.15,-0.84 -0.35,-1.13 -0.36,-0.49 -0.99,-0.78 -1.72,-0.78 -1.42,0 -2.33,1.12 -2.33,2.86 0,1.69 0.9,2.76 2.32,2.76 1.25,0 2.04,-0.75 2.14,-2.03 h -0.84 c -0.14,0.84 -0.57,1.26 -1.28,1.26 -0.92,0 -1.47,-0.75 -1.47,-1.99 0,-1.31 0.54,-2.09 1.45,-2.09 0.7,0 1.14,0.41 1.24,1.14 z"
+             id="path1047" />
+          <path
+             d="m 412.06001,311.61 c -1.48,0 -2.36,1.05 -2.36,2.81 0,1.77 0.88,2.81 2.37,2.81 1.48,0 2.37,-1.05 2.37,-2.77 0,-1.82 -0.86,-2.85 -2.38,-2.85 z m 0.01,0.77 c 0.94,0 1.5,0.77 1.5,2.07 0,1.24 -0.58,2.01 -1.5,2.01 -0.93,0 -1.5,-0.77 -1.5,-2.04 0,-1.27 0.57,-2.04 1.5,-2.04 z"
+             id="path1049" />
+          <path
+             d="m 416.42,309.71 h -0.84 V 317 h 0.84 z"
+             id="path1051" />
+          <path
+             d="m 421.94,317 v -5.24 h -0.83 v 2.97 c 0,1.07 -0.56,1.77 -1.43,1.77 -0.66,0 -1.08,-0.4 -1.08,-1.03 v -3.71 h -0.83 v 4.04 c 0,0.87 0.65,1.43 1.67,1.43 0.77,0 1.26,-0.27 1.75,-0.96 V 317 Z"
+             id="path1053" />
+          <path
+             d="M 423.38,311.76 V 317 h 0.84 v -3.29 c 0,-0.76 0.55,-1.37 1.23,-1.37 0.62,0 0.97,0.38 0.97,1.05 V 317 h 0.84 v -3.29 c 0,-0.76 0.55,-1.37 1.23,-1.37 0.61,0 0.97,0.39 0.97,1.05 V 317 h 0.84 v -3.93 c 0,-0.94 -0.54,-1.46 -1.52,-1.46 -0.7,0 -1.12,0.21 -1.61,0.8 -0.31,-0.56 -0.73,-0.8 -1.41,-0.8 -0.7,0 -1.17,0.26 -1.61,0.89 v -0.74 z"
+             id="path1055" />
+          <path
+             d="M 431.71,311.76 V 317 h 0.84 v -2.89 c 0,-1.07 0.56,-1.77 1.42,-1.77 0.66,0 1.08,0.4 1.08,1.03 V 317 h 0.83 v -3.96 c 0,-0.87 -0.65,-1.43 -1.66,-1.43 -0.78,0 -1.28,0.3 -1.74,1.03 v -0.88 z"
+             id="path1057" />
+          <path
+             d="m 444.06,313.52 c -0.04,-0.51 -0.15,-0.84 -0.35,-1.13 -0.36,-0.49 -0.99,-0.78 -1.72,-0.78 -1.42,0 -2.33,1.12 -2.33,2.86 0,1.69 0.9,2.76 2.32,2.76 1.25,0 2.04,-0.75 2.14,-2.03 h -0.84 c -0.14,0.84 -0.57,1.26 -1.28,1.26 -0.92,0 -1.47,-0.75 -1.47,-1.99 0,-1.31 0.54,-2.09 1.45,-2.09 0.7,0 1.14,0.41 1.24,1.14 z"
+             id="path1059" />
+          <path
+             d="m 447.14999,311.61 c -1.48,0 -2.36,1.05 -2.36,2.81 0,1.77 0.88,2.81 2.37,2.81 1.48,0 2.37,-1.05 2.37,-2.77 0,-1.82 -0.86,-2.85 -2.38,-2.85 z m 0.01,0.77 c 0.94,0 1.5,0.77 1.5,2.07 0,1.24 -0.58,2.01 -1.5,2.01 -0.93,0 -1.5,-0.77 -1.5,-2.04 0,-1.27 0.57,-2.04 1.5,-2.04 z"
+             id="path1061" />
+          <path
+             d="M 450.68999,311.76 V 317 h 0.84 v -2.89 c 0,-1.07 0.56,-1.77 1.42,-1.77 0.66,0 1.08,0.4 1.08,1.03 V 317 h 0.83 v -3.96 c 0,-0.87 -0.65,-1.43 -1.66,-1.43 -0.78,0 -1.28,0.3 -1.74,1.03 v -0.88 z"
+             id="path1063" />
+          <path
+             d="m 458.08999,311.76 h -0.86 v -1.44 h -0.83 v 1.44 h -0.71 v 0.68 h 0.71 v 3.96 c 0,0.54 0.36,0.83 1.01,0.83 0.22,0 0.4,-0.02 0.68,-0.07 v -0.7 c -0.12,0.03 -0.23,0.04 -0.4,0.04 -0.36,0 -0.46,-0.1 -0.46,-0.47 v -3.59 h 0.86 z"
+             id="path1065" />
+          <path
+             d="m 463.31999,314.66 c 0,-0.8 -0.06,-1.28 -0.21,-1.67 -0.34,-0.86 -1.14,-1.38 -2.12,-1.38 -1.46,0 -2.4,1.11 -2.4,2.84 0,1.73 0.9,2.78 2.38,2.78 1.2,0 2.03,-0.68 2.24,-1.82 h -0.84 c -0.23,0.69 -0.7,1.05 -1.37,1.05 -0.53,0 -0.98,-0.24 -1.26,-0.68 -0.2,-0.3 -0.27,-0.6 -0.28,-1.12 z m -3.84,-0.68 c 0.07,-0.97 0.66,-1.6 1.5,-1.6 0.85,0 1.44,0.66 1.44,1.6 z"
+             id="path1067" />
+          <path
+             d="M 464.44998,311.76 V 317 h 0.84 v -2.89 c 0,-1.07 0.56,-1.77 1.42,-1.77 0.66,0 1.08,0.4 1.08,1.03 V 317 h 0.83 v -3.96 c 0,-0.87 -0.65,-1.43 -1.66,-1.43 -0.78,0 -1.28,0.3 -1.74,1.03 v -0.88 z"
+             id="path1069" />
+          <path
+             d="m 471.84998,311.76 h -0.86 v -1.44 h -0.83 v 1.44 h -0.71 v 0.68 h 0.71 v 3.96 c 0,0.54 0.36,0.83 1.01,0.83 0.22,0 0.4,-0.02 0.68,-0.07 v -0.7 c -0.12,0.03 -0.23,0.04 -0.4,0.04 -0.36,0 -0.46,-0.1 -0.46,-0.47 v -3.59 h 0.86 z"
+             id="path1071" />
+        </g>
+      </switch>
+    </g>
+  </g>
+  <switch
+     id="switch622"
+     transform="translate(8,-2)">
+    <g
+       requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+       id="g616" />
+    <a
+       transform="translate(0,-5)"
+       xlink:href="https://www.drawio.com/doc/faq/svg-export-text-problems"
+       target="_blank"
+       id="a620">
+      <g
+         aria-label="Text is not SVG - cannot display"
+         id="text618"
+         style="font-size:10px;text-anchor:middle">
+        <path
+           d="m 181.085,351 h -0.9 v -6.35 h -2.23 v -0.79 h 5.35 v 0.79 h -2.22 z"
+           id="path1074" />
+        <path
+           d="m 185.635,345.54 q 0.69,0 1.18,0.3 0.5,0.3 0.76,0.85 0.27,0.54 0.27,1.27 v 0.53 h -3.67 q 0.02,0.91 0.46,1.39 0.45,0.47 1.25,0.47 0.51,0 0.9,-0.09 0.4,-0.1 0.82,-0.28 v 0.77 q -0.41,0.18 -0.81,0.26 -0.4,0.09 -0.95,0.09 -0.76,0 -1.35,-0.31 -0.58,-0.31 -0.91,-0.92 -0.32,-0.62 -0.32,-1.51 0,-0.88 0.29,-1.51 0.3,-0.63 0.83,-0.97 0.54,-0.34 1.25,-0.34 z m -0.01,0.72 q -0.63,0 -1,0.41 -0.36,0.4 -0.43,1.12 h 2.73 q -0.01,-0.68 -0.32,-1.1 -0.31,-0.43 -0.98,-0.43 z"
+           id="path1076" />
+        <path
+           d="m 190.27499,348.26 -1.85,-2.62 h 1 l 1.38,2.02 1.37,-2.02 h 0.99 l -1.85,2.62 1.95,2.74 h -1 l -1.46,-2.14 -1.48,2.14 h -0.99 z"
+           id="path1078" />
+        <path
+           d="m 196.08498,350.38 q 0.2,0 0.41,-0.03 0.21,-0.04 0.34,-0.08 v 0.67 q -0.14,0.07 -0.4,0.11 -0.26,0.05 -0.5,0.05 -0.42,0 -0.78,-0.14 -0.35,-0.15 -0.57,-0.51 -0.22,-0.36 -0.22,-1.01 v -3.12 h -0.76 v -0.42 l 0.77,-0.35 0.35,-1.14 h 0.52 v 1.23 h 1.55 v 0.68 h -1.55 v 3.1 q 0,0.49 0.23,0.73 0.24,0.23 0.61,0.23 z"
+           id="path1080" />
+        <path
+           d="m 200.95499,343.63 q 0.2,0 0.35,0.14 0.16,0.13 0.16,0.42 0,0.28 -0.16,0.42 -0.15,0.14 -0.35,0.14 -0.22,0 -0.37,-0.14 -0.15,-0.14 -0.15,-0.42 0,-0.29 0.15,-0.42 0.15,-0.14 0.37,-0.14 z m 0.43,2.01 V 351 h -0.88 v -5.36 z"
+           id="path1082" />
+        <path
+           d="m 206.57498,349.52 q 0,0.78 -0.58,1.18 -0.58,0.4 -1.56,0.4 -0.56,0 -0.97,-0.09 -0.4,-0.09 -0.71,-0.25 v -0.8 q 0.32,0.16 0.77,0.3 0.46,0.13 0.93,0.13 0.67,0 0.97,-0.21 0.3,-0.22 0.3,-0.58 0,-0.2 -0.11,-0.36 -0.11,-0.16 -0.4,-0.32 -0.28,-0.16 -0.81,-0.36 -0.52,-0.2 -0.89,-0.4 -0.37,-0.2 -0.57,-0.48 -0.2,-0.28 -0.2,-0.72 0,-0.68 0.55,-1.05 0.56,-0.37 1.46,-0.37 0.49,0 0.91,0.1 0.43,0.09 0.8,0.26 l -0.3,0.7 q -0.34,-0.14 -0.71,-0.24 -0.37,-0.1 -0.76,-0.1 -0.54,0 -0.83,0.18 -0.28,0.17 -0.28,0.47 0,0.22 0.13,0.38 0.13,0.15 0.43,0.3 0.31,0.14 0.82,0.34 0.51,0.19 0.87,0.39 0.36,0.2 0.55,0.49 0.19,0.28 0.19,0.71 z"
+           id="path1084" />
+        <path
+           d="m 213.05498,345.54 q 0.96,0 1.45,0.47 0.49,0.46 0.49,1.5 V 351 h -0.87 v -3.43 q 0,-1.29 -1.2,-1.29 -0.89,0 -1.23,0.5 -0.34,0.5 -0.34,1.44 V 351 h -0.88 v -5.36 h 0.71 l 0.13,0.73 h 0.05 q 0.26,-0.42 0.72,-0.62 0.46,-0.21 0.97,-0.21 z"
+           id="path1086" />
+        <path
+           d="m 221.31499,348.31 q 0,1.33 -0.68,2.06 -0.67,0.73 -1.82,0.73 -0.71,0 -1.27,-0.32 -0.55,-0.33 -0.87,-0.95 -0.32,-0.63 -0.32,-1.52 0,-1.33 0.67,-2.05 0.67,-0.72 1.82,-0.72 0.73,0 1.28,0.33 0.56,0.32 0.87,0.94 0.32,0.61 0.32,1.5 z m -4.05,0 q 0,0.95 0.37,1.51 0.38,0.55 1.2,0.55 0.81,0 1.19,-0.55 0.38,-0.56 0.38,-1.51 0,-0.95 -0.38,-1.49 -0.38,-0.54 -1.2,-0.54 -0.82,0 -1.19,0.54 -0.37,0.54 -0.37,1.49 z"
+           id="path1088" />
+        <path
+           d="m 224.49498,350.38 q 0.2,0 0.41,-0.03 0.21,-0.04 0.34,-0.08 v 0.67 q -0.14,0.07 -0.4,0.11 -0.26,0.05 -0.5,0.05 -0.42,0 -0.78,-0.14 -0.35,-0.15 -0.57,-0.51 -0.22,-0.36 -0.22,-1.01 v -3.12 h -0.76 v -0.42 l 0.77,-0.35 0.35,-1.14 h 0.52 v 1.23 h 1.55 v 0.68 h -1.55 v 3.1 q 0,0.49 0.23,0.73 0.24,0.23 0.61,0.23 z"
+           id="path1090" />
+        <path
+           d="m 233.08498,349.09 q 0,0.95 -0.69,1.48 -0.69,0.53 -1.86,0.53 -0.6,0 -1.11,-0.09 -0.51,-0.09 -0.85,-0.25 v -0.86 q 0.36,0.16 0.89,0.29 0.54,0.13 1.11,0.13 0.8,0 1.2,-0.31 0.41,-0.31 0.41,-0.84 0,-0.35 -0.15,-0.59 -0.15,-0.24 -0.52,-0.44 -0.36,-0.21 -1.01,-0.44 -0.91,-0.33 -1.38,-0.81 -0.46,-0.48 -0.46,-1.31 0,-0.57 0.29,-0.97 0.29,-0.41 0.8,-0.63 0.52,-0.22 1.19,-0.22 0.59,0 1.08,0.11 0.49,0.11 0.89,0.29 l -0.28,0.77 q -0.37,-0.16 -0.81,-0.27 -0.43,-0.11 -0.9,-0.11 -0.67,0 -1.01,0.29 -0.34,0.28 -0.34,0.75 0,0.36 0.15,0.6 0.15,0.24 0.49,0.43 0.34,0.19 0.92,0.41 0.63,0.23 1.06,0.5 0.44,0.26 0.66,0.63 0.23,0.37 0.23,0.93 z"
+           id="path1092" />
+        <path
+           d="m 239.55498,343.86 -2.55,7.14 h -0.9 l -2.55,-7.14 h 0.94 l 1.61,4.58 q 0.16,0.44 0.27,0.83 0.11,0.38 0.18,0.73 0.07,-0.35 0.18,-0.74 0.11,-0.39 0.27,-0.84 l 1.6,-4.56 z"
+           id="path1094" />
+        <path
+           d="m 243.52498,347.23 h 2.47 v 3.5 q -0.58,0.19 -1.17,0.28 -0.59,0.09 -1.34,0.09 -1.11,0 -1.87,-0.44 -0.76,-0.45 -1.16,-1.27 -0.39,-0.83 -0.39,-1.96 0,-1.12 0.44,-1.94 0.44,-0.82 1.26,-1.27 0.83,-0.46 2,-0.46 0.6,0 1.13,0.11 0.54,0.11 1,0.31 l -0.34,0.78 q -0.38,-0.17 -0.86,-0.29 -0.47,-0.12 -0.98,-0.12 -1.28,0 -2,0.77 -0.71,0.77 -0.71,2.11 0,0.85 0.27,1.51 0.28,0.65 0.87,1.02 0.59,0.36 1.55,0.36 0.47,0 0.8,-0.05 0.33,-0.05 0.6,-0.12 v -2.12 h -1.57 z"
+           id="path1096" />
+        <path
+           d="m 249.73499,348.71 v -0.78 h 2.42 v 0.78 z"
+           id="path1098" />
+        <path
+           d="m 258.155,351.1 q -0.71,0 -1.27,-0.29 -0.55,-0.29 -0.87,-0.9 -0.31,-0.61 -0.31,-1.56 0,-0.99 0.33,-1.61 0.33,-0.62 0.89,-0.91 0.57,-0.29 1.29,-0.29 0.41,0 0.79,0.09 0.38,0.08 0.62,0.2 l -0.27,0.73 q -0.24,-0.09 -0.56,-0.17 -0.32,-0.08 -0.6,-0.08 -1.58,0 -1.58,2.03 0,0.97 0.38,1.49 0.39,0.51 1.15,0.51 0.44,0 0.77,-0.09 0.34,-0.09 0.62,-0.22 v 0.78 q -0.27,0.14 -0.6,0.21 -0.32,0.08 -0.78,0.08 z"
+           id="path1100" />
+        <path
+           d="m 262.83499,345.55 q 0.98,0 1.45,0.43 0.47,0.43 0.47,1.37 V 351 h -0.64 l -0.17,-0.76 h -0.04 q -0.35,0.44 -0.74,0.65 -0.38,0.21 -1.06,0.21 -0.73,0 -1.21,-0.38 -0.48,-0.39 -0.48,-1.21 0,-0.8 0.63,-1.23 0.63,-0.44 1.94,-0.48 l 0.91,-0.03 v -0.32 q 0,-0.67 -0.29,-0.93 -0.29,-0.26 -0.82,-0.26 -0.42,0 -0.8,0.13 -0.38,0.12 -0.71,0.28 l -0.27,-0.66 q 0.35,-0.19 0.83,-0.32 0.48,-0.14 1,-0.14 z m 0.26,2.86 q -1,0.04 -1.39,0.32 -0.38,0.28 -0.38,0.79 0,0.45 0.27,0.66 0.28,0.21 0.71,0.21 0.68,0 1.13,-0.37 0.45,-0.38 0.45,-1.16 v -0.48 z"
+           id="path1102" />
+        <path
+           d="m 268.995,345.54 q 0.96,0 1.45,0.47 0.49,0.46 0.49,1.5 V 351 h -0.87 v -3.43 q 0,-1.29 -1.2,-1.29 -0.89,0 -1.23,0.5 -0.34,0.5 -0.34,1.44 V 351 h -0.88 v -5.36 h 0.71 l 0.13,0.73 h 0.05 q 0.26,-0.42 0.72,-0.62 0.46,-0.21 0.97,-0.21 z"
+           id="path1104" />
+        <path
+           d="m 275.175,345.54 q 0.96,0 1.45,0.47 0.49,0.46 0.49,1.5 V 351 h -0.87 v -3.43 q 0,-1.29 -1.2,-1.29 -0.89,0 -1.23,0.5 -0.34,0.5 -0.34,1.44 V 351 h -0.88 v -5.36 h 0.71 l 0.13,0.73 h 0.05 q 0.26,-0.42 0.72,-0.62 0.46,-0.21 0.97,-0.21 z"
+           id="path1106" />
+        <path
+           d="m 283.435,348.31 q 0,1.33 -0.68,2.06 -0.67,0.73 -1.82,0.73 -0.71,0 -1.27,-0.32 -0.55,-0.33 -0.87,-0.95 -0.32,-0.63 -0.32,-1.52 0,-1.33 0.67,-2.05 0.67,-0.72 1.82,-0.72 0.73,0 1.28,0.33 0.56,0.32 0.87,0.94 0.32,0.61 0.32,1.5 z m -4.05,0 q 0,0.95 0.37,1.51 0.38,0.55 1.2,0.55 0.81,0 1.19,-0.55 0.38,-0.56 0.38,-1.51 0,-0.95 -0.38,-1.49 -0.38,-0.54 -1.2,-0.54 -0.82,0 -1.19,0.54 -0.37,0.54 -0.37,1.49 z"
+           id="path1108" />
+        <path
+           d="m 286.615,350.38 q 0.2,0 0.41,-0.03 0.21,-0.04 0.34,-0.08 v 0.67 q -0.14,0.07 -0.4,0.11 -0.26,0.05 -0.5,0.05 -0.42,0 -0.78,-0.14 -0.35,-0.15 -0.57,-0.51 -0.22,-0.36 -0.22,-1.01 v -3.12 h -0.76 v -0.42 l 0.77,-0.35 0.35,-1.14 h 0.52 v 1.23 h 1.55 v 0.68 h -1.55 v 3.1 q 0,0.49 0.23,0.73 0.24,0.23 0.61,0.23 z"
+           id="path1110" />
+        <path
+           d="m 292.93501,351.1 q -1,0 -1.6,-0.69 -0.6,-0.7 -0.6,-2.08 0,-1.38 0.6,-2.08 0.61,-0.71 1.61,-0.71 0.62,0 1.01,0.23 0.4,0.23 0.65,0.56 h 0.06 q -0.01,-0.13 -0.04,-0.38 -0.02,-0.26 -0.02,-0.41 v -2.14 h 0.88 v 7.6 h -0.71 l -0.13,-0.72 h -0.04 q -0.24,0.34 -0.64,0.58 -0.4,0.24 -1.03,0.24 z m 0.14,-0.73 q 0.85,0 1.19,-0.46 0.35,-0.47 0.35,-1.41 v -0.16 q 0,-1 -0.33,-1.53 -0.33,-0.54 -1.22,-0.54 -0.71,0 -1.07,0.57 -0.35,0.56 -0.35,1.51 0,0.96 0.35,1.49 0.36,0.53 1.08,0.53 z"
+           id="path1112" />
+        <path
+           d="m 297.635,343.63 q 0.2,0 0.35,0.14 0.16,0.13 0.16,0.42 0,0.28 -0.16,0.42 -0.15,0.14 -0.35,0.14 -0.22,0 -0.37,-0.14 -0.15,-0.14 -0.15,-0.42 0,-0.29 0.15,-0.42 0.15,-0.14 0.37,-0.14 z m 0.43,2.01 V 351 h -0.88 v -5.36 z"
+           id="path1114" />
+        <path
+           d="m 303.25499,349.52 q 0,0.78 -0.58,1.18 -0.58,0.4 -1.56,0.4 -0.56,0 -0.97,-0.09 -0.4,-0.09 -0.71,-0.25 v -0.8 q 0.32,0.16 0.77,0.3 0.46,0.13 0.93,0.13 0.67,0 0.97,-0.21 0.3,-0.22 0.3,-0.58 0,-0.2 -0.11,-0.36 -0.11,-0.16 -0.4,-0.32 -0.28,-0.16 -0.81,-0.36 -0.52,-0.2 -0.89,-0.4 -0.37,-0.2 -0.57,-0.48 -0.2,-0.28 -0.2,-0.72 0,-0.68 0.55,-1.05 0.56,-0.37 1.46,-0.37 0.49,0 0.91,0.1 0.43,0.09 0.8,0.26 l -0.3,0.7 q -0.34,-0.14 -0.71,-0.24 -0.37,-0.1 -0.76,-0.1 -0.54,0 -0.83,0.18 -0.28,0.17 -0.28,0.47 0,0.22 0.13,0.38 0.13,0.15 0.43,0.3 0.31,0.14 0.82,0.34 0.51,0.19 0.87,0.39 0.36,0.2 0.55,0.49 0.19,0.28 0.19,0.71 z"
+           id="path1116" />
+        <path
+           d="m 307.10499,345.54 q 0.99,0 1.59,0.69 0.61,0.69 0.61,2.08 0,1.37 -0.61,2.08 -0.6,0.71 -1.6,0.71 -0.62,0 -1.03,-0.23 -0.4,-0.24 -0.63,-0.55 h -0.06 q 0.02,0.17 0.04,0.43 0.02,0.26 0.02,0.45 v 2.2 h -0.88 v -7.76 h 0.72 l 0.12,0.73 h 0.04 q 0.24,-0.35 0.63,-0.59 0.39,-0.24 1.04,-0.24 z m -0.16,0.74 q -0.82,0 -1.16,0.46 -0.33,0.46 -0.35,1.4 v 0.17 q 0,0.99 0.32,1.53 0.33,0.53 1.21,0.53 0.49,0 0.8,-0.27 0.32,-0.27 0.47,-0.73 0.16,-0.47 0.16,-1.07 0,-0.92 -0.36,-1.47 -0.35,-0.55 -1.09,-0.55 z"
+           id="path1118" />
+        <path
+           d="m 311.58499,351 h -0.88 v -7.6 h 0.88 z"
+           id="path1120" />
+        <path
+           d="m 315.31499,345.55 q 0.98,0 1.45,0.43 0.47,0.43 0.47,1.37 V 351 h -0.64 l -0.17,-0.76 h -0.04 q -0.35,0.44 -0.74,0.65 -0.38,0.21 -1.06,0.21 -0.73,0 -1.21,-0.38 -0.48,-0.39 -0.48,-1.21 0,-0.8 0.63,-1.23 0.63,-0.44 1.94,-0.48 l 0.91,-0.03 v -0.32 q 0,-0.67 -0.29,-0.93 -0.29,-0.26 -0.82,-0.26 -0.42,0 -0.8,0.13 -0.38,0.12 -0.71,0.28 l -0.27,-0.66 q 0.35,-0.19 0.83,-0.32 0.48,-0.14 1,-0.14 z m 0.26,2.86 q -1,0.04 -1.39,0.32 -0.38,0.28 -0.38,0.79 0,0.45 0.27,0.66 0.28,0.21 0.71,0.21 0.68,0 1.13,-0.37 0.45,-0.38 0.45,-1.16 v -0.48 z"
+           id="path1122" />
+        <path
+           d="m 318.05499,345.64 h 0.94 l 1.16,3.05 q 0.15,0.4 0.27,0.77 0.12,0.36 0.18,0.69 h 0.04 q 0.06,-0.25 0.19,-0.65 0.13,-0.41 0.27,-0.82 l 1.09,-3.04 h 0.95 l -2.31,6.1 q -0.28,0.76 -0.73,1.21 -0.44,0.45 -1.22,0.45 -0.24,0 -0.42,-0.03 -0.18,-0.02 -0.31,-0.05 v -0.7 q 0.11,0.02 0.26,0.04 0.16,0.02 0.33,0.02 0.46,0 0.74,-0.26 0.29,-0.26 0.45,-0.69 l 0.28,-0.71 z"
+           id="path1124" />
+      </g>
+    </a>
+  </switch>
+</svg>

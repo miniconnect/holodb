@@ -1,0 +1,35 @@
+plugins {
+    id 'java-library'
+}
+
+description "HoloDB configuration"
+
+sourceSets {
+    schemaGen {
+        compileClasspath += sourceSets.main.runtimeClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+configurations {
+    schemaGenImplementation.extendsFrom implementation
+    schemaGenRuntimeOnly.extendsFrom runtimeOnly
+}
+
+dependencies {
+    implementation project(':spi')
+    api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+    implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"
+    
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
+    
+    schemaGenImplementation "hu.webarticum.miniconnect.api:lang-jackson:${miniConnectApiVersion}"
+    schemaGenImplementation 'com.fasterxml.jackson.module:jackson-module-jsonSchema:2.15.0'
+}
+
+task generateSchema(type: JavaExec) {
+    dependsOn classes
+    mainClass = "hu.webarticum.holodb.config.gradle.schemagen.SchemaGeneratorMain"
+    classpath = sourceSets.schemaGen.runtimeClasspath
+    args = [ "${buildDir}/schemas/holodb-config.schema.json" ]
+}

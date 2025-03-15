@@ -1,0 +1,66 @@
+plugins {
+    id 'java-library'
+    id 'me.champeau.jmh' version '0.7.2'
+    id 'io.morethan.jmhreport' version '0.9.0'
+}
+
+description "Core building blocks"
+
+sourceSets {
+    lab {
+        compileClasspath += sourceSets.main.runtimeClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+configurations {
+    labImplementation.extendsFrom implementation
+    labRuntimeOnly.extendsFrom runtimeOnly
+}
+
+dependencies {
+    implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+    implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"
+    implementation "hu.webarticum.minibase:engine:${miniBaseVersion}"
+    
+    implementation 'org.apache.commons:commons-lang3:3.0'
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+    
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.7.1'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+    
+    labImplementation 'jfree:jfreechart:1.0.13'
+    labImplementation 'org.openjdk.jol:jol-core:0.17'
+    
+    jmh 'org.openjdk.jmh:jmh-core:1.37'
+    jmhRuntimeOnly 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
+}
+
+jmhJar {
+    duplicatesStrategy = DuplicatesStrategy.WARN
+}
+
+String jmhIncludesPropertyValue = findProperty("jmhIncludes")
+jmh {
+    if (jmhIncludesPropertyValue != null) {
+        includes = jmhIncludesPropertyValue.split(",") as List
+    }
+    duplicateClassesStrategy = DuplicatesStrategy.EXCLUDE
+    resultFormat = 'JSON'
+}
+
+tasks.getByName('jmhJar').doFirst() {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
+
+def jmhReportHtmlDir = 'build/results/jmh/html'
+project.tasks.getByName("jmhReport").doFirst {
+    project.file(jmhReportHtmlDir).mkdirs()
+}
+jmhReport {
+    jmhResultPath = project.file('build/results/jmh/results.json')
+    jmhReportOutput = project.file(jmhReportHtmlDir)
+}
+
