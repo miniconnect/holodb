@@ -1,5 +1,5 @@
 plugins {
-    id 'com.palantir.git-version' version '0.14.0'
+    id 'org.ajoberstar.grgit' version '4.1.1'
     id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
     id 'nebula.lint' version '17.7.1'
 }
@@ -10,7 +10,7 @@ def scmUrl = 'https://github.com/miniconnect/holodb.git'
 def websiteUrl = scmUrl.replaceAll(/\.git$/, "");
 
 def automaticVersion = '0.1.0-SNAPSHOT'
-def versionMatcher = gitVersion() =~ /^v?(\d+\.\d+\.)(\d+)(.*)$/
+def versionMatcher = grgit.describe() =~ /^v?(\d+\.\d+\.)(\d+)(.*)$/
 if (versionMatcher.size() > 0) {
     def versionMatch = versionMatcher[0]
     def isVersionDirty = !versionMatch[3].isEmpty()
@@ -25,6 +25,12 @@ defaultTasks 'build'
 nexusPublishing {
     repositories {
         sonatype()
+    }
+}
+
+task printVersion {
+    doLast {
+        println project.version
     }
 }
 
