@@ -1,8 +1,7 @@
 #!/bin/sh
 
-DIRECTORY="$( dirname "$0" )"
-TASK_NAME='execLab'
-
+selfDir="$( dirname -- "$( realpath "$0" )" )"
+taskName='execLab'
 
 if [ "$#" -ne 2 ]; then
     echo "Usage: ./exec-lab.sh <projectName> <mainClass>"
@@ -12,4 +11,4 @@ fi
 projectName="$1"
 mainClass="$2"
 
-"$DIRECTORY/gradlew" ":${1}:${TASK_NAME}" -Dlab.exec.main.class="$2" -q --console=plain
+"$selfDir/gradlew" ":${projectName}:${taskName}" -Dlab.exec.main.class="$mainClass" -q --console=plain
