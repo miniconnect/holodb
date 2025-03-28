@@ -1,6 +1,6 @@
 #!/bin/sh
 
-selfDir="$( dirname -- "$( realpath "$0" )" )"
+selfDir="$( dirname -- "$( realpath -- "$0" )" )"
 taskName='execLab'
 
 if [ "$#" -ne 2 ]; then

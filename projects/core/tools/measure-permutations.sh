@@ -3,9 +3,9 @@
 
 startDir="$( pwd )"
 
-selfDir="$( dirname -- "$( realpath "$0" )" )"
-projectDir="$( realpath "${selfDir}/.." )"
-rootDir="$( realpath "${projectDir}/../.." )"
+selfDir="$( dirname -- "$( realpath -- "$0" )" )"
+projectDir="$( realpath -- "${selfDir}/.." )"
+rootDir="$( realpath -- "${projectDir}/../.." )"
 buildDir="${projectDir}/build"
 outDir="${buildDir}/measure-permutations"
 dataDir="${outDir}/data"
