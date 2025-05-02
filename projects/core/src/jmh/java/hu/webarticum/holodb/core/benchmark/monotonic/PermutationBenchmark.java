@@ -41,7 +41,7 @@ public class PermutationBenchmark {
     private static final LargeInteger SMALL_POW_2 = LargeInteger.of(64);
     private static final LargeInteger SMALL_NON_POW_2 = LargeInteger.of(125);
     private static final LargeInteger BIG_POW_2 = LargeInteger.of("147573952589676412928");
-    private static final LargeInteger BIG_NON_POW_2 = LargeInteger.of("210463807346237083746");
+    private static final LargeInteger BIG_NON_POW_2 = LargeInteger.of("287769207549869005209");
     
     
     @Param({
