@@ -5,9 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
+import com.kjetland.jackson.jsonSchema.JsonSchemaGenerator;
 
 import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.miniconnect.lang.jackson.JacksonSupport;
@@ -19,9 +19,10 @@ public class SchemaGeneratorMain {
         
         ObjectMapper mapper = JacksonSupport.createMapper();
         JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
-        JsonSchema schema = generator.generateSchema(HoloConfig.class);
+        JsonNode schema = generator.generateJsonSchema(HoloConfig.class);
         
         File schemaOutFile = new File(outputPath);
+        System.out.println(schemaOutFile);
         File schemaOutDirectory = schemaOutFile.getParentFile();
         schemaOutDirectory.mkdirs();
         try (OutputStream out = new FileOutputStream(schemaOutFile)) {

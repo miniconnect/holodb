@@ -24,7 +24,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
     
     schemaGenImplementation "hu.webarticum.miniconnect.api:lang-jackson:${miniConnectApiVersion}"
-    schemaGenImplementation 'com.fasterxml.jackson.module:jackson-module-jsonSchema:2.15.0'
+    //schemaGenImplementation 'com.fasterxml.jackson.module:jackson-module-jsonSchema:2.15.0'
+    schemaGenImplementation 'com.kjetland:mbknor-jackson-jsonschema_2.13:1.0.39'
 }
 
 task generateSchema(type: JavaExec) {
