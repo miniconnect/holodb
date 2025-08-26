@@ -36,7 +36,7 @@ import javax.persistence.metamodel.Type;
 import javax.persistence.metamodel.Type.PersistenceType;
 
 import org.hibernate.annotations.Immutable;
-import org.hibernate.metamodel.internal.MetamodelImpl;
+import org.hibernate.metamodel.spi.MetamodelImplementor;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
 
@@ -65,7 +65,7 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 
 // TODO: ignore column vs throw exception?
 // TODO: handling mapped superclasses?
-public class JpaMetamodelHoloConfigLoader {
+public class JpaJavaxMetamodelHoloConfigLoader {
     
     private final Pattern getMethodPattern = Pattern.compile("^get([A-Z])(.*)$");
     
@@ -160,8 +160,9 @@ public class JpaMetamodelHoloConfigLoader {
         }
         
         Class<?> clazz = (Class<?>) annotatedElement;
-        if (metamodel instanceof MetamodelImpl) {
-            MetamodelImpl hibernateMetamodel = (MetamodelImpl) metamodel;
+        if (metamodel instanceof MetamodelImplementor) {
+            // FIXME MetamodelImplementor is deprecated now
+            MetamodelImplementor hibernateMetamodel = (MetamodelImplementor) metamodel;
             EntityPersister entityPersister = hibernateMetamodel.entityPersister(clazz);
             if (entityPersister instanceof SingleTableEntityPersister) {
                 return ((SingleTableEntityPersister) entityPersister).getTableName();

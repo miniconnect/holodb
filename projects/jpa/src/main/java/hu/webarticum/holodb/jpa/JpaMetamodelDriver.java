@@ -9,8 +9,6 @@ import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
-import javax.persistence.metamodel.Metamodel;
-
 import hu.webarticum.holodb.bootstrap.factory.StorageAccessFactory;
 import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.minibase.engine.api.Engine;
@@ -31,6 +29,7 @@ import hu.webarticum.miniconnect.jdbc.provider.DatabaseProvider;
 import hu.webarticum.miniconnect.jdbc.provider.impl.BlanketDatabaseProvider;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.record.converter.DefaultConverter;
+import jakarta.persistence.metamodel.Metamodel;
 
 public class JpaMetamodelDriver implements Driver {
     
@@ -39,13 +38,22 @@ public class JpaMetamodelDriver implements Driver {
     public static final String DEFAULT_SCHEMA_NAME = "default_schema";
     
     
-    private static Metamodel metamodel = null;
+    private static Object metamodel = null;
     
-    public static synchronized void setMetamodel(Metamodel metamodel) {
+    /**
+     * Accepts a metamodel.
+     * The currently supported types are the following:
+     * 
+     * <ul>
+     *   <li>{@link jakarta.persistence.metamodel.Metamodel}</li>
+     *   <li>{@link javax.persistence.metamodel.Metamodel}</li>
+     * </ul>
+     */
+    public static synchronized void setMetamodel(Object metamodel) {
         JpaMetamodelDriver.metamodel = metamodel;
     }
 
-    private static synchronized Metamodel getMetamodel() {
+    private static synchronized Object getMetamodel() {
         return metamodel;
     }
     
@@ -103,12 +111,18 @@ public class JpaMetamodelDriver implements Driver {
     }
     
     private static StorageAccess createMetamodelStorageAccess(String defaultSchemaName) {
-        Metamodel metamodel = getMetamodel();
-        if (metamodel == null) {
+        LargeInteger seed = LargeInteger.of(42L); // FIXME: detect?
+        HoloConfig config;
+        Object metamodel = getMetamodel();
+        if (metamodel instanceof Metamodel) {
+            Metamodel jakartaMetamodel = (Metamodel) metamodel;
+            config = new JpaJakartaMetamodelHoloConfigLoader().load(jakartaMetamodel, defaultSchemaName, seed);
+        } else if (metamodel instanceof javax.persistence.metamodel.Metamodel) {
+            javax.persistence.metamodel.Metamodel javaxMetamodel = (javax.persistence.metamodel.Metamodel) metamodel;
+            config = new JpaJavaxMetamodelHoloConfigLoader().load(javaxMetamodel, defaultSchemaName, seed);
+        } else {
             throw new StorageAccessNotReadyException();
         }
-        LargeInteger seed = LargeInteger.of(42L); // FIXME: detect?
-        HoloConfig config = new JpaMetamodelHoloConfigLoader().load(metamodel, defaultSchemaName, seed);
         return StorageAccessFactory.createStorageAccess(config, new DefaultConverter());
     }
     
