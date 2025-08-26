@@ -675,6 +675,11 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (columnAnnotation != null && !columnAnnotation.name().isEmpty()) {
             return columnAnnotation.name();
         }
+
+        JoinColumn joinColumnAnnotation = annotatedMember.getAnnotation(JoinColumn.class);
+        if (joinColumnAnnotation != null && !joinColumnAnnotation.name().isEmpty()) {
+            return joinColumnAnnotation.name();
+        }
         
         return extractFieldName(annotatedMember);
     }
