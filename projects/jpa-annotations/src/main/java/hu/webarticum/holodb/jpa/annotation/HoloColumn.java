@@ -33,6 +33,8 @@ public @interface HoloColumn {
     
     public String valuesDynamicPattern() default "";
     
+    public HoloColumnDummyTextKind valuesTextKind() default HoloColumnDummyTextKind.UNDEFINED;
+    
     public String[] valuesForeignColumn() default {};
     
     public HoloColumnDistributionQuality distributionQuality() default HoloColumnDistributionQuality.UNDEFINED;

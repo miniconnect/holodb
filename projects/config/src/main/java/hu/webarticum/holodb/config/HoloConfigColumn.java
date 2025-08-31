@@ -45,6 +45,17 @@ public class HoloConfigColumn {
         }
     
     }
+
+    public enum DummyTextKind {
+        
+        PHRASE, TITLE, SENTENCE, PARAGRAPH, MARKDOWN, HTML;
+        
+        @JsonValue
+        public String toJson() {
+            return name().toLowerCase();
+        }
+            
+    }
     
     
     private final String name;
@@ -67,6 +78,8 @@ public class HoloConfigColumn {
     
     private final String valuesDynamicPattern;
 
+    private final DummyTextKind valuesTextKind;
+    
     private final ImmutableList<String> valuesForeignColumn;
     
     private final DistributionQuality distributionQuality;
@@ -91,6 +104,7 @@ public class HoloConfigColumn {
             @JsonProperty("valuesRange") ImmutableList<LargeInteger> valuesRange,
             @JsonProperty("valuesPattern") String valuesPattern,
             @JsonProperty("valuesDynamicPattern") String valuesDynamicPattern,
+            @JsonProperty("valuesTextKind") DummyTextKind valuesTextKind,
             @JsonProperty("valuesForeignColumn") ImmutableList<String> valuesForeignColumn,
             @JsonProperty("distributionQuality") DistributionQuality distributionQuality,
             @JsonProperty("shuffleQuality") ShuffleQuality shuffleQuality,
@@ -107,6 +121,7 @@ public class HoloConfigColumn {
         this.valuesRange = valuesRange;
         this.valuesPattern = valuesPattern;
         this.valuesDynamicPattern = valuesDynamicPattern;
+        this.valuesTextKind = valuesTextKind;
         this.valuesForeignColumn = valuesForeignColumn;
         this.distributionQuality = distributionQuality;
         this.shuffleQuality = shuffleQuality;
@@ -117,7 +132,7 @@ public class HoloConfigColumn {
 
     public static HoloConfigColumn empty() {
         return new HoloConfigColumn(
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
     
     public static HoloConfigColumn createWithDefaults() {
@@ -127,6 +142,7 @@ public class HoloConfigColumn {
                 ColumnMode.DEFAULT,
                 null,
                 ImmutableList.empty(), // FIXME: should null be supported?
+                null,
                 null,
                 null,
                 null,
@@ -157,6 +173,7 @@ public class HoloConfigColumn {
                 mergeValue(valuesRange, other.valuesRange()),
                 mergeValue(valuesPattern, other.valuesPattern()),
                 mergeValue(valuesDynamicPattern, other.valuesDynamicPattern()),
+                mergeValue(valuesTextKind, other.valuesTextKind()),
                 mergeValue(valuesForeignColumn, other.valuesForeignColumn()),
                 mergeValue(distributionQuality, other.distributionQuality()),
                 mergeValue(shuffleQuality, other.shuffleQuality()),
@@ -227,6 +244,12 @@ public class HoloConfigColumn {
         return valuesDynamicPattern;
     }
 
+    @JsonGetter("valuesTextKind")
+    @JsonInclude(Include.NON_NULL)
+    public DummyTextKind valuesTextKind() {
+        return valuesTextKind;
+    }
+
     @JsonGetter("valuesForeignColumn")
     @JsonInclude(Include.NON_NULL)
     public ImmutableList<String> valuesForeignColumn() {
@@ -276,6 +299,7 @@ public class HoloConfigColumn {
                 .add("valuesRange", valuesRange)
                 .add("valuesPattern", valuesPattern)
                 .add("valuesDynamicPattern", valuesDynamicPattern)
+                .add("valuesTextKind", valuesTextKind)
                 .add("valuesForeignColumn", valuesForeignColumn)
                 .add("distributionQuality", distributionQuality)
                 .add("shuffleQuality", shuffleQuality)

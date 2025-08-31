@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import com.mifmif.common.regex.Generex;
 
+import hu.webarticum.holodb.bootstrap.misc.DummyTextSource;
 import hu.webarticum.holodb.bootstrap.misc.GenerexSource;
 import hu.webarticum.holodb.bootstrap.misc.MatchListSource;
 import hu.webarticum.holodb.config.HoloConfig;
@@ -245,7 +246,8 @@ public class StorageAccessFactory {
                 columnConfig.valuesBundle() != null ||
                 columnConfig.valuesResource() != null ||
                 columnConfig.valuesPattern() != null ||
-                columnConfig.valuesDynamicPattern() != null) {
+                columnConfig.valuesDynamicPattern() != null ||
+                columnConfig.valuesTextKind() != null) {
             return String.class;
         }
         
@@ -326,15 +328,21 @@ public class StorageAccessFactory {
             TreeRandom columnRandom = tableRandom.sub("col-" + columnName);
             if (columnConfig.valuesForeignColumn() != null) {
                 return createForeignColumnSource(config, schemaConfig, tableConfig, columnConfig, columnRandom);
-            } else if (columnConfig.valuesDynamicPattern() == null) {
+            } else if (columnConfig.valuesDynamicPattern() != null) {
+                if (isEnum) {
+                    throw new IllegalArgumentException(
+                            "ENUM mode can not be used with dynamic pattern (" + tableConfig.name() + "." + columnName + ")");
+                }
+                return createDynamicPatternSource(columnConfig, columnRandom, converter, tableSize);
+            } else if (columnConfig.valuesTextKind() != null) {
+                if (isEnum) {
+                    throw new IllegalArgumentException(
+                            "ENUM mode can not be used with text kind (" + tableConfig.name() + "." + columnName + ")");
+                }
+                return createTextKindSource(columnConfig, columnRandom, converter, tableSize);
+            } else {
                 SortedSource<?> baseSource = loadBaseSource(columnConfig, converter, isEnum);
                 return createShuffledSource(columnConfig, columnRandom, baseSource, tableSize);
-            } else if (!isEnum) {
-                return createDynamicPatternSource(columnConfig, columnRandom, converter, tableSize);
-            } else {
-                throw new IllegalArgumentException(
-                        "ENUM mode can not be used with dynamic column (" +
-                        tableConfig.name() + "." + columnName + ")");
             }
         } else if (columnMode == ColumnMode.COUNTER) {
             return new RangeSource(LargeInteger.ONE, tableSize);
@@ -547,18 +555,40 @@ public class StorageAccessFactory {
             TreeRandom columnRandom,
             Converter converter,
             LargeInteger tableSize) {
+        LargeInteger valueCount = getValueCount(columnConfig, tableSize);
+        Generex generex = new Generex(columnConfig.valuesDynamicPattern());
+        GenerexSource generexSource = new GenerexSource(generex, columnRandom, valueCount);
+        return wrapNonIndexedStringSource(columnConfig, columnRandom, converter, tableSize, generexSource);
+    }
+
+    private static Source<?> createTextKindSource(
+            HoloConfigColumn columnConfig,
+            TreeRandom columnRandom,
+            Converter converter,
+            LargeInteger tableSize) {
+        LargeInteger valueCount = getValueCount(columnConfig, tableSize);
+        DummyTextSource dummyTextSource = new DummyTextSource(columnConfig.valuesTextKind(), columnRandom, valueCount);
+        return wrapNonIndexedStringSource(columnConfig, columnRandom, converter, tableSize, dummyTextSource);
+    }
+    
+    private static LargeInteger getValueCount(HoloConfigColumn columnConfig, LargeInteger tableSize) {
         LargeInteger nullCount = columnConfig.nullCount();
         LargeInteger effectiveNullCount = nullCount != null ? nullCount : LargeInteger.ZERO;
-        LargeInteger valueCount = tableSize.subtract(effectiveNullCount);
-        String dynamicPattern = columnConfig.valuesDynamicPattern();
+        return tableSize.subtract(effectiveNullCount);
+    }
+
+    private static Source<?> wrapNonIndexedStringSource(
+            HoloConfigColumn columnConfig,
+            TreeRandom columnRandom,
+            Converter converter,
+            LargeInteger tableSize,
+            Source<String> nonIndexedStringSource) {
+        LargeInteger nullCount = columnConfig.nullCount();
+        LargeInteger effectiveNullCount = nullCount != null ? nullCount : LargeInteger.ZERO;
         Class<?> type = extractType(columnConfig);
-        GenerexSource generexSource = new GenerexSource(new Generex(dynamicPattern), columnRandom, valueCount);
-        Source<?> source = generexSource;
+        Source<?> source = nonIndexedStringSource;
         if (type != String.class) {
-            source = new TransformingSource<String, Object>( // NOSONAR explicit type parameters are necessary
-                    generexSource,
-                    type,
-                    b -> converter.convert(b, type));
+            source = new TransformingSource<>(nonIndexedStringSource, type, b -> converter.convert(b, type));
         }
         if (!effectiveNullCount.equals(LargeInteger.ZERO)) {
             source = new NullPaddedSource<>(source, tableSize);
@@ -604,8 +634,7 @@ public class StorageAccessFactory {
             String indexName = "idx_" + columnName;
             Source<?> source = entry.getValue();
             if (source instanceof HoloSimpleSource) {
-                TableIndex tableIndex = ((HoloSimpleSource<?>) source)
-                        .createIndex(indexName, columnName);
+                TableIndex tableIndex = ((HoloSimpleSource<?>) source).createIndex(indexName, columnName);
                 tableIndexes.add(tableIndex);
             } else if (source instanceof IndexedSource) {
                 TableIndex tableIndex = new IndexTableIndex(indexName, columnName, (Index) source);

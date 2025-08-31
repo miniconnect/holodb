@@ -34,6 +34,8 @@ public @interface HoloVirtualColumn {
     public String valuesPattern() default "";
     
     public String valuesDynamicPattern() default "";
+
+    public HoloColumnDummyTextKind valuesTextKind() default HoloColumnDummyTextKind.UNDEFINED;
     
     public String[] valuesForeignColumn() default {};
     

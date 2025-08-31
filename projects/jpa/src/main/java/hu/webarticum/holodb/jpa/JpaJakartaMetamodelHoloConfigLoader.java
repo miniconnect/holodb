@@ -29,9 +29,11 @@ import hu.webarticum.holodb.config.HoloConfigSchema;
 import hu.webarticum.holodb.config.HoloConfigTable;
 import hu.webarticum.holodb.config.HoloConfigColumn.ColumnMode;
 import hu.webarticum.holodb.config.HoloConfigColumn.DistributionQuality;
+import hu.webarticum.holodb.config.HoloConfigColumn.DummyTextKind;
 import hu.webarticum.holodb.config.HoloConfigColumn.ShuffleQuality;
 import hu.webarticum.holodb.jpa.annotation.HoloColumn;
 import hu.webarticum.holodb.jpa.annotation.HoloColumnDistributionQuality;
+import hu.webarticum.holodb.jpa.annotation.HoloColumnDummyTextKind;
 import hu.webarticum.holodb.jpa.annotation.HoloColumnMode;
 import hu.webarticum.holodb.jpa.annotation.HoloColumnShuffleQuality;
 import hu.webarticum.holodb.jpa.annotation.HoloIgnore;
@@ -780,6 +782,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                 detectColumnValuesRange(jpaColumnInfo, columnMode, holoColumnAnnotation),
                 detectColumnValuesPattern(holoColumnAnnotation),
                 detectColumnValuesDynamicPattern(holoColumnAnnotation),
+                detectColumnValuesTextKind(holoColumnAnnotation),
                 detectColumnValuesForeignColumn(schemas, jpaColumnInfo, columnMode, holoColumnAnnotation),
                 detectColumnDistributionQuality(holoColumnAnnotation),
                 detectColumnShuffleQuality(holoColumnAnnotation),
@@ -909,6 +912,14 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         }
     }
     
+    private DummyTextKind detectColumnValuesTextKind(HoloColumn holoColumnAnnotation) {
+        if (holoColumnAnnotation != null) {
+            return dummyTextKindOf(holoColumnAnnotation.valuesTextKind());
+        } else {
+            return null;
+        }
+    }
+    
     private ImmutableList<String> detectColumnValuesForeignColumn(
             Map<String, JpaSchemaInfo> schemas,
             JpaColumnInfo jpaColumnInfo,
@@ -1017,6 +1028,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                 detectVirtualColumnValuesRange(virtualColumnAnnotation),
                 nonEmptyStringOrNull(virtualColumnAnnotation.valuesPattern()),
                 nonEmptyStringOrNull(virtualColumnAnnotation.valuesDynamicPattern()),
+                detectVirtualColumnValuesTextKind(virtualColumnAnnotation),
                 detectVirtualColumnValuesForeignColumn(virtualColumnAnnotation),
                 detectVirtualColumnDistributionQuality(virtualColumnAnnotation),
                 detectVirtualColumnShuffleQuality(virtualColumnAnnotation),
@@ -1042,6 +1054,14 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         } else if (virtualColumnAnnotation.largeValuesRange().length != 0) {
             String[] largeValuesRange = virtualColumnAnnotation.largeValuesRange();
             return ImmutableList.of(LargeInteger.of(largeValuesRange[0]), LargeInteger.of(largeValuesRange[1]));
+        } else {
+            return null;
+        }
+    }
+    
+    private DummyTextKind detectVirtualColumnValuesTextKind(HoloVirtualColumn virtualColumnAnnotation) {
+        if (virtualColumnAnnotation != null) {
+            return dummyTextKindOf(virtualColumnAnnotation.valuesTextKind());
         } else {
             return null;
         }
@@ -1110,6 +1130,14 @@ public class JpaJakartaMetamodelHoloConfigLoader {
     private ColumnMode columnModeOf(HoloColumnMode holoColumnMode) {
         if (holoColumnMode != HoloColumnMode.UNDEFINED) {
             return ColumnMode.valueOf(holoColumnMode.name());
+        } else {
+            return null;
+        }
+    }
+
+    private DummyTextKind dummyTextKindOf(HoloColumnDummyTextKind holoColumnDummyTextKind) {
+        if (holoColumnDummyTextKind != HoloColumnDummyTextKind.UNDEFINED) {
+            return DummyTextKind.valueOf(holoColumnDummyTextKind.name());
         } else {
             return null;
         }
