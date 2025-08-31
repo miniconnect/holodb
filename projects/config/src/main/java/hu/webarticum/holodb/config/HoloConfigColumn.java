@@ -1,9 +1,11 @@
 package hu.webarticum.holodb.config;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import hu.webarticum.holodb.spi.config.SourceFactory;
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -11,22 +13,40 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.lang.ToStringBuilder;
 
 public class HoloConfigColumn {
-    
+
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_VALUES)
     public enum ColumnMode {
         
-        DEFAULT, COUNTER, FIXED, ENUM
-    
+        DEFAULT, COUNTER, FIXED, ENUM;
+        
+        @JsonValue
+        public String toJson() {
+            return name().toLowerCase();
+        }
+        
     }
-    
+
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_VALUES)
     public enum DistributionQuality {
         
-        LOW, MEDIUM, HIGH
+        LOW, MEDIUM, HIGH;
+        
+        @JsonValue
+        public String toJson() {
+            return name().toLowerCase();
+        }
     
     }
-    
+
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_VALUES)
     public enum ShuffleQuality {
         
-        NOOP, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH
+        NOOP, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH;
+        
+        @JsonValue
+        public String toJson() {
+            return name().toLowerCase();
+        }
     
     }
     
