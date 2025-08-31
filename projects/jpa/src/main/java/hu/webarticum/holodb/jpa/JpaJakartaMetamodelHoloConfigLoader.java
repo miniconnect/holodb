@@ -846,7 +846,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         } else if (holoColumnAnnotation != null && !holoColumnAnnotation.largeNullCount().isEmpty()) {
             return LargeInteger.of(holoColumnAnnotation.largeNullCount());
         } else {
-            return LargeInteger.ZERO;
+            return null;
         }
     }
 
