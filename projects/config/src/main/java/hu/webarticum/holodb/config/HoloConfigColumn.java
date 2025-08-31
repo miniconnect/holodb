@@ -1,6 +1,5 @@
 package hu.webarticum.holodb.config;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -14,7 +13,6 @@ import hu.webarticum.miniconnect.lang.ToStringBuilder;
 
 public class HoloConfigColumn {
 
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_VALUES)
     public enum ColumnMode {
         
         DEFAULT, COUNTER, FIXED, ENUM;
@@ -26,7 +24,6 @@ public class HoloConfigColumn {
         
     }
 
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_VALUES)
     public enum DistributionQuality {
         
         LOW, MEDIUM, HIGH;
@@ -38,7 +35,6 @@ public class HoloConfigColumn {
     
     }
 
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_VALUES)
     public enum ShuffleQuality {
         
         NOOP, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH;

@@ -11,8 +11,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Supplier;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
@@ -94,8 +96,10 @@ public class ConfigLoader {
     
     
     public HoloConfig load() {
-        ObjectMapper mapper = new ObjectMapper(contentType.createJsonFactory());
-        mapper.registerModule(JacksonSupport.createModule());
+        ObjectMapper mapper = JsonMapper.builder(contentType.createJsonFactory())
+                .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+                .addModule(JacksonSupport.createModule())
+                .build();
         try {
             return mapper.readValue(readerSupplier.get(), HoloConfig.class);
         } catch (IOException e) {
