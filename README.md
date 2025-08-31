@@ -123,7 +123,7 @@ schemas:
         size: 150
         columns:
           - name: id
-            mode: COUNTER
+            mode: counter
           - name: name
             values: ['Some name', 'Other name', 'Some other']
 ```
@@ -172,7 +172,7 @@ For each **column**, these subkeys are supported:
 | --- | ---- | ----------- |
 | `name` | `String` | name of the table column |
 | `type` | `String` (`Class<?>`) | java class name of column type |
-| `mode` | `String` | filling mode: `DEFAULT`, `COUNTER`, `FIXED`, or `ENUM` (global default: `DEFAULT`) |
+| `mode` | `String` | filling mode: `default`, `counter`, `fixed`, or `enum` (global default: `default`) |
 | `nullCount` | `LargeInteger` | count of null values (global default: `0`) |
 | `values` | `Object[]` | explicit list of possible values |
 | `valuesResource` | `String` | name of a java resource which contains the values line by line |
@@ -180,9 +180,9 @@ For each **column**, these subkeys are supported:
 | `valuesRange` | `LargeInteger[]` | start and end value of a numeric value range |
 | `valuesPattern` | `String` | regex pattern for values (reverse indexed) |
 | `valuesDynamicPattern` | `String` | regex pattern processed by [Generex](https://github.com/mifmif/Generex) (not reverse indexed) |
-| `valuesForeignColumn` | `String[]` | use value set of a foreign `COUNTER` column |
-| `distributionQuality` | `String` | distribution quality: `LOW`, `MEDIUM`, or `HIGH` (global default: `MEDIUM`) |
-| `shuffleQuality` | `String` | shuffle quality: `NOOP`, `VERY_LOW`, `LOW`, `MEDIUM`, `HIGH`, or `VERY_HIGH` (global default: `MEDIUM`) |
+| `valuesForeignColumn` | `String[]` | use value set of a foreign `counter` column |
+| `distributionQuality` | `String` | distribution quality: `low`, `medium`, or `high` (global default: `medium`) |
+| `shuffleQuality` | `String` | shuffle quality: `noop`, `very_low`, `low`, `medium`, `high`, or `very_high` (global default: `medium`) |
 | `sourceFactory` | `String` | java class name of source factory (must implement `hu.webarticum.holodb.spi.config.SourceFactory`) |
 | `sourceFactoryData` | *any* | data will be passed to the source factory |
 | `defaultValue` | *any* | default insert value for the column |
@@ -195,12 +195,12 @@ The meaning of `mode` values:
 
 | Mode | Description |
 | ---- | ----------- |
-| `DEFAULT` | randomly distributed, non-unique values, indexed (except in case of `valuesDynamicPattern` used) |
-| `COUNTER` | fill with increasing whole numbers starting from `1`, unique, indexed (good choice for ID columns) |
-| `FIXED` | values will not be shuffled, the count of values must be equal to the table size, non-indexed |
-| `ENUM` | similar to `DEFAULT`, but with different proper rules for equality check, sort order and insertion/update |
+| `default` | randomly distributed, non-unique values, indexed (except in case of `valuesDynamicPattern` used) |
+| `counter` | fill with increasing whole numbers starting from `1`, unique, indexed (good choice for ID columns) |
+| `fixed` | values will not be shuffled, the count of values must be equal to the table size, non-indexed |
+| `enum` | similar to `default`, but with different proper rules for equality check, sort order and insertion/update |
 
-In the case of writable tables, if other than the `ENUM` mode is used,
+In the case of writable tables, if other than the `enum` mode is used,
 users can also put values ​​different from the initial ones.
 
 If `nullCount` is specified (even if `0`), then the column will be nullable.
@@ -211,10 +211,10 @@ the source is an `IndexedSource` and has at least one null value.
 For specifying the possible values in the column, one of
 `values`, `valuesResource`, `valuesRange`, `valuesPattern`,  `valuesDynamicPattern` and `valuesForeignColumn`
 can be used.
-Currently, for a `FIXED` column, only `values` is supported.
+Currently, for a `fixed` column, only `values` is supported.
 
-In the case of `COUNTER` mode, values will be ignored and should be omitted.
-The type of a `COUNTER` column is always `java.math.LargeInteger`.
+In the case of `counter` mode, values will be ignored and should be omitted.
+The type of a `counter` column is always `java.math.LargeInteger`.
 
 If used, the value of `valuesForeignColumn` must be an array of lengths 1, 2, or 3.
 The one-element version contains a column name in the same table.
@@ -254,7 +254,7 @@ tableDefaults:
   writeable: false
   size: 120
 columnDefaults:
-  shuffleQuality: NOOP
+  shuffleQuality: noop
 schemas:
   - name: schema_1
     tables:
