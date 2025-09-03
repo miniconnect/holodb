@@ -166,7 +166,61 @@ will be added over the read-only table,
 which accepts and stores insertions, updates, and deletions,
 and it gives the effect that the table is writeable.
 
-For each **column**, these subkeys are supported:
+For each **column**, several subkeys are supported,
+of which those related to the base value set and those related to additional settings can be distinguished
+(some of the latter may also apply to the base value set).
+At most one of the base value set keys should be used.
+These keys all begin with the prefix `values`:
+
+| Key | Type | Description |
+| --- | ---- | ----------- |
+| `values` | `Object[]` | explicit list of possible values |
+| `valuesResource` | `String` | name of a java resource which contains the values line by line |
+| `valuesBundle` | `String` | short name of a bundled value resource, otherwise similar to `valuesResource` (see below) |
+| `valuesRange` | `LargeInteger[]` | start and end value of a numeric value range |
+| `valuesPattern` | `String` | regex pattern for values (reverse indexed) |
+| `valuesDynamicPattern` | `String` | regex pattern processed by [Generex](https://github.com/mifmif/Generex) (not reverse indexed) |
+| `valuesTextKind` | `String` | text kind for dummy text: `phrase`, `title`, `sentence`, `paragraph`, `markdown`, or `html` |
+| `valuesForeignColumn` | `String[]` | use value set of a foreign column (ideal for ID-based foreign keys) |
+
+The `valuesTextKind` key can be used to generate dummy text in various forms.
+These are based on randomly mixed words from the "lorem ipsum" text, supplemented with some English conjunctions.
+The values will not be indexed
+(for an indexed column containing single words, use the `valuesBundle` key with the value "lorem").
+The available values are as follows:
+
+| Text kind | Example | Description |
+| --------- | ----------- |
+| `phrase` | eiusmod an aliqua ullamco | a short phrase |
+| `title` | The Nulla Sit Tempor | a title with capitalization |
+| `sentence` | Some exercitation an occaecat anim the duis. | a sentence terminated with perid |
+| `paragraph` |  | a paragraph of containing 3-6 sentences |
+| `markdown` |  | MarkDown formatted text containing a few headers and paragraphs |
+| `html` |  | HTML formatted text containing a few headers and paragraphs |
+
+There are several possible values for `valuesBundle`:
+
+| Bundle name | Description |
+| ----------- | ----------- |
+| `cities` | 100 major world cities |
+| `colors` | 147 color names (from CSS3) |
+| `countries` | 197 country names |
+| `female-forenames` | 100 frequent English female forenames |
+| `forenames` | 100 frequent English forenames (50 female, 50 male) |
+| `fruits` | 26 of the best selling fruits |
+| `log-levels` | 6 standard log levels (from log4j) |
+| `lorem` | 49 lower-case words of the *Lorem ipsum* text |
+| `male-forenames` | 100 frequent English male forenames |
+| `months` | the 12 month names |
+| `surnames` | 100 frequent English surnames |
+| `weekdays` | the names of the 7 days of the week |
+
+If used, the value of `valuesForeignColumn` must be an array of lengths 1, 2, or 3.
+The one-element version contains a column name in the same table.
+The two-element version contains a \[*\<table\>*, *\<column\>*\] pair in the same schema.
+The three-element version contains the \[*\<schema\>*, *\<table\>*, *\<column\>*\] triplet.
+
+The remaining column settings are as follows:
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
@@ -174,13 +228,6 @@ For each **column**, these subkeys are supported:
 | `type` | `String` (`Class<?>`) | java class name of column type |
 | `mode` | `String` | filling mode: `default`, `counter`, `fixed`, or `enum` (global default: `default`) |
 | `nullCount` | `LargeInteger` | count of null values (global default: `0`) |
-| `values` | `Object[]` | explicit list of possible values |
-| `valuesResource` | `String` | name of a java resource which contains the values line by line |
-| `valuesBundle` | `String` | short name of a bundled value resource, otherwise similar to `valuesResource` (see below) |
-| `valuesRange` | `LargeInteger[]` | start and end value of a numeric value range |
-| `valuesPattern` | `String` | regex pattern for values (reverse indexed) |
-| `valuesDynamicPattern` | `String` | regex pattern processed by [Generex](https://github.com/mifmif/Generex) (not reverse indexed) |
-| `valuesForeignColumn` | `String[]` | use value set of a foreign `counter` column |
 | `distributionQuality` | `String` | distribution quality: `low`, `medium`, or `high` (global default: `medium`) |
 | `shuffleQuality` | `String` | shuffle quality: `noop`, `very_low`, `low`, `medium`, `high`, or `very_high` (global default: `medium`) |
 | `sourceFactory` | `String` | java class name of source factory (must implement `hu.webarticum.holodb.spi.config.SourceFactory`) |
@@ -208,35 +255,10 @@ Omit `nullCount` to make the column `NOT NULL`.
 In case of custom `sourceFactory`, the column will be `NOT NULL` only iff
 the source is an `IndexedSource` and has at least one null value.
 
-For specifying the possible values in the column, one of
-`values`, `valuesResource`, `valuesRange`, `valuesPattern`,  `valuesDynamicPattern` and `valuesForeignColumn`
-can be used.
 Currently, for a `fixed` column, only `values` is supported.
 
 In the case of `counter` mode, values will be ignored and should be omitted.
 The type of a `counter` column is always `java.math.LargeInteger`.
-
-If used, the value of `valuesForeignColumn` must be an array of lengths 1, 2, or 3.
-The one-element version contains a column name in the same table.
-The two-element version contains a \[*\<table\>*, *\<column\>*\] pair in the same schema.
-The three-element version contains the \[*\<schema\>*, *\<table\>*, *\<column\>*\] triplet.
-
-There are several possible values for `valuesBundle`:
-
-| Bundle name | Description |
-| ----------- | ----------- |
-| `cities` | 100 major world cities |
-| `colors` | 147 color names (from CSS3) |
-| `countries` | 197 country names |
-| `female-forenames` | 100 frequent English female forenames |
-| `forenames` | 100 frequent English forenames (50 female, 50 male) |
-| `fruits` | 26 of the best selling fruits |
-| `log-levels` | 6 standard log levels (from log4j) |
-| `lorem` | 49 lower-case words of the *Lorem ipsum* text |
-| `male-forenames` | 100 frequent English male forenames |
-| `months` | the 12 month names |
-| `surnames` | 100 frequent English surnames |
-| `weekdays` | the names of the 7 days of the week |
 
 You can set default values for schemas, tables, and columns at any higher level in the configuration tree.
 Any value set at a lower lever will override any value set at a higher level (and, of course, the global default).
