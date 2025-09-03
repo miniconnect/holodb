@@ -265,6 +265,10 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         String columnName = extractColumnName(annotatedMember);
         JpaColumnInfo jpaColumnInfo = jpaTableInfo.columns.computeIfAbsent(columnName, k -> new JpaColumnInfo());
         jpaColumnInfo.attribute = attribute;
+        HoloColumn holoColumnAnnotation = annotatedMember.getAnnotation(HoloColumn.class);
+        if (holoColumnAnnotation != null && holoColumnAnnotation.type() != Void.class) {
+            jpaColumnInfo.type = holoColumnAnnotation.type();
+        }
     }
 
     private void scanOneToOneAttribute(
