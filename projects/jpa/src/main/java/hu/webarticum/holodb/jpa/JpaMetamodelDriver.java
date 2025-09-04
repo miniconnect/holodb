@@ -38,6 +38,11 @@ public class JpaMetamodelDriver implements Driver {
     public static final String DEFAULT_SCHEMA_NAME = "default_schema";
     
     
+    private static final String JAKARTA_METAMODEL_TYPE_NAME = "jakarta.persistence.metamodel.Metamodel";
+    
+    private static final String JAVAX_METAMODEL_TYPE_NAME = "javax.persistence.metamodel.Metamodel";
+    
+    
     private static Object metamodel = null;
     
     /**
@@ -114,10 +119,10 @@ public class JpaMetamodelDriver implements Driver {
         LargeInteger seed = LargeInteger.of(42L); // FIXME: detect?
         HoloConfig config;
         Object metamodel = getMetamodel();
-        if (metamodel instanceof Metamodel) {
+        if (isInstanceOf(metamodel, JAKARTA_METAMODEL_TYPE_NAME)) {
             Metamodel jakartaMetamodel = (Metamodel) metamodel;
             config = new JpaJakartaMetamodelHoloConfigLoader().load(jakartaMetamodel, defaultSchemaName, seed);
-        } else if (metamodel instanceof javax.persistence.metamodel.Metamodel) {
+        } else if (isInstanceOf(metamodel, JAVAX_METAMODEL_TYPE_NAME)) {
             javax.persistence.metamodel.Metamodel javaxMetamodel = (javax.persistence.metamodel.Metamodel) metamodel;
             config = new JpaJavaxMetamodelHoloConfigLoader().load(javaxMetamodel, defaultSchemaName, seed);
         } else {
@@ -126,6 +131,17 @@ public class JpaMetamodelDriver implements Driver {
         return StorageAccessFactory.createStorageAccess(config, new DefaultConverter());
     }
     
+    private static boolean isInstanceOf(Object object, String type) {
+        Class<?> clazz;
+        try {
+            clazz = Class.forName(type);
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+        
+        return clazz.isInstance(object);
+    }
+
     private static void setupDefaultSchema(AtomicReference<MiniSession> sessionHolder, String defaultSchemaName) {
         ((FrameworkSession) sessionHolder.get()).engineSession().state().setCurrentSchema(defaultSchemaName);
     }
