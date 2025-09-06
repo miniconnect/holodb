@@ -306,6 +306,8 @@ public class StorageAccessFactory {
             Converter converter) {
         LargeInteger tableSize = tableConfig.size();
         String columnName = columnConfig.name();
+
+        TreeRandom columnRandom = createColumnTreeRandom(tableRandom, columnConfig);
         
         Class<? extends SourceFactory> factoryClazz = columnConfig.sourceFactory();
         if (factoryClazz != null) {
@@ -317,7 +319,7 @@ public class StorageAccessFactory {
             }
             return sourceFactory.create(
                     new ColumnLocation(schemaConfig.name(), tableConfig.name(), columnName),
-                    tableRandom.sub("col-" + columnName),
+                    columnRandom,
                     tableSize,
                     columnConfig.sourceFactoryData());
         }
@@ -325,7 +327,6 @@ public class StorageAccessFactory {
         ColumnMode columnMode = columnConfig.mode();
         if (columnMode == ColumnMode.DEFAULT || columnMode == ColumnMode.ENUM) {
             boolean isEnum = (columnMode == ColumnMode.ENUM);
-            TreeRandom columnRandom = tableRandom.sub("col-" + columnName);
             if (columnConfig.valuesForeignColumn() != null) {
                 return createForeignColumnSource(config, schemaConfig, tableConfig, columnConfig, columnRandom);
             } else if (columnConfig.valuesDynamicPattern() != null) {
@@ -352,6 +353,15 @@ public class StorageAccessFactory {
         } else {
             throw new IllegalArgumentException(
                     "Invalid column mode: " + columnMode + " (" + tableConfig.name() + "." + columnConfig.name() + ")");
+        }
+    }
+    
+    private static TreeRandom createColumnTreeRandom(TreeRandom tableRandom, HoloConfigColumn columnConfig) {
+        LargeInteger seedKey = columnConfig.seedKey();
+        if (seedKey != null) {
+            return tableRandom.sub(seedKey);
+        } else {
+            return tableRandom.sub("col-" + columnConfig.name());
         }
     }
     

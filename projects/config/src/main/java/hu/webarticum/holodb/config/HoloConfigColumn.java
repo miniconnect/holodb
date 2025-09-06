@@ -56,7 +56,9 @@ public class HoloConfigColumn {
         }
             
     }
-    
+
+
+    private final LargeInteger seedKey;
     
     private final String name;
 
@@ -94,6 +96,7 @@ public class HoloConfigColumn {
 
     
     public HoloConfigColumn( // NOSONAR: many parameter is OK
+            @JsonProperty("seedKey") LargeInteger seedKey,
             @JsonProperty("name") String name,
             @JsonProperty("type") Class<?> type,
             @JsonProperty("mode") ColumnMode mode,
@@ -111,6 +114,7 @@ public class HoloConfigColumn {
             @JsonProperty("sourceFactory") Class<? extends SourceFactory> sourceFactory,
             @JsonProperty("sourceFactoryData") Object sourceFactoryData,
             @JsonProperty("defaultValue") Object defaultValue) {
+        this.seedKey = seedKey;
         this.name = name;
         this.type = type;
         this.mode = mode;
@@ -132,11 +136,12 @@ public class HoloConfigColumn {
 
     public static HoloConfigColumn empty() {
         return new HoloConfigColumn(
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
     
     public static HoloConfigColumn createWithDefaults() {
         return new HoloConfigColumn(
+                null,
                 null,
                 null,
                 ColumnMode.DEFAULT,
@@ -163,6 +168,7 @@ public class HoloConfigColumn {
         }
         
         return new HoloConfigColumn(
+                mergeValue(seedKey, other.seedKey()),
                 mergeValue(name, other.name()),
                 mergeValue(type, other.type()),
                 mergeValue(mode, other.mode()),
@@ -185,7 +191,12 @@ public class HoloConfigColumn {
     private <T> T mergeValue(T fallbackValue, T mergeValue) {
         return (mergeValue != null) ? mergeValue : fallbackValue;
     }
-    
+
+    @JsonGetter("seedKey")
+    public LargeInteger seedKey() {
+        return seedKey;
+    }
+
     @JsonGetter("name")
     public String name() {
         return name;

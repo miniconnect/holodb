@@ -233,6 +233,7 @@ The remaining column settings are as follows:
 | `sourceFactory` | `String` | java class name of source factory (must implement `hu.webarticum.holodb.spi.config.SourceFactory`) |
 | `sourceFactoryData` | *any* | data will be passed to the source factory |
 | `defaultValue` | *any* | default insert value for the column |
+| `seedKey` | `LargeInteger` | custom seed key |
 
 In most cases, `type` can be omitted.
 If the configuration loader cannot guess the type, the startup aborts with an error.
@@ -260,7 +261,12 @@ Currently, for a `fixed` column, only `values` is supported.
 In the case of `counter` mode, values will be ignored and should be omitted.
 The type of a `counter` column is always `java.math.LargeInteger`.
 
-You can set default values for schemas, tables, and columns at any higher level in the configuration tree.
+If `seedKey` is specified, it will be explicitly used as a key for the sub-random-generator for the column.
+Setting or changing this value alters the data distribution, shuffling, etc. for this column without affecting other columns.
+If two columns share the same non-null `seedKey` while they have the same settings (except for `name`),
+then they will provide the exact same values in the exact same order , effectively making them mirrors of each other.
+
+You can set default configuration for schemas, tables, and columns at any higher level in the configuration tree.
 Any value set at a lower lever will override any value set at a higher level (and, of course, the global default).
 
 | Key | Available in |

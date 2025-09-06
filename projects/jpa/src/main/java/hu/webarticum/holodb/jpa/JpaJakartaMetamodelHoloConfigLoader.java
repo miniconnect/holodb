@@ -776,6 +776,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         Class<?> type = detectColumnType(jpaColumnInfo);
         ColumnMode columnMode = detectColumnMode(columnName, jpaTableInfo, jpaColumnInfo, holoColumnAnnotation);
         return new HoloConfigColumn(
+                detectColumnSeedKey(holoColumnAnnotation),
                 columnName,
                 type,
                 columnMode,
@@ -843,9 +844,19 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         
         return ColumnMode.DEFAULT;
     }
+
+    private LargeInteger detectColumnSeedKey(HoloColumn holoColumnAnnotation) {
+        if (holoColumnAnnotation != null && holoColumnAnnotation.seedKey() != -1L) {
+            return LargeInteger.of(holoColumnAnnotation.seedKey());
+        } else if (holoColumnAnnotation != null && !holoColumnAnnotation.largeSeedKey().isEmpty()) {
+            return LargeInteger.of(holoColumnAnnotation.largeSeedKey());
+        } else {
+            return null;
+        }
+    }
     
     private LargeInteger detectColumnNullCount(HoloColumn holoColumnAnnotation) {
-        if (holoColumnAnnotation != null && holoColumnAnnotation.nullCount() != -1) {
+        if (holoColumnAnnotation != null && holoColumnAnnotation.nullCount() != -1L) {
             return LargeInteger.of(holoColumnAnnotation.nullCount());
         } else if (holoColumnAnnotation != null && !holoColumnAnnotation.largeNullCount().isEmpty()) {
             return LargeInteger.of(holoColumnAnnotation.largeNullCount());
@@ -1022,6 +1033,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
     
     private HoloConfigColumn renderVirtualColumn(HoloVirtualColumn virtualColumnAnnotation) {
         return new HoloConfigColumn(
+                detectVirtualColumnSeedKey(virtualColumnAnnotation),
                 virtualColumnAnnotation.name(),
                 virtualColumnAnnotation.type(),
                 columnModeOf(virtualColumnAnnotation.mode()),
@@ -1040,9 +1052,19 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                 detectVirtualSourceFactoryData(virtualColumnAnnotation),
                 detectVirtualDefaultValue(virtualColumnAnnotation));
     }
-    
+
+    private LargeInteger detectVirtualColumnSeedKey(HoloVirtualColumn virtualColumnAnnotation) {
+        if (virtualColumnAnnotation.seedKey() != -1L) {
+            return LargeInteger.of(virtualColumnAnnotation.seedKey());
+        } else if (!virtualColumnAnnotation.largeSeedKey().isEmpty()) {
+            return LargeInteger.of(virtualColumnAnnotation.largeSeedKey());
+        } else {
+            return null;
+        }
+    }
+
     private LargeInteger detectVirtualColumnNullCount(HoloVirtualColumn virtualColumnAnnotation) {
-        if (virtualColumnAnnotation.nullCount() != -1) {
+        if (virtualColumnAnnotation.nullCount() != -1L) {
             return LargeInteger.of(virtualColumnAnnotation.nullCount());
         } else if (!virtualColumnAnnotation.largeNullCount().isEmpty()) {
             return LargeInteger.of(virtualColumnAnnotation.largeNullCount());
