@@ -274,7 +274,7 @@ all table with no explicit `writeable` will read-only in `schema_1`, and writeab
 Also, data shuffling is disabled by default.
 
 
-## :arrow_down: Get the configuration JSON Schema
+## :arrow_down: Getting the configuration JSON Schema
 
 You can generate a JSON schema for this configuration data structure
 by executing the `config:generateSchema` gradle task inside the holodb gradle project.
@@ -285,7 +285,7 @@ projects/config/build/schemas/holodb-config.schema.json
 ```
 
 
-## :open_file_folder: Load values from resource
+## :open_file_folder: Loading values from resource
 
 You can use custom predefined value sets too.
 To do this, create a file with one value on each line.
@@ -332,7 +332,7 @@ COPY --from=builder /en-letters.txt /app/resources/en-letters.txt
 ```
 
 
-## :minidisc: Generate from an existing database
+## :minidisc: Generating from an existing database
 
 You can find an experimental python script in the `tools` directory
 that creates a HoloDB configuration from an existing MySQL database.
@@ -402,7 +402,7 @@ jdbc:miniconnect://localhost:3430/university
 In this case, use the `hu.webarticum.miniconnect.jdbc.MiniJdbcDriver` driver class if necessary.
 
 
-## :package: Mock JPA entities
+## :package: Mocking JPA entities
 
 To use the annotations below, set the `jpa-annotations` subproject as a dependency:
 
