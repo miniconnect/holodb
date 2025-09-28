@@ -522,17 +522,17 @@ HoloDB consists of several Gradle subprojects located in the `projects` director
 
 | Subproject | Description |
 | ---------- | ----------- |
-| :arrow_forward: &nbsp; `app` | Standalone application |
-| :rocket: &nbsp; `bootstrap` | Utility for initializing a database from configuration |
-| :hammer_and_wrench: &nbsp; `config` | Configuration model classes |
-| :nut_and_bolt: &nbsp; `core` | Core building blocks |
-| :file_cabinet: &nbsp; `embedded` | Embedded mode drivers |
-| :ledger: &nbsp; `jpa` | JPA mocking drivers |
-| :label: &nbsp; `jpa-annotations` | JPA configuration annotations (lightweight dependency) |
-| :1234: &nbsp; `regex` | Regex-based value provider |
-| :electric_plug: &nbsp; `spi` | Service provider interfaces |
-| :floppy_disk: &nbsp; `storage` | [MiniBase](https://github.com/miniconnect/minibase) storage implementation |
-| :card_file_box: &nbsp; `values` | Predefined value sets |
+| :arrow_forward:&nbsp; `app` | Standalone application |
+| :rocket:&nbsp; `bootstrap` | Utility for initializing a database from configuration |
+| :hammer_and_wrench:&nbsp; `config` | Configuration model classes |
+| :nut_and_bolt:&nbsp; `core` | Core building blocks |
+| :file_cabinet:&nbsp; `embedded` | Embedded mode drivers |
+| :ledger:&nbsp; `jpa` | JPA mocking drivers |
+| :label:&nbsp; `jpa-annotations` | JPA configuration annotations (lightweight dependency) |
+| :1234:&nbsp; `regex` | Regex-based value provider |
+| :electric_plug:&nbsp; `spi` | Service provider interfaces |
+| :floppy_disk:&nbsp; `storage` | [MiniBase](https://github.com/miniconnect/minibase) storage implementation |
+| :card_file_box:&nbsp; `values` | Predefined value sets |
 
 
 ## :gear: How does HoloDB work?
