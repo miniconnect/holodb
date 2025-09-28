@@ -147,8 +147,7 @@ subprojects {
         
         signing {
             required = true
-            sign configurations.archives
-            sign publishing.publications.mavenJava
+            sign publishing.publications
         }
         
     }
