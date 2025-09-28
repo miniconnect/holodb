@@ -159,10 +159,10 @@ The values will not be indexed
 The available values are as follows:
 
 | Text kind | Example | Description |
-| --------- | ----------- |
-| `phrase` | eiusmod an aliqua ullamco | a short phrase |
-| `title` | The Nulla Sit Tempor | a title with capitalization |
-| `sentence` | Some exercitation an occaecat anim the duis. | a sentence terminated with perid |
+| --------- | ------- | ----------- |
+| `phrase` | *eiusmod an aliqua ullamco* | a short phrase |
+| `title` | *The Nulla Sit Tempor* | a title with capitalization |
+| `sentence` | *Some exercitation an occaecat anim the duis.* | a sentence terminated with perid |
 | `paragraph` |  | a paragraph of containing 3-6 sentences |
 | `markdown` |  | MarkDown formatted text containing a few headers and paragraphs |
 | `html` |  | HTML formatted text containing a few headers and paragraphs |
