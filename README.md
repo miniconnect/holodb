@@ -91,6 +91,11 @@ Start, select the schema, and run queries:
 For other ways to use the server, such as connecting from your application, see later.
 
 
+## :books: More examples
+
+[Explore more complex and realistic examples here.](https://github.com/miniconnect/general-docs/blob/main/examples/README.md)
+
+
 ## :jigsaw: SQL features
 
 Currently, a limited subset of the SQL features is supported by the default query engine.
