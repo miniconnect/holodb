@@ -28,9 +28,23 @@ dependencies {
     schemaGenImplementation 'org.scala-lang:scala-library:2.13.16'
 }
 
+def schemaFile = layout.buildDirectory.file('schemas/holodb-config.schema.json')
+
 tasks.register('generateSchema', JavaExec) {
-    dependsOn(tasks.named('classes'))
+    dependsOn tasks.named('classes')
     mainClass = 'hu.webarticum.holodb.config.gradle.schemagen.SchemaGeneratorMain'
     classpath = sourceSets.schemaGen.runtimeClasspath
-    args = [ "${buildDir}/schemas/holodb-config.schema.json" ]
+    args = [ schemaFile.get().asFile.absolutePath ]
+    inputs.files(sourceSets.main.output, sourceSets.schemaGen.output)
+    outputs.file(schemaFile)
+}
+
+publishing {
+    publications.withType(MavenPublication).matching { it.name == 'mavenJava' }.configureEach {
+        artifact(schemaFile) {
+            classifier = 'schema'
+            extension  = 'json'
+            builtBy tasks.named('generateSchema')
+        }
+    }
 }
