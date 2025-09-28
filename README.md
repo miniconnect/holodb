@@ -64,29 +64,29 @@ The simplest way to do this is to use the `micl` command line application, which
 You can get it from the [`miniconnect-client` project](https://github.com/miniconnect/miniconnect-client).
 Start, select the schema, and run queries:
 
-```
-$ micl
-
-Welcome in miniConnect SQL REPL! - localhost:3430
-
-SQL > USE my_schema;
-
-  Query was successfully executed!
-
-SQL > SELECT * FROM my_table WHERE year = 1990 ORDER BY id LIMIT 5;
-
-  Query was successfully executed!
-
-  ┌─────┬───────┬──────┐
-  │ id  │ code  │ year │
-  ├─────┼───────┼──────┤
-  │ 125 │ ADB81 │ 1990 │
-  │ 252 │ AEE24 │ 1990 │
-  │ 280 │ BAC77 │ 1990 │
-  │ 332 │ EFE77 │ 1990 │
-  │ 371 │ BFF62 │ 1990 │
-  └─────┴───────┴──────┘
-```
+> `$` &nbsp; **`micl`**
+>
+>  > *Welcome in miniConnect SQL REPL! - localhost:3430*
+>
+> `SQL >` &nbsp; **`USE my_schema;`**
+>
+> > *Query was successfully executed!*
+>
+> `SQL >` &nbsp; **`SELECT * FROM my_table WHERE year = 1990 ORDER BY id LIMIT 5;`**
+>
+> > *Query was successfully executed!*
+> >
+> > ```
+> >  ┌─────┬───────┬──────┐
+> >  │ id  │ code  │ year │
+> >  ├─────┼───────┼──────┤
+> >  │ 125 │ ADB81 │ 1990 │
+> >  │ 252 │ AEE24 │ 1990 │
+> >  │ 280 │ BAC77 │ 1990 │
+> >  │ 332 │ EFE77 │ 1990 │
+> >  │ 371 │ BFF62 │ 1990 │
+> >  └─────┴───────┴──────┘
+> > ```
 
 For other ways to use the server, such as connecting from your application, see later.
 
