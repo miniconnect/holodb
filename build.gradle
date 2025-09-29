@@ -24,7 +24,9 @@ defaultTasks 'build'
 
 nexusPublishing {
     repositories {
-        sonatype()
+        sonatype {
+            nexusUrl.set(uri(providers.gradleProperty('sonatypeUrl').orNull))
+        }
     }
 }
 
