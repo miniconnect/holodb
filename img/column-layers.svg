@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    version="1.1"
-   width="501px"
-   height="351px"
-   viewBox="-0.5 -0.5 501 351"
+   width="1200"
+   height="650"
+   viewBox="-0.5 -0.5 1200 650"
    id="svg624"
-   sodipodi:docname="column-data-layers.svg"
+   sodipodi:docname="column-layers.svg"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="1.8353491"
-     inkscape:cx="290.40796"
-     inkscape:cy="216.30762"
+     inkscape:zoom="0.64378292"
+     inkscape:cx="415.51273"
+     inkscape:cy="442.69581"
      inkscape:window-width="1920"
      inkscape:window-height="1135"
      inkscape:window-x="0"
@@ -35,15 +35,15 @@
   <defs
      id="defs2" />
   <rect
-     style="fill:#ffffff;stroke-width:2"
+     style="fill:#ffffff;stroke-width:4.17735"
      id="rect657"
-     width="501.40158"
-     height="356.58713"
-     x="-1.3424007"
-     y="-1.7523569" />
+     width="1200"
+     height="650"
+     x="-0.5"
+     y="-0.5" />
   <g
      id="g614"
-     transform="translate(8,-2)">
+     transform="matrix(1.7927227,0,0,1.7927227,159.41203,6.3938588)">
     <path
        d="M 403,65 385,44"
        fill="none"
@@ -2848,7 +2848,7 @@
   </g>
   <switch
      id="switch622"
-     transform="translate(8,-2)">
+     transform="matrix(1.7927227,0,0,1.7927227,159.41203,6.3938588)">
     <g
        requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
        id="g616" />

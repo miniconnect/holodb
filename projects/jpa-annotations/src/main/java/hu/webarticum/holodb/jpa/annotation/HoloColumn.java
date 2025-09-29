@@ -9,6 +9,10 @@ import java.lang.annotation.Target;
 @Retention( RetentionPolicy.RUNTIME )
 public @interface HoloColumn {
 
+    public long seedKey() default -1L;
+
+    public String largeSeedKey() default "";
+
     public String name() default "";
 
     public Class<?> type() default Void.class;
@@ -32,6 +36,8 @@ public @interface HoloColumn {
     public String valuesPattern() default "";
     
     public String valuesDynamicPattern() default "";
+    
+    public HoloColumnDummyTextKind valuesTextKind() default HoloColumnDummyTextKind.UNDEFINED;
     
     public String[] valuesForeignColumn() default {};
     

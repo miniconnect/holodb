@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-description "HoloDB configuration"
+description = "HoloDB configuration"
 
 sourceSets {
     schemaGen {
@@ -21,15 +21,30 @@ dependencies {
     api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
     implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"
     
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.19.2'
     
     schemaGenImplementation "hu.webarticum.miniconnect.api:lang-jackson:${miniConnectApiVersion}"
-    schemaGenImplementation 'com.fasterxml.jackson.module:jackson-module-jsonSchema:2.15.0'
+    schemaGenImplementation 'com.kjetland:mbknor-jackson-jsonschema_2.13:1.0.39'
+    schemaGenImplementation 'org.scala-lang:scala-library:2.13.16'
 }
 
-task generateSchema(type: JavaExec) {
-    dependsOn classes
-    mainClass = "hu.webarticum.holodb.config.gradle.schemagen.SchemaGeneratorMain"
+def schemaFile = layout.buildDirectory.file('schemas/holodb-config.schema.json')
+
+tasks.register('generateSchema', JavaExec) {
+    dependsOn tasks.named('classes')
+    mainClass = 'hu.webarticum.holodb.config.gradle.schemagen.SchemaGeneratorMain'
     classpath = sourceSets.schemaGen.runtimeClasspath
-    args = [ "${buildDir}/schemas/holodb-config.schema.json" ]
+    args = [ schemaFile.get().asFile.absolutePath ]
+    inputs.files(sourceSets.main.output, sourceSets.schemaGen.output)
+    outputs.file(schemaFile)
+}
+
+publishing {
+    publications.withType(MavenPublication).matching { it.name == 'mavenJava' }.configureEach {
+        artifact(schemaFile) {
+            classifier = 'schema'
+            extension  = 'json'
+            builtBy tasks.named('generateSchema')
+        }
+    }
 }

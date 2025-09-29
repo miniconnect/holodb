@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-description "MiniBase storage implementation"
+description = "MiniBase storage implementation"
 
 sourceSets {
     lab {

@@ -9,8 +9,6 @@ import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
-import javax.persistence.metamodel.Metamodel;
-
 import hu.webarticum.holodb.bootstrap.factory.StorageAccessFactory;
 import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.minibase.engine.api.Engine;
@@ -31,6 +29,7 @@ import hu.webarticum.miniconnect.jdbc.provider.DatabaseProvider;
 import hu.webarticum.miniconnect.jdbc.provider.impl.BlanketDatabaseProvider;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.record.converter.DefaultConverter;
+import jakarta.persistence.metamodel.Metamodel;
 
 public class JpaMetamodelDriver implements Driver {
     
@@ -39,13 +38,27 @@ public class JpaMetamodelDriver implements Driver {
     public static final String DEFAULT_SCHEMA_NAME = "default_schema";
     
     
-    private static Metamodel metamodel = null;
+    private static final String JAKARTA_METAMODEL_TYPE_NAME = "jakarta.persistence.metamodel.Metamodel";
     
-    public static synchronized void setMetamodel(Metamodel metamodel) {
+    private static final String JAVAX_METAMODEL_TYPE_NAME = "javax.persistence.metamodel.Metamodel";
+    
+    
+    private static Object metamodel = null;
+    
+    /**
+     * Accepts a metamodel.
+     * The currently supported types are the following:
+     * 
+     * <ul>
+     *   <li>{@link jakarta.persistence.metamodel.Metamodel}</li>
+     *   <li>{@link javax.persistence.metamodel.Metamodel}</li>
+     * </ul>
+     */
+    public static synchronized void setMetamodel(Object metamodel) {
         JpaMetamodelDriver.metamodel = metamodel;
     }
 
-    private static synchronized Metamodel getMetamodel() {
+    private static synchronized Object getMetamodel() {
         return metamodel;
     }
     
@@ -103,15 +116,32 @@ public class JpaMetamodelDriver implements Driver {
     }
     
     private static StorageAccess createMetamodelStorageAccess(String defaultSchemaName) {
-        Metamodel metamodel = getMetamodel();
-        if (metamodel == null) {
+        LargeInteger seed = LargeInteger.of(42L); // FIXME: detect?
+        HoloConfig config;
+        Object metamodel = getMetamodel();
+        if (isInstanceOf(metamodel, JAKARTA_METAMODEL_TYPE_NAME)) {
+            Metamodel jakartaMetamodel = (Metamodel) metamodel;
+            config = new JpaJakartaMetamodelHoloConfigLoader().load(jakartaMetamodel, defaultSchemaName, seed);
+        } else if (isInstanceOf(metamodel, JAVAX_METAMODEL_TYPE_NAME)) {
+            javax.persistence.metamodel.Metamodel javaxMetamodel = (javax.persistence.metamodel.Metamodel) metamodel;
+            config = new JpaJavaxMetamodelHoloConfigLoader().load(javaxMetamodel, defaultSchemaName, seed);
+        } else {
             throw new StorageAccessNotReadyException();
         }
-        LargeInteger seed = LargeInteger.of(42L); // FIXME: detect?
-        HoloConfig config = new JpaMetamodelHoloConfigLoader().load(metamodel, defaultSchemaName, seed);
         return StorageAccessFactory.createStorageAccess(config, new DefaultConverter());
     }
     
+    private static boolean isInstanceOf(Object object, String type) {
+        Class<?> clazz;
+        try {
+            clazz = Class.forName(type);
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+        
+        return clazz.isInstance(object);
+    }
+
     private static void setupDefaultSchema(AtomicReference<MiniSession> sessionHolder, String defaultSchemaName) {
         ((FrameworkSession) sessionHolder.get()).engineSession().state().setCurrentSchema(defaultSchemaName);
     }

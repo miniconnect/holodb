@@ -3,7 +3,7 @@ package hu.webarticum.holodb.bootstrap.factory;
 import java.util.function.Supplier;
 
 import hu.webarticum.holodb.config.HoloConfig;
-import hu.webarticum.minibase.engine.api.Engine;
+import hu.webarticum.minibase.engine.api.TackedEngine;
 import hu.webarticum.minibase.engine.impl.DynamicStorageEngine;
 import hu.webarticum.minibase.engine.impl.SimpleEngine;
 import hu.webarticum.minibase.execution.QueryExecutor;
@@ -69,7 +69,7 @@ public class EngineBuilder {
     }
     
     
-    public Engine build() {
+    public TackedEngine build() {
         SqlParser sqlParserToInject = sqlParser != null ? sqlParser : buildDefaultSqlParser();
         QueryExecutor queryExecutorToInject = queryExecutor != null ? queryExecutor : buildDefaultQueryExecutor();
         if (storageAccessSupplier != null) {

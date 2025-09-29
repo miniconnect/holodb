@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-description "Bootstrap utility for creating a HoloDB database from a configuration"
+description = "Bootstrap utility for creating a HoloDB database from a configuration"
 
 dependencies {
     api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
@@ -21,10 +21,9 @@ dependencies {
     implementation project(':storage')
     implementation project(':values')
     
-    implementation 'org.slf4j:slf4j-api:1.7.35'
     implementation 'com.github.mifmif:generex:1.0.2'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.19.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.2'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.19.2'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.2'
 }

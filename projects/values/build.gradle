@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-description "Very common value sets"
+description = "Very common value sets"
 
 dependencies {
 }

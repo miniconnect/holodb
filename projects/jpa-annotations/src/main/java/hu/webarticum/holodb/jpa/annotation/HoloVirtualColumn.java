@@ -11,6 +11,10 @@ import java.lang.annotation.Target;
 @Repeatable(HoloVirtualColumns.class)
 public @interface HoloVirtualColumn {
 
+    public long seedKey() default -1L;
+
+    public String largeSeedKey() default "";
+    
     public String name();
 
     public Class<?> type();
@@ -34,6 +38,8 @@ public @interface HoloVirtualColumn {
     public String valuesPattern() default "";
     
     public String valuesDynamicPattern() default "";
+
+    public HoloColumnDummyTextKind valuesTextKind() default HoloColumnDummyTextKind.UNDEFINED;
     
     public String[] valuesForeignColumn() default {};
     

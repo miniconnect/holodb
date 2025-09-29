@@ -4,7 +4,7 @@ plugins {
     id 'io.morethan.jmhreport' version '0.9.0'
 }
 
-description "Regular expression based value set provider"
+description = "Regular expression based value set provider"
 
 sourceSets {
     lab {
@@ -21,15 +21,15 @@ configurations {
 dependencies {
     api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
     
-    labImplementation 'com.ibm.icu:icu4j:75.1'
+    labImplementation 'com.ibm.icu:icu4j:77.1'
     labImplementation 'hu.webarticum:tree-printer:3.2.1'
     labImplementation 'com.github.mifmif:generex:1.0.2'
     labImplementation 'com.github.krraghavan:xeger:1.0.0-RELEASE'
     
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.7.1'
-    testImplementation 'org.assertj:assertj-core:3.24.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.13.4'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.13.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.13.4'
+    testImplementation 'org.assertj:assertj-core:3.27.3'
     testImplementation 'com.github.mifmif:generex:1.0.2'
     testImplementation 'com.github.krraghavan:xeger:1.0.0-RELEASE'
     
@@ -50,18 +50,16 @@ jmh {
     resultFormat = 'JSON'
 }
 
-task downloadDucetFile {
+tasks.register('downloadDucetFile') {
+    def destFilePath = "${layout.buildDirectory.get()}/lab/unicodeallkeys.txt"
+    inputs.property('destFilePath', destFilePath)
+    outputs.file(destFilePath)
     doLast {
-        def destDir = file("${layout.buildDirectory.get()}/lab/unicode")
-        def destFile = file("${destDir}/allkeys.txt")
-        if (!destFile.exists()) {
-            destDir.mkdirs()
-            new URL("https://www.unicode.org/Public/UCA/latest/allkeys.txt").withInputStream { i ->
-                destFile.withOutputStream { it << i }
-            }
-            println "Downloaded DUCET table to ${destFile}"
-        } else {
-            println "DUCET table already exists at ${destFile}"
+        def destFile = file(inputs.properties['destFilePath'])
+        destFile.getParentFile().mkdirs()
+        new URL("https://www.unicode.org/Public/UCA/latest/allkeys.txt").withInputStream { i ->
+            destFile.withOutputStream { it << i }
         }
+        println "Downloaded DUCET table to ${destFile}"
     }
 }

@@ -1,11 +1,11 @@
 plugins {
     id 'java-library'
     id 'application'
-    id 'com.google.cloud.tools.jib' version '3.3.1'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.google.cloud.tools.jib' version '3.4.5'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
-description "HoloDB standalone app"
+description = "HoloDB standalone app"
 
 ext.mainClass = 'hu.webarticum.holodb.app.launch.HolodbServerMain'
 
@@ -24,10 +24,11 @@ configurations {
 dependencies {
     implementation project(':bootstrap')
     
-    implementation 'info.picocli:picocli:4.7.6'
-    implementation 'org.slf4j:slf4j-api:1.7.35'
-    implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.24.3'
+    implementation 'info.picocli:picocli:4.7.7'
+    implementation 'org.slf4j:slf4j-api:2.0.17'
+    
+    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.25.1'
+    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.25.1'
 }
 
 application {
@@ -65,20 +66,20 @@ ext.graalDockerPlatforms = [
     'linux/s390x',*/
 ]
 
-task graalDockerBuild(type: Exec) {
-    dependsOn shadowJar
-    workingDir = projectDir
+tasks.register('graalDockerBuild', Exec) {
+    dependsOn(tasks.named('shadowJar'))
+    workingDir = project.projectDir
     commandLine(
         'docker', 'build',
         '-t', "${graalDockerName}:latest",
         '-f', 'Dockerfile.graal',
-        '.',
+        '.'
     )
 }
 
-task graalDockerBuildMultiplatform(type: Exec) {
-    dependsOn shadowJar
-    workingDir = projectDir
+tasks.register('graalDockerBuildMultiplatform', Exec) {
+    dependsOn(tasks.named('shadowJar'))
+    workingDir = project.projectDir
     commandLine(
         'docker', 'buildx', 'build',
         '--platform', graalDockerPlatforms.join(','),
@@ -88,14 +89,20 @@ task graalDockerBuildMultiplatform(type: Exec) {
     )
 }
 
-task graalDockerExtractBinaries {
+tasks.register('graalDockerExtractBinaries') {
+    inputs.property('versionStr', project.version ?: 'SNAPSHOT')
+    inputs.property('outputPath', "${buildDir}/native-image/bin")
+    inputs.property('dockerName', graalDockerName)
+    inputs.property('dockerPlatforms', graalDockerPlatforms)
     doLast {
-        def versionStr = project.version ?: "SNAPSHOT"
-        def outputDir = file("${buildDir}/native-image/bin")
+        def versionStr = inputs.properties['versionStr']
+        def outputDir = file(inputs.properties['outputPath'])
+        def dockerName = inputs.properties['dockerName']
+        def dockerPlatforms = inputs.properties['dockerPlatforms']
         outputDir.mkdirs()
-        graalDockerPlatforms.each { platformName ->
+        dockerPlatforms.each { platformName ->
             def platformTag = platformName.replaceAll('/', '_')
-            def imageName = "${graalDockerName}:latest-${platformTag}"
+            def imageName = "${dockerName}:latest-${platformTag}"
             def outputFileName = "holodb-${versionStr}-${platformTag}"
             def outputPath = new File(outputDir, outputFileName).absolutePath
             println "Extract native executable for platform '${platformName}' to ${outputPath}"
@@ -104,7 +111,7 @@ task graalDockerExtractBinaries {
                 commandLine(
                     'docker', 'buildx', 'build',
                     '--platform', platformName,
-                    '-t', "${graalDockerName}:latest-${platformTag}",
+                    '-t', "${dockerName}:latest-${platformTag}",
                     '--load',
                     '-f', 'Dockerfile.graal',
                     '.',

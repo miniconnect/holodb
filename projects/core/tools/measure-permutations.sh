@@ -1,19 +1,20 @@
 #!/bin/sh
+# shellcheck disable=SC2016
 
 startDir="$( pwd )"
 
-selfDir="$( dirname -- "$( realpath "$0" )" )"
-projectDir="$( realpath "${selfDir}/.." )"
-rootDir="$( realpath "${projectDir}/../.." )"
+selfDir="$( dirname -- "$( realpath -- "$0" )" )"
+projectDir="$( realpath -- "${selfDir}/.." )"
+rootDir="$( realpath -- "${projectDir}/../.." )"
 buildDir="${projectDir}/build"
 outDir="${buildDir}/measure-permutations"
 dataDir="${outDir}/data"
 compressedDir="${outDir}/compressed"
 
-NL='
-'
-
-cd "$rootDir"
+cd "$rootDir" || {
+    echo "Failed to cd to rootDir=${rootDir}"
+    exit 1
+}
 
 
 rm -rf "$outDir"
@@ -25,6 +26,7 @@ echo "$dataDir" | ./exec-lab.sh core 'hu.webarticum.holodb.core.lab.permutation.
 mkdir "$compressedDir"
 
 originalSize="$( stat -c '%s' "$( find "$dataDir" -name "*" -type f -print -quit )" )"
+echo "Original size: ${originalSize}"
 
 printf '%s' '
 bzip2 -c "<SSS>" > "<TTT>.bz2"
@@ -49,4 +51,7 @@ paq8px -4 "<SSS>" "<TTT>.paq8"
 done
 
 
-cd "$startDir"
+cd "$startDir" || {
+    echo "Failed to cd to startDir=${startDir}"
+    exit 1
+}

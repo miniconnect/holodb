@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import hu.webarticum.holodb.spi.config.SourceFactory;
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -11,25 +12,53 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.lang.ToStringBuilder;
 
 public class HoloConfigColumn {
-    
+
     public enum ColumnMode {
         
-        DEFAULT, COUNTER, FIXED, ENUM
-    
+        DEFAULT, COUNTER, FIXED, ENUM;
+        
+        @JsonValue
+        public String toJson() {
+            return name().toLowerCase();
+        }
+        
     }
-    
+
     public enum DistributionQuality {
         
-        LOW, MEDIUM, HIGH
+        LOW, MEDIUM, HIGH;
+        
+        @JsonValue
+        public String toJson() {
+            return name().toLowerCase();
+        }
     
     }
-    
+
     public enum ShuffleQuality {
         
-        NOOP, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH
+        NOOP, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH;
+        
+        @JsonValue
+        public String toJson() {
+            return name().toLowerCase();
+        }
     
     }
-    
+
+    public enum DummyTextKind {
+        
+        PHRASE, TITLE, SENTENCE, PARAGRAPH, MARKDOWN, HTML;
+        
+        @JsonValue
+        public String toJson() {
+            return name().toLowerCase();
+        }
+            
+    }
+
+
+    private final LargeInteger seedKey;
     
     private final String name;
 
@@ -51,6 +80,8 @@ public class HoloConfigColumn {
     
     private final String valuesDynamicPattern;
 
+    private final DummyTextKind valuesTextKind;
+    
     private final ImmutableList<String> valuesForeignColumn;
     
     private final DistributionQuality distributionQuality;
@@ -65,6 +96,7 @@ public class HoloConfigColumn {
 
     
     public HoloConfigColumn( // NOSONAR: many parameter is OK
+            @JsonProperty("seedKey") LargeInteger seedKey,
             @JsonProperty("name") String name,
             @JsonProperty("type") Class<?> type,
             @JsonProperty("mode") ColumnMode mode,
@@ -75,12 +107,14 @@ public class HoloConfigColumn {
             @JsonProperty("valuesRange") ImmutableList<LargeInteger> valuesRange,
             @JsonProperty("valuesPattern") String valuesPattern,
             @JsonProperty("valuesDynamicPattern") String valuesDynamicPattern,
+            @JsonProperty("valuesTextKind") DummyTextKind valuesTextKind,
             @JsonProperty("valuesForeignColumn") ImmutableList<String> valuesForeignColumn,
             @JsonProperty("distributionQuality") DistributionQuality distributionQuality,
             @JsonProperty("shuffleQuality") ShuffleQuality shuffleQuality,
             @JsonProperty("sourceFactory") Class<? extends SourceFactory> sourceFactory,
             @JsonProperty("sourceFactoryData") Object sourceFactoryData,
             @JsonProperty("defaultValue") Object defaultValue) {
+        this.seedKey = seedKey;
         this.name = name;
         this.type = type;
         this.mode = mode;
@@ -91,6 +125,7 @@ public class HoloConfigColumn {
         this.valuesRange = valuesRange;
         this.valuesPattern = valuesPattern;
         this.valuesDynamicPattern = valuesDynamicPattern;
+        this.valuesTextKind = valuesTextKind;
         this.valuesForeignColumn = valuesForeignColumn;
         this.distributionQuality = distributionQuality;
         this.shuffleQuality = shuffleQuality;
@@ -101,16 +136,18 @@ public class HoloConfigColumn {
 
     public static HoloConfigColumn empty() {
         return new HoloConfigColumn(
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
     
     public static HoloConfigColumn createWithDefaults() {
         return new HoloConfigColumn(
                 null,
                 null,
+                null,
                 ColumnMode.DEFAULT,
                 null,
                 ImmutableList.empty(), // FIXME: should null be supported?
+                null,
                 null,
                 null,
                 null,
@@ -131,6 +168,7 @@ public class HoloConfigColumn {
         }
         
         return new HoloConfigColumn(
+                mergeValue(seedKey, other.seedKey()),
                 mergeValue(name, other.name()),
                 mergeValue(type, other.type()),
                 mergeValue(mode, other.mode()),
@@ -141,6 +179,7 @@ public class HoloConfigColumn {
                 mergeValue(valuesRange, other.valuesRange()),
                 mergeValue(valuesPattern, other.valuesPattern()),
                 mergeValue(valuesDynamicPattern, other.valuesDynamicPattern()),
+                mergeValue(valuesTextKind, other.valuesTextKind()),
                 mergeValue(valuesForeignColumn, other.valuesForeignColumn()),
                 mergeValue(distributionQuality, other.distributionQuality()),
                 mergeValue(shuffleQuality, other.shuffleQuality()),
@@ -152,7 +191,12 @@ public class HoloConfigColumn {
     private <T> T mergeValue(T fallbackValue, T mergeValue) {
         return (mergeValue != null) ? mergeValue : fallbackValue;
     }
-    
+
+    @JsonGetter("seedKey")
+    public LargeInteger seedKey() {
+        return seedKey;
+    }
+
     @JsonGetter("name")
     public String name() {
         return name;
@@ -211,6 +255,12 @@ public class HoloConfigColumn {
         return valuesDynamicPattern;
     }
 
+    @JsonGetter("valuesTextKind")
+    @JsonInclude(Include.NON_NULL)
+    public DummyTextKind valuesTextKind() {
+        return valuesTextKind;
+    }
+
     @JsonGetter("valuesForeignColumn")
     @JsonInclude(Include.NON_NULL)
     public ImmutableList<String> valuesForeignColumn() {
@@ -260,6 +310,7 @@ public class HoloConfigColumn {
                 .add("valuesRange", valuesRange)
                 .add("valuesPattern", valuesPattern)
                 .add("valuesDynamicPattern", valuesDynamicPattern)
+                .add("valuesTextKind", valuesTextKind)
                 .add("valuesForeignColumn", valuesForeignColumn)
                 .add("distributionQuality", distributionQuality)
                 .add("shuffleQuality", shuffleQuality)

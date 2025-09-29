@@ -1,117 +1,36 @@
-# HoloDB - the on-the-fly relational database
+# HoloDB &ndash; the on-the-fly relational database
 
-No data generation.
-No storage costs.
-No migrations.
-Start from zero and immediately work with
-realistic, arbitrarily large, fully queryable datasets.
-Simply describe your data as a declarative configuration,
-and it's there in a flash.
-
-HoloDB is a full-featured relational database engine
-with a completely virtual starting dataset.
-Field values and query results are calculated on the fly,
-based on the given configuration in a highly efficient way.
-Further modifications are stored in diff layers,
-making the database effectively writable.
+HoloDB is a relational database simulator that provides realistic mock data entirely on-the-fly, based on declarative configuration.
+It behaves like a regular database but requires no real storage, making it ideal for demos, prototypes, testing, and education.
 
 
-**What is all this for?**
+## :bulb: Why HoloDB?
 
-- **prototyping**: include the database in your stack, even in live mode
-- **demonstration**: showcase your app with realistic data, without materializing it
-- **integration testing**: add a full-featured relational database to your pipeline
-- **mocking**: put a functional database into the stack, even based on ORM entities
-- **feeding**: use it as a data source to populate a traditional database
-- **teaching**: provide a dummy database for your students
+> ***No data generation &ndash; no storage costs &ndash; no migrations.***
+> 
+> **Sketch up your schema and characteristics, and you're ready to start querying!**
 
-**How to try it out quickly?**
+HoloDB is for those moments when you need a database-shaped system without the hassle of managing real data.
+Instead of setting up or importing datasets, you simply point it at a configuration (or ORM entities)
+and instantly get a live, consistent, queryable database &ndash; ready for demos, prototypes, tests, or teaching.
 
-You can use HoloDB in many ways,
-e.g. in embedded mode or as a server, from a program,
-from an ORM system, or interactively with a REPL.
-But the easiest way to try it out is using Docker.
+What you get from it:
 
-You can download a ready-made configuration file from the example projects:
+- **On-the-fly data engine** &rarr; generates consistent data dynamically, no pre-generation.
+- **Declarative control** &rarr; lets you define schema and values via YAML/JSON config or JPA annotations.
+- **Searchable and writable** &rarr; on-the-fly data you can still search and update like a real DB.
+- **Versatile usage modes** &rarr; supports multiple ways to run (embedded, JPA-based, Docker etc.).
+- **Integration options** &rarr; offers several ways to connect (JDBC, [MiniConnect](https://github.com/miniconnect/miniconnect), TCP) and upcoming integrations (Postgres, DBeaver).
+- **Portable across environments** &rarr; runs seamlessly in Java or Docker, on any platform.
+- **Open source and transparent** &rarr; freely available, inspectable, and adaptable to your needs.
 
-```bash
-curl -o /tmp/config.yaml https://raw.githubusercontent.com/miniconnect/general-docs/refs/heads/main/examples/holodb-standalone/config.yaml
-```
+Work with a database as if it were real, minus the cost of setup or maintenance.
 
-Then, just load the configuration into a HoloDB container:
 
-```bash
-docker run --rm -p 3430:3430 -v /tmp/config.yaml:/app/config.yaml miniconnect/holodb
-```
+## :rocket: Quick start
 
-Then use the `micl` command from [miniconnect-client](https://github.com/miniconnect/miniconnect-client) to run queries in a REPL:
-
-```
-$ micl
-
-Welcome in miniConnect SQL REPL! - localhost:3430
-
-SQL > SHOW SCHEMAS
-
-  Query was successfully executed!
-
-  ┌─────────┐
-  │ Schemas │
-  ├─────────┤
-  │ economy │
-  └─────────┘
-
-SQL > USE economy
-
-  Query was successfully executed!
-
-SQL > SHOW TABLES;
-
-  Query was successfully executed!
-
-  ┌───────────────────┐
-  │ Tables_in_economy │
-  ├───────────────────┤
-  │ companies         │
-  │ employees         │
-  │ sales             │
-  └───────────────────┘
-
-SQL > SELECT * FROM companies;
-
-  Query was successfully executed!
-
-  ┌────┬──────────────────────┬──────────────┬─────────────────┐
-  │ id │ name                 │ headquarters │ contact_phone   │
-  ├────┼──────────────────────┼──────────────┼─────────────────┤
-  │  1 │ Fav Fruits Inc.      │ Stockholm    │ [NULL]          │
-  │  2 │ Fru-fru Sales Inc.   │ Tel Aviv     │ +1 143-339-0981 │
-  │  3 │ Fructose Palace Inc. │ Baku         │ +1 295-272-4854 │
-  │  4 │ Vega Veterans Inc.   │ New York     │ +1 413-876-4936 │
-  │  5 │ Goods of Nature Inc. │ Paris        │ [NULL]          │
-  └────┴──────────────────────┴──────────────┴─────────────────┘
-
-SQL > exit
-
-Bye-bye!
-```
-
-Visit the [SQL guide](https://github.com/miniconnect/minibase/blob/master/SQL.md)
-to learn more about the SQL features supported by the default query engine.
-Alternatively, you can try the experimental integration with the
-[Apache Calcite](https://github.com/miniconnect/calcite-integration) query planner.
-
-You can connect to HoloDB directly via the MiniConnect API.
-For more information,
-see [MiniConnect API](https://github.com/miniconnect/miniconnect?tab=readme-ov-file#getting-started-with-the-api).
-
-Also, you can use a MiniConnect server or even an existing MiniConnect `Session` via JDBC.
-For more information,
-see [MiniConnect JDBC compatibility](https://github.com/miniconnect/miniconnect#jdbc-compatibility).
-
-## Configuration
-
-In `config.yaml` you can specify the structure of your data (schemas, tables, columns, data, etc.):
+One easy way to try out HoloDB is to run it via [the official Docker image](https://hub.docker.com/r/miniconnect/holodb).
+All you need is a YAML configuration file:
 
 ```yaml
 seed: 98765
@@ -120,21 +39,76 @@ schemas:
     tables:
       - name: my_table
         writeable: true
-        size: 150
+        size: 1500
         columns:
           - name: id
             mode: COUNTER
-          - name: name
-            values: ['Some name', 'Other name', 'Some other']
+          - name: code
+            valuesPattern: '[A-F]{3}[0-9]{2}'
+          - name: year
+            shuffleQuality: high
+            valuesRange: [1950, 2000]
 ```
 
-You can generate a JSON schema for this configuration data structure
-by executing the `config:generateSchema` gradle task inside the holodb gradle project.
-Then the generated schema file will be found here:
+> [!TIP]
+> [You can download a more complex sample configuration from here.](https://raw.githubusercontent.com/miniconnect/general-docs/refs/heads/main/examples/holodb-standalone/config.yaml).
 
+Save this as `config.yaml`, and you are now ready to start the queryable database server:
+
+```bash
+docker run --rm -p 3430:3430 -v /tmp/config.yaml:/app/config.yaml miniconnect/holodb
 ```
-projects/config/build/schemas/holodb-config.schema.json
-```
+
+You can now connect to the server on port 3430.
+The simplest way to do this is to use the `micl` command line application, which is an SQL REPL.
+You can get it from the [`miniconnect-client` project](https://github.com/miniconnect/miniconnect-client).
+Start, select the schema, and run queries:
+
+> `$` &nbsp; **`micl`**
+>
+>  > *Welcome in miniConnect SQL REPL! - localhost:3430*
+>
+> `SQL >` &nbsp; **`USE my_schema;`**
+>
+> > *Query was successfully executed!*
+>
+> `SQL >` &nbsp; **`SELECT * FROM my_table WHERE year = 1990 ORDER BY id LIMIT 5;`**
+>
+> > *Query was successfully executed!*
+> >
+> > ```
+> >  ┌─────┬───────┬──────┐
+> >  │ id  │ code  │ year │
+> >  ├─────┼───────┼──────┤
+> >  │ 125 │ ADB81 │ 1990 │
+> >  │ 252 │ AEE24 │ 1990 │
+> >  │ 280 │ BAC77 │ 1990 │
+> >  │ 332 │ EFE77 │ 1990 │
+> >  │ 371 │ BFF62 │ 1990 │
+> >  └─────┴───────┴──────┘
+> > ```
+
+For other ways to use the server, such as connecting from your application, see later.
+
+
+## :books: More examples
+
+[Explore more complex and realistic examples here.](https://github.com/miniconnect/general-docs/blob/main/examples/README.md)
+
+
+## :jigsaw: SQL features
+
+Currently, a limited subset of the SQL features is supported by the default query engine.
+It lacks some relatively basic features such as grouping and filtering by arbitrary expressions.
+However it's powerful enough to serve queries of most ORM system.
+
+Visit the [SQL guide](https://github.com/miniconnect/minibase/blob/master/SQL.md)
+to learn more about the SQL features supported by the default query engine.
+Alternatively, you can try the experimental integration with the
+[Apache Calcite](https://github.com/miniconnect/calcite-integration) query planner.
+
+
+## :pencil: Configuration reference
 
 On the **top level** these keys are supported:
 
@@ -166,60 +140,37 @@ will be added over the read-only table,
 which accepts and stores insertions, updates, and deletions,
 and it gives the effect that the table is writeable.
 
-For each **column**, these subkeys are supported:
+For each **column**, several subkeys are supported,
+of which those related to the base value set and those related to additional settings can be distinguished
+(some of the latter may also apply to the base value set).
+At most one of the base value set keys should be used.
+These keys all begin with the prefix `values`:
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
-| `name` | `String` | name of the table column |
-| `type` | `String` (`Class<?>`) | java class name of column type |
-| `mode` | `String` | filling mode: `DEFAULT`, `COUNTER`, `FIXED`, or `ENUM` (global default: `DEFAULT`) |
-| `nullCount` | `LargeInteger` | count of null values (global default: `0`) |
 | `values` | `Object[]` | explicit list of possible values |
 | `valuesResource` | `String` | name of a java resource which contains the values line by line |
 | `valuesBundle` | `String` | short name of a bundled value resource, otherwise similar to `valuesResource` (see below) |
 | `valuesRange` | `LargeInteger[]` | start and end value of a numeric value range |
 | `valuesPattern` | `String` | regex pattern for values (reverse indexed) |
 | `valuesDynamicPattern` | `String` | regex pattern processed by [Generex](https://github.com/mifmif/Generex) (not reverse indexed) |
-| `valuesForeignColumn` | `String[]` | use value set of a foreign `COUNTER` column |
-| `distributionQuality` | `String` | distribution quality: `LOW`, `MEDIUM`, or `HIGH` (global default: `MEDIUM`) |
-| `shuffleQuality` | `String` | shuffle quality: `NOOP`, `VERY_LOW`, `LOW`, `MEDIUM`, `HIGH`, or `VERY_HIGH` (global default: `MEDIUM`) |
-| `sourceFactory` | `String` | java class name of source factory (must implement `hu.webarticum.holodb.spi.config.SourceFactory`) |
-| `sourceFactoryData` | *any* | data will be passed to the source factory |
-| `defaultValue` | *any* | default insert value for the column |
+| `valuesTextKind` | `String` | text kind for dummy text: `phrase`, `title`, `sentence`, `paragraph`, `markdown`, or `html` |
+| `valuesForeignColumn` | `String[]` | use value set of a foreign column (ideal for ID-based foreign keys) |
 
-In most cases, `type` can be omitted.
-If the configuration loader cannot guess the type, the startup aborts with an error.
-However, the type can always be overridden (e. g. numbers can be generated using a regular expression).
+The `valuesTextKind` key can be used to generate dummy text in various forms.
+These are based on randomly mixed words from the "lorem ipsum" text, supplemented with some English conjunctions.
+The values will not be indexed
+(for an indexed column containing single words, use the `valuesBundle` key with the value "lorem").
+The available values are as follows:
 
-The meaning of `mode` values:
-
-| Mode | Description |
-| ---- | ----------- |
-| `DEFAULT` | randomly distributed, non-unique values, indexed (except in case of `valuesDynamicPattern` used) |
-| `COUNTER` | fill with increasing whole numbers starting from `1`, unique, indexed (good choice for ID columns) |
-| `FIXED` | values will not be shuffled, the count of values must be equal to the table size, non-indexed |
-| `ENUM` | similar to `DEFAULT`, but with different proper rules for equality check, sort order and insertion/update |
-
-In the case of writable tables, if other than the `ENUM` mode is used,
-users can also put values ​​different from the initial ones.
-
-If `nullCount` is specified (even if `0`), then the column will be nullable.
-Omit `nullCount` to make the column `NOT NULL`.
-In case of custom `sourceFactory`, the column will be `NOT NULL` only iff
-the source is an `IndexedSource` and has at least one null value.
-
-For specifying the possible values in the column, one of
-`values`, `valuesResource`, `valuesRange`, `valuesPattern`,  `valuesDynamicPattern` and `valuesForeignColumn`
-can be used.
-Currently, for a `FIXED` column, only `values` is supported.
-
-In the case of `COUNTER` mode, values will be ignored and should be omitted.
-The type of a `COUNTER` column is always `java.math.LargeInteger`.
-
-If used, the value of `valuesForeignColumn` must be an array of lengths 1, 2, or 3.
-The one-element version contains a column name in the same table.
-The two-element version contains a \[*\<table\>*, *\<column\>*\] pair in the same schema.
-The three-element version contains the \[*\<schema\>*, *\<table\>*, *\<column\>*\] triplet.
+| Text kind | Example | Description |
+| --------- | ------- | ----------- |
+| `phrase` | *eiusmod an aliqua ullamco* | a short phrase |
+| `title` | *The Nulla Sit Tempor* | a title with capitalization |
+| `sentence` | *Some exercitation an occaecat anim the duis.* | a sentence terminated with perid |
+| `paragraph` |  | a paragraph of containing 3-6 sentences |
+| `markdown` |  | MarkDown formatted text containing a few headers and paragraphs |
+| `html` |  | HTML formatted text containing a few headers and paragraphs |
 
 There are several possible values for `valuesBundle`:
 
@@ -238,7 +189,58 @@ There are several possible values for `valuesBundle`:
 | `surnames` | 100 frequent English surnames |
 | `weekdays` | the names of the 7 days of the week |
 
-You can set default values for schemas, tables, and columns at any higher level in the configuration tree.
+If used, the value of `valuesForeignColumn` must be an array of lengths 1, 2, or 3.
+The one-element version contains a column name in the same table.
+The two-element version contains a \[*\<table\>*, *\<column\>*\] pair in the same schema.
+The three-element version contains the \[*\<schema\>*, *\<table\>*, *\<column\>*\] triplet.
+
+The remaining column settings are as follows:
+
+| Key | Type | Description |
+| --- | ---- | ----------- |
+| `name` | `String` | name of the table column |
+| `type` | `String` (`Class<?>`) | java class name of column type |
+| `mode` | `String` | filling mode: `default`, `counter`, `fixed`, or `enum` (global default: `default`) |
+| `nullCount` | `LargeInteger` | count of null values (global default: `0`) |
+| `distributionQuality` | `String` | distribution quality: `low`, `medium`, or `high` (global default: `medium`) |
+| `shuffleQuality` | `String` | shuffle quality: `noop`, `very_low`, `low`, `medium`, `high`, or `very_high` (global default: `medium`) |
+| `sourceFactory` | `String` | java class name of source factory (must implement `hu.webarticum.holodb.spi.config.SourceFactory`) |
+| `sourceFactoryData` | *any* | data will be passed to the source factory |
+| `defaultValue` | *any* | default insert value for the column |
+| `seedKey` | `LargeInteger` | custom seed key |
+
+In most cases, `type` can be omitted.
+If the configuration loader cannot guess the type, the startup aborts with an error.
+However, the type can always be overridden (e. g. numbers can be generated using a regular expression).
+
+The meaning of `mode` values:
+
+| Mode | Description |
+| ---- | ----------- |
+| `default` | randomly distributed, non-unique values, indexed (except in case of `valuesDynamicPattern` used) |
+| `counter` | fill with increasing whole numbers starting from `1`, unique, indexed (good choice for ID columns) |
+| `fixed` | values will not be shuffled, the count of values must be equal to the table size, non-indexed |
+| `enum` | similar to `default`, but with different proper rules for equality check, sort order and insertion/update |
+
+In the case of writable tables, if other than the `enum` mode is used,
+users can also put values ​​different from the initial ones.
+
+If `nullCount` is specified (even if `0`), then the column will be nullable.
+Omit `nullCount` to make the column `NOT NULL`.
+In case of custom `sourceFactory`, the column will be `NOT NULL` only iff
+the source is an `IndexedSource` and has at least one null value.
+
+Currently, for a `fixed` column, only `values` is supported.
+
+In the case of `counter` mode, values will be ignored and should be omitted.
+The type of a `counter` column is always `java.math.LargeInteger`.
+
+If `seedKey` is specified, it will be explicitly used as a key for the sub-random-generator for the column.
+Setting or changing this value alters the data distribution, shuffling, etc. for this column without affecting other columns.
+If two columns share the same non-null `seedKey` while they have the same settings (except for `name`),
+then they will provide the exact same values in the exact same order , effectively making them mirrors of each other.
+
+You can set default configuration for schemas, tables, and columns at any higher level in the configuration tree.
 Any value set at a lower lever will override any value set at a higher level (and, of course, the global default).
 
 | Key | Available in |
@@ -254,7 +256,7 @@ tableDefaults:
   writeable: false
   size: 120
 columnDefaults:
-  shuffleQuality: NOOP
+  shuffleQuality: noop
 schemas:
   - name: schema_1
     tables:
@@ -272,7 +274,18 @@ all table with no explicit `writeable` will read-only in `schema_1`, and writeab
 Also, data shuffling is disabled by default.
 
 
-## Load values from resource
+## :arrow_down: Getting the configuration JSON Schema
+
+You can generate a JSON schema for this configuration data structure
+by executing the `config:generateSchema` gradle task inside the holodb gradle project.
+Then the generated schema file will be found here:
+
+```
+projects/config/build/schemas/holodb-config.schema.json
+```
+
+
+## :open_file_folder: Loading values from resource
 
 You can use custom predefined value sets too.
 To do this, create a file with one value on each line.
@@ -319,7 +332,7 @@ COPY --from=builder /en-letters.txt /app/resources/en-letters.txt
 ```
 
 
-## Generate from an existing database
+## :minidisc: Generating from an existing database
 
 You can find an experimental python script in the `tools` directory
 that creates a HoloDB configuration from an existing MySQL database.
@@ -333,7 +346,7 @@ python3 mysql_scanner.py -u your_user -p your_password -d your_database -w
 Use the `-h` or `--help` option for more details.
 
 
-## Embedded mode via JDBC
+## :file_cabinet: Embedded mode via JDBC
 
 You can use HoloDB as an embedded database.
 
@@ -366,7 +379,7 @@ jdbc:holodb:embedded:resource://config.yaml?schema=university
 Use the `hu.webarticum.holodb.embedded.HoloEmbeddedDriver` driver class if its explicit setting is mandatory.
 
 
-## Client-server mode via JDBC
+## :arrows_counterclockwise: Client-server mode via JDBC
 
 To achieve this, first add the required dependency:
 
@@ -389,7 +402,7 @@ jdbc:miniconnect://localhost:3430/university
 In this case, use the `hu.webarticum.miniconnect.jdbc.MiniJdbcDriver` driver class if necessary.
 
 
-## Mock JPA entities
+## :package: Mocking JPA entities
 
 To use the annotations below, set the `jpa-annotations` subproject as a dependency:
 
@@ -446,6 +459,32 @@ The solution should be similarly simple for Spring or other frameworks.
 
 Now, all of your entities will be backed by HoloDB tables with automatic configuration.
 To fine-tune this configuration, you can use some annotation on the entity classes.
+For example:
+
+```java
+@Entity
+@Table(name = "companies")
+@HoloTable(size = 25)
+@HoloVirtualColumn(name = "extracol", type = Integer.class, valuesRange = {10, 20})
+public class Company {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "birth_country", nullable = false)
+    @HoloColumn(valuesBundle = "countries")
+    private String country;
+    
+    // ...
+    
+}
+```
+
+
+## :label: JPA annotations reference
+
+These are the supported annotations:
 
 | Annotation | Target | Description |
 | ---------- | ------ | ----------- |
@@ -481,48 +520,46 @@ Some settings accepts custom data:
 Fields ending with the 'Map' suffix accepts an array of `@HoloValue`s,
 you can use `@HoloValue.key` to set map entry key for each.
 
-Example:
 
-```java
-@Entity
-@Table(name = "companies")
-@HoloTable(size = 25)
-@HoloVirtualColumn(name = "extracol", type = Integer.class, valuesRange = {10, 20})
-public class Company {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Column(name = "birth_country", nullable = false)
-    @HoloColumn(valuesBundle = "countries")
-    private String country;
-    
-    // ...
-    
-}
-```
+## :bricks: Overview of sub-projects
+
+HoloDB consists of several Gradle subprojects located in the `projects` directory:
+
+| Subproject | Description |
+| ---------- | ----------- |
+| :arrow_forward:&nbsp; `app` | Standalone application |
+| :rocket:&nbsp; `bootstrap` | Utility for initializing a database from configuration |
+| :hammer_and_wrench:&nbsp; `config` | Configuration model classes |
+| :nut_and_bolt:&nbsp; `core` | Core building blocks |
+| :file_cabinet:&nbsp; `embedded` | Embedded mode drivers |
+| :ledger:&nbsp; `jpa` | JPA mocking drivers |
+| :label:&nbsp; `jpa-annotations` | JPA configuration annotations (lightweight dependency) |
+| :1234:&nbsp; `regex` | Regex-based value provider |
+| :electric_plug:&nbsp; `spi` | Service provider interfaces |
+| :floppy_disk:&nbsp; `storage` | [MiniBase](https://github.com/miniconnect/minibase) storage implementation |
+| :card_file_box:&nbsp; `values` | Predefined value sets |
 
 
-## How does HoloDB work?
+## :gear: How does HoloDB work?
 
 HoloDB is a flexible virtual relational database engine written in Java.
 
 Like other relational database engines,
 HoloDB is a collection of tools built on top of a query engine
 layered over a structured data access API.
-But in the case of HoloDB, this API does not access a real pre-populated data storage,
-but dynamically computes data on-the-fly directly from your configuration.
-However, unlike simplistic SQL mocking techniques,
-multiple queries yield realistic, mutually consistent results, computed dynamically yet reproducibly.
+The difference is that this API does not access a real pre-populated data storage,
+but dynamically computes values from configuration.
+Unlike simplistic SQL mocking techniques,
+results remain realistic and mutually consistent across queries, computed dynamically yet reproducibly.
 
-Typically, this computation is done on a column-by-column basis.
-The column then refers to an ordered, searchable base set of values.
-This is then distributed over the size of the table controlled by distribution
-and null-management strategies preserving order and searchability.
-Finally, a shuffling layer applies an invertible permutation,
-leveraging concepts borrowed from cryptography
-to efficiently distribute values without precomputing them.
+Column data is typically produced in layered steps:
+
+1. **Base set**: an ordered, searchable, typically virtual collection of values
+   (as simple as a numeric range or as complex as all strings matching a regex).  
+2. **Distribution**: this base set is *stretched* over the required table size.
+   The result is a monotonic, easily searchable list of values matching the configured characteristics.
+3. **Shuffling**: the permutation layer makes the data look realistically random.
+   This is always invertible, so search queries remain efficient and reproducible.
 
 ![Default method of providing column data](img/column-layers.svg)
 
@@ -550,7 +587,8 @@ ideal for short-lived writable datasets.
 
 The on-the-fly computations rely heavily on arithmetic-centric operations
 rather than data storage and retrieval.
-For numeric efficiency, HoloDB introduces specialized types and algorithms, most of which can be used standalone too.
+For numeric efficiency, HoloDB introduces specialized types and algorithms,
+most of which can be used standalone too.
 For example, LargeInteger is an arbitrarily large numeric data type
 somewhat inspired by similar double-nature implementations
 such as SafeLong from the Spire library, BigInt from the Scala standard library, and others.
@@ -558,6 +596,6 @@ Compared to these, LargeInteger is more efficient in case of
 frequent operations on smaller numbers.
 
 
-## Changelog
+## :notebook: Changelog
 
 See [CHANGELOG.md](CHANGELOG.md).

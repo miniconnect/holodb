@@ -1,7 +1,7 @@
 plugins {
-    id 'com.palantir.git-version' version '0.14.0'
-    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
-    id 'nebula.lint' version '17.7.1'
+    id 'org.ajoberstar.grgit' version '5.3.2'
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
+    id 'nebula.lint' version '20.6.2'
 }
 
 description = "HoloDB - instant random relational data"
@@ -10,7 +10,7 @@ def scmUrl = 'https://github.com/miniconnect/holodb.git'
 def websiteUrl = scmUrl.replaceAll(/\.git$/, "");
 
 def automaticVersion = '0.1.0-SNAPSHOT'
-def versionMatcher = gitVersion() =~ /^v?(\d+\.\d+\.)(\d+)(.*)$/
+def versionMatcher = grgit.describe() =~ /^v?(\d+\.\d+\.)(\d+)(.*)$/
 if (versionMatcher.size() > 0) {
     def versionMatch = versionMatcher[0]
     def isVersionDirty = !versionMatch[3].isEmpty()
@@ -24,27 +24,31 @@ defaultTasks 'build'
 
 nexusPublishing {
     repositories {
-        sonatype()
+        sonatype {
+            nexusUrl.set(uri(providers.gradleProperty('sonatypeUrl').orNull))
+        }
+    }
+}
+
+tasks.register('printVersion') {
+    inputs.property('projectVersion', project.version)
+    doLast {
+        println inputs.properties['projectVersion']
     }
 }
 
 allprojects {
-    group 'hu.webarticum.holodb'
-    version automaticVersion
+    group = 'hu.webarticum.holodb'
+    version = automaticVersion
     
-    ext.miniConnectApiVersion = '0.3.0'
-    ext.miniConnectVersion = '0.6.0'
-    ext.miniBaseVersion = '0.3.0'
+    ext.miniConnectApiVersion = '0.4.0'
+    ext.miniConnectVersion = '0.7.0'
+    ext.miniBaseVersion = '0.4.0'
     
     repositories {
         mavenCentral()
         mavenLocal()
     }
-    /*
-    apply plugin: 'nebula.lint'
-    gradleLint {
-        rules = [ 'unused-dependency' ]
-    }*/
 }
 
 subprojects {
@@ -52,12 +56,14 @@ subprojects {
     apply plugin: 'signing'
     apply plugin: 'maven-publish'
     
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
     
     afterEvaluate {
         if (sourceSets.hasProperty('lab')) {
-            task execLab(type: JavaExec) {
+            tasks.register('execLab', JavaExec) {
                 group = 'Execution'
                 description = 'Run lab demo main class'
                 classpath = sourceSets.lab.runtimeClasspath
@@ -94,11 +100,11 @@ subprojects {
             useJUnitPlatform()
             testLogging {
                 events 'failed'
-                showExceptions true
-                exceptionFormat 'full'
-                showCauses true
-                showStackTraces true
-                showStandardStreams false
+                showExceptions = true
+                exceptionFormat = 'full'
+                showCauses = true
+                showStackTraces = true
+                showStandardStreams = false
             }
         }
         
@@ -142,9 +148,8 @@ subprojects {
         }
         
         signing {
-            required { true }
-            sign configurations.archives
-            sign publishing.publications.mavenJava
+            required = true
+            sign publishing.publications
         }
         
     }

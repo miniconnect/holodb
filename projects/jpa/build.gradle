@@ -2,13 +2,7 @@ plugins {
     id 'java-library'
 }
 
-description "HoloDB JPA loader functionality"
-
-java {
-    registerFeature('malleableDependencies') {
-        usingSourceSet(sourceSets.main)
-    }
-}
+description = "HoloDB JPA loader functionality"
 
 dependencies {
     api project(':config')
@@ -21,9 +15,12 @@ dependencies {
     implementation "hu.webarticum.miniconnect:jdbc:${miniConnectVersion}"
     implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
     implementation "hu.webarticum.minibase:engine:${miniBaseVersion}"
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.19.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.2'
     
-    malleableDependenciesImplementation 'javax.persistence:javax.persistence-api:2.2'
-    malleableDependenciesImplementation 'org.hibernate:hibernate-core:5.4.31.Final'
+    compileOnly 'jakarta.persistence:jakarta.persistence-api:3.2.0'
+    compileOnly 'jakarta.persistence:jakarta.persistence-api:2.2'
+    
+    // TODO: provide separate drivers for newer hibernate major versions
+    compileOnly 'org.hibernate:hibernate-core:5.4.31.Final'
 }
