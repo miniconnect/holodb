@@ -1,5 +1,34 @@
 # Changelog
 
+
+## Version 0.7.0
+
+Released on *2025-09-29*
+
+### Fixed:
+
+- Fixed support for `ManyToOne` JPA columns
+- Fixed explicit type declaration handling in JPA annotations
+- Fixed `nullCount` detection from JPA annotation
+
+### Added:
+
+- Added the new `seedKey` column setting
+- Added the new `valuesTextKind` column setting
+- Added support for Jakarta JPA and Hibernate 6+
+
+### Improved:
+
+- Made column config enums case-insensitive
+
+### Development:
+
+- Improved project tools
+- Improved schema generator
+- Added the schema file to the config publication
+- Improved permutation benchmark parameters
+
+
 ## Version 0.6.0
 
 Released on *2025-03-15*
@@ -18,7 +47,7 @@ Released on *2025-03-15*
 - Improve performance of permutations and other computations
 - Changed `ValueExtractor` to be fully value agnostic
 
-## Development:
+### Development:
 
 - Upgrade to gradle 8
 - Improved the config JSON schema generator task
@@ -117,7 +146,7 @@ Released on *2022-08-10*
 
 **Added:**
 
-- new column configurations: `valuesRange`, `valuesResource`, `valuesPattern`, `valuesDynamicPattern`
+- New column configurations: `valuesRange`, `valuesResource`, `valuesPattern`, `valuesDynamicPattern`
 - Support for database sequences
 - Proper support for NULL values
 - `possibleValues()` method in `Source`
