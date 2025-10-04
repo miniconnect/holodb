@@ -49,7 +49,7 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 | Named group | `(?<name>abc)`, `(?P<name>abc)`, `(?'name'abc)` | |
 | Non-capturing group | `(?:abc)` | Modifiers are not supported |
 | Greedy quantifier | `?`, `*`, `+`, `{2,5}`, `{3,}` | Non-greedy quantifiers are not supported |
-| Alternation | `(a|bc)` | |
+| Alternation | `(a\|bc)` | |
 | Numbered backreference | `\1` | Limited support |
 | Named backreference | `\k<name>` | Limited support |
 | Quoted fixed string | `\Qa.b?c\E` | Can't be used inside character classes |
