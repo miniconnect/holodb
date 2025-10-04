@@ -11,7 +11,7 @@ It behaves like a regular database but requires no real storage, making it ideal
 > **Sketch up your schema and characteristics, and you're ready to start querying!**
 
 HoloDB is for those moments when you need a database-shaped system without the hassle of managing real data.
-Instead of setting up or importing datasets, you simply point it at a configuration (or ORM entities)
+Instead of setting up or importing datasets, you simply provide a configuration file (or ORM entities)
 and instantly get a live, consistent, queryable database &ndash; ready for demos, prototypes, tests, or teaching.
 
 What you get from it:
@@ -104,8 +104,8 @@ However it's powerful enough to serve queries of most ORM system.
 
 Visit the [SQL guide](https://github.com/miniconnect/minibase/blob/master/SQL.md)
 to learn more about the SQL features supported by the default query engine.
-Alternatively, you can try the experimental integration with the
-[Apache Calcite](https://github.com/miniconnect/calcite-integration) query planner.
+Alternatively, you can try the
+[experimental integration with the Apache Calcite query planner](https://github.com/miniconnect/calcite-integration).
 
 
 ## :pencil: Configuration reference
@@ -117,7 +117,9 @@ On the **top level** these keys are supported:
 | `seed` | `LargeInteger` | global random seed (global default: `0`) |
 | `schemas` | `List` | list of schemas (see below) |
 
-The `seed` option sets a random seed with which you can vary the content of the database.
+The `seed` option defines a root value used in the hierarchical derivation of keys,
+which are then applied in randomized data generation at runtime.
+Modifying it remixes the entire content of the database.
 
 For each **schema**, these subkeys are supported:
 
@@ -153,9 +155,16 @@ These keys all begin with the prefix `values`:
 | `valuesBundle` | `String` | short name of a bundled value resource, otherwise similar to `valuesResource` (see below) |
 | `valuesRange` | `LargeInteger[]` | start and end value of a numeric value range |
 | `valuesPattern` | `String` | regex pattern for values (reverse indexed) |
-| `valuesDynamicPattern` | `String` | regex pattern processed by [Generex](https://github.com/mifmif/Generex) (not reverse indexed) |
+| `valuesDynamicPattern` | `String` | regex pattern for values (not reverse indexed) |
 | `valuesTextKind` | `String` | text kind for dummy text: `phrase`, `title`, `sentence`, `paragraph`, `markdown`, or `html` |
 | `valuesForeignColumn` | `String[]` | use value set of a foreign column (ideal for ID-based foreign keys) |
+
+The `valuesDynamicPattern` option is backed by [Generex](https://github.com/mifmif/Generex).
+It supports slightly more regex features than `valuesPattern`,
+but it is not indexed and generates individual strings more slowly.
+[The native engine](https://github.com/miniconnect/holodb/tree/main/projects/regex)
+behind `valuesPattern` uses an efficient, purpose-built algorithm,
+and should be preferred in most cases.
 
 The `valuesTextKind` key can be used to generate dummy text in various forms.
 These are based on randomly mixed words from the "lorem ipsum" text, supplemented with some English conjunctions.
@@ -211,7 +220,9 @@ The remaining column settings are as follows:
 
 In most cases, `type` can be omitted.
 If the configuration loader cannot guess the type, the startup aborts with an error.
-However, the type can always be overridden (e. g. numbers can be generated using a regular expression).
+The type can always be explicitly specified;
+the required conversion is applied automatically
+(it is even possible to generate numbers based on, say, a regular expression, though this may cause problems when sorting).
 
 The meaning of `mode` values:
 
@@ -232,8 +243,8 @@ the source is an `IndexedSource` and has at least one null value.
 
 Currently, for a `fixed` column, only `values` is supported.
 
-In the case of `counter` mode, values will be ignored and should be omitted.
-The type of a `counter` column is always `java.math.LargeInteger`.
+In the case of `counter` mode, explicit setup of values will be ignored and should be omitted.
+The type of a `counter` column is always `hu.webarticum.miniconnect.lang.LargeInteger`.
 
 If `seedKey` is specified, it will be explicitly used as a key for the sub-random-generator for the column.
 Setting or changing this value alters the data distribution, shuffling, etc. for this column without affecting other columns.
@@ -433,7 +444,7 @@ jdbc:holodb:jpa://
 
 (Optionally, the schema can also be specified, e.g. `jdbc:holodb:jpa:///my_schema_name`.)
 
-At the moment, schema construction is not fully automatic, it's necessary to explicitly pass the metamodel.
+At the moment, schema construction is not fully automatic, it is necessary to explicitly pass the metamodel.
 For example in Micronaut:
 
 ```java
