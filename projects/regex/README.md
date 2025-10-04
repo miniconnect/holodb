@@ -1,12 +1,5 @@
 # Regular expression based string generator
 
-## Disclaimer
-
-> [!CAUTION]
-> This project is in progress. Most of the features are not implemented yet.
-
-## General info
-
 This library is for generating strings that match a specific regular expression.
 Unlike other string generators, it provides an alphabetically ordered virtual list of the generated strings.
 This list is lazy, you can get the number of matching strings and the nth of them.
