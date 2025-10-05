@@ -56,11 +56,11 @@ public class PermutationFactory {
     }
 
     private static Permutation createVeryLowQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
-        return new ModuloPermutation(treeRandom, size);
+        int bitCount = calculateBitCount(size);
+        return new BitXorPermutation(treeRandom, bitCount).resized(size);
     }
 
     private static Permutation createLowQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
-        // TODO: add additional cheap local shuffling
         return new ModuloPermutation(treeRandom, size);
     }
 
