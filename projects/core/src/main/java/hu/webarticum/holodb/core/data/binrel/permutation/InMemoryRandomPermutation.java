@@ -2,7 +2,6 @@ package hu.webarticum.holodb.core.data.binrel.permutation;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 import java.util.Random;
 
 import hu.webarticum.holodb.core.data.random.TreeRandom;
@@ -14,6 +13,8 @@ public class InMemoryRandomPermutation implements Permutation {
     
     private final int[] permutatedValues;
     
+    private final int[] keyMap;
+    
 
     public InMemoryRandomPermutation(TreeRandom treeRandom, LargeInteger size) {
         this(treeRandom, size.intValueExact());
@@ -22,6 +23,7 @@ public class InMemoryRandomPermutation implements Permutation {
     public InMemoryRandomPermutation(TreeRandom treeRandom, int size) {
         this.size = LargeInteger.of(size);
         permutatedValues = createPermutation(treeRandom, size);
+        keyMap = generateKeyMap(permutatedValues);
     }
     
     private static int[] createPermutation(TreeRandom treeRandom, int size) {
@@ -44,6 +46,14 @@ public class InMemoryRandomPermutation implements Permutation {
         }
     }
 
+    private static int[] generateKeyMap(int[] permutatedValues) {
+        int[] keyMap = new int[permutatedValues.length];
+        for (int i = 0; i < permutatedValues.length; i++) {
+            keyMap[permutatedValues[i]] = i;
+        }
+        return keyMap;
+    }
+
     
     public int[] permutatedValues() {
         return Arrays.copyOf(permutatedValues, permutatedValues.length);
@@ -61,13 +71,7 @@ public class InMemoryRandomPermutation implements Permutation {
 
     @Override
     public LargeInteger indexOf(LargeInteger value) {
-        int intValue = value.intValueExact();
-        for (int i = 0; i < permutatedValues.length; i++) {
-            if (permutatedValues[i] == intValue) {
-                return LargeInteger.of(i);
-            }
-        }
-        throw new NoSuchElementException();
+        return LargeInteger.of(keyMap[value.intValueExact()]);
     }
 
 }
