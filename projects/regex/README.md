@@ -1,12 +1,5 @@
 # Regular expression based string generator
 
-## Disclaimer
-
-> [!CAUTION]
-> This project is in progress. Most of the features are not implemented yet.
-
-## General info
-
 This library is for generating strings that match a specific regular expression.
 Unlike other string generators, it provides an alphabetically ordered virtual list of the generated strings.
 This list is lazy, you can get the number of matching strings and the nth of them.
@@ -49,7 +42,7 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 | Named group | `(?<name>abc)`, `(?P<name>abc)`, `(?'name'abc)` | |
 | Non-capturing group | `(?:abc)` | Modifiers are not supported |
 | Greedy quantifier | `?`, `*`, `+`, `{2,5}`, `{3,}` | Non-greedy quantifiers are not supported |
-| Alternation | `(a|bc)` | |
+| Alternation | `(a\|bc)` | |
 | Numbered backreference | `\1` | Limited support |
 | Named backreference | `\k<name>` | Limited support |
 | Quoted fixed string | `\Qa.b?c\E` | Can't be used inside character classes |

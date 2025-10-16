@@ -36,6 +36,9 @@ application {
 }
 
 jib {
+    from {
+        image = 'gcr.io/distroless/java21-debian12'
+    }
     to {
         image = 'miniconnect/holodb'
         tags = [version, 'latest']
@@ -45,6 +48,7 @@ jib {
         }
     }
     container {
+        user = '65532:65532'
         ports = ['3430']
         args = ['/app/config.yaml']
         mainClass = project.ext.mainClass

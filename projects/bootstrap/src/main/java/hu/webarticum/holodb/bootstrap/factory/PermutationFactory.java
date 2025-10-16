@@ -1,13 +1,14 @@
 package hu.webarticum.holodb.bootstrap.factory;
 
 import hu.webarticum.holodb.config.HoloConfigColumn.ShuffleQuality;
-import hu.webarticum.holodb.core.data.binrel.permutation.DirtyFpePermutation;
+import hu.webarticum.holodb.core.data.binrel.permutation.BitShufflePermutation;
+import hu.webarticum.holodb.core.data.binrel.permutation.BitXorPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.FeistelNetworkPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.IdentityPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.ModuloPermutation;
 import hu.webarticum.holodb.core.data.binrel.permutation.Permutation;
+import hu.webarticum.holodb.core.data.binrel.permutation.PermutationComposition;
 import hu.webarticum.holodb.core.data.binrel.permutation.InMemoryRandomPermutation;
-import hu.webarticum.holodb.core.data.hasher.FastHasher;
 import hu.webarticum.holodb.core.data.hasher.Hasher;
 import hu.webarticum.holodb.core.data.hasher.Sha256MacHasher;
 import hu.webarticum.holodb.core.data.random.TreeRandom;
@@ -35,7 +36,7 @@ public class PermutationFactory {
             return createLowQualityPermutation(treeRandom, size);
         } else if (shuffleQuality == ShuffleQuality.HIGH) {
             if (size.isLessThanOrEqualTo(MAX_SMALL_SIZE)) {
-                return createSmallHighQualityPermutation(treeRandom, size);
+                return createSmallVeryHighQualityPermutation(treeRandom, size);
             } else {
                 return createHighQualityPermutation(treeRandom, size);
             }
@@ -55,51 +56,43 @@ public class PermutationFactory {
     }
 
     private static Permutation createVeryLowQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
-        return new ModuloPermutation(treeRandom, size);
+        int bitCount = calculateBitCount(size);
+        return new BitXorPermutation(treeRandom, bitCount).resized(size);
     }
 
     private static Permutation createLowQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
-        // TODO: add additional cheap local shuffling
         return new ModuloPermutation(treeRandom, size);
     }
 
     private static Permutation createMediumQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
         int bitCount = calculateBitCount(size);
-        byte[] key = treeRandom.getBytes(4);
-        int halfHashByteSize = calculateHalfHashByteSize(bitCount);
-        Hasher hasher = new FastHasher(key, halfHashByteSize);
-        int doubleRounds = 1;
-        return new FeistelNetworkPermutation(treeRandom, bitCount, doubleRounds, hasher).resized(size);   
+        return new PermutationComposition(
+                new ModuloPermutation(treeRandom, size),
+                new BitShufflePermutation(treeRandom, bitCount).resized(size),
+                new ModuloPermutation(treeRandom.sub(size), size),
+                new BitXorPermutation(treeRandom, bitCount).resized(size));
     }
 
     private static int calculateBitCount(LargeInteger size) {
         return size.decrement().bitLength();
     }
     
-    private static int calculateHalfHashByteSize(int bitCount) {
-        return (((bitCount + 7) / 8) + 1) / 2;
-    }
-
-    private static Permutation createSmallHighQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
-        return new InMemoryRandomPermutation(treeRandom, size);
-    }
-
     private static Permutation createHighQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
-        // FIXME: it's slow to initialize
-        return new DirtyFpePermutation(treeRandom, size, 6);
+        return createSha256Permutation(treeRandom, size, 2);
     }
 
     private static Permutation createSmallVeryHighQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
-        // TODO: can we improve this in any way?
         return new InMemoryRandomPermutation(treeRandom, size);
     }
 
     private static Permutation createVeryHighQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
+        return createSha256Permutation(treeRandom, size, 3);
+    }
+    
+    private static Permutation createSha256Permutation(TreeRandom treeRandom, LargeInteger size, int doubleRounds) {
         int bitCount = size.decrement().bitLength();
         byte[] key = treeRandom.getBytes(8);
-        // TODO: scale hash output size
         Hasher hasher = new Sha256MacHasher(key);
-        int doubleRounds = 2;
         return new FeistelNetworkPermutation(treeRandom, bitCount, doubleRounds, hasher).resized(size); 
     }
 

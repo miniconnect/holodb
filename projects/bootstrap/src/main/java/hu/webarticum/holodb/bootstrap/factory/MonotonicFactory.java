@@ -16,15 +16,10 @@ public class MonotonicFactory {
 
     public static Monotonic createMonotonic(
             TreeRandom treeRandom, LargeInteger size, LargeInteger baseSize, DistributionQuality distributionQuality) {
-        if (distributionQuality == DistributionQuality.MEDIUM) {
-            // TODO: can we increase performance for MEDIUM?
-            return new BinomialMonotonic(treeRandom, size, baseSize);
-        } else if (distributionQuality == DistributionQuality.LOW) {
-            return new FastMonotonic(size, baseSize);
-        } else if (distributionQuality == DistributionQuality.HIGH) {
+        if (distributionQuality == DistributionQuality.HIGH) {
             return new BinomialMonotonic(treeRandom, size, baseSize);
         } else {
-            throw new IllegalArgumentException("Unknown distributionQuality: " + distributionQuality);
+            return new FastMonotonic(size, baseSize);
         }
     }
     

@@ -1,6 +1,17 @@
 # Changelog
 
 
+## Version 0.7.1
+
+Released on *2025-12-16*
+
+### Improved:
+
+- Improved the search performance of in-memory random permutation by also storing the index array
+- Improved configuration defaults
+- Improved docker build with new base image (distroless)
+
+
 ## Version 0.7.0
 
 Released on *2025-09-29*
