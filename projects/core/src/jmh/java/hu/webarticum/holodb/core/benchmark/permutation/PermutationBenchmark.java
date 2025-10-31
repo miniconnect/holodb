@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.core.benchmark.monotonic;
+package hu.webarticum.holodb.core.benchmark.permutation;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
