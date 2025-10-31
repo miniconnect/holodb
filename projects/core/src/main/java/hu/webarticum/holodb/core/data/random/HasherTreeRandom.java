@@ -100,8 +100,8 @@ public class HasherTreeRandom implements TreeRandom {
 
 
     @Override
-    public TreeRandom sub(byte... bytes) {
-        byte[] cleanSubBytes = cleanBytes(bytes);
+    public TreeRandom sub(byte[] key) {
+        byte[] cleanSubBytes = cleanBytes(key);
         byte[] bytesForSub = new byte[this.bytes.length + 1 + cleanSubBytes.length];
         System.arraycopy(this.bytes, 0, bytesForSub, 0, this.bytes.length);
         bytesForSub[this.bytes.length] = SEPARATOR;
