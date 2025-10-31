@@ -6,19 +6,23 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public interface TreeRandom {
 
-    public default TreeRandom sub(long number) {
-        return sub(LargeInteger.of(number));
+    public default TreeRandom sub(boolean key) {
+        return sub(new byte[] { (key ? (byte) 1 : (byte) 0) });
     }
     
-    public default TreeRandom sub(LargeInteger number) {
-        return sub(number.toByteArray());
+    public default TreeRandom sub(long key) {
+        return sub(LargeInteger.of(key));
+    }
+    
+    public default TreeRandom sub(LargeInteger key) {
+        return sub(key.toByteArray());
     }
 
-    public default TreeRandom sub(String name) {
-        return sub(name.getBytes(StandardCharsets.UTF_8));
+    public default TreeRandom sub(String key) {
+        return sub(key.getBytes(StandardCharsets.UTF_8));
     }
     
-    public TreeRandom sub(byte... bytes);
+    public TreeRandom sub(byte[] key);
 
     public byte[] getBytes(int numberOfBytes);
     
