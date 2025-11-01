@@ -1,11 +1,15 @@
 package hu.webarticum.holodb.core.data.bitsource;
 
+import java.util.function.Supplier;
+
 // TODO: 1 byte cache only?
 public class ByteSourceBitSource implements BitSource {
     
     private byte[] bytes;
     
-    private final ByteSource byteSource;
+    private ByteSource byteSource;
+    
+    private Supplier<ByteSource> byteSourceFactory;
     
     private int position = 0;
     
@@ -23,6 +27,14 @@ public class ByteSourceBitSource implements BitSource {
         this.bytes = new byte[initialBuffer.length];
         System.arraycopy(initialBuffer, 0, this.bytes, 0, initialBuffer.length);
         this.byteSource = byteSource;
+        this.byteSourceFactory = null;
+    }
+    
+    public ByteSourceBitSource(byte[] initialBuffer, Supplier<ByteSource> byteSourceFactory) {
+        this.bytes = new byte[initialBuffer.length];
+        System.arraycopy(initialBuffer, 0, this.bytes, 0, initialBuffer.length);
+        this.byteSource = null;
+        this.byteSourceFactory = byteSourceFactory;
     }
     
     
@@ -51,7 +63,6 @@ public class ByteSourceBitSource implements BitSource {
         position = readPosition;
 
         return result;
-        
     }
     
     private void ensureBytes(int numberOfBits) {
@@ -68,11 +79,20 @@ public class ByteSourceBitSource implements BitSource {
         System.arraycopy(bytes, keepingBytesIndex, newBytes, 0, keepingBytesCount);
 
         for (int b = keepingBytesCount; b < neededBytesCount; b++) {
-            newBytes[b] = byteSource.next();
+            newBytes[b] = getByteSource().next();
         }
 
         bytes = newBytes;
         position %= 8;
+    }
+    
+    private ByteSource getByteSource() {
+        if (byteSource == null) {
+            byteSource = byteSourceFactory.get();
+            byteSourceFactory = null;
+        }
+        
+        return byteSource;
     }
 
     private byte extractPadded(int from, int length) {
