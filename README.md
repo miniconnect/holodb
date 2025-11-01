@@ -1,7 +1,8 @@
 # HoloDB &ndash; the on-the-fly relational database
 
-HoloDB is a relational database simulator that provides realistic mock data entirely on-the-fly, based on declarative configuration.
-It behaves like a regular database but requires no real storage, making it ideal for demos, prototypes, testing, and education.
+HoloDB is a lightweight relational database simulator.
+It launches instantly from your declarative configuration and presents a coherent, performant, writable database view without storing any data.
+Ideal for demos, prototypes, testing, education, or any situation traditionally involving synthetic or anonymized data.
 
 
 ## :bulb: Why HoloDB?
@@ -12,7 +13,7 @@ It behaves like a regular database but requires no real storage, making it ideal
 
 HoloDB is for those moments when you need a database-shaped system without the hassle of managing real data.
 Instead of setting up or importing datasets, you simply provide a configuration file (or ORM entities)
-and instantly get a live, consistent, queryable database &ndash; ready for demos, prototypes, tests, or teaching.
+and start working with an on-the-fly (yet performant) relational system that computes every result from definition rules, not storage.
 
 What you get from it:
 
