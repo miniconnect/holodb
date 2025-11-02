@@ -122,13 +122,13 @@ public class HasherTreeRandom implements TreeRandom {
         }
         
         if (highExclusive.isFittingInLong()) {
-            return getNumberLong(highExclusive);
+            return getNumberSmall(highExclusive);
         } else {
-            return getNumberLarge_XXX(highExclusive);
+            return getNumberLarge(highExclusive);
         }
     }
 
-    private LargeInteger getNumberLong(LargeInteger highExclusive) {
+    private LargeInteger getNumberSmall(LargeInteger highExclusive) {
         int numberOfBits = highExclusive.ceilingLog2().intValue();
         BitSource bitSource = createBitSource();
 
@@ -143,7 +143,7 @@ public class HasherTreeRandom implements TreeRandom {
         return highExclusive.decrement();
     }
     
-    private LargeInteger getNumberLarge_XXX(LargeInteger highExclusive) {
+    private LargeInteger getNumberLarge(LargeInteger highExclusive) {
         LargeInteger two = LargeInteger.of(2);
         LargeInteger factor = highExclusive;
         LargeInteger powerOfTwo = LargeInteger.ONE;
