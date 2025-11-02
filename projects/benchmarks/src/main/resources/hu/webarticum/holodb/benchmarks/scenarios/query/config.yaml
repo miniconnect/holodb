@@ -1,0 +1,15 @@
+seed: 98765
+schemas:
+  - name: benchmark
+    tables:
+      - name: test_table
+        writeable: true
+        size: 1500
+        columns:
+          - name: id
+            mode: COUNTER
+          - name: code
+            valuesPattern: '[A-F]{3}[0-9]{2}'
+          - name: year
+            shuffleQuality: high
+            valuesRange: [1950, 2000]

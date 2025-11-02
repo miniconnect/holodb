@@ -23,7 +23,7 @@ public class FastByteSource implements ByteSource {
 
     @Override
     public byte next() {
-        stateByte = (byte) ((((int) stateByte) * MULITPLIER) + counter);
+        stateByte = (byte) ((stateByte * MULITPLIER) + counter);
         counter++;
         return stateByte;
     }

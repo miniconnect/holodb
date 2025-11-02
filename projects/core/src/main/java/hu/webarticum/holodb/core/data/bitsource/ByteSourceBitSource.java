@@ -2,7 +2,6 @@ package hu.webarticum.holodb.core.data.bitsource;
 
 import java.util.function.Supplier;
 
-// TODO: 1 byte cache only?
 public class ByteSourceBitSource implements BitSource {
     
     private byte[] bytes;
