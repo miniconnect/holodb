@@ -11,9 +11,9 @@ Ideal for demos, prototypes, testing, education, or any situation traditionally 
 > 
 > **Sketch up your schema and characteristics, and you're ready to start querying!**
 
-HoloDB is for those moments when you need a database-shaped system without the hassle of managing real data.
+HoloDB is for those moments when you need a database-shaped system but are tired of the complications of managing actual data
 Instead of setting up or importing datasets, you simply provide a configuration file (or ORM entities)
-and start working with an on-the-fly (yet performant) relational system that computes every result from definition rules, not storage.
+and immediately start working with an on-the-fly (yet performant) relational system that computes every result from definition rules, not storage.
 
 What you get from it:
 
