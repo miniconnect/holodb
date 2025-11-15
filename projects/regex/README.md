@@ -26,7 +26,7 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 | Name | Example | Comments |
 | ---- | ------- | -------- |
 | Character literal | `a` | |
-| Escaped literal | `\(` | For anything else than ASCII letters and numbers |
+| Escaped literal | `\(` | For escaping anything else than ASCII letters and numbers |
 | Dot wildcard | `.` | Produces an ASCII non-ISO-Control character |
 | Special literal | `\t`, `\n`, `\r`, `\f`, `\a`, `\e` | |
 | Control escape sequence | `\cM` | |
@@ -44,8 +44,8 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 | Non-capturing group | `(?:abc)` | Modifiers are not supported |
 | Greedy quantifier | `?`, `*`, `+`, `{2,5}`, `{3,}` | Non-greedy quantifiers are not supported |
 | Alternation | `(a\|bc)` | |
-| Numbered backreference | `\1` | Limited support |
-| Named backreference | `\k<name>` | Limited support |
+| Numbered backreference | `\1` | Very limited support |
+| Named backreference | `\k<name>` | Very limited support |
 | Quoted fixed string | `\Qa.b?c\E` | Can't be used inside character classes |
 
 ## Unsupported constructs:
@@ -66,7 +66,7 @@ In the future, some of these may be implemented.
 
 ## Normalizations
 
-Upper bound of unlimited quantifiers is 3 for groups and 12 for anything other:
+Default upper bound of unlimited quantifiers is 3 for groups and 12 for anything other:
 
 - `x*` &rarr; `x{0,12}`
 - `x+` &rarr; `x{1,12}`
@@ -77,5 +77,5 @@ Upper bound of unlimited quantifiers is 3 for groups and 12 for anything other:
 
 Unicode property character classes are narrowed, if not empty, to their ASCII subset.
 
-By default, negative character classes are narrowed to the ASCII printable set.
+By default, negated character classes are narrowed to the ASCII printable set.
 If the remaining set would be empty, the first few allowed printable codepoint will be included.
