@@ -27,6 +27,7 @@ String someString = sortedInputGraph.get(LargeInteger.of(534));
 | ---- | ------- | -------- |
 | Character literal | `a` | |
 | Escaped literal | `\(` | For anything else than ASCII letters and numbers |
+| Dot wildcard | `.` | Produces an ASCII non-ISO-Control character |
 | Special literal | `\t`, `\n`, `\r`, `\f`, `\a`, `\e` | |
 | Control escape sequence | `\cM` | |
 | Octal escape sequence | `\043` | |
