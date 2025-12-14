@@ -6,6 +6,8 @@ plugins {
 
 description = "HoloDB - instant random relational data"
 
+def groupName = 'hu.webarticum.holodb'
+
 def scmUrl = 'https://github.com/miniconnect/holodb.git'
 def websiteUrl = scmUrl.replaceAll(/\.git$/, "");
 
@@ -38,68 +40,60 @@ tasks.register('printVersion') {
 }
 
 allprojects {
-    group = 'hu.webarticum.holodb'
+    group = groupName
     version = automaticVersion
-    
+
     ext.miniConnectApiVersion = '0.4.1-SNAPSHOT'
     ext.miniConnectVersion = '0.7.1-SNAPSHOT'
     ext.miniBaseVersion = '0.4.1-SNAPSHOT'
-    
+
     repositories {
         mavenCentral()
         mavenLocal()
     }
 }
 
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'signing'
-    apply plugin: 'maven-publish'
-    
-    java {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    
-    afterEvaluate {
-        if (sourceSets.hasProperty('lab')) {
-            tasks.register('execLab', JavaExec) {
-                group = 'Execution'
-                description = 'Run lab demo main class'
-                classpath = sourceSets.lab.runtimeClasspath
-                mainClass = System.getProperty("lab.exec.main.class")
-                standardInput = System.in
-            }
-        }
-        
-        tasks.withType(JavaCompile) {
-            options.encoding = 'UTF-8'
-            options.release = 8
-        }
-        
-        java {
+subprojects { subproject ->
+    subproject.plugins.withId('java') {
+
+        subproject.plugins.apply('maven-publish')
+        subproject.plugins.apply('signing')
+
+        subproject.java {
             withJavadocJar()
             withSourcesJar()
         }
-        
-        javadoc {
-            options.addStringOption('Xdoclint:none', '-quiet')
+
+        subproject.tasks.withType(JavaCompile).configureEach { compileTask ->
+            compileTask.javaCompiler = javaToolchains.compilerFor {
+                languageVersion = JavaLanguageVersion.of(8)
+            }
+            compileTask.options.encoding = 'UTF-8'
         }
-        
-        def moduleNamePrefix = 'hu.webarticum.holodb.'
-        def cleanProjectName = project.name.replaceAll(/\W/, ".")
-        def moduleName = "${moduleNamePrefix}${cleanProjectName}"
-        
-        jar {
-            manifest {
-                attributes('Automatic-Module-Name': moduleName)
+
+        subproject.tasks.withType(Javadoc).configureEach { javadocTask ->
+            javadocTask.options.addStringOption('Xdoclint:none', '-quiet')
+        }
+
+        subproject.sourceSets.matching { it.name == 'lab' }.all { labSourceSet ->
+            subproject.tasks.register('execLab', JavaExec) {
+                group = 'Execution'
+                description = 'Run lab demo main class'
+                classpath = labSourceSet.runtimeClasspath
+                mainClass = System.getProperty('lab.exec.main.class')
+                standardInput = System.in
             }
         }
-        
-        test {
-            useJUnitPlatform()
-            testLogging {
-                events 'failed'
+
+        def moduleName = groupName + '.' + subproject.name.replaceAll(/\W/, ".")
+        subproject.tasks.named('jar', Jar).configure {
+            manifest.attributes('Automatic-Module-Name': moduleName)
+        }
+
+        subproject.tasks.withType(Test).configureEach { testTask ->
+            testTask.useJUnitPlatform()
+            testTask.testLogging {
+                events('failed')
                 showExceptions = true
                 exceptionFormat = 'full'
                 showCauses = true
@@ -107,50 +101,47 @@ subprojects {
                 showStandardStreams = false
             }
         }
-        
-        publishing {
+
+        subproject.publishing {
             publications {
                 mavenJava(MavenPublication) {
-                    from components.java
+                    from subproject.components.java
                     suppressAllPomMetadataWarnings()
                 }
             }
         }
-        
-        project.plugins.withType(MavenPublishPlugin).all {
-            PublishingExtension publishing = project.extensions.getByType(PublishingExtension)
-            publishing.publications.withType(MavenPublication).all { mavenPublication ->
-                mavenPublication.pom {
-                    name = project.name
-                    description = project.description
-                    url = websiteUrl
-                    licenses {
-                        license {
-                            name = 'The Apache Software License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            distribution = 'repo'
-                        }
+
+        subproject.publishing.publications.withType(MavenPublication).configureEach { mavenPublication ->
+            mavenPublication.pom {
+                name = subproject.name
+                description = subproject.description
+                url = websiteUrl
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
                     }
-                    scm {
-                        connection = 'scm:git:' + scmUrl
-                        developerConnection = 'scm:git:' + scmUrl
-                        url = scmUrl
-                    }
-                    developers {
-                        developer {
-                            id = 'davidsusu'
-                            name = 'Dávid Horváth'
-                            email = 'horvath@webarticum.hu'
-                        }
+                }
+                scm {
+                    connection = 'scm:git:' + scmUrl
+                    developerConnection = 'scm:git:' + scmUrl
+                    url = scmUrl
+                }
+                developers {
+                    developer {
+                        id = 'davidsusu'
+                        name = 'Dávid Horváth'
+                        email = 'horvath@webarticum.hu'
                     }
                 }
             }
         }
-        
-        signing {
+
+        subproject.signing {
             required = true
-            sign publishing.publications
+            sign subproject.publishing.publications
         }
-        
+
     }
 }

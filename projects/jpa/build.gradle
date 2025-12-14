@@ -24,3 +24,10 @@ dependencies {
     // TODO: provide separate drivers for newer hibernate major versions
     compileOnly 'org.hibernate:hibernate-core:5.4.31.Final'
 }
+
+tasks.withType(JavaCompile).configureEach {
+    javaCompiler = javaToolchains.compilerFor {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+    options.release = 8
+}
