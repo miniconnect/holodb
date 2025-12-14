@@ -50,8 +50,13 @@ jib {
     container {
         user = '65532:65532'
         ports = ['3430']
+        entrypoint = [
+          "java",
+          "-cp",
+          "/app/classes:/app/resources:/app/libs/*:/app/custom-libs/*",
+          serverMainClass
+        ]
         args = ['/app/config.yaml']
-        mainClass = serverMainClass
     }
 }
 
