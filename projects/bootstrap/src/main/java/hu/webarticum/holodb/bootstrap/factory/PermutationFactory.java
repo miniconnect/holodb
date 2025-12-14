@@ -15,14 +15,14 @@ import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class PermutationFactory {
-    
+
     private static final LargeInteger MAX_SMALL_SIZE = LargeInteger.of(100);
 
-    
+
     private PermutationFactory() {
         // static class
     }
-    
+
 
     public static Permutation createPermutation(
             TreeRandom treeRandom, LargeInteger size, ShuffleQuality shuffleQuality) {
@@ -50,7 +50,7 @@ public class PermutationFactory {
             throw new IllegalArgumentException("Unknown shuffleQuality: " + shuffleQuality);
         }
     }
-    
+
     private static Permutation createNoopPermutation(LargeInteger size) {
         return new IdentityPermutation(size);
     }
@@ -76,7 +76,7 @@ public class PermutationFactory {
     private static int calculateBitCount(LargeInteger size) {
         return size.decrement().bitLength();
     }
-    
+
     private static Permutation createHighQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
         return createSha256Permutation(treeRandom, size, 2);
     }
@@ -88,7 +88,7 @@ public class PermutationFactory {
     private static Permutation createVeryHighQualityPermutation(TreeRandom treeRandom, LargeInteger size) {
         return createSha256Permutation(treeRandom, size, 3);
     }
-    
+
     private static Permutation createSha256Permutation(TreeRandom treeRandom, LargeInteger size, int doubleRounds) {
         int bitCount = size.decrement().bitLength();
         byte[] key = treeRandom.getBytes(8);

@@ -6,14 +6,14 @@ import java.util.List;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public enum CharAnchorKind {
-    
+
     BEGIN {
 
         @Override
         public boolean accept(char c) {
             return false;
         }
-        
+
     },
 
     END {
@@ -22,16 +22,16 @@ public enum CharAnchorKind {
         public boolean accept(char c) {
             return false;
         }
-        
+
     },
-    
+
     WORD {
 
         @Override
         public boolean accept(char c) {
             return c == '_' || Character.isDigit(c) || Character.isAlphabetic(c);
         }
-        
+
     },
 
     NEWLINE {
@@ -40,7 +40,7 @@ public enum CharAnchorKind {
         public boolean accept(char c) {
             return c == '\n';
         }
-        
+
     },
 
     OTHER {
@@ -49,11 +49,11 @@ public enum CharAnchorKind {
         public boolean accept(char c) {
             return !WORD.accept(c) && !NEWLINE.accept(c);
         }
-        
+
     },
-    
+
     ;
-    
+
     public abstract boolean accept(char c);
 
     public static CharAnchorKind of(char c) {
@@ -65,7 +65,7 @@ public enum CharAnchorKind {
             return OTHER;
         }
     }
-    
+
     public static ImmutableList<String> separate(String chars) {
         int length = chars.length();
         int capacity = length > 16 ? 16 : length;
@@ -101,15 +101,15 @@ public enum CharAnchorKind {
         if (newLineBuilder != null) {
             resultBuilder.add(newLineBuilder.toString());
         }
-        
+
         if (resultBuilder.isEmpty()) {
-            
+
             // FIXME
             resultBuilder.add("?");
-            
+
         }
-        
+
         return ImmutableList.fromCollection(resultBuilder);
     }
-    
+
 }

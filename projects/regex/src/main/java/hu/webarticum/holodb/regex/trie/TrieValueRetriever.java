@@ -11,18 +11,18 @@ public class TrieValueRetriever {
         retrieve(trieNode, position, resultBuilder);
         return resultBuilder.toString();
     }
-    
+
     private void retrieve(TrieNode trieNode, LargeInteger position, StringBuilder stringBuilder) {
         if (trieNode.isLeaf()) {
             return;
         }
-        
+
         LargeInteger subPosition = position;
         if (!trieNode.isRoot()) {
             CharClass charClass = trieNode.charClass();
             String chars = charClass.chars();
             int charCount = chars.length();
-            
+
             if (charCount == 1) {
                 stringBuilder.append(chars.charAt(0));
             } else {
@@ -32,7 +32,7 @@ public class TrieValueRetriever {
                 subPosition = charIndexAndSubPosition[1];
             }
         }
-        
+
         ImmutableList<LargeInteger> positions = trieNode.positions();
         int foundIndex = positions.binarySearch(subPosition.increment());
         if (foundIndex < 0) {
@@ -43,5 +43,5 @@ public class TrieValueRetriever {
         TrieNode childTrieNode = trieNode.children().get(foundIndex);
         retrieve(childTrieNode, childSubPosition, stringBuilder);
     }
-    
+
 }

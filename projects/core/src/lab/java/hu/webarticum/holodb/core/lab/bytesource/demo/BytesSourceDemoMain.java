@@ -23,20 +23,20 @@ import hu.webarticum.holodb.core.util.ByteUtil;
 public class BytesSourceDemoMain {
 
     public static final String TITLE = "ByteSource basic demo";
-    
+
 
     public static void main(String[] args) throws IOException {
         CommandLineUtil.printTitle(TITLE);
-        
+
         MutableHolder<Integer> seedHolder = new MutableHolder<>();
-        
+
         Pair<Integer, Supplier<ByteSource>> byteSourceUserSelection = CommandLineUtil.readOption("ByteSource implementation", Arrays.asList(
                 Pair.of(JavaRandomByteSource.class.getSimpleName(), () -> new JavaRandomByteSource(seedHolder.get())),
                 Pair.of(FastByteSource.class.getSimpleName(), () -> new FastByteSource((byte)(int) seedHolder.get()))
                 ));
         int byteSourceIndex = byteSourceUserSelection.getLeft();
         Supplier<ByteSource> byteSourceFactory = byteSourceUserSelection.getRight();
-        
+
         if (byteSourceIndex == 1) {
             seedHolder.set(CommandLineUtil.readIntBetween("Seed", 0, 256));
         } else {
@@ -44,8 +44,8 @@ public class BytesSourceDemoMain {
         }
         int previewSize = CommandLineUtil.readIntBetween("Preview size", 1, 1001);
         int dumpSize = CommandLineUtil.readIntBetween("Dump size", 1, 10000001);
-        
-        
+
+
         ByteSource byteSource1 = byteSourceFactory.get();
 
         CommandLineUtil.printSeparator();
@@ -59,14 +59,14 @@ public class BytesSourceDemoMain {
                     ByteUtil.byteToBinaryString(b) + "  " +
                     StringUtils.leftPad(Integer.toString(Byte.toUnsignedInt(b)), 3));
         }
-        
+
         CommandLineUtil.printSeparator();
-        
+
         System.out.println("ENT output:"); // NOSONAR
         System.out.println(); // NOSONAR
 
         ByteSource byteSource2 = byteSourceFactory.get();
-        
+
         File tmpFile = File.createTempFile("bytes-", ".dat");
         OutputStream out = new FileOutputStream(tmpFile); // NOSONAR
         for (int i = 0; i < dumpSize; i++) {
@@ -85,8 +85,8 @@ public class BytesSourceDemoMain {
         Files.delete(tmpFile.toPath());
 
         CommandLineUtil.printSeparator();
-        
+
         System.out.println("Finished"); // NOSONAR
     }
-    
+
 }

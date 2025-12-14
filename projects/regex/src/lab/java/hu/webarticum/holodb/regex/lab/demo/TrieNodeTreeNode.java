@@ -8,9 +8,9 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.treeprinter.text.ConsoleText;
 
 public class TrieNodeTreeNode implements hu.webarticum.treeprinter.TreeNode {
-    
+
     private final TrieNode innerNode;
-    
+
     public TrieNodeTreeNode(TrieNode innerNode) {
         this.innerNode = innerNode;
     }
@@ -37,5 +37,5 @@ public class TrieNodeTreeNode implements hu.webarticum.treeprinter.TreeNode {
         }
         return innerNode.children().map(n -> (hu.webarticum.treeprinter.TreeNode) new TrieNodeTreeNode(n)).asList();
     }
-    
+
 }

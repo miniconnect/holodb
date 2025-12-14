@@ -14,13 +14,13 @@ dependencies {
     api "hu.webarticum.miniconnect:messenger:${miniConnectVersion}"
     api "hu.webarticum.miniconnect:jdbc:${miniConnectVersion}"
     api project(':config')
-    
+
     implementation project(':core')
     implementation project(':regex')
     implementation project(':spi')
     implementation project(':storage')
     implementation project(':values')
-    
+
     implementation 'com.github.mifmif:generex:1.0.2'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.19.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.2'

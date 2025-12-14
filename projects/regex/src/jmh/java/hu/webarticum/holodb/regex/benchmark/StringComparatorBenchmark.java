@@ -47,19 +47,19 @@ public class StringComparatorBenchmark {
 
     @Param({"SIMPLE", "MIXED"})
     private String type;
-    
+
     private final ArrayList<String> listToSort = new ArrayList<>();
-    
+
     @SuppressWarnings("unchecked")
     private final Comparator<String> collatorComparator =
             (Comparator<String>) (Comparator<?>) Collator.getInstance(Locale.ENGLISH);
-    
+
     private final Comparator<String> naturalCharStringComparator = new CharStringComparator(Character::compare);
-    
+
     private final Comparator<String> defaultCharStringComparator =
             new CharStringComparator(new DefaultCharComparator());
 
-    
+
     @Setup(Level.Invocation)
     public void prepareList() {
         ImmutableList<String> soouceStrings;
@@ -74,8 +74,8 @@ public class StringComparatorBenchmark {
         listToSort.ensureCapacity(soouceStrings.size());
         listToSort.addAll(soouceStrings.asList());
     }
-    
-    
+
+
     @Benchmark
     public void benchmarkNaturalComparison(Blackhole blackhole) {
         Collections.sort(listToSort);

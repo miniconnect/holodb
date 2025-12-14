@@ -10,20 +10,20 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class GenerexSource implements Source<String> {
-    
+
     private final Generex generex;
-    
+
     private final TreeRandom treeRandom;
-    
+
     private final LargeInteger size;
-    
+
 
     public GenerexSource(Generex generex, TreeRandom treeRandom, LargeInteger size) {
         this.generex = generex;
         this.treeRandom = treeRandom;
         this.size = size;
     }
-    
+
 
     @Override
     public Class<?> type() {

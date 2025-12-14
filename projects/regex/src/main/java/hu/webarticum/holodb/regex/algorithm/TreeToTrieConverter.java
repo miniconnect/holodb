@@ -12,11 +12,11 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 public class TreeToTrieConverter {
 
     private final CharComparator charComparator;
-    
+
     public TreeToTrieConverter(CharComparator charComparator) {
         this.charComparator = charComparator;
     }
-    
+
     public TrieNode convert(TreeNode treeNode) {
         return convertCaching(treeNode, new IdentityHashMap<>());
     }

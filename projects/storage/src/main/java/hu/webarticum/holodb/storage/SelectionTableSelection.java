@@ -7,18 +7,18 @@ import hu.webarticum.minibase.storage.api.TableSelection;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class SelectionTableSelection implements TableSelection {
-    
+
     private final Selection selection;
-    
+
     private final boolean ascOrder;
-    
+
 
     public SelectionTableSelection(Selection selection, boolean ascOrder) {
         this.selection = selection;
         this.ascOrder = ascOrder;
     }
-    
-    
+
+
     public Selection selection() {
         return selection;
     }
@@ -36,5 +36,5 @@ public class SelectionTableSelection implements TableSelection {
     public SelectionTableSelection reversed() {
         return new SelectionTableSelection(selection, !ascOrder);
     }
-    
+
 }

@@ -3,11 +3,11 @@ package hu.webarticum.holodb.regex.ast;
 import java.util.Objects;
 
 public class RangeAstNode implements CharacterMatchAstNode {
-    
+
     private final char low;
-    
+
     private final char high;
-    
+
     private RangeAstNode(char low, char high) {
         this.low = low;
         this.high = high;
@@ -29,7 +29,7 @@ public class RangeAstNode implements CharacterMatchAstNode {
     public int hashCode() {
         return Objects.hash(low, high);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -42,10 +42,10 @@ public class RangeAstNode implements CharacterMatchAstNode {
                 low == other.low &&
                 high == other.high);
     }
-    
+
     @Override
     public String toString() {
         return "range:'" + low + "'..'" + high + "'";
     }
-    
+
 }

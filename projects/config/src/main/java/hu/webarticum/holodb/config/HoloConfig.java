@@ -12,16 +12,16 @@ import hu.webarticum.miniconnect.lang.ToStringBuilder;
 public class HoloConfig {
 
     private final LargeInteger seed;
-    
+
     private final HoloConfigSchema schemaDefaults;
-    
+
     private final HoloConfigTable tableDefaults;
 
     private final HoloConfigColumn columnDefaults;
 
     private final ImmutableList<HoloConfigSchema> schemas;
-    
-    
+
+
     public HoloConfig(
             @JsonProperty("seed") LargeInteger seed,
             @JsonProperty("schemaDefaults") HoloConfigSchema schemaDefaults,
@@ -34,7 +34,7 @@ public class HoloConfig {
         this.columnDefaults = columnDefaults;
         this.schemas = schemas != null ? schemas : ImmutableList.empty();
     }
-    
+
 
     @JsonGetter("seed")
     public LargeInteger seed() {
@@ -52,18 +52,18 @@ public class HoloConfig {
     public HoloConfigTable tableDefaults() {
         return tableDefaults;
     }
-    
+
     @JsonGetter("columnDefaults")
     @JsonInclude(Include.NON_NULL)
     public HoloConfigColumn columnDefaults() {
         return columnDefaults;
     }
-    
+
     @JsonGetter("schemas")
     public ImmutableList<HoloConfigSchema> schemas() {
         return schemas;
     }
-    
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -71,5 +71,5 @@ public class HoloConfig {
                 .add("schemas", schemas)
                 .build();
     }
-    
+
 }

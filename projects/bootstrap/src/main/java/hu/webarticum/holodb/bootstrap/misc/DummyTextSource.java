@@ -21,29 +21,29 @@ public class DummyTextSource implements Source<String> {
         "occaecat", "officia", "pariatu", "proident", "qui", "quis", "reprehenderit", "sed", "sint",
         "sit", "sunt", "tempor", "ullamco", "velit", "veniam", "voluptate",
     };
-    
+
     private static final String[] CONJUNCTION_WORDS = { "and", "for", "if", "of", "or", "the" };
-    
+
     private static final String[] PRIMARY_PRE_WORDS = { "a", "the" };
-    
+
     private static final String[] SECONDARY_PRE_WORDS = { "more", "no", "some", "two" };
 
     private static final Pattern WRONG_PRE_PATTERN = Pattern.compile("\\b([aA]) (?=[aeiouAEIOU])");
 
-    
+
     private final DummyTextKind kind;
-    
+
     private final TreeRandom treeRandom;
-    
+
     private final LargeInteger size;
-    
+
 
     public DummyTextSource(DummyTextKind kind, TreeRandom treeRandom, LargeInteger size) {
         this.kind = kind;
         this.treeRandom = treeRandom;
         this.size = size;
     }
-    
+
 
     @Override
     public Class<?> type() {
@@ -104,7 +104,7 @@ public class DummyTextSource implements Source<String> {
         }
         return resultBuilder.toString();
     }
-    
+
     private static String markdown(Random random) {
         StringBuilder resultBuilder = new StringBuilder("# ");
         resultBuilder.append(title(random));
@@ -124,7 +124,7 @@ public class DummyTextSource implements Source<String> {
         }
         return resultBuilder.toString();
     }
-    
+
     private static String paragraph(Random random) {
         int sentenceCount = 3 + random.nextInt(3);
         StringBuilder resultBuilder = new StringBuilder(sentence(random));

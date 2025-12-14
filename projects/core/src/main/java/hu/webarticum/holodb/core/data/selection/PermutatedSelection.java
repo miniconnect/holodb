@@ -8,17 +8,17 @@ import hu.webarticum.miniconnect.lang.ReversibleIterable;
 import hu.webarticum.miniconnect.util.IteratorAdapter;
 
 public class PermutatedSelection implements Selection {
-    
+
     private final Selection baseSelection;
-    
+
     private final Permutation permutation;
-    
-    
+
+
     public PermutatedSelection(Selection baseSelection, Permutation permutation) {
         this.baseSelection = baseSelection;
         this.permutation = permutation;
     }
-    
+
 
     @Override
     public LargeInteger size() {
@@ -39,7 +39,7 @@ public class PermutatedSelection implements Selection {
     public boolean contains(LargeInteger value) {
         return baseSelection.contains(permutation.indexOf(value));
     }
-    
+
     @Override
     public Iterator<LargeInteger> iterator() {
         return new IteratorAdapter<>(baseSelection.iterator(), permutation::at);
@@ -52,5 +52,5 @@ public class PermutatedSelection implements Selection {
                 () -> new IteratorAdapter<>(reversedBase.iterator(), permutation::at);
         return ReversibleIterable.reversedOfReference(permutatedReversed, this);
     }
-    
+
 }

@@ -22,28 +22,28 @@ class MonotonicSourceTest {
         assertThat(source.find("kiwi")).isEqualTo(Range.fromUntil(3, 3));
         assertThat(source.findBetween("banana", true, "pear", true)).isEqualTo(Range.fromUntil(1, 7));
     }
-    
+
     private MonotonicSource<String> createBaseSource() {
         SortedSet<String> values = new TreeSet<>(Arrays.asList("apple", "banana", "kiwi", "orange", "pear", "watermelon"));
         SortedSource<String> baseSource = new UniqueSource<>(String.class, values);
         Monotonic monotonic = new MockMonotonic(new long[] { 0, 1, 1, 3, 4, 4, 4, 5 }, 6);
         return new MonotonicSource<String>(baseSource, monotonic);
     }
-    
-    
+
+
     private static class MockMonotonic implements Monotonic {
 
         private final long[] values;
-        
+
         private final LargeInteger imageSize;
-        
-        
+
+
         private MockMonotonic(long[] values, long imageSize) {
             this.values = values;
             this.imageSize = LargeInteger.of(imageSize);
         }
-        
-        
+
+
         @Override
         public LargeInteger size() {
             return LargeInteger.of(values.length);
@@ -78,7 +78,7 @@ class MonotonicSourceTest {
         public LargeInteger imageSize() {
             return imageSize;
         }
-        
+
     }
 
 }

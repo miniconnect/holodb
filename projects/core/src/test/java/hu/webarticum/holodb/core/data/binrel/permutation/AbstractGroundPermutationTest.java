@@ -8,12 +8,12 @@ abstract class AbstractGroundPermutationTest<T extends Permutation> extends Abst
 
     protected abstract T create(LargeInteger size);
 
-    
+
     @Test
     void testEmpty() {
         checkSize(create(LargeInteger.ZERO), LargeInteger.ZERO);
     }
-    
+
     @Test
     void testSmallInstancesCompletely() {
         for (long i = 10; i <= 100; i += 3) {

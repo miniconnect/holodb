@@ -4,5 +4,5 @@ package hu.webarticum.holodb.regex.comparator;
 public interface CharComparator {
 
     public int compare(char a, char b);
-    
+
 }

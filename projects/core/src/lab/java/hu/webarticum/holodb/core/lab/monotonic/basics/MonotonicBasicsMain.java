@@ -24,16 +24,16 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public class MonotonicBasicsMain {
 
     public static final String TITLE = "Monotonic basic demo";
-    
+
 
     public static void main(String[] args) {
         CommandLineUtil.printTitle(TITLE);
-        
+
         MutableHolder<TreeRandom> treeRandomHolder = new MutableHolder<>();
         MutableHolder<SamplerFactory> samplerFactoryHolder = new MutableHolder<>();
         MutableHolder<Integer> sizeHolder = new MutableHolder<>();
         MutableHolder<Integer> imageSizeHolder = new MutableHolder<>();
-        
+
         Pair<Integer, Supplier<Monotonic>> monotonicUserSelection = CommandLineUtil.readOption("Monotonic implementation", Arrays.asList(
                 Pair.of(BinomialMonotonic.class.getSimpleName(), () -> new BinomialMonotonic(
                         treeRandomHolder.get(), samplerFactoryHolder.get(), sizeHolder.get(), imageSizeHolder.get())),
@@ -53,10 +53,10 @@ public class MonotonicBasicsMain {
                                     new FastSampler(size))
                             )).getRight());
         }
-        
+
         int size = CommandLineUtil.readInt("Monotonic size");
         sizeHolder.set(size);
-        
+
         int imageSize = CommandLineUtil.readInt("Monotonic image size");
         imageSizeHolder.set(imageSize);
 
@@ -65,10 +65,10 @@ public class MonotonicBasicsMain {
             treeRandomHolder.set(new HasherTreeRandom(seed, new Sha256MacHasher()));
         }
 
-        
+
         CommandLineUtil.printSeparator();
-        
-        
+
+
         Monotonic monotonic = monotonicFactory.get();
 
         int columnWidth = ("" + (imageSize - 1)).length() + 1;
@@ -92,5 +92,5 @@ public class MonotonicBasicsMain {
         }
         System.out.println(); // NOSONAR
     }
-    
+
 }

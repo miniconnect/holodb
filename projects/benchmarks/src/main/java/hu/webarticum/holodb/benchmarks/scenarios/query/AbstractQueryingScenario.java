@@ -14,9 +14,9 @@ import hu.webarticum.miniconnect.api.MiniSessionManager;
 public abstract class AbstractQueryingScenario implements Scenario {
 
     private static final String CONFIG_RESOURCE_PATH = "hu/webarticum/holodb/benchmarks/scenarios/query/config.yaml";
-    
+
     private MiniSession session;
-    
+
     @Override
     public void setUp() {
         HoloConfig config = new ConfigLoader(CONFIG_RESOURCE_PATH).load();
@@ -25,7 +25,7 @@ public abstract class AbstractQueryingScenario implements Scenario {
         session = sessionManager.openSession();
         executeOrThrow(session, "USE benchmark");
     }
-    
+
     @Override
     public void runOnce() {
         runWithSession(session);
@@ -37,7 +37,7 @@ public abstract class AbstractQueryingScenario implements Scenario {
             session.close();
         }
     }
-    
+
     protected MiniResult executeOrThrow(MiniSession session, String sql) {
         MiniResult result = session.execute(sql);
         if (!result.success()) {

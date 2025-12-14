@@ -9,13 +9,13 @@ import hu.webarticum.miniconnect.lang.ReversibleIterable;
 public final class EmptySelection implements Selection {
 
     private static final EmptySelection INSTANCE = new EmptySelection();
-    
-    
+
+
     private EmptySelection() {
         // use instance()
     }
-    
-    
+
+
     public static EmptySelection instance() {
         return INSTANCE;
     }

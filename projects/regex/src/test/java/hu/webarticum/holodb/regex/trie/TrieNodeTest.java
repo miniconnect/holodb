@@ -42,7 +42,7 @@ class TrieNodeTest {
         assertThat(inner.isInner()).isTrue();
         assertThat(leaf.isInner()).isFalse();
     }
-    
+
     @Test
     void testCharClass() {
         CharClass charClass = CharClass.of("xyz", charComparator);
@@ -118,7 +118,7 @@ class TrieNodeTest {
         assertProperties(a, LargeInteger.THREE, LargeInteger.ONE, LargeInteger.THREE);
         assertProperties(root, LargeInteger.ELEVEN, LargeInteger.ONE, LargeInteger.ELEVEN);
     }
-    
+
     private void assertProperties(
             TrieNode trieNode,
             LargeInteger expectedSize,

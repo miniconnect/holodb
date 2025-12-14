@@ -3,7 +3,7 @@ package hu.webarticum.holodb.regex.ast;
 import java.util.Objects;
 
 public class QuantifiedAstNode implements AstNode {
-    
+
     public static final int NO_UPPER_LIMIT = Integer.MAX_VALUE;
 
     private final AstNode node;
@@ -11,7 +11,7 @@ public class QuantifiedAstNode implements AstNode {
     private final int minOccurrences;
 
     private final int maxOccurrences;
-    
+
     private QuantifiedAstNode(AstNode node, int minOccurrences, int maxOccurrences) {
         this.node = node;
         this.minOccurrences = minOccurrences;
@@ -38,7 +38,7 @@ public class QuantifiedAstNode implements AstNode {
     public int hashCode() {
         return Objects.hash(node, minOccurrences, maxOccurrences);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -57,5 +57,5 @@ public class QuantifiedAstNode implements AstNode {
     public String toString() {
         return "quant{node: " + node + ", min:" + minOccurrences + ", max: " + maxOccurrences + "}";
     }
-    
+
 }

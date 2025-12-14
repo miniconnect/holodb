@@ -16,11 +16,11 @@ public class CharacterAnalyserMain {
     private static void dumpCharInfo(char c) {
         System.out.println(Character.getName('E'));
         System.out.println("Character:        " + c);
-        
+
         Normalizer2 normalizer = Normalizer2.getNFDInstance();
         String decomposed = normalizer.normalize(Character.toString(c));
         System.out.println("Base char:        " + decomposed.toLowerCase().charAt(0));
-        
+
         System.out.println("Name:             " + UCharacter.getName(c));
         System.out.println("Category:         " + UCharacter.getPropertyValueName(UProperty.GENERAL_CATEGORY, UCharacter.getType(c), UProperty.NameChoice.LONG));
         System.out.println("Codepoint:        " + ((int) c));
@@ -30,5 +30,5 @@ public class CharacterAnalyserMain {
 
         System.out.println();
     }
-    
+
 }

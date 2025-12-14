@@ -19,24 +19,24 @@ import hu.webarticum.minibase.storage.api.TableIndex;
 import hu.webarticum.minibase.storage.api.TablePatch;
 
 public class HoloTable implements Table {
-    
+
     private final String name;
-    
+
     private final LargeInteger size;
-    
+
     private final ImmutableList<String> columnNames;
-    
+
     private final ImmutableMap<String, ? extends Source<?>> singleColumnSources;
-    
+
     private final ImmutableMap<String, MultiColumnSourceEntry> multiColumnSourceMap;
-    
+
     private final NamedResourceStore<Column> columnStore;
-    
+
     private final NamedResourceStore<TableIndex> indexStore;
-    
+
     private final HoloFixedSequence sequence;
-    
-    
+
+
     public HoloTable( // NOSONAR many parameter is OK for now
             String name,
             LargeInteger size,
@@ -63,7 +63,7 @@ public class HoloTable implements Table {
         this.indexStore = indexStore;
         this.sequence = new HoloFixedSequence(sequenceValue);
     }
-    
+
     private static void checkSources(
             LargeInteger size,
             ImmutableList<String> columnNames,
@@ -194,41 +194,41 @@ public class HoloTable implements Table {
     public void applyPatch(TablePatch patch) {
         throw new UnsupportedOperationException("This table is read-only");
     }
-    
-    
+
+
     private static class MultiColumnSourceEntry {
-        
+
         private final ImmutableList<String> columnNames;
-        
+
         private final Source<? extends ImmutableList<?>> source;
-        
-        
+
+
         private MultiColumnSourceEntry(
                 ImmutableList<String> columnNames, Source<? extends ImmutableList<?>> source) {
             this.columnNames = columnNames;
             this.source = source;
         }
-        
+
     }
-    
+
     @Override
     public Sequence sequence() {
         return sequence;
     }
-    
-    
+
+
     public class HoloTableRow implements Row {
-        
+
         private final LargeInteger rowIndex;
-        
-        
+
+
         private final Map<String, ValueCacheEntry> valueCache = new HashMap<>();
-        
-        
+
+
         private HoloTableRow(LargeInteger rowIndex) {
             this.rowIndex = rowIndex;
         }
-        
+
 
         @Override
         public ImmutableList<String> columnNames() {
@@ -246,14 +246,14 @@ public class HoloTable implements Table {
             if (currentCacheEntry != null) {
                 return currentCacheEntry.value;
             }
-            
+
             Source<?> singleColumnSource = singleColumnSources.get(columnName);
             if (singleColumnSource != null) {
                 Object value = singleColumnSource.get(rowIndex);
                 valueCache.put(columnName, new ValueCacheEntry(value));
                 return value;
             }
-            
+
             MultiColumnSourceEntry multiColumnSourceEntry = multiColumnSourceMap.get(columnName);
             ImmutableList<?> values = multiColumnSourceEntry.source.get(rowIndex);
             int sourceWidth = values.size();
@@ -279,19 +279,19 @@ public class HoloTable implements Table {
         public ImmutableMap<String, Object> getMap(ImmutableList<String> columnNames) {
             return columnNames.assign(this::get);
         }
-        
+
     }
-    
-    
+
+
     private static class ValueCacheEntry {
-        
+
         private final Object value;
-        
-        
+
+
         public ValueCacheEntry(Object value) {
             this.value = value;
         }
-        
+
     }
 
 }

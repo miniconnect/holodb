@@ -5,7 +5,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 public class SequenceAstNode implements AstNode {
 
     private final ImmutableList<AstNode> nodes;
-    
+
     private SequenceAstNode(ImmutableList<AstNode> nodes) {
         this.nodes = nodes;
     }
@@ -22,7 +22,7 @@ public class SequenceAstNode implements AstNode {
     public int hashCode() {
         return nodes.hashCode();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -33,10 +33,10 @@ public class SequenceAstNode implements AstNode {
         SequenceAstNode other = (SequenceAstNode) obj;
         return nodes.equals(other.nodes);
     }
-    
+
     @Override
     public String toString() {
         return "seq" + nodes.toString();
     }
-    
+
 }

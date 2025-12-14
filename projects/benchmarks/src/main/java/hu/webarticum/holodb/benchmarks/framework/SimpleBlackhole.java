@@ -7,5 +7,5 @@ public class SimpleBlackhole { // NOSONAR
     public static void consume(Object object) {
         sink = object;
     }
-    
+
 }

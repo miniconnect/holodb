@@ -42,23 +42,23 @@ public class PermutationBenchmark {
     private static final LargeInteger SMALL_NON_POW_2 = LargeInteger.of(125);
     private static final LargeInteger BIG_POW_2 = LargeInteger.of("147573952589676412928");
     private static final LargeInteger BIG_NON_POW_2 = LargeInteger.of("287769207549869005209");
-    
-    
+
+
     @Param({
         "Identity", "Modulo", "DirtyFpe", "FeistelFastR1", "FeistelFastR4", "FeistelSha256R2",
         "BitShuffle", "BitXor", "BestComposition",
     })
     private String type;
-    
+
 
     private Function<LargeInteger, Permutation> factory;
-    
+
     private Permutation instanceSmallPow2;
     private Permutation instanceSmallNonPow2;
     private Permutation instanceBigPow2;
     private Permutation instanceBigNonPow2;
-    
-    
+
+
     @Setup
     public void setup() {
         TreeRandom rootRandom = new HasherTreeRandom("lorem", new FastHasher());
@@ -93,7 +93,7 @@ public class PermutationBenchmark {
         this.instanceBigPow2 = this.factory.apply(BIG_POW_2);
         this.instanceBigNonPow2 = this.factory.apply(BIG_NON_POW_2);
     }
-    
+
 
     @Benchmark
     public void benchmarkPermutationFactorySmallPow2(Blackhole blackhole) {
@@ -144,14 +144,14 @@ public class PermutationBenchmark {
     public void benchmarkInversePermutationBigNonPow2(Blackhole blackhole) {
         doBenchmarkInversePermutation(blackhole, instanceBigNonPow2);
     }
-    
-    
+
+
     private void doBenchmarkPermutation(Blackhole blackhole, Permutation permutation) {
         for (long i = 0; i < 30L; i++) {
             blackhole.consume(permutation.at(LargeInteger.of(i)));
         }
     }
-    
+
     private void doBenchmarkInversePermutation(Blackhole blackhole, Permutation permutation) {
         for (long i = 0; i < 30L; i++) {
             blackhole.consume(permutation.indexOf(LargeInteger.of(i)));

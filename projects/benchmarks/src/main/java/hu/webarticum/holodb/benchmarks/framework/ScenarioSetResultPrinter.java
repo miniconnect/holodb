@@ -6,9 +6,9 @@ import java.util.function.Function;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class ScenarioSetResultPrinter {
-    
+
     private final ImmutableList<ScenarioResult> scenarioResults;
-    
+
     private final ImmutableList<Column> columns = ImmutableList.of(
             new Column("name", false, ScenarioResult::name),
             new Column("state", true, r -> r.exception().isPresent() ? "exception" : "success"),
@@ -16,7 +16,7 @@ public class ScenarioSetResultPrinter {
             new Column("measurements", true, r -> r.measurementNanos().size() + ""),
             new Column("best", true, r -> toMsString(min(r.measurementNanos()))),
             new Column("avg", true, r -> toMsString(avg(r.measurementNanos()))));
-    
+
     public ScenarioSetResultPrinter(ImmutableList<ScenarioResult> scenarioResults) {
         this.scenarioResults = scenarioResults;
     }
@@ -80,13 +80,13 @@ public class ScenarioSetResultPrinter {
         long fractions = (nanos / 1000) % 1000;
         return String.format("%d.%03d", millis, fractions);
     }
-    
+
     private static long min(ImmutableList<Long> values) {
         int size = values.size();
         if (size == 0) {
             return -1;
         }
-        
+
         long min = values.get(0);
         for (int i = 1; i < size; i++) {
             long value = values.get(i);
@@ -102,28 +102,28 @@ public class ScenarioSetResultPrinter {
         if (size == 0) {
             return -1;
         }
-        
+
         long sum = 0;
         for (long value : values) {
             sum += value;
         }
         return sum / size;
     }
-    
+
     private static class Column {
-        
+
         final String title;
 
         final boolean rightAligned;
-        
+
         final Function<ScenarioResult, String> stringifier;
-        
+
         Column(String title, boolean rightAligned, Function<ScenarioResult, String> stringifier) {
             this.title = title;
             this.rightAligned = rightAligned;
             this.stringifier = stringifier;
         }
-        
+
     }
-    
+
 }

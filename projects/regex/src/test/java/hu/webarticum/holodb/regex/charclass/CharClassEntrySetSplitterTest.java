@@ -9,7 +9,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 
 
 class CharClassEntrySetSplitterTest {
-    
+
     private final CharClassEntrySetSplitter<Integer> splitter = new CharClassEntrySetSplitter<>();
 
     private final CharComparator comparator = Character::compare;
@@ -81,7 +81,7 @@ class CharClassEntrySetSplitterTest {
                 entryOf(charClassOf("ghi"), ImmutableList.of(2, 3)),
                 entryOf(charClassOf("jkl"), ImmutableList.of(3, 4)),
                 entryOf(charClassOf("mno"), ImmutableList.of(3)));
-        
+
     }
 
     @Test
@@ -111,15 +111,15 @@ class CharClassEntrySetSplitterTest {
                 entryOf(charClassOf("vwx"), ImmutableList.of(99)),
                 entryOf(charClassOf("y"), ImmutableList.of(7)),
                 entryOf(charClassOf("z"), ImmutableList.of(7)));
-        
+
     }
-    
+
     private CharClass charClassOf(String chars) {
         return CharClass.of(chars, comparator);
     }
-    
+
     private <K extends Comparable<K>, V> SimpleEntryList.Entry<K, V> entryOf(K key, V value) {
         return SimpleEntryList.Entry.of(key, value);
     }
-    
+
 }

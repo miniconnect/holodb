@@ -127,7 +127,7 @@ foreign_keys_cursor.close()
 
 for database in databases:
     escaped_database = "`" + database.replace("`", "``") + "`"
-    
+
     if args.table is not None:
         tables = [args.table]
     else:
@@ -142,7 +142,7 @@ for database in databases:
 
     if args.database_table_filter is not None:
         tables = list(filter(lambda table: re.fullmatch(args.database_table_filter, f"{database}.{table}"), tables))
-    
+
     schema_output = OrderedDict()
     schema_output["name"] = database
     schema_output["tables"] = []
@@ -193,7 +193,7 @@ for database in databases:
 
             column_output = OrderedDict()
             column_output["name"] = column
-            
+
             if f"{database}.{table}.{column}" in foreign_keys:
                 column_output["valuesForeignColumn"] = foreign_keys[f"{database}.{table}.{column}"]
             elif describe_info[3] == "PRI":
@@ -238,7 +238,7 @@ for database in databases:
             else:
                 # FIXME: what to do?
                 column_output["values"] = ["0"]
-            
+
             if is_nullable and "nullCount" not in column_output:
                 column_output["nullCount"] = math.floor(table_size * 0.2)
 

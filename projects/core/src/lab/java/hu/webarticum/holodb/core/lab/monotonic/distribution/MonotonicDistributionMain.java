@@ -23,8 +23,8 @@ import hu.webarticum.holodb.core.lab.util.MutableHolder;
 public class MonotonicDistributionMain {
 
     public static final String TITLE = "Monotonic distribution";
-    
-    
+
+
     public static void main(String[] args) {
         CommandLineUtil.printTitle(TITLE);
 
@@ -39,7 +39,7 @@ public class MonotonicDistributionMain {
                         ));
         int monotonicIndex = monotonicUserSelection.getLeft();
         BiFunction<Integer, Integer, Monotonic> monotonicFactory = monotonicUserSelection.getRight();
-        
+
         if (monotonicIndex == 0) {
             samplerFactoryHolder.set(CommandLineUtil.<SamplerFactory>readOption(
                     "Sampler implementation", Arrays.asList(
@@ -49,13 +49,13 @@ public class MonotonicDistributionMain {
                                     new FastSampler(size))
                             )).getRight());
         }
-        
+
         LongFunction<Hasher> hasherFactory = CommandLineUtil.<LongFunction<Hasher>>readOption(
                 "Hasher implementation", Arrays.asList(
                         Pair.of(Sha256MacHasher.class.getSimpleName(), Sha256MacHasher::new),
                         Pair.of(FastHasher.class.getSimpleName(), FastHasher::new)
                         )).getRight();
-        
+
         long seed = CommandLineUtil.readLong("Seed");
         Hasher hasher = hasherFactory.apply(seed);
         treeRandomHolder.set(new HasherTreeRandom(seed, hasher));

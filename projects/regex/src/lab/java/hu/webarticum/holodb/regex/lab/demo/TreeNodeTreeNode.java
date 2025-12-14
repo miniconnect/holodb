@@ -7,9 +7,9 @@ import hu.webarticum.holodb.regex.tree.TreeNode;
 import hu.webarticum.treeprinter.text.ConsoleText;
 
 public class TreeNodeTreeNode implements hu.webarticum.treeprinter.TreeNode {
-    
+
     private final TreeNode innerNode;
-    
+
     public TreeNodeTreeNode(TreeNode innerNode) {
         this.innerNode = innerNode;
     }
@@ -34,7 +34,7 @@ public class TreeNodeTreeNode implements hu.webarticum.treeprinter.TreeNode {
     public List<hu.webarticum.treeprinter.TreeNode> children() {
         return innerNode.children().map(n -> (hu.webarticum.treeprinter.TreeNode) new TreeNodeTreeNode(n)).asList();
     }
-    
+
     @Override
     public boolean isDecorable() {
         return innerNode.value() != null;

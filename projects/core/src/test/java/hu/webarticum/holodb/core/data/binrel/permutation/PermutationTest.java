@@ -23,5 +23,5 @@ class PermutationTest {
         assertThat(resizedPermutation.size().intValueExact()).isEqualTo(8);
         assertThat(resizedPermutation).containsExactly(LargeInteger.arrayOf(2, 3, 0, 4, 1, 7, 6, 5));
     }
-    
+
 }

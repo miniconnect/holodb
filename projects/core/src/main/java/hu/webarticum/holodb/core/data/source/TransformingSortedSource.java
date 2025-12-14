@@ -13,14 +13,14 @@ public class TransformingSortedSource<T, U> implements SortedSource<U> {
     private final SortedSource<T> baseSource;
 
     private final Class<? extends U> type;
-    
+
     private final Function<U, T> encoder;
-    
+
     private final Function<T, U> decoder;
-    
+
     private final Comparator<?> comparator;
-    
-    
+
+
     public TransformingSortedSource(
             SortedSource<T> baseSource,
             Class<? extends U> type,
@@ -32,13 +32,13 @@ public class TransformingSortedSource<T, U> implements SortedSource<U> {
         this.decoder = decoder;
         this.comparator = createComparator(baseSource, encoder);
     }
-    
+
     private static <T, U> Comparator<T> createComparator(IndexedSource<U> baseSource, Function<T, U> encoder) {
         @SuppressWarnings("unchecked")
         Comparator<U> baseComparator = (Comparator<U>) baseSource.comparator();
         return (a, b) -> baseComparator.compare(encoder.apply(a), encoder.apply(b));
     }
-    
+
 
     @Override
     public Range findNulls() {
@@ -80,7 +80,7 @@ public class TransformingSortedSource<T, U> implements SortedSource<U> {
         Object encodedValue = value != null ? encoder.apply((U) value) : null;
         return baseSource.find(encodedValue);
     }
-    
+
     @Override
     public Range findBetween(Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
         @SuppressWarnings("unchecked")

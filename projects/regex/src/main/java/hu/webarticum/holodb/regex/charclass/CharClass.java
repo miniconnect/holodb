@@ -7,26 +7,26 @@ import hu.webarticum.holodb.regex.comparator.CharComparator;
 import hu.webarticum.miniconnect.lang.ToStringBuilder;
 
 public class CharClass implements Comparable<CharClass> {
-    
+
     private final String chars;
-    
+
     private final CharComparator charComparator;
-    
+
     private CharClass(String chars, CharComparator charComparator) {
         this.chars = chars;
         this.charComparator = charComparator;
     }
-    
+
     public static CharClass of(String chars, CharComparator charComparator) {
         return new CharClass(normalize(chars, charComparator), charComparator);
     }
-    
+
     private static String normalize(String chars, CharComparator charComparator) {
         int length = chars.length();
         if (length == 0) {
             return chars;
         }
-        
+
         boolean isAlreadyNormalized = true;
         char previousChar = chars.charAt(0);
         for (int i = 1; i < length; i++) {
@@ -40,7 +40,7 @@ public class CharClass implements Comparable<CharClass> {
         if (isAlreadyNormalized) {
             return chars;
         }
-        
+
         TreeSet<Character> characterSet = new TreeSet<>(charComparator::compare);
         for (int i = 0; i < length; i++) {
             characterSet.add(chars.charAt(i));
@@ -104,7 +104,7 @@ public class CharClass implements Comparable<CharClass> {
     public CharComparator charComparator() {
         return charComparator;
     }
-    
+
     @Override
     public int compareTo(CharClass other) {
         if (this == other) {
@@ -129,12 +129,12 @@ public class CharClass implements Comparable<CharClass> {
             return 0;
         }
     }
-    
+
     @Override
     public int hashCode() {
         return chars.hashCode();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -147,7 +147,7 @@ public class CharClass implements Comparable<CharClass> {
                 chars.equals(other.chars) &&
                 Objects.equals(charComparator, other.charComparator);
     }
-    
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -155,7 +155,7 @@ public class CharClass implements Comparable<CharClass> {
                 .add("charComparator", charComparator)
                 .build();
     }
-    
+
     // FIXME: we assume the same comparator
     public CharClass union(CharClass other) {
         if (chars.isEmpty()) {
@@ -163,7 +163,7 @@ public class CharClass implements Comparable<CharClass> {
         } else if (other.chars.isEmpty()) {
             return this;
         }
-        
+
         int length = chars.length();
         int otherLength = other.chars.length();
         char[] resultChars = new char[length + otherLength];
@@ -231,7 +231,7 @@ public class CharClass implements Comparable<CharClass> {
                 charComparator.compare(chars.charAt(length - 1), other.chars.charAt(0)) < 0) {
             return new CharClass("", charComparator);
         }
-        
+
         char[] resultChars = new char[length + otherLength];
         int resultLength = 0;
         int i = 0;

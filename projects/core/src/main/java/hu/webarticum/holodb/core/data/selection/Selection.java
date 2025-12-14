@@ -10,7 +10,7 @@ public interface Selection extends ReversibleIterable<LargeInteger> {
     public boolean isEmpty();
 
     public LargeInteger at(LargeInteger index);
-    
+
     public boolean contains(LargeInteger value);
-    
+
 }

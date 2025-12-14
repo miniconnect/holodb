@@ -4,17 +4,17 @@ import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class ModuloPermutation implements Permutation {
-    
+
     private final LargeInteger size;
-    
+
     private final LargeInteger prime;
-    
+
     private final LargeInteger diff;
-    
+
     private final LargeInteger inverseDiff;
-    
+
     private final LargeInteger primeModInverse;
-    
+
 
     public ModuloPermutation(TreeRandom treeRandom, LargeInteger size) {
         this.size = size;
@@ -70,5 +70,5 @@ public class ModuloPermutation implements Permutation {
         }
         return primeModInverse.multiply(multiplier).mod(size);
     }
-    
+
 }

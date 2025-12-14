@@ -5,13 +5,13 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public class PermutationInverter implements PermutationDecorator {
 
     private final Permutation base;
-    
-    
+
+
     public PermutationInverter(Permutation base) {
         this.base = base;
     }
-    
-    
+
+
     @Override
     public LargeInteger size() {
         return base.size();
@@ -31,7 +31,7 @@ public class PermutationInverter implements PermutationDecorator {
     public Permutation getBase() {
         return base;
     }
-    
+
     @Override
     public Permutation inverted() {
         return base;

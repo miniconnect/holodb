@@ -32,7 +32,7 @@ class ByteUtilTest {
         assertThat(ByteUtil.longToBytes(-78238062L)).isEqualTo(b(255, 255, 255, 255, 251, 86, 46, 146));
         assertThat(ByteUtil.longToBytes(-2653304120892283044L)).isEqualTo(b(219, 45, 145, 245, 185, 34, 167, 92));
     }
-    
+
     @Test
     void testFirstBytesToLong() {
         assertThat(ByteUtil.firstBytesToLong(b(0, 0, 0, 0, 0, 1))).isEqualTo(65536L);
@@ -48,7 +48,7 @@ class ByteUtilTest {
         assertThat(ByteUtil.bytesToLong(b(12, 50, 197, 78, 203, 61, 112, 132))).isEqualTo(878981819498590340L);
         assertThat(ByteUtil.bytesToLong(b(219, 45, 145, 245, 185, 34, 167, 92))).isEqualTo(-2653304120892283044L);
     }
-    
+
     @Test
     void testBytesToBinaryString() {
         assertThat(ByteUtil.bytesToBinaryString(b())).isEmpty();
@@ -80,7 +80,7 @@ class ByteUtilTest {
         assertThat(ByteUtil.byteToHexadecimalString((byte) 125)).isEqualToIgnoringCase("7D");
         assertThat(ByteUtil.byteToHexadecimalString((byte) 255)).isEqualToIgnoringCase("FF");
     }
-    
+
     @Test
     void testGetClosestSetBit() {
         assertThat(ByteUtil.getClosestSetBit(buildBitSet(), 0)).isEqualTo(-1);
@@ -116,13 +116,13 @@ class ByteUtilTest {
         assertThat(applyFillBytesFrom(b("0123"), b("abcde"))).isEqualTo(b("abcd"));
         assertThat(applyFillBytesFrom(b("0123"), b("abcdef"))).isEqualTo(b("abcd"));
     }
-    
+
     private byte[] applyFillBytesFrom(byte[] target, byte[] source) {
         ByteUtil.fillBytesFrom(target, source);
         return target;
     }
 
-    
+
     private BitSet buildBitSet(int... sortedValues) {
         int length = sortedValues.length > 1 ? sortedValues[sortedValues.length - 1] + 1 : 1;
         BitSet bitSet = new BitSet(length);
@@ -131,7 +131,7 @@ class ByteUtilTest {
         }
         return bitSet;
     }
-    
+
     private byte[] b(String content) {
         return content.getBytes(StandardCharsets.UTF_8);
     }
@@ -143,5 +143,5 @@ class ByteUtilTest {
         }
         return result;
     }
-    
+
 }

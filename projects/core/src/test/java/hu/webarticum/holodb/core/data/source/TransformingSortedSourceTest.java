@@ -51,7 +51,7 @@ class TransformingSortedSourceTest {
         assertThat(source.findBetween("6", true, "12", true)).containsExactly(LargeInteger.arrayOf(1, 2, 3, 4, 5, 6, 7));
     }
 
-    
+
     private static TransformingSortedSource<LargeInteger, String> createTransformingSortedSource() {
         RangeSource rangeSource = new RangeSource(LargeInteger.of(5), LargeInteger.of(20));
         return new TransformingSortedSource<>(rangeSource, String.class, LargeInteger::of, LargeInteger::toString);

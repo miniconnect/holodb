@@ -16,18 +16,18 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 class SurjectiveMonotonicTest extends AbstractMonotonicTest<SurjectiveMonotonic> {
 
     private TreeRandom treeRandom = new HasherTreeRandom();
-    
-    
+
+
     @Override
     protected SurjectiveMonotonic create(LargeInteger size, LargeInteger imageSize) {
         return new SurjectiveMonotonic(treeRandom, size, imageSize);
     }
-    
+
     @Override
     protected boolean isNarrowingEnabled() {
         return false;
     }
-    
+
 
     @Test
     void testInputConstraint() {
@@ -42,7 +42,7 @@ class SurjectiveMonotonicTest extends AbstractMonotonicTest<SurjectiveMonotonic>
         checkSurjective(create(LargeInteger.of(643), LargeInteger.of(234)));
         checkSurjective(create(LargeInteger.of(643), LargeInteger.of(15)));
     }
-    
+
     public void checkSurjective(SurjectiveMonotonic monotonic) {
         Set<LargeInteger> values = new LinkedHashSet<LargeInteger>();
         for (LargeInteger value : monotonic) {
@@ -51,5 +51,5 @@ class SurjectiveMonotonicTest extends AbstractMonotonicTest<SurjectiveMonotonic>
         assertThat(values).containsExactlyElementsOf(
                 Range.until(monotonic.imageSize()));
     }
-    
+
 }

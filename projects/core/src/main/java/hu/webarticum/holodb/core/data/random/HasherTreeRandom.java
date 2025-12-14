@@ -11,22 +11,22 @@ import hu.webarticum.holodb.core.data.hasher.Hasher;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class HasherTreeRandom implements TreeRandom {
-    
+
     private static final long DEFAULT_SEED = 0L;
-    
+
     private static final int DEFAULT_HASH_LENGTH = 8;
 
     private static final int NUMBER_SAMPLLING_MAX_RETRIES = 50;
 
     private static final byte SEPARATOR_BYTE = (byte) 0b11111111;
 
-    
+
     private final byte[] bytes;
-    
+
     private final Hasher hasher;
-    
+
     private final Function<byte[], ByteSource> additionalByteSourceFactory;
-    
+
 
     public HasherTreeRandom() {
         this(DEFAULT_SEED);
@@ -111,7 +111,7 @@ public class HasherTreeRandom implements TreeRandom {
             System.arraycopy(bytes, 0, result, 0, numberOfBytes);
             return result;
         }
-        
+
         return createBitSource().fetch(numberOfBytes * 8);
     }
 
@@ -120,7 +120,7 @@ public class HasherTreeRandom implements TreeRandom {
         if (highExclusive.isNonPositive()) {
             throw new IllegalArgumentException("High value must be positive");
         }
-        
+
         if (highExclusive.isFittingInLong()) {
             return getNumberSmall(highExclusive);
         } else {
@@ -139,10 +139,10 @@ public class HasherTreeRandom implements TreeRandom {
                 return candidate;
             }
         }
-        
+
         return highExclusive.decrement();
     }
-    
+
     private LargeInteger getNumberLarge(LargeInteger highExclusive) {
         LargeInteger two = LargeInteger.of(2);
         LargeInteger factor = highExclusive;
@@ -154,9 +154,9 @@ public class HasherTreeRandom implements TreeRandom {
             exponentOfTwo++;
         }
         int bitCountOfFactor = factor.bitCount();
-        
+
         BitSource bitSource = createBitSource();
-        
+
         LargeInteger partition = exponentOfTwo > 0 ?
                 LargeInteger.ofUnsigned(bitSource.fetch(exponentOfTwo)) :
                 LargeInteger.ZERO;
@@ -168,7 +168,7 @@ public class HasherTreeRandom implements TreeRandom {
                 break;
             }
         }
-        
+
         return partition.multiply(factor).add(offset);
     }
 

@@ -30,13 +30,13 @@ public class CharComparatorBenchmark {
 
     @Param({"=", "?", "2", "5", "a", "á", "ḁ", "ą", "α", "ά", "ú", "ü", "A", "Á", "Ḁ", "Ą", "Ú", "Ü", "Α", "Ά"})
     private char char2;
-    
+
 
     private CharComparator naturalCharComparator = Character::compare;
 
     private CharComparator defaultCharComparator = new DefaultCharComparator();
-    
-    
+
+
     @Benchmark
     public void benchmarkNaturalCharComparator(Blackhole blackhole) {
         blackhole.consume(naturalCharComparator.compare(char1, char2));

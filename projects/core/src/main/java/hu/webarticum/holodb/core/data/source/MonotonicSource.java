@@ -9,27 +9,27 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class MonotonicSource<T> implements SortedSource<T> {
-    
+
     private final SortedSource<T> baseSource;
-    
+
     private final Monotonic monotonic;
 
-    
+
     public MonotonicSource(SortedSource<T> baseSource, Monotonic monotonic) {
         if (!monotonic.imageSize().equals(baseSource.size())) {
             throw new IllegalArgumentException("Image size must be equal to the size of base source");
         }
-        
+
         this.baseSource = baseSource;
         this.monotonic = monotonic;
     }
-    
-    
+
+
     @Override
     public Class<?> type() {
         return baseSource.type();
     }
-    
+
     @Override
     public LargeInteger size() {
         return monotonic.size();
@@ -68,5 +68,5 @@ public class MonotonicSource<T> implements SortedSource<T> {
     public Range findNulls() {
         return Range.empty();
     }
-    
+
 }

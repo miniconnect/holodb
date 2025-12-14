@@ -37,7 +37,7 @@ public class CommandLineUtil {
     public static int readIntAtLeast(String message, int min) {
         return readIntBetween(message, min, Integer.MAX_VALUE);
     }
-    
+
     public static int readIntBetween(String message, int min, int highExclusive) {
         String fullMessage;
         if (highExclusive == Integer.MAX_VALUE) {
@@ -78,11 +78,11 @@ public class CommandLineUtil {
                 System.err.println("Unknown error while reading user input"); // NOSONAR
                 e.printStackTrace(); // NOSONAR
             }
-            
+
             if (value == null) {
                 continue;
             }
-            
+
             try {
                 data = converter.convert(value);
             } catch (ArithmeticException | IllegalArgumentException e) {
@@ -94,7 +94,7 @@ public class CommandLineUtil {
         }
         return data;
     }
-    
+
     public static String readLine() throws IOException {
         return new BufferedReader(new InputStreamReader(System.in)).readLine();
     }
@@ -108,7 +108,7 @@ public class CommandLineUtil {
         System.out.println(); // NOSONAR
         System.out.println(); // NOSONAR
     }
-    
+
     public static void printSeparator() {
         System.out.println(); // NOSONAR
         printRepeated('=', 100);
@@ -121,12 +121,12 @@ public class CommandLineUtil {
             System.out.print(c); // NOSONAR
         }
     }
-    
-    
+
+
     public interface Converter<T> {
-        
+
         public T convert(String value) throws Exception;
-        
+
     }
-    
+
 }

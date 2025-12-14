@@ -13,7 +13,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 class TreeWeedingTransformerTest {
 
     private final CharComparator charComparator = Character::compare;
-    
+
     @Test
     void testEmpty() {
         TreeWeedingTransformer transformer = new TreeWeedingTransformer();

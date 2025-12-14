@@ -9,24 +9,24 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class RangeSource implements SortedSource<LargeInteger> {
-    
+
     private static final int MAX_COUNT_OF_POSSIBLE_VALUES = 1000;
-    
-    
+
+
     private final LargeInteger from;
-    
+
     private final LargeInteger size;
-    
+
 
     public RangeSource(LargeInteger size) {
         this(LargeInteger.ZERO, size);
     }
-    
+
     public RangeSource(LargeInteger from, LargeInteger size) {
         this.from = from;
         this.size = size;
     }
-    
+
 
     @Override
     public Class<LargeInteger> type() {
@@ -42,7 +42,7 @@ public class RangeSource implements SortedSource<LargeInteger> {
     public LargeInteger get(LargeInteger index) {
         return from.add(index);
     }
-    
+
     @Override
     public Comparator<LargeInteger> comparator() {
         return LargeInteger::compareTo;
@@ -53,7 +53,7 @@ public class RangeSource implements SortedSource<LargeInteger> {
         if (size.isGreaterThan(LargeInteger.of(MAX_COUNT_OF_POSSIBLE_VALUES))) {
             return Optional.empty();
         }
-        
+
         ImmutableList<LargeInteger> valueList = IntStream
                 .range(0, size.intValueExact())
                 .mapToObj(i -> get(LargeInteger.of(i)))
@@ -72,12 +72,12 @@ public class RangeSource implements SortedSource<LargeInteger> {
         LargeInteger queryUntil = untilOf(maxValue, maxInclusive);
         return Range.fromUntil(queryFrom.subtract(from), queryUntil.subtract(from));
     }
-    
+
     private LargeInteger fromOf(Object minValue, boolean minInclusive) {
         if (minValue == null) {
             return from;
         }
-        
+
         LargeInteger until = from.add(size);
         LargeInteger queryMin = (LargeInteger) minValue;
         LargeInteger queryFrom = minInclusive ? queryMin : queryMin.add(LargeInteger.ONE);
@@ -86,11 +86,11 @@ public class RangeSource implements SortedSource<LargeInteger> {
 
     private LargeInteger untilOf(Object maxValue, boolean maxInclusive) {
         LargeInteger until = from.add(size);
-        
+
         if (maxValue == null) {
             return until;
         }
-        
+
         LargeInteger queryMax = (LargeInteger) maxValue;
         LargeInteger queryUntil = maxInclusive ? queryMax.add(LargeInteger.ONE) : queryMax;
         return keepBetween(queryUntil, from, until);
@@ -110,5 +110,5 @@ public class RangeSource implements SortedSource<LargeInteger> {
     public Range findNulls() {
         return Range.empty();
     }
-    
+
 }

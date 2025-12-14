@@ -12,27 +12,27 @@ public class FixedSource<T extends Comparable<T>> implements Source<T> {
     private Class<T> type;
 
     private LargeInteger length;
-    
+
     private Object[] values;
-    
+
 
     @SuppressWarnings("unchecked")
     public FixedSource(T... values) {
         this((Class<T>) values.getClass().getComponentType(), Arrays.asList(values));
     }
-    
+
     public FixedSource(Class<T> type, Collection<T> values) {
         this.type = type;
         this.length = LargeInteger.of(values.size());
         this.values = values.toArray();
     }
-    
-    
+
+
     @Override
     public Class<T> type() {
         return type;
     }
-    
+
     @Override
     public LargeInteger size() {
         return length;
@@ -49,5 +49,5 @@ public class FixedSource<T extends Comparable<T>> implements Source<T> {
     public Optional<ImmutableList<T>> possibleValues() {
         return Optional.empty(); // FIXME
     }
-    
+
 }

@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class UnicodePropertyCharacterClassAstNode implements CharacterMatchAstNode {
-    
+
     public enum Property {
 
         ALPHABETIC("IsAlphabetic"),
@@ -21,15 +21,15 @@ public class UnicodePropertyCharacterClassAstNode implements CharacterMatchAstNo
         JOIN_CONTROL("IsJoin_Control"),
         NONCHARACTER("IsNoncharacter_Code_Point"),
         ASSIGNED("IsAssigned"),
-        
+
         ;
-        
+
         private final String propertyName;
-        
+
         private Property(String propertyName) {
             this.propertyName = propertyName;
         }
-        
+
         public static Optional<Property> of(String propertyName) {
             for (Property property : values()) {
                 if (property.propertyName.equals(propertyName)) {
@@ -38,17 +38,17 @@ public class UnicodePropertyCharacterClassAstNode implements CharacterMatchAstNo
             }
             return Optional.empty();
         }
-        
+
         public String propertyName() {
             return propertyName;
         }
-        
+
     }
-    
+
     private final Property property;
-    
+
     private final boolean positive;
-    
+
     private UnicodePropertyCharacterClassAstNode(Property property, boolean positive) {
         this.property = property;
         this.positive = positive;
@@ -61,7 +61,7 @@ public class UnicodePropertyCharacterClassAstNode implements CharacterMatchAstNo
         }
         return Optional.of(UnicodePropertyCharacterClassAstNode.of(optionalProperty.get(), positive));
     }
-    
+
     public static UnicodePropertyCharacterClassAstNode of(Property property, boolean positive) {
         return new UnicodePropertyCharacterClassAstNode(property, positive);
     }
@@ -73,12 +73,12 @@ public class UnicodePropertyCharacterClassAstNode implements CharacterMatchAstNo
     public boolean positive() {
         return positive;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(property, positive);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -96,5 +96,5 @@ public class UnicodePropertyCharacterClassAstNode implements CharacterMatchAstNo
     public String toString() {
         return "uprop{kind:" + property + ", positive: " + positive + "}";
     }
-    
+
 }

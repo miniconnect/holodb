@@ -3,7 +3,7 @@ package hu.webarticum.holodb.regex.ast;
 public class CharacterConstantAstNode implements CharacterMatchAstNode {
 
     private final char value;
-    
+
     private CharacterConstantAstNode(char value) {
         this.value = value;
     }
@@ -20,7 +20,7 @@ public class CharacterConstantAstNode implements CharacterMatchAstNode {
     public int hashCode() {
         return Character.hashCode(value);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -36,5 +36,5 @@ public class CharacterConstantAstNode implements CharacterMatchAstNode {
     public String toString() {
         return "'" + value + "'";
     }
-    
+
 }

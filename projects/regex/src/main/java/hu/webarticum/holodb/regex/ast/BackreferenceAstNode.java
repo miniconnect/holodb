@@ -3,7 +3,7 @@ package hu.webarticum.holodb.regex.ast;
 public class BackreferenceAstNode implements AstNode {
 
     private final int number;
-    
+
     private BackreferenceAstNode(int number) {
         this.number = number;
     }
@@ -20,7 +20,7 @@ public class BackreferenceAstNode implements AstNode {
     public int hashCode() {
         return Integer.hashCode(number);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -36,5 +36,5 @@ public class BackreferenceAstNode implements AstNode {
     public String toString() {
         return "back:" + number;
     }
-    
+
 }

@@ -12,7 +12,7 @@ public class BitShufflePermutation implements Permutation {
     private final int[] positions;
 
     private final int[] inversePositions;
-    
+
 
     public BitShufflePermutation(TreeRandom treeRandom, LargeInteger bitLength) {
         this(new InMemoryRandomPermutation(treeRandom, bitLength));
@@ -21,19 +21,19 @@ public class BitShufflePermutation implements Permutation {
     public BitShufflePermutation(TreeRandom treeRandom, int bitLength) {
         this(new InMemoryRandomPermutation(treeRandom, bitLength));
     }
-    
+
     public BitShufflePermutation(InMemoryRandomPermutation bitPermutation) {
         this.positions = bitPermutation.permutatedValues();
         this.size = LargeInteger.TWO.pow(positions.length);
         this.inversePositions = createInversePositions(this.positions);
     }
-    
+
     public BitShufflePermutation(int[] positions) {
         this.size = LargeInteger.TWO.pow(positions.length);
         this.positions = positions;
         this.inversePositions = createInversePositions(positions);
     }
-    
+
     private static int[] createInversePositions(int[] positions) {
         int length = positions.length;
         int[] result = new int[length];
@@ -42,8 +42,8 @@ public class BitShufflePermutation implements Permutation {
         }
         return result;
     }
-    
-    
+
+
     @Override
     public LargeInteger size() {
         return size;

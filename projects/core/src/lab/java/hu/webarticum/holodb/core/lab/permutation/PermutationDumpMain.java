@@ -29,10 +29,10 @@ public class PermutationDumpMain {
         }
 
         System.out.println(path);
-        
+
         File directory = new File(path);
         directory.mkdirs();
-        
+
         LargeInteger size = LargeInteger.of(PERMUTATION_SIZE);
         for (Map.Entry<String, Function<LargeInteger, Permutation>> entry : permutationFactories.entrySet()) {
             String name = entry.getKey();
@@ -54,5 +54,5 @@ public class PermutationDumpMain {
         }
         System.out.println("finished");
     }
-    
+
 }

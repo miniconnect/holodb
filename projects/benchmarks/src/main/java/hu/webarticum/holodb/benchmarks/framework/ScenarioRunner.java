@@ -11,15 +11,15 @@ import org.slf4j.LoggerFactory;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class ScenarioRunner {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(ScenarioRunner.class);
 
     private Supplier<Scenario> scenarioFactory;
-    
+
     private int warmups;
-    
+
     private int measurements;
-    
+
     public ScenarioRunner(Supplier<Scenario> scenarioFactory, int warmups, int measurements) {
         this.scenarioFactory = scenarioFactory;
         this.warmups = warmups;
@@ -59,7 +59,7 @@ public class ScenarioRunner {
                 ImmutableList.fromCollection(warmupNanos),
                 ImmutableList.fromCollection(measurementNanos));
     }
-    
+
     private long runIteration() throws Exception {
         Scenario scenario = scenarioFactory.get();
         long startTime;
@@ -74,5 +74,5 @@ public class ScenarioRunner {
         }
         return endTime - startTime;
     }
-    
+
 }

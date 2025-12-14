@@ -10,22 +10,22 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class TrieNode {
-    
+
     public static final char ROOT_CHAR = '\u0002';
-    
+
     public static final char LEAF_CHAR = '\u0004';
-    
+
 
     private final CharClass charClass;
-    
+
     private final ImmutableList<TrieNode> children;
 
     private final ImmutableList<LargeInteger> positions;
 
     private final LargeInteger size;
-    
+
     private final int hashCode;
-    
+
 
     private TrieNode(CharClass charClass, ImmutableList<TrieNode> children, ImmutableList<LargeInteger> positions) {
         this.charClass = charClass;
@@ -45,7 +45,7 @@ public class TrieNode {
         ImmutableList<LargeInteger> positions = extractPositions(children);
         return new TrieNode(charClass, children, positions);
     }
-    
+
     public static TrieNode leafOf(CharComparator charComparator) {
         CharClass charClass = CharClass.of(String.valueOf(LEAF_CHAR), charComparator);
         ImmutableList<TrieNode> children = ImmutableList.of((TrieNode) null);
@@ -63,7 +63,7 @@ public class TrieNode {
         return ImmutableList.fromCollection(resultBuilder);
     }
 
-    
+
     public CharClass charClass() {
         return charClass;
     }
@@ -92,7 +92,7 @@ public class TrieNode {
         String chars = charClass.chars();
         return (chars.length() == 1) && (chars.charAt(0) == ROOT_CHAR);
     }
-    
+
     public boolean isLeaf() {
         String chars = charClass.chars();
         return (chars.length() == 1) && (chars.charAt(0) == LEAF_CHAR) && (children.get(0) == null);
@@ -108,12 +108,12 @@ public class TrieNode {
             return (chars.charAt(0) != LEAF_CHAR) || (children.get(0) != null);
         }
     }
-    
+
     @Override
     public int hashCode() {
         return hashCode;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -124,5 +124,5 @@ public class TrieNode {
         TrieNode other = (TrieNode) obj;
         return Objects.equals(charClass, other.charClass) && Objects.equals(children, other.children);
     }
-    
+
 }

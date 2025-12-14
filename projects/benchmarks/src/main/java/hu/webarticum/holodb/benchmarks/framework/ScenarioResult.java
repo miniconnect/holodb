@@ -7,7 +7,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 public class ScenarioResult {
 
     private final String name;
-    
+
     private final String description;
 
     private final Optional<Exception> exception;
@@ -15,7 +15,7 @@ public class ScenarioResult {
     private final ImmutableList<Long> warmupNanos;
 
     private final ImmutableList<Long> measurementNanos;
-    
+
     public ScenarioResult(
             String name,
             String description,
@@ -28,7 +28,7 @@ public class ScenarioResult {
         this.warmupNanos = warmupNanos;
         this.measurementNanos = measurementNanos;
     }
-    
+
     public String name() {
         return name;
     }
@@ -48,5 +48,5 @@ public class ScenarioResult {
     public ImmutableList<Long> measurementNanos() {
         return measurementNanos;
     }
-    
+
 }

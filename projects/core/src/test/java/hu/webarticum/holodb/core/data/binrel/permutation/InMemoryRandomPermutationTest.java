@@ -7,11 +7,11 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 class InMemoryRandomPermutationTest extends AbstractGroundPermutationTest<InMemoryRandomPermutation> {
 
     private final TreeRandom treeRandom = new HasherTreeRandom("0123456789");
-    
+
 
     @Override
     protected InMemoryRandomPermutation create(LargeInteger size) {
         return new InMemoryRandomPermutation(treeRandom, size);
     }
-    
+
 }

@@ -17,5 +17,5 @@ public class BenchmarksMain {
                 .runAllScenarios();
         new ScenarioSetResultPrinter(scenarioResults).print(System.out);
     }
-    
+
 }

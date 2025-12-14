@@ -9,7 +9,7 @@ import hu.webarticum.holodb.regex.comparator.CharComparator;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public final class TestUtil {
-    
+
     private TestUtil() {
         // utility class
     }
@@ -21,7 +21,7 @@ public final class TestUtil {
         }
         return result;
     }
-    
+
     public static TrieNode generateDigitsTrie(
             int numberOfDigits, ImmutableList<TrieNode> tailNodes, CharComparator charComparator) {
         CharClass digits1 = CharClass.of("012", charComparator);

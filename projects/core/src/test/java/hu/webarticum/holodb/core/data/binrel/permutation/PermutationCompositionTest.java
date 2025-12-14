@@ -70,5 +70,5 @@ class PermutationCompositionTest {
         assertThat(composition).containsExactly(LargeInteger.arrayOf(1, 2, 4, 0, 5, 3));
         assertThat(composition.inverted()).containsExactly(LargeInteger.arrayOf(3, 0, 1, 5, 2, 4));
     }
-    
+
 }

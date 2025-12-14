@@ -32,19 +32,19 @@ import hu.webarticum.miniconnect.record.converter.DefaultConverter;
 import jakarta.persistence.metamodel.Metamodel;
 
 public class JpaMetamodelDriver implements Driver {
-    
+
     public static final String URL_PREFIX = "jdbc:holodb:jpa://";
-    
+
     public static final String DEFAULT_SCHEMA_NAME = "default_schema";
-    
-    
+
+
     private static final String JAKARTA_METAMODEL_TYPE_NAME = "jakarta.persistence.metamodel.Metamodel";
-    
+
     private static final String JAVAX_METAMODEL_TYPE_NAME = "javax.persistence.metamodel.Metamodel";
-    
-    
+
+
     private static Object metamodel = null;
-    
+
     /**
      * Accepts a metamodel.
      * The currently supported types are the following:
@@ -61,7 +61,7 @@ public class JpaMetamodelDriver implements Driver {
     private static synchronized Object getMetamodel() {
         return metamodel;
     }
-    
+
 
     @Override
     public boolean acceptsURL(String url) {
@@ -114,7 +114,7 @@ public class JpaMetamodelDriver implements Driver {
         sessionHolder.set(session);
         return new MiniJdbcConnection(session, databaseProvider);
     }
-    
+
     private static StorageAccess createMetamodelStorageAccess(String defaultSchemaName) {
         LargeInteger seed = LargeInteger.of(42L); // FIXME: detect?
         HoloConfig config;
@@ -130,7 +130,7 @@ public class JpaMetamodelDriver implements Driver {
         }
         return StorageAccessFactory.createStorageAccess(config, new DefaultConverter());
     }
-    
+
     private static boolean isInstanceOf(Object object, String type) {
         Class<?> clazz;
         try {
@@ -138,12 +138,12 @@ public class JpaMetamodelDriver implements Driver {
         } catch (ClassNotFoundException e) {
             return false;
         }
-        
+
         return clazz.isInstance(object);
     }
 
     private static void setupDefaultSchema(AtomicReference<MiniSession> sessionHolder, String defaultSchemaName) {
         ((FrameworkSession) sessionHolder.get()).engineSession().state().setCurrentSchema(defaultSchemaName);
     }
-    
+
 }

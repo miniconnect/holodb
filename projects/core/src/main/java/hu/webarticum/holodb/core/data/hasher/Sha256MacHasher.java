@@ -12,27 +12,27 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public class Sha256MacHasher implements Hasher {
 
     private static final byte DEFAULT_BYTE = (byte) 0;
-    
-    
+
+
     private final Mac mac;
-    
+
 
     public Sha256MacHasher() {
         this(new byte[] { DEFAULT_BYTE });
     }
-    
+
     public Sha256MacHasher(String key) {
         this(key.getBytes(StandardCharsets.UTF_8));
     }
-    
+
     public Sha256MacHasher(long key) {
         this(LargeInteger.of(key));
     }
-    
+
     public Sha256MacHasher(LargeInteger key) {
         this(key.toByteArray());
     }
-    
+
     public Sha256MacHasher(byte[] key) {
         mac = buildMac(key);
     }
@@ -45,17 +45,17 @@ public class Sha256MacHasher implements Hasher {
             throw new RuntimeException(e); // NOSONAR
         }
     }
-    
+
     private static Mac buildMacThrows(byte[] key) throws NoSuchAlgorithmException, InvalidKeyException {
         Mac mac = Mac.getInstance("HmacSHA256");
         mac.init(new SecretKeySpec(normalizeKey(key), "RawBytes"));
         return mac;
     }
-    
+
     private static byte[] normalizeKey(byte[] key) {
         return key.length == 0 ? new byte[] { DEFAULT_BYTE } : key;
     }
-    
+
 
     @Override
     public byte[] hash(byte[] input) {

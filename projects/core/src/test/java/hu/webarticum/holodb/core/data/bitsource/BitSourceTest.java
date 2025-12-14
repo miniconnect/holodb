@@ -24,7 +24,7 @@ class BitSourceTest {
         assertThat(bitSource.fetch(1)).isEqualTo(new byte[] { 0 });
         assertThat(bitSource.fetch(33)).isEqualTo(new byte[] { 0, 0, 0, 0, 0 });
     }
-    
+
     @Test
     void testWithInitialBuffer1() {
         ByteSourceBitSource bitSource = createWithInitialBuffer();
@@ -96,7 +96,7 @@ class BitSourceTest {
                 0b10, (byte) 0b11111111, (byte) 0b10000101, 0b00001010,
                 0b00001111, 0b00010100, 0b00011001, 0b00011110, 0b00100011 });
     }
-    
+
     private ByteSourceBitSource createEmpty() {
         return new ByteSourceBitSource(new byte[0]);
     }
@@ -108,7 +108,7 @@ class BitSourceTest {
     private ByteSourceBitSource createWithByteSource() {
         return new ByteSourceBitSource(createByteSource());
     }
-    
+
     private ByteSourceBitSource createWithInitialBufferAndByteSource() {
         return new ByteSourceBitSource(createBuffer(), createByteSource());
     }
@@ -116,12 +116,12 @@ class BitSourceTest {
     private byte[] createBuffer() {
         return new byte[] { 0b01010101, (byte) 0b11111111 };
     }
-    
+
     private ByteSource createByteSource() {
         //       10       20       30       40       50       60       70
         // 00001010 00010100 00011110 00101000 00110010 00111100 01000110 ...
         int[] i = new int[] { 0 };
         return () -> (byte) (++i[0] * 10);
     }
-    
+
 }

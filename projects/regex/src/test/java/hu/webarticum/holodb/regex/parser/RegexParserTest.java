@@ -31,10 +31,10 @@ class RegexParserTest {
         AstNode expectedAst = AlternationAstNode.of(ImmutableList.of(
             SequenceAstNode.of(ImmutableList.empty())
         ));
-        
+
         assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
     }
-    
+
     @Test
     void testSimpleCharacters() {
         String pattern = "abc123";
@@ -48,10 +48,10 @@ class RegexParserTest {
                 CharacterConstantAstNode.of('3')
             ))
         ));
-        
+
         assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
     }
-    
+
     @Test
     void testSimpleAlternation() {
         String pattern = "a1|b2|c333";
@@ -71,7 +71,7 @@ class RegexParserTest {
                 CharacterConstantAstNode.of('3')
             ))
         ));
-        
+
         assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
     }
 
@@ -88,7 +88,7 @@ class RegexParserTest {
 
         assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
     }
-    
+
     @Test
     void testSimpleGroup() {
         String pattern = "(lorem)";
@@ -383,7 +383,7 @@ class RegexParserTest {
 
         assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
     }
-    
+
     @Test
     void testPosixProperyCharacterClasses() {
         String pattern = "\\p{Digit}x\\P{Alnum}y";
@@ -570,7 +570,7 @@ class RegexParserTest {
 
         assertThat(new RegexParser().parse(pattern)).isEqualTo(expectedAst);
     }
-    
+
     @Test
     void testExceptionCases() { // NOSONAR this is easy to read
         testExceptionCase(")", 0);
@@ -613,7 +613,7 @@ class RegexParserTest {
         testExceptionCase("[x[]y]", 6);
         testExceptionCase("[x\\by]", 2);
     }
-    
+
     private void testExceptionCase(String pattern, int expectedPosition) {
         RegexParser parser = new RegexParser();
         assertThatThrownBy(() -> parser.parse(pattern))
@@ -621,5 +621,5 @@ class RegexParserTest {
                 .extracting(e -> ((RegexParserException) e).position()).as("pattern error position")
                 .isEqualTo(expectedPosition);
     }
-    
+
 }

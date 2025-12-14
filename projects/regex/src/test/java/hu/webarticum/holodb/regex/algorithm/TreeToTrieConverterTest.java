@@ -13,7 +13,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 class TreeToTrieConverterTest {
 
     private final CharComparator charComparator = Character::compare;
-    
+
     @Test
     void testSomeConversion() {
         TreeToTrieConverter converter = new TreeToTrieConverter(charComparator);
@@ -43,5 +43,5 @@ class TreeToTrieConverterTest {
         ))))));
         assertThat(converter.convert(tree)).isEqualTo(trie);
     }
-    
+
 }

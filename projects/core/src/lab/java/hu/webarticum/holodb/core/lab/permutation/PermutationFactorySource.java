@@ -20,15 +20,15 @@ import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class PermutationFactorySource {
-    
+
     private PermutationFactorySource() {
         // static class
     }
-    
+
 
     public static Map<String, Function<LargeInteger, Permutation>> createFactories() {
         TreeRandom rootRandom = new HasherTreeRandom("lorem", new FastHasher());
-        
+
         Map<String, Function<LargeInteger, Permutation>> result = new LinkedHashMap<>();
 
         result.put("ID", s -> new IdentityPermutation(s));
@@ -65,5 +65,5 @@ public class PermutationFactorySource {
 
         return result;
     }
-    
+
 }

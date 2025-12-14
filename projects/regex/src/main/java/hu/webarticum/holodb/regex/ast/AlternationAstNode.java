@@ -3,13 +3,13 @@ package hu.webarticum.holodb.regex.ast;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class AlternationAstNode implements AstNode {
-    
+
     private final ImmutableList<SequenceAstNode> branches;
-    
+
     private AlternationAstNode(ImmutableList<SequenceAstNode> branches) {
         this.branches = branches;
     }
-    
+
     public static AlternationAstNode of(ImmutableList<SequenceAstNode> branches) {
         return new AlternationAstNode(branches);
     }
@@ -17,12 +17,12 @@ public class AlternationAstNode implements AstNode {
     public ImmutableList<SequenceAstNode> branches() {
         return branches;
     }
-    
+
     @Override
     public int hashCode() {
         return branches.hashCode();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -38,5 +38,5 @@ public class AlternationAstNode implements AstNode {
     public String toString() {
         return "alt" + branches.toString();
     }
-    
+
 }

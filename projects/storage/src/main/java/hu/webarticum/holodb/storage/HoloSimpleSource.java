@@ -16,10 +16,10 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class HoloSimpleSource<T> implements Source<T> {
-    
+
     private final IndexedSource<T> indexedSource;
-    
-    
+
+
     public HoloSimpleSource(TreeRandom treeRandom, SortedSource<T> baseSource, LargeInteger size) {
         MonotonicSource<T> monotonicSource = new MonotonicSource<>(
                 baseSource,
@@ -27,7 +27,7 @@ public class HoloSimpleSource<T> implements Source<T> {
         Permutation permutation = new DirtyFpePermutation(treeRandom.sub("permutation"), size);
         this.indexedSource = new PermutatedIndexedSource<>(monotonicSource, permutation);
     }
-    
+
 
     @Override
     public Class<?> type() {
@@ -48,7 +48,7 @@ public class HoloSimpleSource<T> implements Source<T> {
     public Optional<ImmutableList<T>> possibleValues() {
         return indexedSource.possibleValues();
     }
-    
+
     public TableIndex createIndex(String indexName, String columnName) {
         return new IndexTableIndex(indexName, columnName, indexedSource);
     }

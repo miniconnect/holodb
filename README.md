@@ -454,19 +454,19 @@ For example in Micronaut:
 ```java
 @Singleton
 public class HoloInit {
-    
+
     private final EntityManager entityManager;
-    
+
     public HoloInit(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-    
+
     @EventListener
     @Transactional
     public void onStartup(StartupEvent startupEvent) {
         JpaMetamodelDriver.setMetamodel(entityManager.getMetamodel());
     }
-    
+
 }
 ```
 
@@ -482,17 +482,17 @@ For example:
 @HoloTable(size = 25)
 @HoloVirtualColumn(name = "extracol", type = Integer.class, valuesRange = {10, 20})
 public class Company {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "birth_country", nullable = false)
     @HoloColumn(valuesBundle = "countries")
     private String country;
-    
+
     // ...
-    
+
 }
 ```
 

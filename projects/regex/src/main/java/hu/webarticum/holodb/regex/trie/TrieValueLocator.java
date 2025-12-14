@@ -40,7 +40,7 @@ public class TrieValueLocator {
         TrieNode childNode = children.get(childIndex);
         return locate(childNode, childOffset, value, nextLevel);
     }
-    
+
     private int findAcceptingChild(ImmutableList<TrieNode> children, char c) {
         int length = children.size();
         if (length < 2) {
@@ -75,11 +75,11 @@ public class TrieValueLocator {
             }
         }
     }
-    
+
     private int compareFirst(char c, TrieNode childNode) {
         CharClass charClass = childNode.charClass();
         char firstChar = charClass.chars().charAt(0);
         return charClass.charComparator().compare(c, firstChar);
     }
-    
+
 }

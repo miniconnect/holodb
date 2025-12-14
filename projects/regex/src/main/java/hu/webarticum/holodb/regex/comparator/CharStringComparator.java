@@ -5,7 +5,7 @@ import java.util.Comparator;
 public class CharStringComparator implements Comparator<String> {
 
     private final CharComparator charComparator;
-    
+
     public CharStringComparator(CharComparator charComparator) {
         this.charComparator = charComparator;
     }
@@ -25,5 +25,5 @@ public class CharStringComparator implements Comparator<String> {
         }
         return Integer.compare(length1, length2);
     }
-    
+
 }

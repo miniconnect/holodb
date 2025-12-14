@@ -75,7 +75,7 @@ public class AstToTreeDemo {
         System.out.println();
         System.out.println("---------------------------------------------------------");
         System.out.println();
-        
+
         System.out.println("Size: " + size);
         for (LargeInteger i = LargeInteger.ZERO; i.isLessThan(sampleSize); i = i.increment()) {
             System.out.println(String.format("%7s: %s", i, retriever.retrieve(trie, i)));
@@ -87,5 +87,5 @@ public class AstToTreeDemo {
         System.out.println(". . . . . . . . . . .");
         System.out.println(String.format("%7s: %s", size.decrement(), retriever.retrieve(trie, size.decrement())));
     }
-    
+
 }

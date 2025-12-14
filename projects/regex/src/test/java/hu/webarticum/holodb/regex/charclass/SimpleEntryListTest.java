@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Test;
 
 class SimpleEntryListTest {
-    
+
     @Test
     void testEmpty() {
         SimpleEntryList<Integer, String> entries = new SimpleEntryList<>();
@@ -20,7 +20,7 @@ class SimpleEntryListTest {
         assertThatThrownBy(entries::removeLast).isInstanceOf(NoSuchElementException.class);
         assertThat(entries).isEqualTo(new SimpleEntryList<>());
     }
-    
+
     @Test
     void testSingleElement() {
         SimpleEntryList<Integer, String> entries = new SimpleEntryList<>();
@@ -43,7 +43,7 @@ class SimpleEntryListTest {
         assertThatThrownBy(entries::removeLast).isInstanceOf(NoSuchElementException.class);
         assertThat(entries).isEqualTo(new SimpleEntryList<>());
     }
-    
+
     @Test
     void testMultipleElements() {
         SimpleEntryList<Integer, String> entries = new SimpleEntryList<>();

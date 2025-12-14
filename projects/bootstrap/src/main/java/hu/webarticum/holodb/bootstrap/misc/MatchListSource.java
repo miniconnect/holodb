@@ -15,18 +15,18 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public class MatchListSource implements SortedSource<String> {
 
     private final MatchList matchList;
-    
+
 
     public MatchListSource(MatchList matchList) {
         this.matchList = matchList;
     }
-    
-    
+
+
     @Override
     public Class<String> type() {
         return String.class;
     }
-    
+
     @Override
     public LargeInteger size() {
         return matchList.size();
@@ -36,7 +36,7 @@ public class MatchListSource implements SortedSource<String> {
     public String get(LargeInteger index) {
         return matchList.get(index);
     }
-    
+
     @Override
     public Comparator<String> comparator() {
         return Collator.getInstance(Locale.US)::compare;
@@ -46,7 +46,7 @@ public class MatchListSource implements SortedSource<String> {
     public Optional<ImmutableList<String>> possibleValues() {
         return Optional.empty();
     }
-    
+
     @Override
     public Range find(Object value) {
         String stringValue = value == null ? null : value.toString();
@@ -63,7 +63,7 @@ public class MatchListSource implements SortedSource<String> {
                 return Range.empty(find(minValue).from());
             }
         }
-        
+
         LargeInteger from;
         if (minValue != null) {
             Range minRange = find(minValue);
@@ -71,7 +71,7 @@ public class MatchListSource implements SortedSource<String> {
         } else {
             from = LargeInteger.ZERO;
         }
-        
+
         LargeInteger until;
         if (maxValue != null) {
             Range maxRange = find(maxValue);
@@ -79,7 +79,7 @@ public class MatchListSource implements SortedSource<String> {
         } else {
             until = size();
         }
-        
+
         return Range.fromUntil(from, until);
     }
 
@@ -87,5 +87,5 @@ public class MatchListSource implements SortedSource<String> {
     public Range findNulls() {
         return Range.empty();
     }
-    
+
 }

@@ -13,11 +13,11 @@ import hu.webarticum.holodb.regex.tree.TreeNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class TreeWeedingTransformer {
-    
+
     public TreeNode weed(TreeNode node) {
         return weedCached(node, null, new HashMap<>()).resultingChildren.get(0);
     }
-    
+
     private TransformResult weedCached(
             TreeNode node, AncestorInfo ancestorInfo, Map<CacheKey, ImmutableList<TreeNode>> cache) {
         Object value = node.value();
@@ -34,7 +34,7 @@ public class TreeWeedingTransformer {
         cache.put(cacheKey, result.resultingChildren);
         return result;
     }
-    
+
     private CacheKey createCacheKey(TreeNode node, AncestorInfo ancestorInfo) {
         AncestorInfo normalizedAncestorInfo = ancestorInfo;
         if (ancestorInfo == null || ancestorInfo.anchors.isEmpty()) {
@@ -103,7 +103,7 @@ public class TreeWeedingTransformer {
             return new TransformResult(true, ImmutableList.of(newNode));
         }
     }
-    
+
     private CharAnchorKind kindOf(Object value) {
         if (value == SpecialTreeValues.ROOT) {
             return CharAnchorKind.BEGIN;
@@ -120,7 +120,7 @@ public class TreeWeedingTransformer {
         char c = chars.charAt(0);
         return CharAnchorKind.of(c);
     }
-    
+
     private boolean checkAnchors(AncestorInfo ancestorInfo, Object value) {
         if (ancestorInfo == null) {
             return true;
@@ -156,13 +156,13 @@ public class TreeWeedingTransformer {
                 throw new IllegalArgumentException("Unknown anchor type: " + anchor);
         }
     }
-    
+
     private boolean checkWordBoundaryAnchor(CharAnchorKind previousKind, Object value) {
         boolean previousIsWordChar = previousKind == CharAnchorKind.WORD;
         boolean currentIsWordChar = isWordCharValue(value);
         return currentIsWordChar != previousIsWordChar;
     }
-    
+
     private boolean isWordCharValue(Object value) {
         if (!(value instanceof CharClass)) {
             return false;
@@ -171,11 +171,11 @@ public class TreeWeedingTransformer {
         char c = chars.charAt(0);
         return CharAnchorKind.WORD.accept(c);
     }
-    
+
     private boolean checkBeginOfLineAnchor(CharAnchorKind previousKind, Object value) {
         return previousKind == CharAnchorKind.BEGIN || previousKind == CharAnchorKind.NEWLINE;
     }
-    
+
     private boolean checkEndOfLineAnchor(Object value) {
         if (value == SpecialTreeValues.LEAF) {
             return true;
@@ -185,31 +185,31 @@ public class TreeWeedingTransformer {
         String chars = ((CharClass) value).chars();
         return chars.equals("\n");
     }
-    
+
     private boolean checkBeginOfInputAnchor(Object value) {
         return value == SpecialTreeValues.LEAF;
     }
-    
+
     private boolean checkEndOfInputAnchor(Object value) {
         return value == SpecialTreeValues.LEAF; 
     }
-    
+
     private static class AncestorInfo {
-        
+
         final CharAnchorKind kind;
-        
+
         final EnumSet<AnchorAstNode> anchors;
-        
+
         AncestorInfo(CharAnchorKind kind, EnumSet<AnchorAstNode> anchors) {
             this.kind = kind;
             this.anchors = anchors;
         }
-        
+
         @Override
         public int hashCode() {
             return Objects.hash(kind, anchors);
         }
-        
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) {
@@ -220,25 +220,25 @@ public class TreeWeedingTransformer {
             AncestorInfo other = (AncestorInfo) obj;
             return kind == other.kind && Objects.equals(anchors, other.anchors);
         }
-        
+
     }
-    
+
     private static class CacheKey {
-        
+
         final TreeNode treeNode;
-        
+
         final AncestorInfo ancestorInfo;
-        
+
         public CacheKey(TreeNode treeNode, AncestorInfo ancestorInfo) {
             this.treeNode = treeNode;
             this.ancestorInfo = ancestorInfo;
         }
-        
+
         @Override
         public int hashCode() {
             return (System.identityHashCode(treeNode) * 31) + Objects.hashCode(ancestorInfo);
         }
-        
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) {
@@ -249,7 +249,7 @@ public class TreeWeedingTransformer {
             CacheKey other = (CacheKey) obj;
             return (treeNode == other.treeNode) && Objects.equals(ancestorInfo, other.ancestorInfo);
         }
-        
+
     }
-    
+
 }

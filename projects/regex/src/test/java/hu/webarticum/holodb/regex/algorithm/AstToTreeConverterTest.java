@@ -17,7 +17,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 class AstToTreeConverterTest {
 
     private final CharComparator charComparator = Character::compare;
-    
+
     @Test
     void testEmpty() {
         AstToTreeConverter converter = new AstToTreeConverter(charComparator);
@@ -91,5 +91,5 @@ class AstToTreeConverterTest {
         ));
         assertThat(converter.convert(alternationNode)).isEqualTo(expectedTreeNode);
     }
-    
+
 }

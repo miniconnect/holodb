@@ -21,18 +21,18 @@ dependencies {
     implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
     implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"
     implementation "hu.webarticum.minibase:engine:${miniBaseVersion}"
-    
+
     implementation 'org.apache.commons:commons-lang3:3.18.0'
     implementation 'org.apache.commons:commons-math3:3.6.1'
-    
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.13.4'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.13.4'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.13.4'
     testImplementation 'org.assertj:assertj-core:3.27.3'
-    
+
     labImplementation 'org.jfree:jfreechart:1.5.6'
     labImplementation 'org.openjdk.jol:jol-core:0.17'
-    
+
     jmh 'org.openjdk.jmh:jmh-core:1.37'
     jmhRuntimeOnly 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
 }

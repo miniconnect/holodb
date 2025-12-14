@@ -24,7 +24,7 @@ import hu.webarticum.holodb.regex.ast.UnicodePropertyCharacterClassAstNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class RegexParser {
-    
+
     public AstNode parse(String patternString) {
         ParserInput parserInput = new ParserInput(patternString);
         AstNode result = parseAlternation(parserInput);
@@ -35,7 +35,7 @@ public class RegexParser {
         }
         return result;
     }
-    
+
     private AlternationAstNode parseAlternation(ParserInput parserInput) {
         List<SequenceAstNode> branches = new ArrayList<>(1);
         branches.add(parseSequence(parserInput));
@@ -78,7 +78,7 @@ public class RegexParser {
             return parseSingleInputCharacter(next);
         }
     }
-    
+
     private GroupAstNode parseOpenedGroup(ParserInput parserInput) {
         requireNonEnd(parserInput);
         Object[] groupMetadata = parseGroupPrefix(parserInput);
@@ -90,7 +90,7 @@ public class RegexParser {
         }
         return GroupAstNode.of(alternation, kind, name);
     }
-    
+
     private Object[] parseGroupPrefix(ParserInput parserInput) {
         char next = parserInput.next();
         if (next != '?') {
@@ -132,7 +132,7 @@ public class RegexParser {
             throw error(parserInput, position, "Unexpected quantifer '" + next + "'");
         }
     }
-    
+
     private AstNode parseOpenedEscapeSequence(ParserInput parserInput) {
         requireNonEnd(parserInput);
         int position = parserInput.position() - 1;
@@ -211,9 +211,9 @@ public class RegexParser {
             default:
                 throw error(parserInput, position, "Unsupported escape sequence '\\" + next + "'");
         }
-        
+
     }
-    
+
     private CharacterConstantAstNode parseOpenedHexadecimalEscapeSequence(ParserInput parserInput, int unbracedLength) {
         requireNonEnd(parserInput);
         int codePoint;
@@ -261,7 +261,7 @@ public class RegexParser {
                 throw error(parserInput, namePosition, "Invalid control character name '" + next + "'");
         }
     }
-    
+
     private NamedBackreferenceAstNode parseOpenedNamedBackreference(ParserInput parserInput) {
         requireNonEnd(parserInput);
         int ltPosition = parserInput.position();
@@ -354,7 +354,7 @@ public class RegexParser {
         }
         return CharacterClassAstNode.of(positive, ImmutableList.fromCollection(nodes));
     }
-    
+
     private CharacterMatchAstNode parseNextInCharacterClass(ParserInput parserInput, char firstChar) {
         if (firstChar == '\\') {
             int position = parserInput.position() - 1;
@@ -369,7 +369,7 @@ public class RegexParser {
             return CharacterConstantAstNode.of(firstChar);
         }
     }
-    
+
     private AstNode parseSingleInputCharacter(char next) {
         if (next == '.') {
             return BuiltinCharacterClassAstNode.ANY;
@@ -381,7 +381,7 @@ public class RegexParser {
             return CharacterConstantAstNode.of(next);
         }
     }
-    
+
     private int[] parseQuantifier(ParserInput parserInput) {
         if (!parserInput.hasNext()) {
             return null; // NOSONAR
@@ -411,7 +411,7 @@ public class RegexParser {
         }
         return result;
     }
-    
+
     private int[] parseOpenedBracedQuantifier(ParserInput parserInput) {
         int position = parserInput.position();
         int num1 = parseDecimalNumber(parserInput);
@@ -454,7 +454,7 @@ public class RegexParser {
         }
         throw error(parserInput, parserInput.position(), "Unexpected end after name sequence");
     }
-    
+
     private boolean isAllowedNameFirstChar(char c) {
         return (
                 (c >= 'a' && c <= 'z') ||
@@ -549,10 +549,10 @@ public class RegexParser {
     private RegexParserException error(ParserInput parserInput, int position, String description) {
         return error(parserInput, position, description, null);
     }
-    
+
     private RegexParserException error(ParserInput parserInput, int position, String description, Exception e) {
         String message = description + " at position " + position + " in pattern " + parserInput.content();
         return new RegexParserException(position, message, e);
     }
-    
+
 }

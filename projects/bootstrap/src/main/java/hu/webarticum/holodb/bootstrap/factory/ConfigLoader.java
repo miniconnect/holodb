@@ -22,52 +22,52 @@ import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.miniconnect.lang.jackson.JacksonSupport;
 
 public class ConfigLoader {
-    
+
     public enum ContentType {
-        
+
         JSON(MappingJsonFactory::new),
         YAML(YAMLFactory::new),
         XML(XmlFactory::new);
-        
-        
+
+
         private Supplier<JsonFactory> jsonFactorySupplier;
-        
-        
+
+
         ContentType(Supplier<JsonFactory> jsonFactorySupplier) {
             this.jsonFactorySupplier = jsonFactorySupplier;
         }
-        
-        
+
+
         public JsonFactory createJsonFactory() {
             return jsonFactorySupplier.get();
         }
-        
+
     }
-    
-    
+
+
     private final Supplier<Reader> readerSupplier;
-    
+
     private final ContentType contentType;
-    
+
 
     public ConfigLoader(String resource) {
         this(() -> createResourceReader(resource), detectContentType(resource));
     }
-    
+
     public ConfigLoader(File file) {
         this(file, detectContentType(file.getName()));
     }
-    
+
     public ConfigLoader(File file, ContentType contentType) {
         this(() -> createFileReader(file), contentType);
     }
-    
+
     public ConfigLoader(Supplier<Reader> readerSupplier, ContentType contentType) {
         this.readerSupplier = readerSupplier;
         this.contentType = contentType;
     }
 
-    
+
     private static ContentType detectContentType(String pathOrName) {
         if (pathOrName.endsWith(".json")) {
             return ContentType.JSON;
@@ -85,7 +85,7 @@ public class ConfigLoader {
         }
         return new InputStreamReader(resourceIn);
     }
-    
+
     private static Reader createFileReader(File file) {
         try {
             return new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
@@ -93,8 +93,8 @@ public class ConfigLoader {
             throw new UncheckedIOException(e);
         }
     }
-    
-    
+
+
     public HoloConfig load() {
         ObjectMapper mapper = JsonMapper.builder(contentType.createJsonFactory())
                 .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
@@ -106,5 +106,5 @@ public class ConfigLoader {
             throw new UncheckedIOException(e);
         }
     }
-    
+
 }

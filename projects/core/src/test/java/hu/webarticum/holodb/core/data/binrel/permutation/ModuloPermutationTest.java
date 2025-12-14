@@ -7,8 +7,8 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 class ModuloPermutationTest extends AbstractLargeGroundPermutationTest<ModuloPermutation> {
 
     private final TreeRandom treeRandom = new HasherTreeRandom("0123456789");
-    
-    
+
+
     @Override
     protected ModuloPermutation create(LargeInteger size) {
         return new ModuloPermutation(treeRandom, size);

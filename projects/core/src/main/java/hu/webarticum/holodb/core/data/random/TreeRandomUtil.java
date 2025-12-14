@@ -7,7 +7,7 @@ public final class TreeRandomUtil {
     private TreeRandomUtil() {
         // utility
     }
-    
+
 
     public static boolean fetchBoolean(TreeRandom treeRandom) {
         byte[] bytes = treeRandom.getBytes(1);
@@ -52,7 +52,7 @@ public final class TreeRandomUtil {
         }
         return Math.abs(intValue) / (float) Integer.MAX_VALUE;
     }
-    
+
     public static double fetchDouble(TreeRandom treeRandom) {
         byte[] bytes = treeRandom.getBytes(8);
         return ByteBuffer.wrap(bytes).getDouble();
@@ -66,5 +66,5 @@ public final class TreeRandomUtil {
         }
         return Math.abs(longValue) / (double) Long.MAX_VALUE;
     }
-    
+
 }

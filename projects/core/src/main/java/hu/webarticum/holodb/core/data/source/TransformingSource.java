@@ -11,10 +11,10 @@ public class TransformingSource<T, U> implements Source<U> {
     private final Source<T> baseSource;
 
     private final Class<? extends U> type;
-    
+
     private final Function<T, U> decoder;
-    
-    
+
+
     public TransformingSource(
             Source<T> baseSource,
             Class<? extends U> type,
@@ -23,8 +23,8 @@ public class TransformingSource<T, U> implements Source<U> {
         this.type = type;
         this.decoder = decoder;
     }
-    
-    
+
+
     @Override
     public Class<? extends U> type() {
         return type;

@@ -37,12 +37,12 @@ import hu.webarticum.miniconnect.server.ServerConstants;
 public class HolodbServerMain implements Runnable { 
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    
+
     private static final int SERVER_PORT = ServerConstants.DEFAULT_PORT;
 
     @Option(names = "--watch", description = "Enables watching changes of the configuration file.") 
     private boolean watch = false;
-    
+
     private Thread watchThread = null;
 
     @Parameters(
@@ -76,7 +76,7 @@ public class HolodbServerMain implements Runnable {
             return loadStaticEngine(configFilePath);
         }
     }
-    
+
     private Engine loadStaticEngine(String configFilePath) {
         HoloConfig config = loadConfig(configFilePath);
         return EngineBuilder.ofConfig(config).build();
@@ -92,7 +92,7 @@ public class HolodbServerMain implements Runnable {
         watchThread = new Thread(() -> watchConfigFile(configFilePath, consumer));
         watchThread.start();
     }
-    
+
     private void watchConfigFile(String configFilePath, Runnable callback) {
         try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
             Path filePath = Paths.get(configFilePath);
@@ -125,12 +125,12 @@ public class HolodbServerMain implements Runnable {
         HoloConfig config = loadConfig(configFilePath);
         return StorageAccessFactory.createStorageAccess(config);
     }
-    
+
     private HoloConfig loadConfig(String configFilePath) {
         File configFile = new File(configFilePath);
         return new ConfigLoader(configFile).load();
     }
-    
+
     private MessengerServer createServer(Engine engine, int port) {
         MiniSessionManager sessionManager = new FrameworkSessionManager(engine);
         Messenger messenger = new SessionManagerMessenger(sessionManager);

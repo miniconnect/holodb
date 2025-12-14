@@ -24,18 +24,18 @@ import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.miniconnect.lang.jackson.JacksonSupport;
 
 public class SchemaGeneratorMain {
-    
+
     private static final String ANY_VALUE_NAME = "AnyValue";
 
     public static void main(String[] args) throws IOException {
         String outputPath = args[0];
-        
+
         ObjectMapper mapper = JacksonSupport.createMapper();
         JsonSchemaConfig config = createSchemaConfig(mapper);
         JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper, config);
         JsonNode schema = generator.generateJsonSchema(HoloConfig.class);
         fixAnyValueSchema(schema);
-        
+
         File schemaOutFile = new File(outputPath);
         File schemaOutDirectory = schemaOutFile.getParentFile();
         schemaOutDirectory.mkdirs();
@@ -43,7 +43,7 @@ public class SchemaGeneratorMain {
             mapper.writerWithDefaultPrettyPrinter().writeValue(out, schema);
         }
     }
-    
+
     private static JsonSchemaConfig createSchemaConfig(ObjectMapper mapper) {
         Map<String, Supplier<JsonNode>> jsonSuppliers = new HashMap<>();
         jsonSuppliers.put(ANY_VALUE_NAME, JsonNodeFactory.instance::objectNode);
@@ -79,5 +79,5 @@ public class SchemaGeneratorMain {
 
     @JsonSchemaInject(jsonSupplierViaLookup = ANY_VALUE_NAME)
     public static class AnyValue {}
-    
+
 }

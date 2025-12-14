@@ -5,22 +5,22 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class FastMonotonic implements Monotonic {
 
-    
+
     private final LargeInteger size;
-    
+
     private final LargeInteger imageSize;
-    
+
 
     public FastMonotonic(long size, long imageSize) {
         this(LargeInteger.of(size), LargeInteger.of(imageSize));
     }
-    
+
     public FastMonotonic(LargeInteger size, LargeInteger imageSize) {
         this.size = size;
         this.imageSize = imageSize;
     }
-    
-    
+
+
     @Override
     public LargeInteger size() {
         return size;
@@ -40,7 +40,7 @@ public class FastMonotonic implements Monotonic {
     public Range indicesOf(Range range) {
         return Range.fromUntil(calculateFrom(range.from()), calculateFrom(range.until()));
     }
-    
+
     private LargeInteger calculateFrom(LargeInteger value) {
         LargeInteger product = value.multiply(size);
         LargeInteger result = product.divide(imageSize);

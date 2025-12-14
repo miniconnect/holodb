@@ -20,9 +20,9 @@ dependencies {
     implementation project(':spi')
     api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
     implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"
-    
+
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.19.2'
-    
+
     schemaGenImplementation "hu.webarticum.miniconnect.api:lang-jackson:${miniConnectApiVersion}"
     schemaGenImplementation 'com.kjetland:mbknor-jackson-jsonschema_2.13:1.0.39'
     schemaGenImplementation 'org.scala-lang:scala-library:2.13.16'

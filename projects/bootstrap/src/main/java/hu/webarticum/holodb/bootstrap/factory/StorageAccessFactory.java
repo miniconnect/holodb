@@ -74,7 +74,7 @@ public class StorageAccessFactory {
     public static StorageAccess createStorageAccess(HoloConfig config) {
         return createStorageAccess(config, new DefaultConverter());
     }
-    
+
     public static StorageAccess createStorageAccess(HoloConfig config, Converter converter) {
         SimpleStorageAccess storageAccess =  new SimpleStorageAccess();
         SimpleResourceManager<Schema> schemaManager = storageAccess.schemas();
@@ -104,7 +104,7 @@ public class StorageAccessFactory {
         }
         return schema;
     }
-    
+
     private static Table createTable(
             HoloConfig config,
             HoloConfigSchema schemaConfig,
@@ -143,7 +143,7 @@ public class StorageAccessFactory {
         }
         return table;
     }
-    
+
     private static HoloConfigSchema renderSchemaConfig(HoloConfig config, HoloConfigSchema schemaConfig) {
         HoloConfigSchema mergedSchemaConfig = HoloConfigSchema.createWithDefaults()
                 .merge(config.schemaDefaults())
@@ -157,17 +157,17 @@ public class StorageAccessFactory {
         if (mergedSchemaConfig.tables() == null) {
             throw new IllegalArgumentException("Tables config is null for schema " + schemaName);
         }
-        
+
         return mergedSchemaConfig;
     }
-    
+
     private static HoloConfigTable renderTableConfig(
             HoloConfig config, HoloConfigSchema schemaConfig, HoloConfigTable tableConfig) {
         HoloConfigTable mergedColumnConfig = HoloConfigTable.createWithDefaults()
                 .merge(config.tableDefaults())
                 .merge(schemaConfig.tableDefaults())
                 .merge(tableConfig);
-        
+
         String schemaName = schemaConfig.name();
         String tableName = mergedColumnConfig.name();
         if (tableName == null) {
@@ -185,10 +185,10 @@ public class StorageAccessFactory {
         if (mergedColumnConfig.columns() == null) {
             throw new IllegalArgumentException("Columns config is null for table " + schemaName + "." + tableName);
         }
-        
+
         return mergedColumnConfig;
     }
-    
+
     private static HoloConfigColumn renderColumnConfig(
             HoloConfig config,
             HoloConfigSchema schemaConfig,
@@ -208,10 +208,10 @@ public class StorageAccessFactory {
         }
 
         // TODO: other checks? values?
-        
+
         return mergedColumnConfig;
     }
-    
+
     private static ColumnDefinition createColumnDefinition(
             HoloConfigColumn columnConfig, Source<?> source, boolean autoIncremented) {
         return new SimpleColumnDefinition(
@@ -227,21 +227,21 @@ public class StorageAccessFactory {
     private static Class<?> extractType(HoloConfigColumn columnConfig) {
         return extractType(columnConfig, null);
     }
-    
+
     private static Class<?> extractType(HoloConfigColumn columnConfig, Source<?> source) {
         if (columnConfig.sourceFactory() != null && source != null) {
             return source.type();
         }
-        
+
         if (columnConfig.mode() == ColumnMode.COUNTER || columnConfig.valuesForeignColumn() != null) {
             return LargeInteger.class;
         }
-        
+
         Class<?> configType = columnConfig.type();
         if (configType != null) {
             return configType;
         }
-        
+
         if (
                 columnConfig.valuesBundle() != null ||
                 columnConfig.valuesResource() != null ||
@@ -250,7 +250,7 @@ public class StorageAccessFactory {
                 columnConfig.valuesTextKind() != null) {
             return String.class;
         }
-        
+
         if (columnConfig.valuesRange() != null) {
             return LargeInteger.class;
         }
@@ -259,14 +259,14 @@ public class StorageAccessFactory {
         if (values != null && !values.isEmpty()) {
             return values.get(0).getClass();
         }
-        
+
         if (source != null) {
             return source.type();
         }
-        
+
         throw new IllegalArgumentException("Can not guess type for column: " + columnConfig.name());
     }
-    
+
     private static boolean extractNullable(HoloConfigColumn columnConfig, Source<?> source) {
         if (columnConfig.sourceFactory() != null) {
             if (source instanceof IndexedSource) {
@@ -275,15 +275,15 @@ public class StorageAccessFactory {
                 return true;
             }
         }
-        
+
         return columnConfig.nullCount() != null;
     }
-    
+
     private static ImmutableList<Object> extractEnumValues(HoloConfigColumn columnConfig, Source<?> source) {
         if (columnConfig.mode() != ColumnMode.ENUM) {
             return null;
         }
-        
+
         return source.possibleValues().get().map(v -> v); // NOSONAR must be presented
     }
 
@@ -293,7 +293,7 @@ public class StorageAccessFactory {
                 return Optional.of(columnConfig.name());
             }
         }
-        
+
         return Optional.empty();
     }
 
@@ -308,7 +308,7 @@ public class StorageAccessFactory {
         String columnName = columnConfig.name();
 
         TreeRandom columnRandom = createColumnTreeRandom(tableRandom, columnConfig);
-        
+
         Class<? extends SourceFactory> factoryClazz = columnConfig.sourceFactory();
         if (factoryClazz != null) {
             SourceFactory sourceFactory;
@@ -323,7 +323,7 @@ public class StorageAccessFactory {
                     tableSize,
                     columnConfig.sourceFactoryData());
         }
-        
+
         ColumnMode columnMode = columnConfig.mode();
         if (columnMode == ColumnMode.DEFAULT || columnMode == ColumnMode.ENUM) {
             boolean isEnum = (columnMode == ColumnMode.ENUM);
@@ -355,7 +355,7 @@ public class StorageAccessFactory {
                     "Invalid column mode: " + columnMode + " (" + tableConfig.name() + "." + columnConfig.name() + ")");
         }
     }
-    
+
     private static TreeRandom createColumnTreeRandom(TreeRandom tableRandom, HoloConfigColumn columnConfig) {
         LargeInteger seedKey = columnConfig.seedKey();
         if (seedKey != null) {
@@ -364,7 +364,7 @@ public class StorageAccessFactory {
             return tableRandom.sub("col-" + columnConfig.name());
         }
     }
-    
+
     private static Source<?> createForeignColumnSource(
             HoloConfig config,
             HoloConfigSchema schemaConfig,
@@ -395,11 +395,11 @@ public class StorageAccessFactory {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Column not found: " + foreignTableName + "." + foreignTableName));
-        
+
         if (foreignColumnConfig.mode() != ColumnMode.COUNTER) {
             throw new IllegalArgumentException();
         }
-        
+
         LargeInteger foreignTableSize = foreignTableConfig.size();
         RangeSource rangeSource = new RangeSource(LargeInteger.ONE, foreignTableSize);
         LargeInteger tableSize = tableConfig.size();
@@ -412,7 +412,7 @@ public class StorageAccessFactory {
         } else if (columnConfig.valuesPattern() != null) {
             return loadPatternSource(columnConfig, converter);
         }
-        
+
         List<Object> values = loadValues(columnConfig, converter);
         return createUniqueSource(extractType(columnConfig), values, isEnum);
     }
@@ -427,7 +427,7 @@ public class StorageAccessFactory {
         if (type == LargeInteger.class) {
             return rangeSource;
         }
-        
+
         if (type == LargeInteger.class) {
             return rangeSource;
         } else {
@@ -460,27 +460,27 @@ public class StorageAccessFactory {
                 .map(v -> converter.convert(v, columnClazz))
                 .collect(Collectors.toList());
     }
-    
+
     private static ImmutableList<Object> loadRawValues(HoloConfigColumn columnConfig) {
         String valuesResource = columnConfig.valuesResource();
         if (valuesResource != null) {
             return loadValuesFromResource(valuesResource);
         }
-        
+
         String valuesBundle = columnConfig.valuesBundle();
         if (valuesBundle != null) {
             String bundleValuesResource = "hu/webarticum/holodb/values/" + valuesBundle + ".txt";
             return loadValuesFromResource(bundleValuesResource);
         }
-        
+
         ImmutableList<Object> values = columnConfig.values();
         if (values != null) {
             return values;
         }
-        
+
         throw new IllegalArgumentException("No values given for " + columnConfig.name());
     }
-    
+
     private static ImmutableList<Object> loadValuesFromResource(String resource) {
         ClassLoader classLoader = StorageAccessFactory.class.getClassLoader();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -502,7 +502,7 @@ public class StorageAccessFactory {
         if (!(source instanceof Index)) {
             return null;
         }
-        
+
         Index index = (Index) source;
         return index.comparator();
     }
@@ -517,7 +517,7 @@ public class StorageAccessFactory {
             throw new IllegalArgumentException(e);
         }
     }
-    
+
     private static Comparator<?> createEnumValueComparator(Collection<?> values) {
         Map<Object, Integer> positionMap = new HashMap<>(values.size());
         int position = 0;
@@ -559,7 +559,7 @@ public class StorageAccessFactory {
         Permutation permutation = createPermutation(treeRandom, columnConfig, tableSize);
         return new PermutatedIndexedSource<>(valueSource, permutation);
     }
-    
+
     private static Source<?> createDynamicPatternSource(
             HoloConfigColumn columnConfig,
             TreeRandom columnRandom,
@@ -580,7 +580,7 @@ public class StorageAccessFactory {
         DummyTextSource dummyTextSource = new DummyTextSource(columnConfig.valuesTextKind(), columnRandom, valueCount);
         return wrapNonIndexedStringSource(columnConfig, columnRandom, converter, tableSize, dummyTextSource);
     }
-    
+
     private static LargeInteger getValueCount(HoloConfigColumn columnConfig, LargeInteger tableSize) {
         LargeInteger nullCount = columnConfig.nullCount();
         LargeInteger effectiveNullCount = nullCount != null ? nullCount : LargeInteger.ZERO;
@@ -607,27 +607,27 @@ public class StorageAccessFactory {
         }
         return source;
     }
-    
+
     private static Monotonic createMonotonic(
             TreeRandom treeRandom, HoloConfigColumn columnConfig, LargeInteger size, LargeInteger baseSize) {
         DistributionQuality distributionQuality = columnConfig.distributionQuality();
         if (distributionQuality == null) {
             distributionQuality = DistributionQuality.MEDIUM;
         }
-        
+
         return MonotonicFactory.createMonotonic(treeRandom, size, baseSize, distributionQuality);
     }
-    
+
     private static Permutation createPermutation(
             TreeRandom treeRandom, HoloConfigColumn columnConfig, LargeInteger tableSize) {
         ShuffleQuality shuffleQuality = columnConfig.shuffleQuality();
         if (shuffleQuality == null) {
             shuffleQuality = ShuffleQuality.MEDIUM;
         }
-        
+
         return PermutationFactory.createPermutation(treeRandom.sub("permutation"), tableSize, shuffleQuality);
     }
-    
+
     private static FixedSource<?> createFixedSource(Class<?> type, Collection<?> values) {
         try {
             return FixedSource.class.getConstructor(Class.class, Collection.class).newInstance(type, values);

@@ -20,14 +20,14 @@ public class OldHasherTreeRandom implements TreeRandom {
     private static final byte SEPARATOR_REPLACEMENT = (byte) 0b00000000;
 
     private static final byte ESCAPER = (byte) 0b11111110;
-    
-    
+
+
     private final byte[] bytes;
-    
+
     private final Hasher hasher;
-    
+
     private final BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory;
-    
+
 
     public OldHasherTreeRandom() {
         this(0L);
@@ -48,7 +48,7 @@ public class OldHasherTreeRandom implements TreeRandom {
     public OldHasherTreeRandom(byte[] seed) {
         this(seed, createDefaultHasher(seed));
     }
-    
+
     public OldHasherTreeRandom(Hasher hasher) {
         this(0L, hasher);
     }
@@ -64,7 +64,7 @@ public class OldHasherTreeRandom implements TreeRandom {
     public OldHasherTreeRandom(String seed, Hasher hasher) {
         this(seed.getBytes(), hasher);
     }
-    
+
     public OldHasherTreeRandom(byte[] seed, Hasher hasher) {
         this(seed, hasher, createDefaultAdditionalByteSourceFactory());
     }
@@ -80,11 +80,11 @@ public class OldHasherTreeRandom implements TreeRandom {
     public OldHasherTreeRandom(String seed, Hasher hasher, BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory) {
         this(seed.getBytes(), hasher, additionalByteSourceFactory);
     }
-    
+
     public OldHasherTreeRandom(byte[] seed, Hasher hasher, BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory) {
         this(seed, hasher, additionalByteSourceFactory, true);
     }
-    
+
     private OldHasherTreeRandom(byte[] bytes, Hasher hasher, BiFunction<byte[], byte[], ByteSource> additionalByteSourceFactory, boolean cleanBytes) {
         this.bytes = cleanBytes ? cleanBytes(bytes) : bytes;
         this.hasher = hasher;
@@ -120,7 +120,7 @@ public class OldHasherTreeRandom implements TreeRandom {
         if (highExclusive.signum() != 1) {
             throw new IllegalArgumentException("High value must be positive");
         }
-        
+
         LargeInteger two = LargeInteger.of(2);
         LargeInteger factor = highExclusive;
         LargeInteger powerOfTwo = LargeInteger.ONE;
@@ -131,9 +131,9 @@ public class OldHasherTreeRandom implements TreeRandom {
             exponentOfTwo++;
         }
         int bitCountOfFactor = factor.bitCount();
-        
+
         ByteSourceBitSource bitSource = createBitSource();
-        
+
         LargeInteger partition = exponentOfTwo > 0 ?
                 LargeInteger.ofUnsigned(bitSource.fetch(exponentOfTwo)) :
                 LargeInteger.ZERO;
@@ -145,11 +145,11 @@ public class OldHasherTreeRandom implements TreeRandom {
                 break;
             }
         }
-        
+
         return partition.multiply(factor).add(offset);
     }
 
-    
+
     private static byte[] cleanBytes(byte[] bytes) {
         ByteArrayOutputStream bytesBuilder = new ByteArrayOutputStream(bytes.length);
         for (byte b : bytes) {
@@ -165,7 +165,7 @@ public class OldHasherTreeRandom implements TreeRandom {
         }
         return bytesBuilder.toByteArray();
     }
-    
+
     private ByteSourceBitSource createBitSource() {
         byte[] hashBytes = hasher.hash(bytes);
         return new ByteSourceBitSource(hashBytes, additionalByteSourceFactory.apply(bytes, hashBytes));

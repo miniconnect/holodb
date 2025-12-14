@@ -20,9 +20,9 @@ import hu.webarticum.miniconnect.lang.FindPositionResult;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class MatchList implements Iterable<String> {
-    
+
     private final TrieNode trie;
-    
+
     private Random random;
 
     private MatchList(Builder builder, String pattern) {
@@ -36,16 +36,16 @@ public class MatchList implements Iterable<String> {
         TreeNode sortedTree = new TreeSortingTransformer().sort(compactTree);
         this.trie = new TreeToTrieConverter(charComparator).convert(sortedTree);
     }
-    
+
     public static MatchList of(String pattern) {
         return builder().build(pattern);
     }
-    
+
     public static Builder builder() {
         return new Builder();
     }
-    
-    
+
+
     public LargeInteger size() {
         return trie.size();
     }
@@ -57,20 +57,20 @@ public class MatchList implements Iterable<String> {
     public String get(LargeInteger i) {
         return new TrieValueRetriever().retrieve(trie, i);
     }
-    
+
     public FindPositionResult find(String value) {
         return new TrieValueLocator().locate(trie, value);
     }
-    
+
     @Override
     public Iterator<String> iterator() {
         return TrieIterator.fromBeginning(trie);
     }
-    
+
     public Iterator<String> iterator(long position) {
         return iterator(LargeInteger.of(position));
     }
-    
+
     public Iterator<String> iterator(LargeInteger position) {
         return TrieIterator.fromPosition(trie, position);
     }
@@ -83,7 +83,7 @@ public class MatchList implements Iterable<String> {
     private synchronized LargeInteger generateRandomPosition() {
         return trie.size().random(requireRandom());
     }
-    
+
     private synchronized Random requireRandom() {
         if (random == null) {
             random = new Random();
@@ -91,17 +91,17 @@ public class MatchList implements Iterable<String> {
         return random;
     }
 
-    
+
     public static class Builder {
-        
+
         private CharComparator charComparator = null;
-        
+
         private int repeatLimit = AstToTreeConverter.DEFAULT_REPEAT_LIMIT;
-        
+
         private int groupRepeatLimit = AstToTreeConverter.DEFAULT_GROUP_REPEAT_LIMIT;
-        
+
         private Random random = null;
-        
+
         public Builder charComparator(CharComparator charComparator) {
             this.charComparator = charComparator;
             return this;
@@ -126,15 +126,15 @@ public class MatchList implements Iterable<String> {
             this.random = new Random(seed);
             return this;
         }
-        
+
         public MatchList build(String pattern) {
             return new MatchList(this, pattern);
         }
-        
+
         private CharComparator supplyCharComparator() {
             return charComparator != null ? charComparator : new DefaultCharComparator();
         }
-        
+
     }
-    
+
 }

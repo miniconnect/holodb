@@ -45,22 +45,22 @@ public class TreeRandomBenchmark {
             LARGE_KEYS.add(base.add(base.random(random)));
         }
     }
-    
-    
+
+
     public static void main(String[] args) {
         System.out.println(LARGE_KEYS);
     }
-    
+
 
     @Param({ "SmallRoot", "LargeRoot" })
     private String rootSeedType;
 
     @Param({ "Hasher", "OldHasher" })
     private String treeRandomType;
-    
+
     private TreeRandom treeRandom;
-    
-    
+
+
     @Setup
     public void setup() {
         LargeInteger rootSeed;

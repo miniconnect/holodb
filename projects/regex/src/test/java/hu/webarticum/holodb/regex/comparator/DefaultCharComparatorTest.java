@@ -80,7 +80,7 @@ class DefaultCharComparatorTest {
             checkEqual(twoChars);
         }
     }
-    
+
     private void checkEqual(String twoChars) {
         char a = twoChars.charAt(0);
         char b = twoChars.charAt(1);
@@ -93,7 +93,7 @@ class DefaultCharComparatorTest {
             checkAscending(twoChars);
         }
     }
-    
+
     private void checkAscending(String twoChars) {
         char a = twoChars.charAt(0);
         char b = twoChars.charAt(1);

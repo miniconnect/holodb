@@ -7,14 +7,14 @@ public class FastSampler implements Sampler {
     private final LargeInteger size;
 
     private final LargeInteger sample;
-    
-    
+
+
     public FastSampler(LargeInteger size) {
         this.size = size;
         this.sample = size.divide(LargeInteger.of(2L));
     }
-    
-    
+
+
     @Override
     public LargeInteger sample() {
         return sample;

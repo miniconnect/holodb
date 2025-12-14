@@ -14,7 +14,7 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 class BitXorPermutationTest extends AbstractPermutationTest {
 
     private final TreeRandom treeRandom = new HasherTreeRandom(423);
-    
+
 
     @Test
     void testZeroLength() {
@@ -43,7 +43,7 @@ class BitXorPermutationTest extends AbstractPermutationTest {
         assertThat(ImmutableList.fill(16, i -> permutation.indexOf(LargeInteger.of(i)).intValueExact()))
                 .containsExactly(14, 15, 12, 13, 10, 11, 8, 9, 6, 7, 4, 5, 2, 3, 0, 1);
     }
-    
+
     @Test
     void testManuallyCreated3() {
         Permutation permutation = new BitXorPermutation(BitSet.valueOf(new long[] { 150 }), 8);
@@ -53,7 +53,7 @@ class BitXorPermutationTest extends AbstractPermutationTest {
         assertThat(ImmutableList.of(0, 85, 88, 105, 150, 195, 206, 255).map(i -> permutation.indexOf(LargeInteger.of(i)).intValueExact()))
                 .containsExactly(150, 195, 206, 255, 0, 85, 88, 105);
     }
-    
+
     @Test
     void testSmallInstancesCompletely() {
         for (int blockSize = 1; blockSize <= 10; blockSize++) {
@@ -71,9 +71,9 @@ class BitXorPermutationTest extends AbstractPermutationTest {
             checkProbablyPermutation(permutation);
         }
     }
-    
+
     private BitXorPermutation create(int blockSize) {
         return new BitXorPermutation(treeRandom, blockSize);
     }
-    
+
 }

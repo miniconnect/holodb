@@ -14,7 +14,7 @@ public @interface HoloVirtualColumn {
     public long seedKey() default -1L;
 
     public String largeSeedKey() default "";
-    
+
     public String name();
 
     public Class<?> type();
@@ -24,29 +24,29 @@ public @interface HoloVirtualColumn {
     public long nullCount() default -1L;
 
     public String largeNullCount() default "";
-    
+
     public String[] values() default {};
-    
+
     public String valuesResource() default "";
-    
+
     public String valuesBundle() default "";
-    
+
     public long[] valuesRange() default {};
-    
+
     public String[] largeValuesRange() default {};
-    
+
     public String valuesPattern() default "";
-    
+
     public String valuesDynamicPattern() default "";
 
     public HoloColumnDummyTextKind valuesTextKind() default HoloColumnDummyTextKind.UNDEFINED;
-    
+
     public String[] valuesForeignColumn() default {};
-    
+
     public HoloColumnDistributionQuality distributionQuality() default HoloColumnDistributionQuality.UNDEFINED;
 
     public HoloColumnShuffleQuality shuffleQuality() default HoloColumnShuffleQuality.UNDEFINED;
-    
+
     public Class<?> sourceFactory() default Void.class;
 
     public HoloValue sourceFactoryData() default @HoloValue(isGiven = false, type = HoloValue.Type.NULL);
@@ -54,5 +54,5 @@ public @interface HoloVirtualColumn {
     public HoloValue[] sourceFactoryDataMap() default {};
 
     public HoloValue defaultValue() default @HoloValue(isGiven = false, type = HoloValue.Type.NULL);
-    
+
 }

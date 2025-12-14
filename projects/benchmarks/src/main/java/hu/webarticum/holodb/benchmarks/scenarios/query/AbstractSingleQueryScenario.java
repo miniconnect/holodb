@@ -23,7 +23,7 @@ public abstract class AbstractSingleQueryScenario extends AbstractQueryingScenar
             }
         }
     }
-    
+
     public abstract String sql();
 
 }
