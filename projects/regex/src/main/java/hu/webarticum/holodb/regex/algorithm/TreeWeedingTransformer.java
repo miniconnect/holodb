@@ -191,7 +191,7 @@ public class TreeWeedingTransformer {
     }
 
     private boolean checkEndOfInputAnchor(Object value) {
-        return value == SpecialTreeValues.LEAF; 
+        return value == SpecialTreeValues.LEAF;
     }
 
     private static class AncestorInfo {

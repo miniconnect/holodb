@@ -12,7 +12,7 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 
 /**
  * Generic Z_n FPE encryption, FE1 scheme
- * 
+ *
  * Software derived from a New-BSD licensed implementation for .NET http://dotfpe.codeplex.com
  * That in turn was ported from the Botan library http://botan.randombit.net/fpe.html.
  * Using the scheme FE1 from the paper "Format-Preserving Encryption" by Bellare, Rogaway, et al. (http://eprint.iacr.org/2009/251)

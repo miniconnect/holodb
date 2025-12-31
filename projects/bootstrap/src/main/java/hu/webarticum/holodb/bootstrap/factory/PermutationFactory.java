@@ -93,7 +93,7 @@ public class PermutationFactory {
         int bitCount = size.decrement().bitLength();
         byte[] key = treeRandom.getBytes(8);
         Hasher hasher = new Sha256MacHasher(key);
-        return new FeistelNetworkPermutation(treeRandom, bitCount, doubleRounds, hasher).resized(size); 
+        return new FeistelNetworkPermutation(treeRandom, bitCount, doubleRounds, hasher).resized(size);
     }
 
 }

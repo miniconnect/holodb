@@ -33,14 +33,14 @@ import hu.webarticum.miniconnect.messenger.impl.SessionManagerMessenger;
 import hu.webarticum.miniconnect.server.MessengerServer;
 import hu.webarticum.miniconnect.server.ServerConstants;
 
-@Command(name = "HoloDBServer", mixinStandardHelpOptions = true) 
-public class HolodbServerMain implements Runnable { 
+@Command(name = "HoloDBServer", mixinStandardHelpOptions = true)
+public class HolodbServerMain implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final int SERVER_PORT = ServerConstants.DEFAULT_PORT;
 
-    @Option(names = "--watch", description = "Enables watching changes of the configuration file.") 
+    @Option(names = "--watch", description = "Enables watching changes of the configuration file.")
     private boolean watch = false;
 
     private Thread watchThread = null;
@@ -65,8 +65,8 @@ public class HolodbServerMain implements Runnable {
     }
 
     public static void main(String[] args) {
-        int exitCode = new CommandLine(new HolodbServerMain()).execute(args); 
-        System.exit(exitCode); 
+        int exitCode = new CommandLine(new HolodbServerMain()).execute(args);
+        System.exit(exitCode);
     }
 
     private Engine loadEngine(String configFilePath) {

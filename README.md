@@ -8,7 +8,7 @@ Ideal for demos, prototypes, testing, education, or any situation traditionally 
 ## :bulb: Why HoloDB?
 
 > ***No data generation &ndash; no storage costs &ndash; no migrations.***
-> 
+>
 > **Sketch up your schema and characteristics, and you're ready to start querying!**
 
 HoloDB is for those moments when you need a database-shaped system but are tired of the complications of actually managing data.
@@ -570,7 +570,7 @@ results remain realistic and mutually consistent across queries, computed dynami
 Column data is typically produced in layered steps:
 
 1. **Base set**: an ordered, searchable, typically virtual collection of values
-   (as simple as a numeric range or as complex as all strings matching a regex).  
+   (as simple as a numeric range or as complex as all strings matching a regex).
 2. **Distribution**: this base set is *stretched* over the required table size.
    The result is a monotonic, easily searchable list of values matching the configured characteristics.
 3. **Shuffling**: the permutation layer makes the data look realistically random.

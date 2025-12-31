@@ -22,7 +22,7 @@ public class ImagePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image, 0, 0, this);          
+        g.drawImage(image, 0, 0, this);
     }
 
     @Override

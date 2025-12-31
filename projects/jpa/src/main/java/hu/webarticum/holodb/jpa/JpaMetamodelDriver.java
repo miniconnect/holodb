@@ -48,7 +48,7 @@ public class JpaMetamodelDriver implements Driver {
     /**
      * Accepts a metamodel.
      * The currently supported types are the following:
-     * 
+     *
      * <ul>
      *   <li>{@link jakarta.persistence.metamodel.Metamodel}</li>
      *   <li>{@link javax.persistence.metamodel.Metamodel}</li>
