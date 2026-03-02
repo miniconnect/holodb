@@ -1,0 +1,13 @@
+description: Simple queries
+holoConfigResource: ../datasets/simple-table.yaml
+initQueries:
+  - USE benchmark
+cases:
+
+  - name: single-field
+    description: Select single field by id
+    query: "SELECT code FROM test_table WHERE id = 2"
+    repeats: 1000
+    columns:
+      - name: code
+        type: java.lang.String
