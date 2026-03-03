@@ -13,3 +13,4 @@ schemas:
           - name: year
             shuffleQuality: high
             valuesRange: [1950, 2000]
+            nullCount: 100
