@@ -35,8 +35,6 @@ import hu.webarticum.miniconnect.record.type.StandardValueType;
 
 public class QueryBenchmarkController {
 
-    private static final long WARMUP_COUNT = 10;
-
     private final String suiteListResourcePath;
 
     private QueryBenchmarkController(String suiteListResourcePath) {
@@ -57,32 +55,39 @@ public class QueryBenchmarkController {
 
     private void runSuitesInternal(QueryBenchmarkCaseCallback callback) throws IOException {
         QueryBenchmarkSuiteListDescription suiteListDescription = loadYaml(suiteListResourcePath, QueryBenchmarkSuiteListDescription.class);
+        int suiteNo = 0;
         for (String relativePath  : suiteListDescription.suites()) {
             String suiteResourcePath = subpath(dirname(suiteListResourcePath), relativePath);
-            handleSuite(suiteResourcePath, callback);
+            handleSuite(suiteNo, suiteResourcePath, callback);
+            suiteNo++;
         }
     }
 
-    private void handleSuite(String suiteResourcePath, QueryBenchmarkCaseCallback callback) throws IOException {
+    private void handleSuite(int suiteNo, String suiteResourcePath, QueryBenchmarkCaseCallback callback) throws IOException {
         QueryBenchmarkSuiteDescription suiteDescription = loadYaml(suiteResourcePath, QueryBenchmarkSuiteDescription.class);
+        int caseNo = 0;
         for (QueryBenchmarkCaseDescription benchmarkCase : suiteDescription.cases()) {
-            handleCase(suiteResourcePath, suiteDescription, benchmarkCase, callback);
+            handleCase(suiteNo, caseNo, suiteResourcePath, suiteDescription, benchmarkCase, callback);
+            caseNo++;
         }
     }
 
     private void handleCase(
+            int suiteNo,
+            int caseNo,
             String suiteResourcePath,
             QueryBenchmarkSuiteDescription suiteDescription,
             QueryBenchmarkCaseDescription benchmarkCase,
             QueryBenchmarkCaseCallback callback
             ) throws IOException {
         String caseName = benchmarkCase.name();
+        int repeats = benchmarkCase.repeats();
         TableHeaderMatcher tableHeaderMatcher = buildTableHeaderMatcher(benchmarkCase);
         ImmutableList<MiniColumnHeader> givenColumnHeaders = executeCase(suiteResourcePath, suiteDescription, benchmarkCase);
-        for (int i = 0; i < WARMUP_COUNT; i++) {
+        int warmupCount = calculateWarmupCount(suiteNo, caseNo, repeats);
+        for (int i = 0; i < warmupCount; i++) {
             measureCase(suiteResourcePath, suiteDescription, benchmarkCase);
         }
-        int repeats = benchmarkCase.repeats();
         List<QueryBenchmarkResultItem> benchmarkResultItemsBuilder = new ArrayList<>();
         for (int i = 0; i < repeats; i++) {
             QueryBenchmarkResultItem benchmarkResultItem = measureCase(suiteResourcePath, suiteDescription, benchmarkCase);
@@ -117,6 +122,12 @@ public class QueryBenchmarkController {
             }
             return session.execute(benchmarkCase.query()).requireSuccess().resultSet().columnHeaders();
         }
+    }
+
+    private int calculateWarmupCount(int suiteNo, int caseNo, int repeats) {
+        int suiteWarmupFactor = Math.max(1, 3 * (2 - suiteNo));
+        int caseWarmupFactor = Math.max(1, 4 * (3 - caseNo));
+        return suiteWarmupFactor * caseWarmupFactor * repeats;
     }
 
     private QueryBenchmarkResultItem measureCase(
