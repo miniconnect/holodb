@@ -1,6 +1,27 @@
 # Changelog
 
 
+## Version 0.8.0
+
+Released on *2026-03-03*
+
+### Fixed:
+
+- Made `jackson-annotations` an API dependency of `config`
+- Fixed custom JAR support
+
+### Improved:
+
+- Improved SQL expression possibilities (via MiniBase)
+- Changed internals of `HasherTreeRandom` for better performance
+- Made API of `TreeRandom` slightly more clear
+
+### Development:
+
+- Updated to gradle 9 and improved build
+- Introduced the query benchmark framework
+
+
 ## Version 0.7.1
 
 Released on *2025-12-16*
