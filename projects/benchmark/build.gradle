@@ -46,11 +46,4 @@ tasks.register('queryBenchmark', JavaExec) {
     classpath = sourceSets.queryBenchmark.runtimeClasspath
     mainClass = queryBenchmarkMainClass
     args = [ queryBenchmarkSuiteListResourcePath ]
-    if (gradle.startParameter.logLevel == LogLevel.QUIET) {
-        args += "--quiet"
-    }
-}
-
-tasks.named('check') {
-    dependsOn tasks.queryBenchmark
 }

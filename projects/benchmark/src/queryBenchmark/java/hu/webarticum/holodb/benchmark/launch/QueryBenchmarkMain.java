@@ -10,7 +10,6 @@ import hu.webarticum.miniconnect.api.MiniColumnHeader;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 @Command(name = "QueryTestMain", mixinStandardHelpOptions = true)
@@ -24,14 +23,6 @@ public class QueryBenchmarkMain implements Callable<Integer> {
             arity = "1")
     private String testSuiteListResourcePath;
 
-    @Option(
-            names = "--quiet",
-            paramLabel = "<quiet>",
-            description = "Enables quiet mode that prints no output.",
-            arity = "0..1",
-            defaultValue = "false")
-    private boolean isQuiet;
-
     public static void main(String[] args) {
         int exitCode = new CommandLine(new QueryBenchmarkMain()).execute(args);
         System.exit(exitCode);
@@ -41,9 +32,7 @@ public class QueryBenchmarkMain implements Callable<Integer> {
     public Integer call() {
         AtomicInteger totalCounter = new AtomicInteger(0);
         AtomicInteger successCounter = new AtomicInteger(0);
-        if (!isQuiet) {
-            printHeader();
-        }
+        printHeader();
         QueryBenchmarkController
                 .ofResource(testSuiteListResourcePath)
                 .runSuites((path, name, matcher, headers, result) -> {
@@ -55,12 +44,10 @@ public class QueryBenchmarkMain implements Callable<Integer> {
                 });
         int totalCount = totalCounter.get();
         int successCount = successCounter.get();
-        if (!isQuiet) {
-            System.out.println();
-            System.out.println(String.format(
-                    "%2$s/%1$s benchmark was run successfully",
-                    totalCount, successCount));
-        }
+        System.out.println();
+        System.out.println(String.format(
+                "%2$s/%1$s benchmark was run successfully",
+                totalCount, successCount));
         return totalCount == successCount ? 0 : 1;
     }
 
@@ -76,9 +63,7 @@ public class QueryBenchmarkMain implements Callable<Integer> {
         } catch (Exception e) {
             success = false;
         }
-        if (!isQuiet) {
-            printResultRow(resourcePath, caseName, success, benchmarkResult);
-        }
+        printResultRow(resourcePath, caseName, success, benchmarkResult);
         return success;
     }
 
