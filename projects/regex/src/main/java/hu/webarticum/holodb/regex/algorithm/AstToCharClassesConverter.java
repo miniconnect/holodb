@@ -15,13 +15,13 @@ import hu.webarticum.holodb.regex.comparator.CharComparator;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class AstToCharClassesConverter {
-    
+
     private final CharComparator charComparator;
 
     public AstToCharClassesConverter(CharComparator charComparator) {
         this.charComparator = charComparator;
     }
-    
+
     public ImmutableList<CharClass> convert(CharacterMatchAstNode astNode) {
         String chars = charsFromCharacterMatch(astNode);
         if (isAlwaysSameType(astNode)) {
@@ -30,7 +30,7 @@ public class AstToCharClassesConverter {
             return separatedCharClassesOf(chars);
         }
     }
-    
+
     private boolean isAlwaysSameType(CharacterMatchAstNode astNode) {
         return
                 astNode instanceof CharacterConstantAstNode ||
@@ -49,7 +49,7 @@ public class AstToCharClassesConverter {
     private ImmutableList<CharClass> separatedCharClassesOf(String chars) {
         return CharAnchorKind.separate(chars).map(s -> CharClass.of(s, charComparator));
     }
-    
+
     private String charsFromCharacterMatch(CharacterMatchAstNode astNode) {
         if (astNode instanceof BuiltinCharacterClassAstNode) {
             return charsFromBuiltinCharacterClass((BuiltinCharacterClassAstNode) astNode);
@@ -69,7 +69,7 @@ public class AstToCharClassesConverter {
             return "";
         }
     }
-    
+
     private String charsFromBuiltinCharacterClass(BuiltinCharacterClassAstNode node) {
         switch (node) {
             case ANY:
@@ -105,13 +105,13 @@ public class AstToCharClassesConverter {
             resultBuilder.append(charsFromCharacterMatch(innerNode));
         }
         return resultBuilder.toString();
-        
+
     }
 
     private String charsFromCharacterConstant(CharacterConstantAstNode node) {
         return Character.toString(node.value());
     }
-    
+
     private String charsFromLineBreak(LinebreakAstNode node) {
         return "\n";
     }
@@ -124,7 +124,7 @@ public class AstToCharClassesConverter {
             return asciiComplementer(positiveSet);
         }
     }
-    
+
     private String charsFromPosixProperty(PosixCharacterClassAstNode.Property property) {
         switch (property) {
             case LOWER:
@@ -166,7 +166,7 @@ public class AstToCharClassesConverter {
             resultBuilder.append(c);
         }
         return resultBuilder.toString();
-        
+
     }
 
     private String charsFromUnicodePropertyProperty(UnicodePropertyCharacterClassAstNode node) {
@@ -183,10 +183,10 @@ public class AstToCharClassesConverter {
             case ALPHABETIC:
                 return asciiRange(Character::isLetter);
             case IDEOGRAPHIC:
-                
+
                 // FIXME
                 return chars('\u4E00');
-                
+
             case LETTER:
                 return asciiRange(Character::isLetter);
             case LOWERCASE:
@@ -194,10 +194,10 @@ public class AstToCharClassesConverter {
             case UPPERCASE:
                 return asciiRange(Character::isUpperCase);
             case TITLECASE:
-                
+
                 // FIXME
                 return chars('\u01F3');
-                
+
             case PUNCTUATION:
                 return asciiRange(c -> !Character.isLetterOrDigit(c) && c >= 33 && c <= 126);
             case CONTROL:
@@ -211,30 +211,30 @@ public class AstToCharClassesConverter {
             case JOIN_CONTROL:
                 return chars('\u200C', '\u200D');
             case NONCHARACTER:
-                
+
                 // FIXME
                 return chars('\uFFFF');
-                
+
             case ASSIGNED:
 
                 // FIXME
                 return asciiRange(c -> !Character.isISOControl(c));
-    
+
             // FIXME
             default:
                 return chars('?');
-            
+
         }
     }
 
     private String asciiComplementer(String positiveSet) {
         return asciiRange(c -> !Character.isISOControl(c) && !positiveSet.contains(Character.toString(c)));
     }
-    
+
     private String chars(char... chars) {
         return String.valueOf(chars);
     }
-    
+
     private String asciiRange(Predicate<Character> predicate) {
         StringBuilder resultBuilder = new StringBuilder();
         for (int i = 0; i < 128; i++) {
@@ -245,5 +245,5 @@ public class AstToCharClassesConverter {
         }
         return resultBuilder.toString();
     }
-    
+
 }

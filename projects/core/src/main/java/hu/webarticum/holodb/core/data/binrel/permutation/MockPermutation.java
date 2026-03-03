@@ -6,14 +6,14 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class MockPermutation implements Permutation {
-    
+
     private final ImmutableList<LargeInteger> values;
-    
+
 
     public MockPermutation(ImmutableList<LargeInteger> values) {
         this.values = values;
     }
-    
+
     public static MockPermutation of(int... values) {
         return new MockPermutation(
                 Arrays.stream(values)
@@ -40,5 +40,5 @@ public class MockPermutation implements Permutation {
         }
         return LargeInteger.of(index);
     }
-    
+
 }

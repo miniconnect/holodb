@@ -1,0 +1,53 @@
+description: Simple queries
+holoConfigResource: ../datasets/simple-table.yaml
+initQueries:
+  - USE benchmark
+cases:
+
+  - name: single-field
+    description: Select single field by id
+    query: "SELECT code FROM test_table WHERE id = 1"
+    repeats: 1000
+    columns:
+      - name: code
+        type: java.lang.String
+        nullable: false
+
+  - name: one-row
+    description: Select one row by id
+    query: "SELECT * FROM test_table WHERE id = 1"
+    repeats: 1000
+    columns:
+      - name: id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: code
+        type: java.lang.String
+        nullable: false
+      - name: year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: true
+
+  - name: single-column
+    description: Select a full column
+    query: "SELECT `year` FROM test_table"
+    repeats: 100
+    columns:
+      - name: year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: true
+
+  - name: full-table
+    description: Select the entire table
+    query: "SELECT * FROM test_table"
+    repeats: 100
+    columns:
+      - name: id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: code
+        type: java.lang.String
+        nullable: false
+      - name: year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: true

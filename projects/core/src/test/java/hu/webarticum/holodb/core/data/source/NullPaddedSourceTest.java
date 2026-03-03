@@ -17,7 +17,7 @@ class NullPaddedSourceTest {
         assertThatThrownBy(() -> new NullPaddedSource<>(baseSource, lessSize))
                 .isInstanceOf(IllegalArgumentException.class);
     }
-    
+
     @Test
     void testEmpty() {
         SortedSource<Integer> baseSource = new UniqueSource<>();

@@ -15,8 +15,8 @@ class FeistelNetworkPermutationTest extends AbstractPermutationTest {
     private final TreeRandom treeRandom = new HasherTreeRandom("0123456789");
 
     private final Hasher hasher = new FastHasher();
-    
-    
+
+
     @Test
     void testZeroLength() {
         Permutation permutation = create(0, 1);
@@ -47,9 +47,9 @@ class FeistelNetworkPermutationTest extends AbstractPermutationTest {
         }
     }
 
-    
+
     private FeistelNetworkPermutation create(int blockSize, int roundPairs) {
         return new FeistelNetworkPermutation(treeRandom, blockSize, roundPairs, hasher);
     }
-    
+
 }

@@ -7,8 +7,8 @@ import hu.webarticum.holodb.core.util.ByteUtil;
 class PreInitDoubleHasher extends AbstractDemoHasher {
 
     private static Hasher cachedKeyHasher;
-    
-    
+
+
     public PreInitDoubleHasher(byte[] key, int hashSize) {
         super(buildKey(key, hashSize));
     }
@@ -18,12 +18,12 @@ class PreInitDoubleHasher extends AbstractDemoHasher {
         ByteUtil.fillBytesFrom(data, getKeyHasher().hash(key));
         return data;
     }
-    
+
     private static synchronized Hasher getKeyHasher() {
         if (cachedKeyHasher == null) {
             cachedKeyHasher = new Sha256MacHasher();
         }
         return cachedKeyHasher;
     }
-    
+
 }

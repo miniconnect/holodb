@@ -20,8 +20,8 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
     protected boolean isNarrowingEnabled() {
         return true;
     }
-    
-    
+
+
     @Test
     void testEmpty() {
         checkSize(create(LargeInteger.ZERO, LargeInteger.ZERO), LargeInteger.ZERO, LargeInteger.ZERO);
@@ -44,7 +44,7 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
             }
         }
     }
-    
+
     @Test
     void testLargeInstancesPartially() {
         LargeInteger innerTo = LargeInteger.of("123252453566234501434504213");
@@ -71,11 +71,11 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
         checkRangeRanges(monotonic);
         checkIterator(monotonic);
     }
-    
+
     private void checkValueRanges(Monotonic monotonic) {
         LargeInteger size = monotonic.size();
         LargeInteger imageSize = monotonic.imageSize();
-        
+
         Map<LargeInteger, Range> rangeMap1 = new HashMap<>();
         LargeInteger previousValue = LargeInteger.of(-1);
         LargeInteger previousSplitPoint = null;
@@ -113,14 +113,14 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
 
         LargeInteger imageSize = monotonic.imageSize();
         LargeInteger size = monotonic.size();
-        
+
         if (imageSize.signum() == 1) {
             Range untilEmptyActual = monotonic.indicesOf(Range.empty(imageSize));
             assertThat(untilEmptyActual).isEqualTo(Range.empty(size));
-            
+
             Range fromUntilActual = monotonic.indicesOf(Range.fromUntil(LargeInteger.ZERO, imageSize));
             assertThat(fromUntilActual).isEqualTo(Range.fromUntil(LargeInteger.ZERO, size));
-            
+
             if (imageSize.isGreaterThan(LargeInteger.ONE)) {
                 LargeInteger midValue = imageSize.divide(LargeInteger.of(2L));
                 LargeInteger midIndex = monotonic.indicesOf(midValue).from();
@@ -157,7 +157,7 @@ abstract class AbstractMonotonicTest<T extends Monotonic> {
         assertThat(iterator.hasNext()).isFalse();
         assertThatThrownBy(() -> iterator.next()).isInstanceOf(NoSuchElementException.class);
     }
-    
+
     private void checkProbablyMonotonic(Monotonic monotonic) {
         LargeInteger size = monotonic.size();
         LargeInteger imageSize = monotonic.imageSize();

@@ -11,19 +11,19 @@ import hu.webarticum.minibase.storage.impl.simple.SimpleSelection;
 public class IndexTableIndex implements SingleColumnTableIndex {
 
     private final String name;
-    
+
     private final String columnName;
-    
+
     private final Index index;
-    
-    
+
+
     public IndexTableIndex(String name, String columnName, Index index) {
         this.name = name;
         this.columnName = columnName;
         this.index = index;
     }
 
-    
+
     @Override
     public String name() {
         return name;
@@ -53,7 +53,7 @@ public class IndexTableIndex implements SingleColumnTableIndex {
             SortMode sortMode) {
         boolean ascOrder = sortMode.isAsc();
         boolean nullsFirst = sortMode.isNullsFirst();
-        
+
         if (nullsMode == NullsMode.NULLS_ONLY) {
             if (
                     (nullsFirst && from == null) ||
@@ -76,10 +76,10 @@ public class IndexTableIndex implements SingleColumnTableIndex {
                 (!nullsFirst && to != null)) {
             return mainTableSelection;
         }
-        
+
         Selection nullsSelection = index.findNulls();
         TableSelection nullsTableSelection = new SelectionTableSelection(nullsSelection, ascOrder);
-        
+
         if (nullsFirst) {
             return DisjunctUnionTableSelection.of(nullsTableSelection, mainTableSelection);
         } else {

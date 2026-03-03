@@ -1,6 +1,11 @@
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
 rootProject.name = 'holodb'
 
 include 'app'
+include 'benchmark'
 include 'bootstrap'
 include 'config'
 include 'core'

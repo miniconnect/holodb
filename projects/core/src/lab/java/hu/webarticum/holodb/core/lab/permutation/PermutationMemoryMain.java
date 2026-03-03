@@ -43,5 +43,5 @@ public class PermutationMemoryMain {
         //System.out.println(name + ": " + subSize + " (" + size + ")     :: " + object.getClass());
         System.out.println(name + ": " + size + "     :: " + object.getClass());
     }
-    
+
 }

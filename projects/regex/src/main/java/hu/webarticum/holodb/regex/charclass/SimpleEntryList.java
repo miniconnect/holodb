@@ -10,13 +10,13 @@ import java.util.Objects;
 import hu.webarticum.miniconnect.lang.ToStringBuilder;
 
 public class SimpleEntryList<K, V> implements Iterable<SimpleEntryList.Entry<K, V>> {
-    
+
     private final List<SimpleEntryList.Entry<K, V>> entries = new ArrayList<>();
-    
+
     public void add(K key, V value) {
         entries.add(new Entry<>(key, value));
     }
-    
+
     @Override
     public Iterator<Entry<K, V>> iterator() {
         return Collections.unmodifiableList(entries).iterator();
@@ -48,7 +48,7 @@ public class SimpleEntryList<K, V> implements Iterable<SimpleEntryList.Entry<K, 
     public int hashCode() {
         return entries.hashCode();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -59,20 +59,20 @@ public class SimpleEntryList<K, V> implements Iterable<SimpleEntryList.Entry<K, 
         SimpleEntryList<?, ?> otherEntrySet = (SimpleEntryList<?, ?>) obj;
         return entries.equals(otherEntrySet.entries);
     }
-    
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("entries", entries)
                 .build();
     }
-    
+
     public static class Entry<K, V> {
-        
+
         private final K key;
-        
+
         private final V value;
-        
+
         private Entry(K key, V value) {
             this.key = key;
             this.value = value;
@@ -89,12 +89,12 @@ public class SimpleEntryList<K, V> implements Iterable<SimpleEntryList.Entry<K, 
         public V value() {
             return value;
         }
-        
+
         @Override
         public int hashCode() {
             return Objects.hash(key, value);
         }
-        
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) {
@@ -105,7 +105,7 @@ public class SimpleEntryList<K, V> implements Iterable<SimpleEntryList.Entry<K, 
             Entry<?, ?> otherEntry = (Entry<?, ?>) obj;
             return key.equals(otherEntry.key) && Objects.equals(value, otherEntry.value);
         }
-        
+
         @Override
         public String toString() {
             return new ToStringBuilder(this)
@@ -113,7 +113,7 @@ public class SimpleEntryList<K, V> implements Iterable<SimpleEntryList.Entry<K, 
                     .add("value", value)
                     .build();
         }
-        
+
     }
-    
+
 }

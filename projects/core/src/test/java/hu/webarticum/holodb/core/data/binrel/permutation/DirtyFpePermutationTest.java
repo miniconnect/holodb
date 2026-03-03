@@ -7,8 +7,8 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 class DirtyFpePermutationTest extends AbstractLargeGroundPermutationTest<DirtyFpePermutation> {
 
     private final TreeRandom treeRandom = new HasherTreeRandom("0123456789");
-    
-    
+
+
     @Override
     protected DirtyFpePermutation create(LargeInteger size) {
         return new DirtyFpePermutation(treeRandom, size);

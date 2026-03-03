@@ -8,7 +8,7 @@ public final class ByteUtil {
     private ByteUtil() {
     }
 
-    
+
     public static byte[] intToBytes(int number) {
         ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
         buffer.putInt(number);
@@ -39,7 +39,7 @@ public final class ByteUtil {
         buffer.flip();
         return buffer.getLong();
     }
-    
+
     public static String bytesToBinaryString(byte[] bytes) {
         StringBuilder resultBuilder = new StringBuilder();
         for (int i = 0; i < bytes.length; i++) {
@@ -50,21 +50,21 @@ public final class ByteUtil {
         }
         return resultBuilder.toString();
     }
-    
+
     public static String byteToBinaryString(byte b) {
         String unpadded = Integer.toString(Byte.toUnsignedInt(b), 2);
-        
+
         int remainingLength = 8 - unpadded.length();
         if (remainingLength == 0) {
             return unpadded;
         }
-        
+
         StringBuilder resultBuilder = new StringBuilder();
         for (int i = 0; i < remainingLength; i++) {
             resultBuilder.append('0');
         }
         resultBuilder.append(unpadded);
-        
+
         return resultBuilder.toString();
     }
 
@@ -92,7 +92,7 @@ public final class ByteUtil {
 
         int nextIndex = bitSet.nextSetBit(index);
         int previousIndex = bitSet.previousSetBit(index);
-        
+
         if (nextIndex == (-1)) {
             return previousIndex;
         } else if (previousIndex == (-1)) {
@@ -101,18 +101,18 @@ public final class ByteUtil {
             return (index - previousIndex > nextIndex - index) ? nextIndex : previousIndex;
         }
     }
-    
+
     public static void fillBytesFrom(byte[] target, byte[] source) {
         int targetLength = target.length;
         int sourceLength = source.length;
-        
+
         if (sourceLength == 0 || targetLength == 0) {
             return;
         }
-        
+
         int commonLength = targetLength < sourceLength ? targetLength : sourceLength;
         System.arraycopy(source, 0, target, 0, commonLength);
-        
+
         if (targetLength > sourceLength) {
             int times = targetLength / sourceLength;
             for (int i = 1; i < times; i++) {
@@ -126,5 +126,5 @@ public final class ByteUtil {
             }
         }
     }
-    
+
 }

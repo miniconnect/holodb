@@ -16,21 +16,21 @@ import hu.webarticum.holodb.regex.tree.TreeNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class AstToTreeConverter {
-    
+
     public static final int DEFAULT_REPEAT_LIMIT = 12;
-    
+
     public static final int DEFAULT_GROUP_REPEAT_LIMIT = 3;
-    
+
     private final AstToCharClassesConverter astToCharClassesConverter;
-    
+
     private final int repeatLimit;
-    
+
     private final int groupRepeatLimit;
-    
+
     public AstToTreeConverter(CharComparator charComparator) {
         this(charComparator, DEFAULT_REPEAT_LIMIT, DEFAULT_GROUP_REPEAT_LIMIT);
     }
-    
+
     public AstToTreeConverter(CharComparator charComparator, int repeatLimit, int groupRepeatLimit) {
         astToCharClassesConverter = new AstToCharClassesConverter(charComparator);
         this.repeatLimit = repeatLimit;
@@ -61,7 +61,7 @@ public class AstToTreeConverter {
     private TreeNode convertAlternation(AlternationAstNode alternationNode, ImmutableList<TreeNode> nextNodes) {
         return convertAlternation(alternationNode, null, nextNodes);
     }
-    
+
     private TreeNode convertAlternation(
             AlternationAstNode alternationNode, Object value, ImmutableList<TreeNode> nextNodes) {
         ArrayList<TreeNode> children = new ArrayList<>();

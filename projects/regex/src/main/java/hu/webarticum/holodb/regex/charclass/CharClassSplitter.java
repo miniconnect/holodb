@@ -8,11 +8,11 @@ import hu.webarticum.holodb.regex.comparator.CharComparator;
 public class CharClassSplitter {
 
     public enum Containment { LEFT, RIGHT, BOTH }
-    
+
     private final CharClass leftCharClass;
 
     private final CharClass rightCharClass;
-    
+
     private CharClassSplitter(CharClass leftCharClass, CharClass rightCharClass) {
         this.leftCharClass = leftCharClass;
         this.rightCharClass = rightCharClass;
@@ -21,7 +21,7 @@ public class CharClassSplitter {
     public static CharClassSplitter of(CharClass leftCharClass, CharClass rightCharClass) {
         return new CharClassSplitter(leftCharClass, rightCharClass);
     }
-    
+
     public SimpleEntryList<CharClass, Containment> split() {
         SimpleEntryList<CharClass, Containment> result = new SimpleEntryList<>();
         CharComparator comparator = leftCharClass.charComparator();
@@ -75,7 +75,7 @@ public class CharClassSplitter {
         flushBuilder(result, currentBuilder, currentContainment, null);
         return result;
     }
-    
+
     private List<Character> flushBuilder(
             SimpleEntryList<CharClass, Containment> result,
             List<Character> currentBuilder,
@@ -89,7 +89,7 @@ public class CharClassSplitter {
             return currentBuilder;
         }
     }
-    
+
     private String characterListToString(List<Character> characterList) {
         int length = characterList.size();
         char[] chars = new char[length];
@@ -100,5 +100,5 @@ public class CharClassSplitter {
         }
         return String.valueOf(chars);
     }
-    
+
 }

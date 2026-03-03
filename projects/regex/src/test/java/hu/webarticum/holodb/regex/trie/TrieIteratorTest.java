@@ -12,7 +12,7 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 class TrieIteratorTest {
 
     private final CharComparator charComparator = Character::compare;
-    
+
     @Test
     void testSingle() {
         TrieNode rootNode = TrieNode.rootOf(charComparator, ImmutableList.of(
@@ -233,9 +233,9 @@ class TrieIteratorTest {
                         "56809734618288072640000000000000lorem",
                         "56809734618288072640000000000001l");
     }
-    
+
     private CharClass charClass(String chars) {
         return CharClass.of(chars, charComparator);
     }
-    
+
 }

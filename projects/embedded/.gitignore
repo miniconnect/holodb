@@ -11,6 +11,9 @@
 /.classpath
 /.project
 
+### theia: ###
+/.theia/
+
 ### idea: ###
 /.idea/
 

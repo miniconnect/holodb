@@ -6,21 +6,21 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class NullPaddedSource<T> implements Source<T> {
-    
+
     private final Source<T> baseSource;
-    
+
     private final LargeInteger size;
-    
-    
+
+
     public NullPaddedSource(Source<T> baseSource, LargeInteger size) {
         if (baseSource.size().isGreaterThan(size)) {
             throw new IllegalArgumentException("Base source size can not be larger than target size");
         }
-        
+
         this.baseSource = baseSource;
         this.size = size;
     }
-    
+
 
     @Override
     public Class<?> type() {

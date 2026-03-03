@@ -21,22 +21,22 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
     private final LargeInteger length;
 
     private final Comparator<T> comparator;
-    
+
     private final Object[] values;
-    
+
 
     @SuppressWarnings("unchecked")
     public UniqueSource(T... values) {
         this((Class<T>) values.getClass().getComponentType(), Arrays.asList(values));
     }
-    
+
     public UniqueSource(Class<T> type, Collection<T> values) {
         this(type, values, null);
     }
 
     public UniqueSource(Class<T> type, Collection<T> values, Comparator<T> comparator) {
         values.forEach(Objects::requireNonNull);
-        
+
         this.type = type;
         this.comparator = comparator != null ? comparator : createDefaultComparatorFor(type);
         this.values = toValueArray(values, this.comparator);
@@ -51,19 +51,19 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
             return (Comparator<T>) Comparator.naturalOrder();
         }
     }
-    
+
     private static <T> Object[] toValueArray(Collection<T> values, Comparator<T> comparator) {
         SortedSet<T> set = new TreeSet<>(comparator);
         set.addAll(values);
         return set.toArray();
     }
-    
-    
+
+
     @Override
     public Class<T> type() {
         return type;
     }
-    
+
     @Override
     public LargeInteger size() {
         return length;
@@ -75,7 +75,7 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
         T result = (T) values[index.intValue()];
         return result;
     }
-    
+
     @Override
     public Comparator<T> comparator() {
         return comparator;
@@ -87,7 +87,7 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
         ImmutableList<T> valueList = (ImmutableList<T>) (ImmutableList<?>) ImmutableList.of(values);
         return Optional.of(valueList);
     }
-    
+
     @Override
     public Range find(Object value) {
         @SuppressWarnings("unchecked")
@@ -106,7 +106,7 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
                 return Range.empty(find(minValue).from());
             }
         }
-        
+
         LargeInteger from;
         if (minValue != null) {
             Range minRange = find(minValue);
@@ -114,7 +114,7 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
         } else {
             from = LargeInteger.ZERO;
         }
-        
+
         LargeInteger until;
         if (maxValue != null) {
             Range maxRange = find(maxValue);
@@ -122,7 +122,7 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
         } else {
             until = length;
         }
-        
+
         return Range.fromUntil(from, until);
     }
 
@@ -130,5 +130,5 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
     public Range findNulls() {
         return Range.empty();
     }
-    
+
 }

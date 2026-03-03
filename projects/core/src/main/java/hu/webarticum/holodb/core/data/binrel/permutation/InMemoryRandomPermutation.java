@@ -8,13 +8,13 @@ import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class InMemoryRandomPermutation implements Permutation {
-    
+
     private final LargeInteger size;
-    
+
     private final int[] permutatedValues;
-    
+
     private final int[] keyMap;
-    
+
 
     public InMemoryRandomPermutation(TreeRandom treeRandom, LargeInteger size) {
         this(treeRandom, size.intValueExact());
@@ -25,7 +25,7 @@ public class InMemoryRandomPermutation implements Permutation {
         permutatedValues = createPermutation(treeRandom, size);
         keyMap = generateKeyMap(permutatedValues);
     }
-    
+
     private static int[] createPermutation(TreeRandom treeRandom, int size) {
         int[] values = new int[size];
         for (int i = 0; i < size; i++) {
@@ -36,7 +36,7 @@ public class InMemoryRandomPermutation implements Permutation {
         shuffleInts(values, random);
         return values;
     }
-    
+
     private static void shuffleInts(int[] values, Random random) {
         for (int i = values.length - 1; i > 1; i--) {
             int j = random.nextInt(i + 1);
@@ -54,11 +54,11 @@ public class InMemoryRandomPermutation implements Permutation {
         return keyMap;
     }
 
-    
+
     public int[] permutatedValues() {
         return Arrays.copyOf(permutatedValues, permutatedValues.length);
     }
-    
+
     @Override
     public LargeInteger size() {
         return size;

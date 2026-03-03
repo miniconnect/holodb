@@ -8,7 +8,7 @@ import hu.webarticum.holodb.regex.comparator.CharComparator;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 class CharClassTest {
-    
+
     private CharComparator comparator = Character::compare;
 
     @Test

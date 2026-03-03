@@ -10,19 +10,19 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
 
     private static final SamplerFactory DEFAULT_SAMPLER_FACTORY = SamplerFactory.DEFAULT;
-    
+
     private static final int DEFAULT_CACHE_DEPTH = 10;
-    
+
     private static final LargeInteger DEFAULT_SAMPLER_MAX_LENGTH = LargeInteger.of(1000L);
-    
-    
+
+
     private final TreeRandom treeRandom;
-    
+
     private final SamplerFactory samplerFactory;
-    
+
     private final LargeInteger samplerMaxLength;
 
-    
+
     public BinomialMonotonic(TreeRandom treeRandom, long size, long imageSize) {
         this(treeRandom, LargeInteger.of(size), LargeInteger.of(imageSize));
     }
@@ -43,18 +43,18 @@ public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
             TreeRandom treeRandom, SamplerFactory samplerFactory, LargeInteger size, LargeInteger imageSize, int cacheDepth) {
         this(treeRandom, samplerFactory, size, imageSize, cacheDepth, DEFAULT_SAMPLER_MAX_LENGTH);
     }
-    
+
     public BinomialMonotonic(
             TreeRandom treeRandom, SamplerFactory samplerFactory,
             LargeInteger size, LargeInteger imageSize, int cacheDepth, LargeInteger samplerMaxLength) {
-        
+
         super(size, imageSize, cacheDepth);
         this.treeRandom = treeRandom;
         this.samplerFactory = samplerFactory;
         this.samplerMaxLength = samplerMaxLength;
     }
-    
-    
+
+
     @Override
     protected LargeInteger splitCacheable(Range range, Range imageRange, LargeInteger imageSplitPoint, int level) {
         LargeInteger length = range.size();
@@ -66,7 +66,7 @@ public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
         } else {
             splitPoint = splitWithSampler(range, imageRange, imageSplitPoint);
         }
-        
+
         return splitPoint;
     }
 
@@ -87,6 +87,6 @@ public class BinomialMonotonic extends AbstractCachingRecursiveMonotonic {
         LargeInteger relativeSplitPoint = sampler.sample();
         return range.from().add(relativeSplitPoint);
     }
-    
+
 
 }

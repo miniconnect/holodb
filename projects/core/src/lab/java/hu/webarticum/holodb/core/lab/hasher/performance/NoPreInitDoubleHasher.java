@@ -14,5 +14,5 @@ class NoPreInitDoubleHasher extends AbstractDemoHasher {
         ByteUtil.fillBytesFrom(data, new Sha256MacHasher().hash(key));
         return data;
     }
-    
+
 }

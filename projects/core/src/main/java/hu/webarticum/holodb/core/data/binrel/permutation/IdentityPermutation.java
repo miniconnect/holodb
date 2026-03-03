@@ -5,13 +5,13 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public class IdentityPermutation implements Permutation {
 
     private final LargeInteger size;
-    
-    
+
+
     public IdentityPermutation(LargeInteger size) {
         this.size = size;
     }
-    
-    
+
+
     @Override
     public LargeInteger size() {
         return size;

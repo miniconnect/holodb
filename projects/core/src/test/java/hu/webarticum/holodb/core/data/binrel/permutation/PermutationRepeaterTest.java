@@ -24,5 +24,5 @@ class PermutationRepeaterTest {
         assertThat(extendedPermutation).containsExactly(LargeInteger.arrayOf(3, 0, 1, 2, 7, 4, 5, 6));
         assertThat(extendedPermutation.inverted()).containsExactly(LargeInteger.arrayOf(1, 2, 3, 0, 5, 6, 7, 4));
     }
-    
+
 }

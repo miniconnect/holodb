@@ -12,7 +12,7 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 class BitShufflePermutationTest extends AbstractPermutationTest {
 
     private final TreeRandom treeRandom = new HasherTreeRandom("0123456789");
-    
+
 
     @Test
     void testZeroLength() {
@@ -41,7 +41,7 @@ class BitShufflePermutationTest extends AbstractPermutationTest {
         assertThat(ImmutableList.fill(8, i -> permutation.indexOf(LargeInteger.of(i)).intValueExact()))
                 .containsExactly(0, 2, 4, 6, 1, 3, 5, 7);
     }
-    
+
     @Test
     void testManuallyCreated3() {
         Permutation permutation = new BitShufflePermutation(new int[] {3, 1, 4, 0, 2});
@@ -69,9 +69,9 @@ class BitShufflePermutationTest extends AbstractPermutationTest {
             checkProbablyPermutation(permutation);
         }
     }
-    
+
     private BitShufflePermutation create(int blockSize) {
         return new BitShufflePermutation(treeRandom, blockSize);
     }
-    
+
 }

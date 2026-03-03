@@ -8,5 +8,5 @@ class FastMonotonicTest extends AbstractMonotonicTest<FastMonotonic> {
     protected FastMonotonic create(LargeInteger size, LargeInteger imageSize) {
         return new FastMonotonic(size, imageSize);
     }
-    
+
 }

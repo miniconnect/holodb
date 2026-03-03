@@ -4,15 +4,15 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.minibase.storage.api.Sequence;
 
 public class HoloFixedSequence implements Sequence {
-    
+
     private final LargeInteger value;
-    
+
 
     public HoloFixedSequence(LargeInteger value) {
         this.value = value;
     }
-    
-    
+
+
     @Override
     public LargeInteger get() {
         return value;

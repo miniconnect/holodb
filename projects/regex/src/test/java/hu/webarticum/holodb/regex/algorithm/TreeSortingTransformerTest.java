@@ -12,7 +12,7 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 class TreeSortingTransformerTest {
 
     private final CharComparator charComparator = Character::compare;
-    
+
     @Test
     void testEmpty() {
         TreeSortingTransformer transformer = new TreeSortingTransformer();
@@ -23,7 +23,7 @@ class TreeSortingTransformerTest {
         assertThat(resultNode).isEqualTo(TreeNode.of(SpecialTreeValues.ROOT, ImmutableList.of(
                 TreeNode.of(SpecialTreeValues.LEAF, ImmutableList.empty()))));
     }
-    
+
     @Test
     void testUnchanging() {
         TreeSortingTransformer transformer = new TreeSortingTransformer();
@@ -54,7 +54,7 @@ class TreeSortingTransformerTest {
         ))))));
         assertThat(resultNode).isEqualTo(expectedTreeNode);
     }
-    
+
     @Test
     void testSimpleSort() {
         TreeSortingTransformer transformer = new TreeSortingTransformer();
@@ -75,7 +75,7 @@ class TreeSortingTransformerTest {
         ));
         assertThat(resultNode).isEqualTo(expectedTreeNode);
     }
-    
+
     @Test
     void testSimpleMerge() {
         TreeSortingTransformer transformer = new TreeSortingTransformer();
@@ -97,7 +97,7 @@ class TreeSortingTransformerTest {
         ));
         assertThat(resultNode).isEqualTo(expectedTreeNode);
     }
-    
+
     @Test
     void testComplex() {
         TreeSortingTransformer transformer = new TreeSortingTransformer();
@@ -242,7 +242,7 @@ class TreeSortingTransformerTest {
         assertThat(resultSecondFirstSubSubNode.value()).isEqualTo(charClass("abc"));
         assertThat(resultSecondFirstSubSubNode).isSameAs(resultFirstSubNode);
     }
-    
+
     private CharClass charClass(String chars) {
         return CharClass.of(chars, charComparator);
     }

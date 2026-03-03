@@ -12,7 +12,7 @@ public class CharClassEntrySetSplitter<T> {
         }
         return entries;
     }
-    
+
     private SimpleEntryList<CharClass, ImmutableList<T>> splitNext(
             SimpleEntryList<CharClass, ImmutableList<T>> listEntries,
             SimpleEntryList.Entry<CharClass, T> nextEntry) {
@@ -57,5 +57,5 @@ public class CharClassEntrySetSplitter<T> {
         }
         return result;
     }
-    
+
 }

@@ -9,7 +9,7 @@ public class MatchListComparisonMain {
 
     public static void main(String[] args) {
         String pattern = "[0-9]?[agb](lo[rx]e[zm]|lo[zt]e[as])";
-        
+
         System.out.println("Generex:");
         Generex generex = new Generex(pattern);
         {
@@ -35,5 +35,5 @@ public class MatchListComparisonMain {
             System.out.println("?: " + xeger.generate());
         }
     }
-    
+
 }

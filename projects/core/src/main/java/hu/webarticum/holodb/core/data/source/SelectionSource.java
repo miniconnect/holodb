@@ -9,21 +9,21 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public class SelectionSource<T> implements Source<T> {
 
     private final Source<T> baseSource;
-    
+
     private final Selection selection;
-    
-    
+
+
     public SelectionSource(Source<T> baseSource, Selection selection) {
         this.baseSource = baseSource;
         this.selection = selection;
     }
-    
-    
+
+
     @Override
     public Class<?> type() {
         return baseSource.type();
     }
-    
+
     @Override
     public LargeInteger size() {
         return selection.size();

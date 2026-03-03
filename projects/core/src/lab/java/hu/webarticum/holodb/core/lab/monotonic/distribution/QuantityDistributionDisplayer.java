@@ -23,22 +23,22 @@ import hu.webarticum.holodb.core.data.binrel.monotonic.Monotonic;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class QuantityDistributionDisplayer implements Runnable {
-    
+
     private final BiFunction<Integer, Integer, Monotonic> monotonicFactory;
-    
-    
+
+
     public QuantityDistributionDisplayer(BiFunction<Integer, Integer, Monotonic> monotonicFactory) {
         this.monotonicFactory = monotonicFactory;
     }
-    
-    
+
+
     @Override
     public void run() {
         JFrame frame = new JFrame("Chart");
-        
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        
+
         JPanel gridPanel = new JPanel(new GridLayout(0, 3));
 
         long millis1 = System.currentTimeMillis();
@@ -67,26 +67,26 @@ public class QuantityDistributionDisplayer implements Runnable {
 
         JLabel infoLabel = new JLabel(String.format("Collected in: %d milliseconds", millis2 - millis1));
         mainPanel.add(infoLabel, BorderLayout.PAGE_START);
-        
+
         JScrollPane scrollPane = new JScrollPane(gridPanel);
         scrollPane.setPreferredSize(new Dimension(gridPanel.getPreferredSize().width + 30, 700));
         mainPanel.add(scrollPane, BorderLayout.CENTER);
-        
+
         frame.setContentPane(mainPanel);
         frame.pack();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
-    
+
     private ChartPanel createQuantityChartPanel(int n, int k) {
         ChartPanel chartPanel = new ChartPanel(createQuantityChart(n, k));
         chartPanel.setPreferredSize(new Dimension(500, 320));
         return chartPanel;
     }
-    
+
     private JFreeChart createQuantityChart(int n, int k) {
         int m = Math.min(n, (int) Math.ceil(2d * n / k) + 1);
-        
+
         DefaultCategoryDataset lineChartDataset = new DefaultCategoryDataset();
 
         double[] countsFromMonotonic = getCountsFromMonotonics(n, k, m);
@@ -103,7 +103,7 @@ public class QuantityDistributionDisplayer implements Runnable {
         for (int i = 0; i < m; i++) {
             lineChartDataset.addValue(countsFromFormula[i], "formula", Integer.valueOf(i));
         }
-        
+
         return ChartFactory.createLineChart(
             String.format("Distribution (n=%d, k=%d)", n, k),
             "Quantity", "Count",
@@ -116,7 +116,7 @@ public class QuantityDistributionDisplayer implements Runnable {
     private double[] getCountsFromMonotonics(int n, int k, int m) {
         return getCountsFromMonotonic(n, k, m);
     }
-    
+
     private double[] getCountsFromMonotonic(int n, int k, int m) {
         return getCountsFromMonotonic(buildMonotonic(n, k), m);
     }
@@ -124,12 +124,12 @@ public class QuantityDistributionDisplayer implements Runnable {
     private Monotonic buildMonotonic(int n, int k) {
         return monotonicFactory.apply(n, k);
     }
-    
+
     private double[] getCountsFromMonotonic(Monotonic monotonic, int m) {
         LargeInteger imageSize = monotonic.imageSize();
-        
+
         double[] result = new double[m];
-        
+
         LargeInteger step =
                 imageSize.isGreaterThan(LargeInteger.of(2000)) ?
                 imageSize.divide(LargeInteger.of(2000)) :
@@ -147,7 +147,7 @@ public class QuantityDistributionDisplayer implements Runnable {
         if (n > 5000) {
             return new double[m];
         }
-        
+
         int[] seeds = new int[] { 0, 15, 432, 7362, 11260, 734652, 6473821, 27348245 };
         double[][] measures = new double[seeds.length][];
         for (int i = 0; i < seeds.length; i++) {
@@ -155,7 +155,7 @@ public class QuantityDistributionDisplayer implements Runnable {
         }
         return getAvgs(measures);
     }
-    
+
     private double[] getCountsFromMeasure(int n, int k, int m, int seed) {
         Random random = new Random(seed);
         int[] quantities = new int[k];
@@ -193,5 +193,5 @@ public class QuantityDistributionDisplayer implements Runnable {
         }
         return result;
     }
-    
+
 }

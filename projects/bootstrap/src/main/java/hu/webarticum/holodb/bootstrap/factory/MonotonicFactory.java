@@ -8,11 +8,11 @@ import hu.webarticum.holodb.core.data.random.TreeRandom;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class MonotonicFactory {
-    
+
     private MonotonicFactory() {
         // static class
     }
-    
+
 
     public static Monotonic createMonotonic(
             TreeRandom treeRandom, LargeInteger size, LargeInteger baseSize, DistributionQuality distributionQuality) {
@@ -22,5 +22,5 @@ public class MonotonicFactory {
             return new FastMonotonic(size, baseSize);
         }
     }
-    
+
 }

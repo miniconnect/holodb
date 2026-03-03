@@ -13,5 +13,5 @@ public enum BuiltinCharacterClassAstNode implements CharacterMatchAstNode {
     NON_HORIZONTAL_WHITESPACE,
     VERTICAL_WHITESPACE,
     NON_VERTICAL_WHITESPACE,
-    
+
 }

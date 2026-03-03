@@ -11,18 +11,18 @@ import hu.webarticum.minibase.storage.api.NamedResource;
 import hu.webarticum.minibase.storage.api.NamedResourceStore;
 
 public class GenericNamedResourceStore<T extends NamedResource> implements NamedResourceStore<T> {
-    
+
     private final ImmutableList<String> names;
 
     private final Map<String, T> resourcesByName;
-    
-    
+
+
     private GenericNamedResourceStore(
             ImmutableList<String> names, Map<String, T> resourceMap) {
         this.names = names;
         this.resourcesByName = resourceMap;
     }
-    
+
     @SafeVarargs
     public static <T extends NamedResource> GenericNamedResourceStore<T> of(T... resources) {
         return from(Arrays.asList(resources));
@@ -43,7 +43,7 @@ public class GenericNamedResourceStore<T extends NamedResource> implements Named
         ImmutableList<String> names = ImmutableList.fromCollection(namesBuilder);
         return new GenericNamedResourceStore<>(names, resourceMap);
     }
-    
+
 
     @Override
     public ImmutableList<String> names() {

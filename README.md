@@ -1,18 +1,19 @@
 # HoloDB &ndash; the on-the-fly relational database
 
-HoloDB is a relational database simulator that provides realistic mock data entirely on-the-fly, based on declarative configuration.
-It behaves like a regular database but requires no real storage, making it ideal for demos, prototypes, testing, and education.
+HoloDB is a lightweight relational database simulator.
+It launches instantly from your declarative configuration and presents a coherent, performant, writable database view without storing any data.
+Ideal for demos, prototypes, testing, education, or any situation traditionally involving synthetic or anonymized data.
 
 
 ## :bulb: Why HoloDB?
 
 > ***No data generation &ndash; no storage costs &ndash; no migrations.***
-> 
+>
 > **Sketch up your schema and characteristics, and you're ready to start querying!**
 
-HoloDB is for those moments when you need a database-shaped system without the hassle of managing real data.
+HoloDB is for those moments when you need a database-shaped system but are tired of the complications of actually managing data.
 Instead of setting up or importing datasets, you simply provide a configuration file (or ORM entities)
-and instantly get a live, consistent, queryable database &ndash; ready for demos, prototypes, tests, or teaching.
+and immediately start working with an on-the-fly (yet performant) relational system that computes every result from definition rules, not storage.
 
 What you get from it:
 
@@ -24,7 +25,7 @@ What you get from it:
 - **Portable across environments** &rarr; runs seamlessly in Java or Docker, on any platform.
 - **Open source and transparent** &rarr; freely available, inspectable, and adaptable to your needs.
 
-Work with a database as if it were real, minus the cost of setup or maintenance.
+Work with a database as if it were real, minus the cost of setup and maintenance.
 
 
 ## :rocket: Quick start
@@ -66,7 +67,7 @@ Start, select the schema, and run queries:
 
 > `$` &nbsp; **`micl`**
 >
->  > *Welcome in miniConnect SQL REPL! - localhost:3430*
+> > *Welcome in miniConnect SQL REPL! - localhost:3430*
 >
 > `SQL >` &nbsp; **`USE my_schema;`**
 >
@@ -100,7 +101,7 @@ For other ways to use the server, such as connecting from your application, see 
 
 Currently, a limited subset of the SQL features is supported by the default query engine.
 It lacks some relatively basic features such as grouping and filtering by arbitrary expressions.
-However it's powerful enough to serve queries of most ORM system.
+However, it's powerful enough to serve queries of most ORM system.
 
 Visit the [SQL guide](https://github.com/miniconnect/minibase/blob/master/SQL.md)
 to learn more about the SQL features supported by the default query engine.
@@ -137,7 +138,7 @@ For each **table**, these subkeys are supported:
 | `size` | `LargeInteger` | number of records in this table (global default: `50`) |
 | `columns` | `List` | list of columns in this table, see below (global default: none) |
 
-If `writeable` option is set to true, then an additional layer
+If the `writeable` option is set to true, then an additional layer
 will be added over the read-only table,
 which accepts and stores insertions, updates, and deletions,
 and it gives the effect that the table is writeable.
@@ -248,8 +249,9 @@ The type of a `counter` column is always `hu.webarticum.miniconnect.lang.LargeIn
 
 If `seedKey` is specified, it will be explicitly used as a key for the sub-random-generator for the column.
 Setting or changing this value alters the data distribution, shuffling, etc. for this column without affecting other columns.
-If two columns share the same non-null `seedKey` while they have the same settings (except for `name`),
+If two columns of a table share the same non-null `seedKey` while they have the same settings (except for `name`),
 then they will provide the exact same values in the exact same order , effectively making them mirrors of each other.
+This also means that such a column can be renamed without remixing its content.
 
 You can set default configuration for schemas, tables, and columns at any higher level in the configuration tree.
 Any value set at a lower lever will override any value set at a higher level (and, of course, the global default).
@@ -280,8 +282,8 @@ schemas:
       # ...
 ```
 
-Using this config all table with no explicit `size` will have the size 120,
-all table with no explicit `writeable` will read-only in `schema_1`, and writeable in `schema_2`.
+Using this config all tables with no explicit `size` will have the size 120,
+all tables with no explicit `writeable` will read-only in `schema_1`, and writeable in `schema_2`.
 Also, data shuffling is disabled by default.
 
 
@@ -294,6 +296,8 @@ Then the generated schema file will be found here:
 ```
 projects/config/build/schemas/holodb-config.schema.json
 ```
+
+Starting from version 7.0.0, the schema file is also published to the Maven repository.
 
 
 ## :open_file_folder: Loading values from resource
@@ -450,19 +454,19 @@ For example in Micronaut:
 ```java
 @Singleton
 public class HoloInit {
-    
+
     private final EntityManager entityManager;
-    
+
     public HoloInit(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-    
+
     @EventListener
     @Transactional
     public void onStartup(StartupEvent startupEvent) {
         JpaMetamodelDriver.setMetamodel(entityManager.getMetamodel());
     }
-    
+
 }
 ```
 
@@ -478,17 +482,17 @@ For example:
 @HoloTable(size = 25)
 @HoloVirtualColumn(name = "extracol", type = Integer.class, valuesRange = {10, 20})
 public class Company {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "birth_country", nullable = false)
     @HoloColumn(valuesBundle = "countries")
     private String country;
-    
+
     // ...
-    
+
 }
 ```
 
@@ -566,7 +570,7 @@ results remain realistic and mutually consistent across queries, computed dynami
 Column data is typically produced in layered steps:
 
 1. **Base set**: an ordered, searchable, typically virtual collection of values
-   (as simple as a numeric range or as complex as all strings matching a regex).  
+   (as simple as a numeric range or as complex as all strings matching a regex).
 2. **Distribution**: this base set is *stretched* over the required table size.
    The result is a monotonic, easily searchable list of values matching the configured characteristics.
 3. **Shuffling**: the permutation layer makes the data look realistically random.

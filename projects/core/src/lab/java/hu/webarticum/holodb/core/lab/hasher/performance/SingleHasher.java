@@ -3,7 +3,7 @@ package hu.webarticum.holodb.core.lab.hasher.performance;
 import hu.webarticum.holodb.core.util.ByteUtil;
 
 class SingleHasher extends AbstractDemoHasher {
-    
+
     public SingleHasher(byte[] key, int hashSize) {
         super(buildKey(key, hashSize));
     }
@@ -13,5 +13,5 @@ class SingleHasher extends AbstractDemoHasher {
         ByteUtil.fillBytesFrom(data, key);
         return data;
     }
-    
+
 }

@@ -20,7 +20,7 @@ class ParserInputTest {
         assertAtStart(parserInput);
         assertNoMoreInput(parserInput);
     }
-    
+
     @Test
     void testNonEmptyStates() {
         ParserInput parserInput = new ParserInput("abcd");
@@ -54,7 +54,7 @@ class ParserInputTest {
     private void assertAtStart(ParserInput parserInput) {
         assertThatThrownBy(parserInput::storno).isInstanceOf(NoSuchElementException.class);
     }
-    
+
     private void assertInMiddleState(
             ParserInput parserInput, int expectedPosition, char expectedPeekChar) {
         assertThat(parserInput.position()).isEqualTo(expectedPosition);

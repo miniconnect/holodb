@@ -67,16 +67,16 @@ import jakarta.persistence.metamodel.Type.PersistenceType;
 // TODO: ignore column vs throw exception?
 // TODO: handling mapped superclasses?
 public class JpaJakartaMetamodelHoloConfigLoader {
-    
+
     private final Pattern getMethodPattern = Pattern.compile("^get([A-Z])(.*)$");
-    
+
 
     public HoloConfig load(Metamodel metamodel, String defaultSchemaName, LargeInteger seed) {
         Map<String, JpaSchemaInfo> schemas = new TreeMap<>();
         scanMetamodel(schemas, metamodel, defaultSchemaName);
         return renderConfig(schemas, seed);
     }
-    
+
     private void scanMetamodel(Map<String, JpaSchemaInfo> schemas, Metamodel metamodel, String defaultSchemaName) {
         for (EntityType<?> entityType : metamodel.getEntities()) {
             scanEntityType(schemas, metamodel, entityType, defaultSchemaName);
@@ -100,19 +100,19 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             scanAttribute(schemas, metamodel, schemaName, tableName, jpaTableInfo, attribute, defaultSchemaName);
         }
     }
-    
+
     private String extractIdColumnName(EntityType<?> entityType) {
         Type<?> idType = entityType.getIdType();
         if (idType == null) {
             return "";
         }
-        
+
         Attribute<?, ?> idAttribute = entityType.getId(entityType.getIdType().getJavaType());
         Member idMember = idAttribute.getJavaMember();
         if (!(idMember instanceof AnnotatedElement)) {
             return "";
         }
-        
+
         return extractColumnName((AnnotatedElement) idMember);
     }
 
@@ -121,7 +121,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (holoTableAnnotation != null && !holoTableAnnotation.schema().isEmpty()) {
             return holoTableAnnotation.schema();
         }
-        
+
         Table tableAnnotation = annotatedElement.getAnnotation(Table.class);
         if (tableAnnotation != null && !tableAnnotation.schema().isEmpty()) {
             return tableAnnotation.schema();
@@ -130,7 +130,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (annotatedElement instanceof Member) {
             return extractSchemaNameFromAnnotatedMember(annotatedElement, defaultSchemaName);
         }
-        
+
         return defaultSchemaName;
     }
 
@@ -139,7 +139,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (joinTableAnnotation != null && !joinTableAnnotation.schema().isEmpty()) {
             return joinTableAnnotation.schema();
         }
-        
+
         CollectionTable collectionTableAnnotation = annotatedElement.getAnnotation(CollectionTable.class);
         if (collectionTableAnnotation != null && !collectionTableAnnotation.schema().isEmpty()) {
             return collectionTableAnnotation.schema();
@@ -153,13 +153,13 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (holoTableAnnotation != null && !holoTableAnnotation.name().isEmpty()) {
             return holoTableAnnotation.name();
         }
-        
+
         if (annotatedElement instanceof Member) {
             return extractTableNameFromAnnotatedMember(annotatedElement);
         } else if (!(annotatedElement instanceof Class)) {
             throw new IllegalArgumentException("Unknown element for table: " + annotatedElement);
         }
-        
+
         Class<?> clazz = (Class<?>) annotatedElement;
         if (metamodel instanceof MetamodelImplementor) {
             // FIXME MetamodelImplementor is deprecated now
@@ -169,12 +169,12 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                 return ((SingleTableEntityPersister) entityPersister).getTableName();
             }
         }
-        
+
         Table tableAnnotation = clazz.getAnnotation(Table.class);
         if (tableAnnotation != null && !tableAnnotation.name().isEmpty()) {
             return tableAnnotation.name();
         }
-        
+
         return clazz.getSimpleName();
     }
 
@@ -183,7 +183,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (joinTableAnnotation != null && !joinTableAnnotation.name().isEmpty()) {
             return joinTableAnnotation.name();
         }
-        
+
         CollectionTable collectionTableAnnotation = annotatedElement.getAnnotation(CollectionTable.class);
         if (collectionTableAnnotation != null && !collectionTableAnnotation.name().isEmpty()) {
             return collectionTableAnnotation.name();
@@ -198,7 +198,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         addColumnNames(result, metamodel, managedType);
         return result;
     }
-    
+
     private void addColumnNames(List<String> result, Metamodel metamodel, ManagedType<?> managedType) {
         Class<?> clazz = managedType.getJavaType();
         for (Field field : clazz.getDeclaredFields()) {
@@ -231,7 +231,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (member instanceof AnnotatedElement && ((AnnotatedElement) member).getAnnotation(HoloIgnore.class) != null) {
             return;
         }
-        
+
         PersistentAttributeType persistentAttributeType = attribute.getPersistentAttributeType();
         if (persistentAttributeType == PersistentAttributeType.BASIC) {
             scanBasicAttribute(attribute, jpaTableInfo);
@@ -255,7 +255,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             throw new IllegalArgumentException("Unsupported persistent attribute type: " + persistentAttributeType);
         }
     }
-    
+
     private void scanBasicAttribute(Attribute<?, ?> attribute, JpaTableInfo jpaTableInfo) {
         Member member = attribute.getJavaMember();
         if (!(member instanceof AnnotatedElement)) {
@@ -288,7 +288,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                 isOwner = oneToOneAnnotation.mappedBy().isEmpty();
             }
         }
-        
+
         if (isOwner) {
             scanOwnerAttribute(schemas, metamodel, schemaName, tableName, attribute, defaultSchemaName);
         } else {
@@ -305,7 +305,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             String defaultSchemaName) {
         scanOwnerAttribute(schemas, metamodel, schemaName, tableName, attribute, defaultSchemaName);
     }
-    
+
     private void scanOwnerAttribute(
             Map<String, JpaSchemaInfo> schemas,
             Metamodel metamodel,
@@ -317,14 +317,14 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return;
         }
         PluralAttribute<?, ?, ?> pluralAttribute = (PluralAttribute<?, ?, ?>) attribute;
-        
+
         Member member = attribute.getJavaMember();
         if (!(member instanceof AnnotatedElement)) {
             return;
         }
-        
+
         AnnotatedElement annotatedMember = (AnnotatedElement) member;
-        
+
         Class<?> targetType = pluralAttribute.getElementType().getJavaType();
         EntityType<?> targetEntityType;
         try {
@@ -332,7 +332,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         } catch (IllegalArgumentException e) {
             return;
         }
-        
+
         Class<?> targetEntityClazz = targetEntityType.getJavaType();
         String targetSchemaName = extractSchemaName(targetEntityClazz, defaultSchemaName);
         String targetTableName = extractTableName(metamodel, targetEntityClazz);
@@ -354,7 +354,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                 targetJpaTableInfo.columns.computeIfAbsent(targetForeignKeyColumn, k -> new JpaColumnInfo());
         mergeForeignLink(targetForeignKeyColumnInfo, schemaName, tableName, referencedColumnName);
     }
-    
+
     private void scanManyToOneAttribute(
             Metamodel metamodel, JpaTableInfo jpaTableInfo, Attribute<?, ?> attribute, String defaultSchemaName) {
         scanOwnedAttribute(metamodel, jpaTableInfo, attribute, defaultSchemaName);
@@ -370,7 +370,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         String columnName = extractColumnName(annotatedMember);
         JpaColumnInfo jpaColumnInfo = jpaTableInfo.columns.computeIfAbsent(columnName, k -> new JpaColumnInfo());
         jpaColumnInfo.attribute = attribute;
-        
+
         Class<?> foreignEntityClazz = attribute.getJavaType();
         String foreignSchemaName = extractSchemaName(foreignEntityClazz, defaultSchemaName);
         String foreignTableName = extractTableName(metamodel, foreignEntityClazz);
@@ -393,13 +393,13 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (jpaTableInfo.idColumnName.isEmpty()) {
             return; // FIXME
         }
-        
+
         Member member = attribute.getJavaMember();
         if (!(member instanceof AnnotatedElement)) {
             return;
         }
         AnnotatedElement annotatedMember = (AnnotatedElement) member;
-        
+
         ManyToMany manyToManyAnnotation = annotatedMember.getAnnotation(ManyToMany.class);
         if (manyToManyAnnotation != null && !manyToManyAnnotation.mappedBy().isEmpty()) {
             return;
@@ -408,16 +408,16 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (!(attribute instanceof PluralAttribute)) {
             return;
         }
-        
+
         PluralAttribute<?, ?, ?> pluralAttribute = (PluralAttribute<?, ?, ?>) attribute;
         Type<?> itemType = pluralAttribute.getElementType();
         Class<?> itemClazz = itemType.getJavaType();
-        
+
         if (!(itemType instanceof EntityType)) {
             return;
         }
         EntityType<?> entityType = (EntityType<?>) itemType;
-        
+
         String subSchemaName = extractSchemaName(annotatedMember, schemaName);
         String subTableName = extractTableName(metamodel, annotatedMember);
         JpaSchemaInfo jpaSchemaInfo = schemas.computeIfAbsent(subSchemaName, k -> new JpaSchemaInfo());
@@ -472,7 +472,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             parentIdJpaColumnInfo.type = LargeInteger.class;
             orderJpaColumnInfo.mode = ColumnMode.COUNTER; // FIXME: gaps are filled with nulls!
         }
-        
+
         OrderBy orderByAnnotation = annotatedMember.getAnnotation(OrderBy.class);
         if (
                 orderByAnnotation != null &&
@@ -513,7 +513,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (jpaTableInfo.idColumnName.isEmpty()) {
             return; // FIXME
         }
-        
+
         Member member = attribute.getJavaMember();
         if (!(member instanceof AnnotatedElement)) {
             return;
@@ -523,24 +523,24 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (!(attribute instanceof PluralAttribute)) {
             return;
         }
-        
+
         PluralAttribute<?, ?, ?> pluralAttribute = (PluralAttribute<?, ?, ?>) attribute;
         Type<?> itemType = pluralAttribute.getElementType();
         Class<?> itemClazz = itemType.getJavaType();
-        
+
         String subSchemaName = extractSchemaName(annotatedMember, schemaName);
         String subTableName = extractTableName(metamodel, annotatedMember);
         JpaSchemaInfo jpaSchemaInfo = schemas.computeIfAbsent(subSchemaName, k -> new JpaSchemaInfo());
         JpaTableInfo subJpaTableInfo = jpaSchemaInfo.tables.computeIfAbsent(subTableName, k -> new JpaTableInfo());
         subJpaTableInfo.annotatedElement = annotatedMember;
         subJpaTableInfo.idColumnName = "";
-        
+
         EmbeddableType<?> embeddableType = null;
         try {
             embeddableType = metamodel.embeddable(itemClazz);
         } catch (IllegalArgumentException e) {
         }
-        
+
         String parentIdColumnName = null;
         JoinColumn joinColumnAnnotation = extractSingleJoinColumnAnnotation(annotatedMember);
         if (joinColumnAnnotation != null) {
@@ -567,7 +567,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             idJpaColumnInfo.type = LargeInteger.class;
             orderJpaColumnInfo.mode = ColumnMode.COUNTER; // FIXME: gaps are filled with nulls!
         }
-        
+
         if (embeddableType != null) {
             subJpaTableInfo.columnNamesInOrder.addAll(loadColumnNamesInOrder(metamodel, embeddableType));
             for (Attribute<?, ?> targetAttribute : embeddableType.getAttributes()) {
@@ -601,13 +601,13 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             orderJpaColumnInfo.mode = ColumnMode.COUNTER;
         }
     }
-    
+
     private JoinColumn extractSingleJoinColumnAnnotation(AnnotatedElement annotatedElement) {
         JoinColumn joinColumnAnnotation = annotatedElement.getAnnotation(JoinColumn.class);
         if (joinColumnAnnotation != null) {
             return joinColumnAnnotation;
         }
-        
+
         JoinColumns joinColumnsAnnotation = annotatedElement.getAnnotation(JoinColumns.class);
         if (joinColumnsAnnotation != null) {
             JoinColumn[] joinColumns = joinColumnsAnnotation.value();
@@ -615,7 +615,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                 return joinColumns[0];
             }
         }
-        
+
         CollectionTable collectionTableAnnotation = annotatedElement.getAnnotation(CollectionTable.class);
         if (collectionTableAnnotation != null) {
             JoinColumn[] joinColumns = collectionTableAnnotation.joinColumns();
@@ -631,10 +631,10 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                 return joinColumns[0];
             }
         }
-        
+
         return null;
     }
-    
+
     private JoinColumn extractSingleInverseJoinColumnAnnotation(AnnotatedElement annotatedElement) {
         JoinTable joinTableAnnotation = annotatedElement.getAnnotation(JoinTable.class);
         if (joinTableAnnotation != null) {
@@ -643,10 +643,10 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                 return inverseJoinColumns[0];
             }
         }
-        
+
         return null;
     }
-    
+
     private void mergeForeignLink(
             JpaColumnInfo jpaColumnInfo, String foreignSchemaName, String foreignTableName, String foreignColumnName) {
         if (jpaColumnInfo.foreignSchemaName != null && !foreignSchemaName.equals(jpaColumnInfo.foreignSchemaName)) {
@@ -665,7 +665,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                         "Unmatching foreign columns: " + foreignColumnName + " != " + jpaColumnInfo.foreignColumnName);
             }
         }
-        
+
         jpaColumnInfo.foreignSchemaName = foreignSchemaName;
         jpaColumnInfo.foreignTableName = foreignTableName;
         jpaColumnInfo.foreignColumnName = foreignColumnName;
@@ -676,7 +676,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (holoColumnAnnotation != null && !holoColumnAnnotation.name().isEmpty()) {
             return holoColumnAnnotation.name();
         }
-        
+
         Column columnAnnotation = annotatedMember.getAnnotation(Column.class);
         if (columnAnnotation != null && !columnAnnotation.name().isEmpty()) {
             return columnAnnotation.name();
@@ -686,7 +686,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (joinColumnAnnotation != null && !joinColumnAnnotation.name().isEmpty()) {
             return joinColumnAnnotation.name();
         }
-        
+
         return extractFieldName(annotatedMember);
     }
 
@@ -766,7 +766,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         int index = orderedFieldNames.indexOf(columnName);
         return index != -1 ? index : Integer.MAX_VALUE;
     }
-    
+
     private HoloConfigColumn renderColumnConfig(
             Map<String, JpaSchemaInfo> schemas,
             String columnName,
@@ -800,16 +800,16 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (jpaColumnInfo.attribute == null) {
             return null;
         }
-        
+
         Member member = jpaColumnInfo.attribute.getJavaMember();
         if (!(member instanceof AnnotatedElement)) {
             return null;
         }
-        
+
         AnnotatedElement annotatedMember = (AnnotatedElement) member;
         return annotatedMember.getAnnotation(HoloColumn.class);
     }
-    
+
     private Class<?> detectColumnType(JpaColumnInfo jpaColumnInfo) {
         if (jpaColumnInfo.type != null) {
             return jpaColumnInfo.type;
@@ -819,7 +819,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return String.class; // FIXME
         }
     }
-    
+
     private ColumnMode detectColumnMode(
             String columnName,
             JpaTableInfo jpaTableInfo,
@@ -828,11 +828,11 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (jpaColumnInfo.mode != null) {
             return jpaColumnInfo.mode;
         }
-        
+
         if (holoColumnAnnotation != null && holoColumnAnnotation.mode() != HoloColumnMode.UNDEFINED) {
             return columnModeOf(holoColumnAnnotation.mode());
         }
-        
+
         if (jpaColumnInfo.attribute != null) {
             Class<?> type = jpaColumnInfo.attribute.getJavaType();
             boolean isId = !jpaTableInfo.idColumnName.isEmpty() && columnName.equals(jpaTableInfo.idColumnName);
@@ -841,7 +841,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                 return ColumnMode.COUNTER;
             }
         }
-        
+
         return ColumnMode.DEFAULT;
     }
 
@@ -854,7 +854,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return null;
         }
     }
-    
+
     private LargeInteger detectColumnNullCount(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null && holoColumnAnnotation.nullCount() != -1L) {
             return LargeInteger.of(holoColumnAnnotation.nullCount());
@@ -891,7 +891,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return "lorem";
         }
     }
-    
+
     private ImmutableList<LargeInteger> detectColumnValuesRange(
             JpaColumnInfo jpaColumnInfo, ColumnMode columnMode, HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null && holoColumnAnnotation.valuesRange().length != 0) {
@@ -926,7 +926,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return null;
         }
     }
-    
+
     private DummyTextKind detectColumnValuesTextKind(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null) {
             return dummyTextKindOf(holoColumnAnnotation.valuesTextKind());
@@ -934,7 +934,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return null;
         }
     }
-    
+
     private ImmutableList<String> detectColumnValuesForeignColumn(
             Map<String, JpaSchemaInfo> schemas,
             JpaColumnInfo jpaColumnInfo,
@@ -945,7 +945,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         } else if (columnMode == ColumnMode.COUNTER || isAnyValueFieldExplicitlySet(holoColumnAnnotation)) {
             return null;
         }
-        
+
         if (jpaColumnInfo.foreignTableName != null) {
             String foreignColumnName = jpaColumnInfo.foreignColumnName;
             if (foreignColumnName.isEmpty()) {
@@ -960,7 +960,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                         jpaColumnInfo.foreignSchemaName, jpaColumnInfo.foreignTableName, foreignColumnName);
             }
         }
-        
+
         return null;
     }
 
@@ -968,7 +968,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         if (holoColumnAnnotation == null) {
             return false;
         }
-        
+
         return
                 holoColumnAnnotation.values().length != 0 ||
                 !holoColumnAnnotation.valuesResource().isEmpty() ||
@@ -986,7 +986,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return null;
         }
     }
-    
+
     private ShuffleQuality detectColumnShuffleQuality(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null) {
             return shuffleQualityOf(holoColumnAnnotation.shuffleQuality());
@@ -994,7 +994,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return null;
         }
     }
-    
+
     private Class<? extends SourceFactory> detectSourceFactory(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null && holoColumnAnnotation.sourceFactory() != Void.class) {
             return sourceFactoryClassOf(holoColumnAnnotation.sourceFactory());
@@ -1002,7 +1002,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return null;
         }
     }
-    
+
     private Object detectSourceFactoryData(HoloColumn holoColumnAnnotation) {
         if (holoColumnAnnotation != null) {
             if (holoColumnAnnotation.sourceFactoryDataMap().length > 0) {
@@ -1018,7 +1018,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                 return resolveValue(holoValue);
             }
         }
-        
+
         return null;
     }
 
@@ -1027,10 +1027,10 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             HoloValue holoValue = holoColumnAnnotation.defaultValue();
             return resolveValue(holoValue);
         }
-        
+
         return null;
     }
-    
+
     private HoloConfigColumn renderVirtualColumn(HoloVirtualColumn virtualColumnAnnotation) {
         return new HoloConfigColumn(
                 detectVirtualColumnSeedKey(virtualColumnAnnotation),
@@ -1084,7 +1084,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return null;
         }
     }
-    
+
     private DummyTextKind detectVirtualColumnValuesTextKind(HoloVirtualColumn virtualColumnAnnotation) {
         if (virtualColumnAnnotation != null) {
             return dummyTextKindOf(virtualColumnAnnotation.valuesTextKind());
@@ -1108,7 +1108,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return null;
         }
     }
-    
+
     private ShuffleQuality detectVirtualColumnShuffleQuality(HoloVirtualColumn virtualColumnAnnotation) {
         if (virtualColumnAnnotation != null) {
             return shuffleQualityOf(virtualColumnAnnotation.shuffleQuality());
@@ -1124,7 +1124,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return null;
         }
     }
-    
+
     private Object detectVirtualSourceFactoryData(HoloVirtualColumn virtualColumnAnnotation) {
         if (virtualColumnAnnotation != null) {
             if (virtualColumnAnnotation.sourceFactoryDataMap().length > 0) {
@@ -1152,7 +1152,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
             return null;
         }
     }
-    
+
     private ColumnMode columnModeOf(HoloColumnMode holoColumnMode) {
         if (holoColumnMode != HoloColumnMode.UNDEFINED) {
             return ColumnMode.valueOf(holoColumnMode.name());
@@ -1189,7 +1189,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
     private Class<SourceFactory> sourceFactoryClassOf(Class<?> clazz) {
         return (Class<SourceFactory>) clazz;
     }
-    
+
     private Object resolveValue(HoloValue holoValue) {
         HoloValue.Type type = holoValue.type();
         switch (type) {
@@ -1225,7 +1225,7 @@ public class JpaJakartaMetamodelHoloConfigLoader {
                     throw new UncheckedIOException(e);
                 }
         }
-        
+
         throw new IllegalArgumentException("Unknown type: " + type);
     }
 
@@ -1233,39 +1233,39 @@ public class JpaJakartaMetamodelHoloConfigLoader {
         return value.isEmpty() ? null : value;
     }
 
-    
+
     private class JpaSchemaInfo {
-        
+
         private final Map<String, JpaTableInfo> tables = new TreeMap<>();
-        
+
     }
 
     private class JpaTableInfo {
-        
+
         private final Map<String, JpaColumnInfo> columns = new HashMap<>();
 
         private final List<String> columnNamesInOrder = new ArrayList<>();
-        
+
         private AnnotatedElement annotatedElement = null;
-        
+
         private String idColumnName = null;
 
     }
-    
+
     private class JpaColumnInfo {
-        
+
         private String foreignSchemaName = null;
-        
+
         private String foreignTableName = null;
-        
+
         private String foreignColumnName = null;
-        
+
         private Class<?> type = null;
-        
+
         private ColumnMode mode = null;
-        
+
         private Attribute<?, ?> attribute = null;
-        
+
     }
-    
+
 }

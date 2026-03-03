@@ -10,7 +10,7 @@ import hu.webarticum.holodb.regex.comparator.CharComparator;
 class CharClassSplitterTest {
 
     private CharComparator comparator = Character::compare;
-    
+
     @Test
     void testBothEmpty() {
         CharClass leftCharClass = charClassOf("");
@@ -131,9 +131,9 @@ class CharClassSplitterTest {
     private CharClass charClassOf(String chars) {
         return CharClass.of(chars, comparator);
     }
-    
+
     private <K extends Comparable<K>, V> SimpleEntryList.Entry<K, V> entryOf(K key, V value) {
         return SimpleEntryList.Entry.of(key, value);
     }
-    
+
 }

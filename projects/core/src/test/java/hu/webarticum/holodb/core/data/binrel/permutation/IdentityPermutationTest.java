@@ -12,7 +12,7 @@ class IdentityPermutationTest extends AbstractLargeGroundPermutationTest<Identit
     protected IdentityPermutation create(LargeInteger size) {
         return new IdentityPermutation(size);
     }
-    
+
     @Test
     void testIdentity() {
         int[] sizes = new int[] { 1, 2, 3, 4, 5, 10, 20, 100, 341 };

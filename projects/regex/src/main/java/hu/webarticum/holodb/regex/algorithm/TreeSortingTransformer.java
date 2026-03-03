@@ -16,7 +16,7 @@ import hu.webarticum.holodb.regex.tree.TreeNode;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 
 public class TreeSortingTransformer {
-    
+
     private final CharClassEntrySetSplitter<TreeNode> splitter = new CharClassEntrySetSplitter<>();
 
     public TreeNode sort(TreeNode node) {
@@ -32,7 +32,7 @@ public class TreeSortingTransformer {
         cache.put(node, transformedNode);
         return transformedNode;
     }
-    
+
     private TreeNode sortInternal(TreeNode node, Map<TreeNode, TreeNode> cache) {
         Object value = node.value();
         if (value == SpecialTreeValues.LEAF) {

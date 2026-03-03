@@ -10,7 +10,7 @@ abstract class AbstractSamplerTest<T extends Sampler> {
 
     protected abstract T create(LargeInteger size);
 
-    
+
     @Test
     void testEmpty() {
         Sampler sampler = create(LargeInteger.ZERO);
@@ -25,5 +25,5 @@ abstract class AbstractSamplerTest<T extends Sampler> {
         assertThat(sampler.size()).isEqualTo(size);
         assertThat(sampler.sample()).isGreaterThanOrEqualTo(LargeInteger.ZERO).isLessThanOrEqualTo(size);
     }
-    
+
 }

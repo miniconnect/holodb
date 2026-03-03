@@ -16,5 +16,5 @@ class PermutationReducerTest {
         assertThat(reducedPermutation).containsExactly(LargeInteger.arrayOf(2, 0, 1));
         assertThat(reducedPermutation.inverted()).containsExactly(LargeInteger.arrayOf(1, 2, 0));
     }
-    
+
 }

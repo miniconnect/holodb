@@ -9,7 +9,7 @@ public interface Monotonic extends Function {
     public Range indicesOf(LargeInteger value);
 
     public LargeInteger imageSize();
-    
+
 
     public default Range indicesOf(Range range) {
         LargeInteger length = range.size();
@@ -30,5 +30,5 @@ public interface Monotonic extends Function {
             return Range.fromUntil(fromRange.from(), lastRange.until());
         }
     }
-    
+
 }

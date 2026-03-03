@@ -10,12 +10,12 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class PermutatedIndexedSource<T> implements IndexedSource<T> {
-    
+
     private final IndexedSource<T> baseSource;
-    
+
     private final Permutation permutation;
-    
-    
+
+
     public PermutatedIndexedSource(IndexedSource<T> baseSource, Permutation permutation) {
         LargeInteger baseSourceSize = baseSource.size();
         LargeInteger permutationSize = permutation.size();
@@ -25,11 +25,11 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
                     baseSourceSize.bigIntegerValue(),
                     permutationSize.bigIntegerValue()));
         }
-        
+
         this.baseSource = baseSource;
         this.permutation = permutation;
     }
-    
+
 
     @Override
     public Class<?> type() {
@@ -46,7 +46,7 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
         LargeInteger permutatedIndex = permutation.indexOf(index);
         return baseSource.get(permutatedIndex);
     }
-    
+
     @Override
     public Comparator<?> comparator() {
         return baseSource.comparator();
@@ -62,7 +62,7 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
         Selection baseSelection = baseSource.find(value);
         return new PermutatedSelection(baseSelection, permutation);
     }
-    
+
     @Override
     public Selection findBetween(
             Object minValue, boolean minInclusive, Object maxValue, boolean maxInclusive) {
@@ -70,11 +70,11 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
                 baseSource.findBetween(minValue, minInclusive, maxValue, maxInclusive);
         return new PermutatedSelection(baseSelection, permutation);
     }
-    
+
     @Override
     public Selection findNulls() {
         Selection baseSelection = baseSource.findNulls();
         return new PermutatedSelection(baseSelection, permutation);
     }
-    
+
 }

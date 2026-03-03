@@ -8,21 +8,21 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class NullPaddedSortedSource<T> implements SortedSource<T> {
-    
+
     private final SortedSource<T> baseSource;
-    
+
     private final LargeInteger size;
-    
-    
+
+
     public NullPaddedSortedSource(SortedSource<T> baseSource, LargeInteger size) {
         if (baseSource.size().isGreaterThan(size)) {
             throw new IllegalArgumentException("Base source size can not be larger than target size");
         }
-        
+
         this.baseSource = baseSource;
         this.size = size;
     }
-    
+
 
     @Override
     public Class<?> type() {
@@ -63,5 +63,5 @@ public class NullPaddedSortedSource<T> implements SortedSource<T> {
     public Range findNulls() {
         return Range.fromUntil(baseSource.size(), size);
     }
-    
+
 }

@@ -34,7 +34,7 @@ class MatchListTest {
         assertThat(matchList.iterator().next()).isEqualTo("lorem");
         assertThat(matchList.iterator(LargeInteger.ZERO).next()).isEqualTo("lorem");
     }
-    
+
     @Test
     void testSimple() {
         MatchList matchList = MatchList.of("(lorem|ipsum)[azx]");
@@ -161,5 +161,5 @@ class MatchListTest {
         );
         assertThat(ImmutableList.fill(1000, i -> matchList.random())).isSubsetOf(matches);
     }
-    
+
 }

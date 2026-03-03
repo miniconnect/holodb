@@ -104,7 +104,7 @@ class UniqueSourceTest {
         assertThat(source.size()).isEqualTo(LargeInteger.of(4));
         assertThat(source.get(LargeInteger.of(2))).isEqualTo("kiwi");
     }
-    
+
     private static UniqueSource<String> createSource() {
         return new UniqueSource<>(
                 String.class,

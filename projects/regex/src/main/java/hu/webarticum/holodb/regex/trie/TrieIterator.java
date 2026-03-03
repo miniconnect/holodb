@@ -11,18 +11,18 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public class TrieIterator implements Iterator<String> {
 
     private final LinkedList<StackEntry> stack;
-    
-    
+
+
     private TrieIterator(LinkedList<StackEntry> stack) {
         this.stack = stack;
     }
-    
+
     public static TrieIterator fromBeginning(TrieNode rootNode) {
         LinkedList<StackEntry> stack = new LinkedList<>();
         collectLeftTrace(rootNode, stack);
         return new TrieIterator(stack);
     }
-    
+
     public static TrieIterator fromPosition(TrieNode rootNode, LargeInteger position) {
         LinkedList<StackEntry> stack = new LinkedList<>();
         if (position.isGreaterThanOrEqualTo(rootNode.size())) {
@@ -47,7 +47,7 @@ public class TrieIterator implements Iterator<String> {
         }
         return new TrieIterator(stack);
     }
-    
+
     private static void collectLeftTrace(TrieNode rootNode, LinkedList<StackEntry> stack) {
         TrieNode subNode = rootNode;
         while (!subNode.isLeaf()) {
@@ -55,8 +55,8 @@ public class TrieIterator implements Iterator<String> {
             subNode = subNode.children().get(0);
         }
     }
-    
-    
+
+
     @Override
     public boolean hasNext() {
         return !stack.isEmpty();
@@ -71,7 +71,7 @@ public class TrieIterator implements Iterator<String> {
         moveNext();
         return result;
     }
-    
+
     private String buildCurrentString() {
         StringBuilder resultBuilder = new StringBuilder();
         Iterator<StackEntry> iterator = stack.iterator();
@@ -118,19 +118,19 @@ public class TrieIterator implements Iterator<String> {
 
 
     private static class StackEntry {
-        
+
         final TrieNode node;
-        
+
         int charPosition;
-        
+
         int childPosition;
-        
+
         public StackEntry(TrieNode node, int charPosition, int childPosition) {
             this.node = node;
             this.charPosition = charPosition;
             this.childPosition = childPosition;
         }
-        
+
     }
 
 }

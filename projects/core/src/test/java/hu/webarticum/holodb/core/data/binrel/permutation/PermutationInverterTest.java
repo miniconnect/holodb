@@ -25,5 +25,5 @@ class PermutationInverterTest {
         assertThat(invertedPermutation).containsExactly(LargeInteger.arrayOf(2, 0, 5, 4, 1, 3));
         assertThat(invertedPermutation.inverted()).containsExactly(LargeInteger.arrayOf(1, 4, 0, 5, 3, 2));
     }
-    
+
 }

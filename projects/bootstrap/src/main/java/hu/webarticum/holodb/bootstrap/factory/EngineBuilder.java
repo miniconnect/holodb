@@ -15,20 +15,20 @@ import hu.webarticum.miniconnect.record.converter.Converter;
 import hu.webarticum.miniconnect.record.converter.DefaultConverter;
 
 public class EngineBuilder {
-    
+
     private final HoloConfig config;
-    
+
     private final Converter converter;
-    
+
     private final StorageAccess storageAccess;
-    
+
     private final Supplier<StorageAccess> storageAccessSupplier;
 
     private SqlParser sqlParser = null;
-    
+
     private QueryExecutor queryExecutor = null;
-    
-    
+
+
     private EngineBuilder(
             HoloConfig config,
             Converter converter,
@@ -39,8 +39,8 @@ public class EngineBuilder {
         this.storageAccess = storageAccess;
         this.storageAccessSupplier = storageAccessSupplier;
     }
-    
-    
+
+
     public static EngineBuilder ofConfig(HoloConfig config) {
         return new EngineBuilder(config, null, null, null);
     }
@@ -52,12 +52,12 @@ public class EngineBuilder {
     public static EngineBuilder ofStorageAccess(StorageAccess storageAccess) {
         return new EngineBuilder(null, null, storageAccess, null);
     }
-    
+
     public static EngineBuilder ofStorageAccessSupplier(Supplier<StorageAccess> storageAccessSupplier) {
         return new EngineBuilder(null, null, null, storageAccessSupplier);
     }
-    
-    
+
+
     public EngineBuilder sqlParser(SqlParser sqlParser) {
         this.sqlParser = sqlParser;
         return this;
@@ -67,8 +67,8 @@ public class EngineBuilder {
         this.queryExecutor = queryExecutor;
         return this;
     }
-    
-    
+
+
     public TackedEngine build() {
         SqlParser sqlParserToInject = sqlParser != null ? sqlParser : buildDefaultSqlParser();
         QueryExecutor queryExecutorToInject = queryExecutor != null ? queryExecutor : buildDefaultQueryExecutor();

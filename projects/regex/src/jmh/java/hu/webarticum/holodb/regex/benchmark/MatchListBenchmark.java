@@ -45,7 +45,7 @@ public class MatchListBenchmark {
         generex = createGenerex();
         xeger = createXeger();
     }
-    
+
     @Benchmark
     public void benchmarkSetupMatchList(Blackhole blackhole) {
         blackhole.consume(createMatchList());
@@ -60,7 +60,7 @@ public class MatchListBenchmark {
     public void benchmarkSetupXeger(Blackhole blackhole) {
         blackhole.consume(createXeger());
     }
-    
+
     @Benchmark
     public void benchmarkRandomMatchList(Blackhole blackhole) {
         blackhole.consume(matchList.random());
@@ -75,7 +75,7 @@ public class MatchListBenchmark {
     public void benchmarkRandomXeger(Blackhole blackhole) {
         blackhole.consume(xeger.generate());
     }
-    
+
     private MatchList createMatchList() {
         return MatchList.builder().random(createRandom()).build(pattern);
     }
@@ -87,7 +87,7 @@ public class MatchListBenchmark {
     private Xeger createXeger() {
         return new Xeger(pattern, createRandom());
     }
-    
+
     private Random createRandom() {
         return new Random(42);
     }

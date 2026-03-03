@@ -7,7 +7,7 @@ public class CharacterClassAstNode implements CharacterMatchAstNode {
     private final boolean positive;
 
     private final ImmutableList<CharacterMatchAstNode> nodes;
-    
+
     private CharacterClassAstNode(boolean positive, ImmutableList<CharacterMatchAstNode> nodes) {
         this.positive = positive;
         this.nodes = nodes;
@@ -25,7 +25,7 @@ public class CharacterClassAstNode implements CharacterMatchAstNode {
     public int hashCode() {
         return nodes.hashCode();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -38,7 +38,7 @@ public class CharacterClassAstNode implements CharacterMatchAstNode {
                 positive == other.positive &&
                 nodes.equals(other.nodes));
     }
-    
+
     @Override
     public String toString() {
         return "class" + nodes.toString();

@@ -23,9 +23,9 @@ class FastHasherTest {
         assertThat(new FastHasher(b("1234"), 257).hash(b("76543"))).hasSize(257);
     }
 
-    
+
     private byte[] b(String content) {
         return content.getBytes(StandardCharsets.UTF_8);
     }
-    
+
 }

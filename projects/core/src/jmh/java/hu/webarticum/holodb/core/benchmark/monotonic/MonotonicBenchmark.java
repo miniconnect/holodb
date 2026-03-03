@@ -29,21 +29,21 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class MonotonicBenchmark {
-    
+
     private static final LargeInteger SIZE = LargeInteger.of(5000L);
-    
+
     private static final LargeInteger IMAGE_SIZE = LargeInteger.of(2000L);
-    
+
     private static final LargeInteger DIVIDE = LargeInteger.of(20L);
-    
-    
+
+
     @Param({"Fast", "Surjective", "Binomial"})
     private String type;
-    
+
 
     private Monotonic monotonic;
-    
-    
+
+
     @Setup
     public void setup() {
         if (type.equals("Fast")) {
@@ -56,7 +56,7 @@ public class MonotonicBenchmark {
             throw new IllegalArgumentException("Unknown benchmark type: " + type);
         }
     }
-    
+
 
     @Benchmark
     public void benchmarkMonotonic(Blackhole blackhole) {

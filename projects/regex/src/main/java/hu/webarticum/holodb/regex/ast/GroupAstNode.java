@@ -3,17 +3,17 @@ package hu.webarticum.holodb.regex.ast;
 import java.util.Objects;
 
 public class GroupAstNode implements AstNode {
-    
+
     public enum Kind {
         CAPTURING, NAMED, NON_CAPTURING
     }
-    
+
     private final AlternationAstNode alternation;
 
     private final Kind kind;
-    
+
     private final String name;
-    
+
     private GroupAstNode(AlternationAstNode alternation, Kind kind, String name) {
         this.alternation = alternation;
         this.kind = kind;
@@ -35,12 +35,12 @@ public class GroupAstNode implements AstNode {
     public String name() {
         return name;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(alternation, kind, name);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -59,5 +59,5 @@ public class GroupAstNode implements AstNode {
     public String toString() {
         return "group{alternation: " + alternation + ", kind:" + kind + ", name: " + name + "}";
     }
-    
+
 }

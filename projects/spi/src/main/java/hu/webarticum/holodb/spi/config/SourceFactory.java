@@ -8,5 +8,5 @@ public interface SourceFactory {
 
     public Source<?> create( // NOSONAR wildcard is OK
             ColumnLocation columnLocation, TreeRandom treeRandom, LargeInteger size, Object data);
-    
+
 }

@@ -6,16 +6,16 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public abstract class AbstractRecursiveMonotonic implements Monotonic {
 
     private final LargeInteger size;
-    
+
     private final LargeInteger imageSize;
 
-    
+
     protected AbstractRecursiveMonotonic(LargeInteger size, LargeInteger imageSize) {
         this.size = size;
         this.imageSize = imageSize;
     }
-    
-    
+
+
     @Override
     public LargeInteger size() {
         return size;
@@ -67,5 +67,5 @@ public abstract class AbstractRecursiveMonotonic implements Monotonic {
     }
 
     protected abstract LargeInteger split(Range range, Range imageRange, LargeInteger imageSplitPoint, int level);
-    
+
 }

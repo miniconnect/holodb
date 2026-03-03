@@ -18,5 +18,5 @@ public @interface HoloTable {
     public long size() default -1L;
 
     public String largeSize() default "";
-    
+
 }

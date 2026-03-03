@@ -13,7 +13,7 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 class TrieValueLocatorTest {
 
     private final CharComparator charComparator = Character::compare;
-    
+
     @Test
     void testSingleEmpty() {
         TrieNode leaf = TrieNode.leafOf(charComparator);
@@ -146,5 +146,5 @@ class TrieValueLocatorTest {
         assertThat(matchingStrings.map(s -> locator.locate(rootNode, s))).allMatch(r -> r.found())
                 .extracting(r -> r.position().toString()).isEqualTo(matchingPositions.asList());
     }
-    
+
 }

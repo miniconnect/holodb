@@ -18,7 +18,7 @@ public class PermutationComparisonMain {
     public static void main(String[] args) throws IOException {
         System.out.print("Characters: ");
         String line = new BufferedReader(new InputStreamReader(System.in)).readLine();
-        
+
         int lineLength = line.length();
         FixedSource<Character> source = new FixedSource<>(
                 Character.class,
@@ -27,7 +27,7 @@ public class PermutationComparisonMain {
                         .collect(Collectors.toList()));
         Map<String, Function<LargeInteger, Permutation>> permutationFactories =
                 PermutationFactorySource.createFactories();
-        
+
         System.out.println();
         int maxLength =
                 permutationFactories.keySet().stream().mapToInt(String::length).max().orElse(0);

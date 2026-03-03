@@ -4,10 +4,10 @@ import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class PermutationComposition implements Permutation {
-    
+
     private final ImmutableList<Permutation> permutations;
-    
-    
+
+
     public PermutationComposition(Permutation... permutations) {
         this(ImmutableList.of(permutations));
     }
@@ -25,10 +25,10 @@ public class PermutationComposition implements Permutation {
                         "Unmatching permutation sizes (%s != %s)", size, itemSize));
             }
         }
-        
+
         this.permutations = permutations;
     }
-    
+
 
     @Override
     public LargeInteger size() {
@@ -52,5 +52,5 @@ public class PermutationComposition implements Permutation {
         }
         return result;
     }
-    
+
 }

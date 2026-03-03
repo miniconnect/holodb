@@ -38,7 +38,7 @@ class CharStringComparatorTest {
                 "", "", ",,", ",7", ",B", ",b", ",b", "3=", "9a", "Ab", "a", "a",
                 "a!", "ab","Áb", "á", "á", "áb", "Ba", "be", "Z", "z9", "zu");
     }
-    
+
     @SuppressWarnings("unchecked")
     private List<String> stringsOf(String... strings) {
         return new ArrayList<>((List<String>) (List<?>) Arrays.asList(strings));

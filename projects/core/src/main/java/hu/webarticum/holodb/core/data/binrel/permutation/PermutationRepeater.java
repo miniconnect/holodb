@@ -5,10 +5,10 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public class PermutationRepeater implements PermutationDecorator {
 
     private final Permutation base;
-    
+
     private final LargeInteger size;
-    
-    
+
+
     public PermutationRepeater(Permutation base, LargeInteger size) {
         if (size.isNonPositive() || !size.isDivisibleBy(base.size())) {
             throw new IllegalArgumentException("New size must be a positive multiple of base size");
@@ -17,8 +17,8 @@ public class PermutationRepeater implements PermutationDecorator {
         this.base = base;
         this.size = size;
     }
-    
-    
+
+
     @Override
     public LargeInteger size() {
         return size;
@@ -49,5 +49,5 @@ public class PermutationRepeater implements PermutationDecorator {
     public Permutation resized(LargeInteger size) {
         return base.resized(size);
     }
-    
+
 }

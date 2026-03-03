@@ -14,52 +14,52 @@ import hu.webarticum.miniconnect.lang.ToStringBuilder;
 public class HoloConfigColumn {
 
     public enum ColumnMode {
-        
+
         DEFAULT, COUNTER, FIXED, ENUM;
-        
+
         @JsonValue
         public String toJson() {
             return name().toLowerCase();
         }
-        
+
     }
 
     public enum DistributionQuality {
-        
+
         LOW, MEDIUM, HIGH;
-        
+
         @JsonValue
         public String toJson() {
             return name().toLowerCase();
         }
-    
+
     }
 
     public enum ShuffleQuality {
-        
+
         NOOP, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH;
-        
+
         @JsonValue
         public String toJson() {
             return name().toLowerCase();
         }
-    
+
     }
 
     public enum DummyTextKind {
-        
+
         PHRASE, TITLE, SENTENCE, PARAGRAPH, MARKDOWN, HTML;
-        
+
         @JsonValue
         public String toJson() {
             return name().toLowerCase();
         }
-            
+
     }
 
 
     private final LargeInteger seedKey;
-    
+
     private final String name;
 
     private final Class<?> type;
@@ -75,26 +75,26 @@ public class HoloConfigColumn {
     private final String valuesBundle;
 
     private final ImmutableList<LargeInteger> valuesRange;
-    
+
     private final String valuesPattern;
-    
+
     private final String valuesDynamicPattern;
 
     private final DummyTextKind valuesTextKind;
-    
+
     private final ImmutableList<String> valuesForeignColumn;
-    
+
     private final DistributionQuality distributionQuality;
-    
+
     private final ShuffleQuality shuffleQuality;
-    
+
     private final Class<? extends SourceFactory> sourceFactory;
-    
+
     private final Object sourceFactoryData;
-    
+
     private final Object defaultValue;
 
-    
+
     public HoloConfigColumn( // NOSONAR: many parameter is OK
             @JsonProperty("seedKey") LargeInteger seedKey,
             @JsonProperty("name") String name,
@@ -138,7 +138,7 @@ public class HoloConfigColumn {
         return new HoloConfigColumn(
                 null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
-    
+
     public static HoloConfigColumn createWithDefaults() {
         return new HoloConfigColumn(
                 null,
@@ -160,13 +160,13 @@ public class HoloConfigColumn {
                 null,
                 null);
     }
-    
+
 
     public HoloConfigColumn merge(HoloConfigColumn other) {
         if (other == null) {
             return this;
         }
-        
+
         return new HoloConfigColumn(
                 mergeValue(seedKey, other.seedKey()),
                 mergeValue(name, other.name()),
@@ -187,7 +187,7 @@ public class HoloConfigColumn {
                 mergeValue(sourceFactoryData, other.sourceFactoryData()),
                 mergeValue(defaultValue, other.defaultValue()));
     }
-    
+
     private <T> T mergeValue(T fallbackValue, T mergeValue) {
         return (mergeValue != null) ? mergeValue : fallbackValue;
     }
@@ -212,7 +212,7 @@ public class HoloConfigColumn {
     public ColumnMode mode() {
         return mode;
     }
-    
+
     @JsonGetter("nullCount")
     @JsonInclude(Include.NON_NULL)
     public LargeInteger nullCount() {
@@ -296,7 +296,7 @@ public class HoloConfigColumn {
     public Object defaultValue() {
         return defaultValue;
     }
-    
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)

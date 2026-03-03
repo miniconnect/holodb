@@ -10,21 +10,21 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 import hu.webarticum.miniconnect.lang.ToStringBuilder;
 
 public class HoloConfigTable {
-    
+
     private static final LargeInteger DEFAULT_SIZE = LargeInteger.of(50);
-    
+
 
     private final String name;
-    
+
     private final Boolean writeable;
-    
+
     private final LargeInteger size;
 
     private final HoloConfigColumn columnDefaults;
 
     private final ImmutableList<HoloConfigColumn> columns;
-    
-    
+
+
     public HoloConfigTable(
             @JsonProperty("name") String name,
             @JsonProperty("writeable") Boolean writeable,
@@ -41,7 +41,7 @@ public class HoloConfigTable {
     public static HoloConfigTable empty() {
         return new HoloConfigTable(null, null, null, null, null);
     }
-    
+
     public static HoloConfigTable createWithDefaults() {
         return new HoloConfigTable(
                 null,
@@ -50,13 +50,13 @@ public class HoloConfigTable {
                 null,
                 ImmutableList.empty());
     }
-    
+
 
     public HoloConfigTable merge(HoloConfigTable other) {
         if (other == null) {
             return this;
         }
-        
+
         return new HoloConfigTable(
                 mergeValue(name, other.name()),
                 mergeValue(writeable, other.writeable()),
@@ -64,11 +64,11 @@ public class HoloConfigTable {
                 mergeValue(columnDefaults, other.columnDefaults()),
                 mergeValue(columns, other.columns()));
     }
-    
+
     private <T> T mergeValue(T fallbackValue, T mergeValue) {
         return (mergeValue != null) ? mergeValue : fallbackValue;
     }
-    
+
     @JsonGetter("name")
     public String name() {
         return name;
@@ -91,7 +91,7 @@ public class HoloConfigTable {
     public HoloConfigColumn columnDefaults() {
         return columnDefaults;
     }
-    
+
     @JsonGetter("columns")
     public ImmutableList<HoloConfigColumn> columns() {
         return columns;
@@ -106,5 +106,5 @@ public class HoloConfigTable {
                 .add("columns", columns)
                 .build();
     }
-    
+
 }

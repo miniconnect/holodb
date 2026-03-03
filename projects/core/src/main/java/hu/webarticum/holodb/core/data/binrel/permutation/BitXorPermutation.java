@@ -10,7 +10,7 @@ public class BitXorPermutation implements Permutation {
     private final LargeInteger size;
 
     private final LargeInteger xorMask;
-    
+
 
     public BitXorPermutation(TreeRandom treeRandom, LargeInteger bitLength) {
         this(treeRandom, bitLength.intValueExact());
@@ -20,18 +20,18 @@ public class BitXorPermutation implements Permutation {
         this.size = LargeInteger.TWO.pow(bitLength);
         this.xorMask = treeRandom.getNumber(size);
     }
-    
+
     public BitXorPermutation(BitSet xorMask, int bitLength) {
         this.size = LargeInteger.TWO.pow(bitLength);
         this.xorMask = LargeInteger.ofUnsigned(xorMask);
     }
-    
+
     public BitXorPermutation(LargeInteger xorMask, int bitLength) {
         this.size = LargeInteger.TWO.pow(bitLength);
         this.xorMask = xorMask;
     }
-    
-    
+
+
     @Override
     public LargeInteger size() {
         return size;

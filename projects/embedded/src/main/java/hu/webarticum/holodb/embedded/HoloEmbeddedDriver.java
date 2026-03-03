@@ -28,9 +28,9 @@ import hu.webarticum.miniconnect.jdbc.provider.DatabaseProvider;
 import hu.webarticum.miniconnect.jdbc.provider.impl.BlanketDatabaseProvider;
 
 public class HoloEmbeddedDriver implements Driver {
-    
+
     public static final String URL_PREFIX = "jdbc:holodb:embedded:";
-    
+
     public static final Pattern TAIL_PATTERN = Pattern.compile(
             "^(?:file://(?<file>[^\\?]+)|resource://(?<resource>[^\\?]+))(?:\\?(?<properties>.*))?");
 
@@ -41,7 +41,7 @@ public class HoloEmbeddedDriver implements Driver {
     public static final String PROPERTIES_GROUPNAME = "properties";
 
     public static final String SCHEMA_KEYNAME = "schema";
-            
+
 
     @Override
     public boolean acceptsURL(String url) {
@@ -80,9 +80,9 @@ public class HoloEmbeddedDriver implements Driver {
         if (!matcher.matches()) {
             throw new IllegalArgumentException("Invalid connection url: " + url);
         }
-        
+
         ConfigLoader configLoader;
-        
+
         String resourcePath = matcher.group(RESOURCE_GROUPNAME);
         if (resourcePath != null) {
             configLoader = new ConfigLoader(resourcePath);
@@ -90,7 +90,7 @@ public class HoloEmbeddedDriver implements Driver {
             String filePath = matcher.group(FILE_GROUPNAME);
             configLoader = new ConfigLoader(new File(filePath));
         }
-        
+
         Map<String, String> properties = parseProperties(matcher.group(PROPERTIES_GROUPNAME));
 
         HoloConfig config = configLoader.load();
@@ -103,23 +103,23 @@ public class HoloEmbeddedDriver implements Driver {
         DatabaseProvider databaseProvider = new BlanketDatabaseProvider();
         return new MiniJdbcConnection(session, databaseProvider);
     }
-    
+
     private Map<String, String> parseProperties(String propertiesString) {
         Map<String, String> properties = new HashMap<>();
         if (propertiesString == null || propertiesString.isEmpty()) {
             return properties;
         }
-        
+
         for (String entryString : propertiesString.split("&")) {
             String[] keyValue = entryString.split("=");
             String key = decodeUrlValue(keyValue[0]);
             String value = decodeUrlValue(keyValue[1]);
             properties.put(key, value);
         }
-        
+
         return properties;
     }
-    
+
     private String decodeUrlValue(String rawValue) {
         try {
             return URLDecoder.decode(rawValue, StandardCharsets.UTF_8.name());
@@ -127,5 +127,5 @@ public class HoloEmbeddedDriver implements Driver {
             return rawValue;
         }
     }
-    
+
 }

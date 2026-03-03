@@ -12,7 +12,7 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 class TrieValueRetrieverTest {
 
     private final CharComparator charComparator = Character::compare;
-    
+
     @Test
     void testSingleEmpty() {
         TrieNode leaf = TrieNode.leafOf(charComparator);
@@ -115,5 +115,5 @@ class TrieValueRetrieverTest {
                         "4690176287371636299340861763759629325046x",
                         "9999999999999999999999999999999999999999x");
     }
-    
+
 }

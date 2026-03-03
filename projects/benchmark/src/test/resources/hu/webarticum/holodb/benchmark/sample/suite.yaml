@@ -1,0 +1,13 @@
+description: This is a sample benchmark suite
+holoConfigResource: dataset.yaml
+initQueries:
+  - "USE sch"
+cases:
+  - name: case-1
+    description: This is a benchmark case
+    query: "SELECT id FROM tbl ORDER BY id LIMIT 1"
+    repeats: 5
+    columns:
+      - name: code
+        type: java.lang.String
+        nullable: false

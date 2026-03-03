@@ -15,9 +15,9 @@ import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.text.ConsoleText;
 
 public class AstNodeTreeNode implements TreeNode {
-    
+
     private final AstNode astNode;
-    
+
     public AstNodeTreeNode(AstNode astNode) {
         this.astNode = astNode;
     }
@@ -47,7 +47,7 @@ public class AstNodeTreeNode implements TreeNode {
     private List<TreeNode> wrapOnlyChild(AstNode astNode) {
         return new ArrayList<>(Arrays.asList(new AstNodeTreeNode(astNode)));
     }
-    
+
     private List<TreeNode> wrapChildren(ImmutableList<? extends AstNode> astNodes) {
         return astNodes.map(a -> (TreeNode) new AstNodeTreeNode(a)).toArrayList();
     }

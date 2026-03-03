@@ -5,10 +5,10 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 public class PermutationReducer implements PermutationDecorator {
 
     private final Permutation base;
-    
+
     private final LargeInteger size;
-    
-    
+
+
     public PermutationReducer(Permutation base, LargeInteger size) {
         if (size.isGreaterThan(base.size())) {
             throw new IllegalArgumentException("New size can not be larger than size of base");
@@ -17,8 +17,8 @@ public class PermutationReducer implements PermutationDecorator {
         this.base = base;
         this.size = size;
     }
-    
-    
+
+
     @Override
     public LargeInteger size() {
         return size;
@@ -51,5 +51,5 @@ public class PermutationReducer implements PermutationDecorator {
     public Permutation resized(LargeInteger size) {
         return base.resized(size);
     }
-    
+
 }

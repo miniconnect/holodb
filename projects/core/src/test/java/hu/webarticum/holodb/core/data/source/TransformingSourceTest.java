@@ -32,7 +32,7 @@ class TransformingSourceTest {
                 .containsExactly("4", "6", "3", "24", "35", "24", "12", "63");
     }
 
-    
+
     private static TransformingSource<Integer, String> createTransformingSource() {
         Source<Integer> baseSource = new FixedSource<>(4, 6, 3, 24, 35, 24, 12, 63);
         return new TransformingSource<>(baseSource, String.class, i -> i.toString());

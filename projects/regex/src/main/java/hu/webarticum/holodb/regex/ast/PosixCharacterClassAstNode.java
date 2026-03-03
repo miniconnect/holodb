@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class PosixCharacterClassAstNode implements CharacterMatchAstNode {
-    
+
     public enum Property {
 
         LOWER("Lower"),
@@ -20,15 +20,15 @@ public class PosixCharacterClassAstNode implements CharacterMatchAstNode {
         CNTRL("Cntrl"),
         XDIGIT("XDigit"),
         SPACE("Space"),
-        
+
         ;
-        
+
         private final String propertyName;
-        
+
         private Property(String propertyName) {
             this.propertyName = propertyName;
         }
-        
+
         public static Optional<Property> of(String propertyName) {
             for (Property property : values()) {
                 if (property.propertyName.equals(propertyName)) {
@@ -37,17 +37,17 @@ public class PosixCharacterClassAstNode implements CharacterMatchAstNode {
             }
             return Optional.empty();
         }
-        
+
         public String propertyName() {
             return propertyName;
         }
-        
+
     }
-    
+
     private final Property property;
-    
+
     private final boolean positive;
-    
+
     private PosixCharacterClassAstNode(Property property, boolean positive) {
         this.property = property;
         this.positive = positive;
@@ -60,7 +60,7 @@ public class PosixCharacterClassAstNode implements CharacterMatchAstNode {
         }
         return Optional.of(PosixCharacterClassAstNode.of(optionalProperty.get(), positive));
     }
-    
+
     public static PosixCharacterClassAstNode of(Property property, boolean positive) {
         return new PosixCharacterClassAstNode(property, positive);
     }
@@ -72,12 +72,12 @@ public class PosixCharacterClassAstNode implements CharacterMatchAstNode {
     public boolean positive() {
         return positive;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(property, positive);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -95,5 +95,5 @@ public class PosixCharacterClassAstNode implements CharacterMatchAstNode {
     public String toString() {
         return "posixprop{kind: " + property + ", positive: " + positive + "}";
     }
-    
+
 }
