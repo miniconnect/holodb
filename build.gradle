@@ -114,7 +114,7 @@ subprojects { subproject ->
         subproject.publishing.publications.withType(MavenPublication).configureEach { mavenPublication ->
             mavenPublication.pom {
                 name = subproject.name
-                description = subproject.description
+                description = subproject.provider { subproject.description }
                 url = websiteUrl
                 licenses {
                     license {
