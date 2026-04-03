@@ -57,7 +57,7 @@ schemas:
 Save this as `config.yaml`, and you are now ready to start the queryable database server:
 
 ```bash
-docker run --rm -p 3430:3430 -v /tmp/config.yaml:/app/config.yaml miniconnect/holodb
+docker run --rm -p 3430:3430 -v '/<path-to-you-file>/config.yaml:/app/config.yaml' miniconnect/holodb
 ```
 
 You can now connect to the server on port 3430.
@@ -169,8 +169,6 @@ and should be preferred in most cases.
 
 The `valuesTextKind` key can be used to generate dummy text in various forms.
 These are based on randomly mixed words from the "lorem ipsum" text, supplemented with some English conjunctions.
-The values will not be indexed
-(for an indexed column containing single words, use the `valuesBundle` key with the value "lorem").
 The available values are as follows:
 
 | Text kind | Example | Description |
@@ -178,9 +176,12 @@ The available values are as follows:
 | `phrase` | *eiusmod an aliqua ullamco* | a short phrase |
 | `title` | *The Nulla Sit Tempor* | a title with capitalization |
 | `sentence` | *Some exercitation an occaecat anim the duis.* | a sentence terminated with perid |
-| `paragraph` |  | a paragraph of containing 3-6 sentences |
+| `paragraph` |  | a paragraph containing 3-6 sentences |
 | `markdown` |  | MarkDown formatted text containing a few headers and paragraphs |
 | `html` |  | HTML formatted text containing a few headers and paragraphs |
+
+The column defined using `valuesTextKind` will not be indexed
+(for an indexed column containing single words, use the `valuesBundle` key with the value `lorem`).
 
 There are several possible values for `valuesBundle`:
 
@@ -192,7 +193,7 @@ There are several possible values for `valuesBundle`:
 | `female-forenames` | 100 frequent English female forenames |
 | `forenames` | 100 frequent English forenames (50 female, 50 male) |
 | `fruits` | 26 of the best selling fruits |
-| `log-levels` | 6 standard log levels (from log4j) |
+| `log-levels` | the 6 common log levels (from log4j) |
 | `lorem` | 49 lower-case words of the *Lorem ipsum* text |
 | `male-forenames` | 100 frequent English male forenames |
 | `months` | the 12 month names |
@@ -235,7 +236,7 @@ The meaning of `mode` values:
 | `enum` | similar to `default`, but with different proper rules for equality check, sort order and insertion/update |
 
 In the case of writable tables, if other than the `enum` mode is used,
-users can also put values ​​different from the initial ones.
+users can also put values different from the initial ones.
 
 If `nullCount` is specified (even if `0`), then the column will be nullable.
 Omit `nullCount` to make the column `NOT NULL`.
@@ -250,7 +251,7 @@ The type of a `counter` column is always `hu.webarticum.miniconnect.lang.LargeIn
 If `seedKey` is specified, it will be explicitly used as a key for the sub-random-generator for the column.
 Setting or changing this value alters the data distribution, shuffling, etc. for this column without affecting other columns.
 If two columns of a table share the same non-null `seedKey` while they have the same settings (except for `name`),
-then they will provide the exact same values in the exact same order , effectively making them mirrors of each other.
+then they will provide the exact same values in the exact same order, effectively making them mirrors of each other.
 This also means that such a column can be renamed without remixing its content.
 
 You can set default configuration for schemas, tables, and columns at any higher level in the configuration tree.
@@ -322,7 +323,7 @@ You can use a predefined value set resource with the `valuesResource` key in `co
             valuesResource: 'my-car-brands.txt'
 ```
 
-If you don't already have a value list, you can retrieve existing data from several sources,
+You can also retrieve existing data from several sources,
 for example [WikiData](https://www.wikidata.org/),
 [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 or [Kaggle](https://www.kaggle.com/).
@@ -509,7 +510,7 @@ These are the supported annotations:
 | `@HoloVirtualColumn` | class | Defines an additional column for the entity (multiple occurrences allowed) |
 
 `@HoloColumn` and `@HoloVirtualColumn` accepts all the columns configurations
-(for `@HoloVirtualColumn` `name` and `type` are mandatory).
+(for `@HoloVirtualColumn`, `name` and `type` are mandatory).
 
 Some numeric settings have two variants, one for usual and one for large values:
 
