@@ -74,6 +74,9 @@ public class HoloConfig {
     public String toString() {
         return new ToStringBuilder(this)
                 .add("seed", seed)
+                .add("schemaDefaults", schemaDefaults)
+                .add("tableDefaults", tableDefaults)
+                .add("columnDefaults", columnDefaults)
                 .add("schemas", schemas)
                 .build();
     }

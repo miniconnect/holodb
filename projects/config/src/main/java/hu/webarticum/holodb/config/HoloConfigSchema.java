@@ -86,6 +86,8 @@ public class HoloConfigSchema {
     public String toString() {
         return new ToStringBuilder(this)
                 .add("name", name)
+                .add("tableDefaults", tableDefaults)
+                .add("columnDefaults", columnDefaults)
                 .add("tables", tables)
                 .build();
     }

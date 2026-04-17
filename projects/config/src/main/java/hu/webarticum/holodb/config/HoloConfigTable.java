@@ -109,6 +109,7 @@ public class HoloConfigTable {
                 .add("name", name)
                 .add("writeable", writeable)
                 .add("size", size)
+                .add("columnDefaults", columnDefaults)
                 .add("columns", columns)
                 .build();
     }
