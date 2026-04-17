@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import hu.webarticum.holodb.spi.config.SourceFactory;
@@ -193,21 +194,25 @@ public class HoloConfigColumn {
     }
 
     @JsonGetter("seedKey")
+    @JsonPropertyDescription("Custom key for seeding the value source of the column")
     public LargeInteger seedKey() {
         return seedKey;
     }
 
     @JsonGetter("name")
+    @JsonPropertyDescription("Name of this column")
     public String name() {
         return name;
     }
 
     @JsonGetter("type")
+    @JsonPropertyDescription("Native type of this column")
     public Class<?> type() {
         return type;
     }
 
     @JsonGetter("mode")
+    @JsonPropertyDescription("Behavior mode of this column")
     @JsonInclude(Include.NON_NULL)
     public ColumnMode mode() {
         return mode;
@@ -215,35 +220,41 @@ public class HoloConfigColumn {
 
     @JsonGetter("nullCount")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Desired count of null values in this column")
     public LargeInteger nullCount() {
         return nullCount;
     }
 
     @JsonGetter("values")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("List of desired values in this column")
     public ImmutableList<Object> values() {
         return values;
     }
 
     @JsonGetter("valuesResource")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Resource path containing the list of desired values in this column")
     public String valuesResource() {
         return valuesResource;
     }
 
     @JsonGetter("valuesBundle")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Name of the bundle providing the desired values in this column")
     public String valuesBundle() {
         return valuesBundle;
     }
 
     @JsonGetter("valuesRange")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Range for bounding the desired values in this column")
     public ImmutableList<LargeInteger> valuesRange() {
         return valuesRange;
     }
 
     @JsonGetter("valuesPattern")
+    @JsonPropertyDescription("Pattern for templating the desired values in this column")
     @JsonInclude(Include.NON_NULL)
     public String valuesPattern() {
         return valuesPattern;
@@ -251,48 +262,56 @@ public class HoloConfigColumn {
 
     @JsonGetter("valuesDynamicPattern")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Pattern for templating the desired values in this column (non-indexed)")
     public String valuesDynamicPattern() {
         return valuesDynamicPattern;
     }
 
     @JsonGetter("valuesTextKind")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Text kind for templating the desired values in this column")
     public DummyTextKind valuesTextKind() {
         return valuesTextKind;
     }
 
     @JsonGetter("valuesForeignColumn")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Foreign key target of this column")
     public ImmutableList<String> valuesForeignColumn() {
         return valuesForeignColumn;
     }
 
     @JsonGetter("distributionQuality")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Quality level of the distributing algorithm for this column")
     public DistributionQuality distributionQuality() {
         return distributionQuality;
     }
 
     @JsonGetter("shuffleQuality")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Quality level of the shuffling algorithm for this column")
     public ShuffleQuality shuffleQuality() {
         return shuffleQuality;
     }
 
     @JsonGetter("sourceFactory")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Custom source factory class for this column")
     public Class<? extends SourceFactory> sourceFactory() {
         return sourceFactory;
     }
 
     @JsonGetter("sourceFactoryData")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Parameters for the custom factory class for this column")
     public Object sourceFactoryData() {
         return sourceFactoryData;
     }
 
     @JsonGetter("defaultValue")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Default value of this column")
     public Object defaultValue() {
         return defaultValue;
     }

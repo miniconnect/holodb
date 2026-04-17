@@ -3,6 +3,7 @@ package hu.webarticum.holodb.config;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -37,29 +38,34 @@ public class HoloConfig {
 
 
     @JsonGetter("seed")
+    @JsonPropertyDescription("Root seed for blending the entire database")
     public LargeInteger seed() {
         return seed;
     }
 
     @JsonGetter("schemaDefaults")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Default settings for all schemas")
     public HoloConfigSchema schemaDefaults() {
         return schemaDefaults;
     }
 
     @JsonGetter("tableDefaults")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Default settings for all tables in all schemas")
     public HoloConfigTable tableDefaults() {
         return tableDefaults;
     }
 
     @JsonGetter("columnDefaults")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Default settings for all columns in all tables in all schemas")
     public HoloConfigColumn columnDefaults() {
         return columnDefaults;
     }
 
     @JsonGetter("schemas")
+    @JsonPropertyDescription("List of schema definitions")
     public ImmutableList<HoloConfigSchema> schemas() {
         return schemas;
     }

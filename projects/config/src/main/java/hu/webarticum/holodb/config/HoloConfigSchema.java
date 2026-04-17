@@ -3,6 +3,7 @@ package hu.webarticum.holodb.config;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -56,23 +57,27 @@ public class HoloConfigSchema {
     }
 
     @JsonGetter("name")
+    @JsonPropertyDescription("Name of this schema")
     public String name() {
         return name;
     }
 
     @JsonGetter("tableDefaults")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Default settings for all tables in this schema")
     public HoloConfigTable tableDefaults() {
         return tableDefaults;
     }
 
     @JsonGetter("columnDefaults")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Default settings for all columns in all tables in this schema")
     public HoloConfigColumn columnDefaults() {
         return columnDefaults;
     }
 
     @JsonGetter("tables")
+    @JsonPropertyDescription("List of table definitions in this schema")
     public ImmutableList<HoloConfigTable> tables() {
         return tables;
     }

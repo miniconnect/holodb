@@ -3,6 +3,7 @@ package hu.webarticum.holodb.config;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import hu.webarticum.miniconnect.lang.ImmutableList;
@@ -70,29 +71,34 @@ public class HoloConfigTable {
     }
 
     @JsonGetter("name")
+    @JsonPropertyDescription("Name of this table")
     public String name() {
         return name;
     }
 
     @JsonGetter("writeable")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Can this table be written by clients or not")
     public Boolean writeable() {
         return writeable;
     }
 
     @JsonGetter("size")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Desired count of rows in this table")
     public LargeInteger size() {
         return size;
     }
 
     @JsonGetter("columnDefaults")
     @JsonInclude(Include.NON_NULL)
+    @JsonPropertyDescription("Default settings for all columns in this table")
     public HoloConfigColumn columnDefaults() {
         return columnDefaults;
     }
 
     @JsonGetter("columns")
+    @JsonPropertyDescription("List of column definitions in this table")
     public ImmutableList<HoloConfigColumn> columns() {
         return columns;
     }
