@@ -1,0 +1,14 @@
+description: Various single-table queries
+holoConfigResource: ../datasets/complex-table.yaml
+initQueries:
+  - USE benchmark
+cases:
+
+  - name: xxx
+    description: Select single field by id
+    query: "SELECT member_code FROM members WHERE id = 1"
+    repeats: 5000
+    columns:
+      - name: member_code
+        type: java.lang.String
+        nullable: false

@@ -125,8 +125,8 @@ public class QueryBenchmarkController {
     }
 
     private int calculateWarmupCount(int suiteNo, int caseNo, int repeats) {
-        int suiteWarmupFactor = Math.max(1, 3 * (2 - suiteNo));
-        int caseWarmupFactor = Math.max(1, 4 * (3 - caseNo));
+        int suiteWarmupFactor = Math.max(1, 2 - suiteNo);
+        int caseWarmupFactor = Math.max(1, 2 * (3 - caseNo));
         return suiteWarmupFactor * caseWarmupFactor * repeats;
     }
 

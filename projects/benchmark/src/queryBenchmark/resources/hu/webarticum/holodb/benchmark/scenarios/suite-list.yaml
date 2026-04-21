@@ -1,2 +1,3 @@
 suites:
   - suites/simple.yaml
+  - suites/single-table.yaml

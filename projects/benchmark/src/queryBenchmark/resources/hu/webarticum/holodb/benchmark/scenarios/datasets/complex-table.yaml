@@ -1,0 +1,26 @@
+seed: 98765
+schemas:
+  - name: benchmark
+    tables:
+      - name: members
+        writeable: true
+        size: 12000
+        columns:
+          - name: id
+            mode: COUNTER
+          - name: member_code
+            valuesPattern: '[A-F]{3}\-(temp|con|admin)\-[0-9]{3,4}'
+          - name: firstname
+            valuesBundle: forenames
+          - name: lastname
+            valuesBundle: surnames
+          - name: birth_year
+            shuffleQuality: high
+            valuesRange: [1940, 2005]
+          - name: address_street_name
+            valuesTextKind: title
+          - name: address_street_type
+            mode: enum
+            values: [ Avenue, Drive, Road, Street, Square, Way ]
+          - name: address_house_number
+            valuesRange: [1, 120]
