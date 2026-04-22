@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: hu.webarticum.miniconnect.generaldocs.examples.benchmarkanimation
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [app-name, data, data-jdbc, gradle, h2, http-client-test, java, java-application, jdbc-hikari, junit, logback, micronaut-aot, micronaut-build, micronaut-http-validation, netty-server, properties, readme, serialization-jackson, shade, static-resources]

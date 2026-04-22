@@ -1,0 +1,77 @@
+plugins {
+    id('io.micronaut.application') version '4.6.2'
+    id('io.micronaut.aot') version '4.6.2'
+    id('com.gradleup.shadow') version '8.3.9'
+}
+
+description = 'Administration tools for HoloDB'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    annotationProcessor('io.micronaut.data:micronaut-data-processor')
+    annotationProcessor('io.micronaut:micronaut-http-validation')
+    annotationProcessor('io.micronaut.serde:micronaut-serde-processor')
+    annotationProcessor('info.picocli:picocli-codegen')
+
+    implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+    implementation project(':bootstrap')
+    implementation project(':embedded')
+
+    implementation('io.micronaut.data:micronaut-data-jdbc')
+    implementation('io.micronaut.picocli:micronaut-picocli')
+    implementation('io.micronaut.serde:micronaut-serde-jackson')
+    implementation('io.micronaut.sql:micronaut-jdbc-hikari')
+    compileOnly('io.micronaut:micronaut-http-client')
+    runtimeOnly('ch.qos.logback:logback-classic')
+
+    runtimeOnly('com.h2database:h2')
+    runtimeOnly('com.mysql:mysql-connector-j:9.6.0')
+    runtimeOnly('org.postgresql:postgresql:42.7.10')
+    runtimeOnly('org.xerial:sqlite-jdbc:3.53.0.0')
+
+    testImplementation('io.micronaut:micronaut-http-client')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+}
+
+application {
+    mainClass = 'hu.webarticum.holodb.admin.Application'
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion('21')
+    targetCompatibility = JavaVersion.toVersion('21')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+}
+
+graalvmNative.toolchainDetection = false
+
+micronaut {
+    runtime('netty')
+    testRuntime('junit5')
+    processing {
+        incremental(true)
+        annotations('hu.webarticum.holodb.admin.*')
+    }
+    aot {
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
+        replaceLogbackXml = true
+    }
+
+}
+
+tasks.named('dockerfileNative') {
+    jdkVersion = '21'
+}
