@@ -1,10 +1,19 @@
 plugins {
-    id('io.micronaut.application') version '4.6.2'
-    id('io.micronaut.aot') version '4.6.2'
-    id('com.gradleup.shadow') version '8.3.9'
+    id 'io.micronaut.application' version '4.6.2'
+    id 'io.micronaut.aot' version '4.6.2'
+    id 'com.gradleup.shadow' version '8.3.9'
+    id 'com.github.gmazzo.buildconfig' version '6.0.9'
 }
 
 description = 'Administration tools for HoloDB'
+
+buildConfig {
+    packageName('hu.webarticum.holodb.admin.buildconfig')
+    className('BuildConfig')
+    buildConfigField(String, 'APP_NAME', project.name)
+    buildConfigField(String, "APP_VERSION", provider { project.version })
+    buildConfigField(String, "APP_DESCRIPTION", provider { project.description })
+}
 
 repositories {
     mavenCentral()
