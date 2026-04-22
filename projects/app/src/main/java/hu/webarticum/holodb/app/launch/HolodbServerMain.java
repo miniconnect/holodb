@@ -20,6 +20,7 @@ import picocli.CommandLine.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hu.webarticum.holodb.app.buildconfig.BuildConfig;
 import hu.webarticum.holodb.bootstrap.factory.ConfigLoader;
 import hu.webarticum.holodb.bootstrap.factory.EngineBuilder;
 import hu.webarticum.holodb.bootstrap.factory.StorageAccessFactory;
@@ -33,7 +34,12 @@ import hu.webarticum.miniconnect.messenger.impl.SessionManagerMessenger;
 import hu.webarticum.miniconnect.server.MessengerServer;
 import hu.webarticum.miniconnect.server.ServerConstants;
 
-@Command(name = "HoloDBServer", mixinStandardHelpOptions = true)
+@Command(
+        name = "HoloDBServer",
+        description = BuildConfig.APP_DESCRIPTION,
+        version = BuildConfig.APP_VERSION,
+        mixinStandardHelpOptions = true
+)
 public class HolodbServerMain implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
