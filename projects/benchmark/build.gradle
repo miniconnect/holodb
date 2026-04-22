@@ -39,6 +39,10 @@ dependencies {
     queryBenchmarkImplementation 'org.slf4j:slf4j-api:2.0.17'
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
+
 tasks.register('queryBenchmark', JavaExec) {
     shouldRunAfter tasks.test
     group = LifecycleBasePlugin.VERIFICATION_GROUP

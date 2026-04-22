@@ -35,6 +35,10 @@ application {
     mainClass = serverMainClass
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
+
 jib {
     from {
         image = 'gcr.io/distroless/java21-debian12'

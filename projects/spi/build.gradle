@@ -4,6 +4,10 @@ plugins {
 
 description = "HoloDB service provider interfaces"
 
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
+
 dependencies {
     api project(':core')
     api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"

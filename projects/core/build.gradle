@@ -17,6 +17,10 @@ configurations {
     labRuntimeOnly.extendsFrom runtimeOnly
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
+
 dependencies {
     implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
     implementation "hu.webarticum.miniconnect:util:${miniConnectVersion}"

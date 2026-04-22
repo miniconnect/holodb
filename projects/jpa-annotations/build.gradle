@@ -4,6 +4,10 @@ plugins {
 
 description = "HoloDB JPA configuration annotations"
 
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
+
 dependencies {
     api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
 }

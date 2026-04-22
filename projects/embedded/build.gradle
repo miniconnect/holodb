@@ -4,6 +4,10 @@ plugins {
 
 description = "HoloDB embedded functionality"
 
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
+
 dependencies {
     implementation project(':bootstrap')
 }

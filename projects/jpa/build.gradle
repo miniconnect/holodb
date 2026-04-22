@@ -4,6 +4,10 @@ plugins {
 
 description = "HoloDB JPA loader functionality"
 
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
+
 dependencies {
     api project(':config')
     api project(':jpa-annotations')
@@ -23,11 +27,4 @@ dependencies {
 
     // TODO: provide separate drivers for newer hibernate major versions
     compileOnly 'org.hibernate:hibernate-core:5.4.31.Final'
-}
-
-tasks.withType(JavaCompile).configureEach {
-    javaCompiler = javaToolchains.compilerFor {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-    options.release = 8
 }

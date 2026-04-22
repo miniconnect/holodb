@@ -4,6 +4,10 @@ plugins {
 
 description = "Bootstrap utility for creating a HoloDB database from a configuration"
 
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
+
 dependencies {
     api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
     api "hu.webarticum.miniconnect.api:api:${miniConnectApiVersion}"
