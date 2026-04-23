@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.admin.materializer;
+package hu.webarticum.holodb.admin.materialize;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +12,7 @@ import picocli.CommandLine.Option;
         description = "Materializes a HoloDB virtual dataset",
         mixinStandardHelpOptions = true
 )
-public class MaterializerCommand implements Runnable {
+public class MaterializeCommand implements Runnable {
 
     @Option(
             names = { "-j", "--jdbc-url" },

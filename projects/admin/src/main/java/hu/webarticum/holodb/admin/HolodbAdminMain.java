@@ -1,7 +1,7 @@
 package hu.webarticum.holodb.admin;
 
-import hu.webarticum.holodb.admin.materializer.MaterializerCommand;
 import hu.webarticum.holodb.admin.buildconfig.BuildConfig;
+import hu.webarticum.holodb.admin.materialize.MaterializeCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -11,7 +11,7 @@ import picocli.CommandLine.Command;
         version = BuildConfig.APP_VERSION,
         mixinStandardHelpOptions = true,
         subcommandsRepeatable = false,
-        subcommands = { MaterializerCommand.class }
+        subcommands = { MaterializeCommand.class }
 )
 public class HolodbAdminMain implements Runnable {
 
