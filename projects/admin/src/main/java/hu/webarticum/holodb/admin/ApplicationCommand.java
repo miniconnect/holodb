@@ -2,11 +2,9 @@ package hu.webarticum.holodb.admin;
 
 import hu.webarticum.holodb.admin.materializer.MaterializerCommand;
 import hu.webarticum.holodb.admin.buildconfig.BuildConfig;
-import jakarta.inject.Singleton;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
-@Singleton
 @Command(
         name = "holodb-admin",
         description = BuildConfig.APP_DESCRIPTION,

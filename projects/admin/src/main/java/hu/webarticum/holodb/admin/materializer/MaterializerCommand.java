@@ -4,11 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import jakarta.inject.Singleton;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-@Singleton
 @Command(
         name = "materialize",
         description = "Materializes a HoloDB virtual dataset",

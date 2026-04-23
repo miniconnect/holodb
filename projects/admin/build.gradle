@@ -1,7 +1,7 @@
 plugins {
-    id 'io.micronaut.application' version '4.6.2'
-    id 'io.micronaut.aot' version '4.6.2'
-    id 'com.gradleup.shadow' version '8.3.9'
+    id 'java-library'
+    id 'application'
+    id 'com.gradleup.shadow' version '9.3.0'
     id 'com.github.gmazzo.buildconfig' version '6.0.9'
 }
 
@@ -15,38 +15,38 @@ buildConfig {
     buildConfigField(String, "APP_DESCRIPTION", provider { project.description })
 }
 
-repositories {
-    mavenCentral()
-    mavenLocal()
+def serverMainClass = 'hu.webarticum.holodb.admin.HolodbAdminMain'
+
+sourceSets {
+    lab {
+        compileClasspath += sourceSets.main.runtimeClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+configurations {
+    labImplementation.extendsFrom implementation
+    labRuntimeOnly.extendsFrom runtimeOnly
 }
 
 dependencies {
-    annotationProcessor('io.micronaut.data:micronaut-data-processor')
-    annotationProcessor('io.micronaut:micronaut-http-validation')
-    annotationProcessor('io.micronaut.serde:micronaut-serde-processor')
-    annotationProcessor('info.picocli:picocli-codegen')
-
     implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
     implementation project(':bootstrap')
     implementation project(':embedded')
 
-    implementation('io.micronaut.data:micronaut-data-jdbc')
-    implementation('io.micronaut.picocli:micronaut-picocli')
-    implementation('io.micronaut.serde:micronaut-serde-jackson')
-    implementation('io.micronaut.sql:micronaut-jdbc-hikari')
-    compileOnly('io.micronaut:micronaut-http-client')
-    runtimeOnly('ch.qos.logback:logback-classic')
+    implementation 'info.picocli:picocli:4.7.7'
+    implementation 'org.slf4j:slf4j-api:2.0.17'
 
-    runtimeOnly('com.h2database:h2')
-    runtimeOnly('org.xerial:sqlite-jdbc:3.53.0.0')
-    runtimeOnly('org.postgresql:postgresql:42.7.10')
+    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.25.3'
+    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.25.3'
 
-    testImplementation('io.micronaut:micronaut-http-client')
-    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+    runtimeOnly 'com.h2database:h2:2.4.240'
+    runtimeOnly 'org.xerial:sqlite-jdbc:3.53.0.0'
+    runtimeOnly 'org.postgresql:postgresql:42.7.10'
 }
 
 application {
-    mainClass = 'hu.webarticum.holodb.admin.Application'
+    mainClass = serverMainClass
 }
 
 java {
@@ -56,30 +56,4 @@ java {
 
 tasks.withType(JavaCompile).configureEach {
     options.release = 21
-}
-
-graalvmNative.toolchainDetection = false
-
-micronaut {
-    runtime('netty')
-    testRuntime('junit5')
-    processing {
-        incremental(true)
-        annotations('hu.webarticum.holodb.admin.*')
-    }
-    aot {
-        optimizeServiceLoading = false
-        convertYamlToJava = false
-        precomputeOperations = true
-        cacheEnvironment = true
-        optimizeClassLoading = true
-        deduceEnvironment = true
-        optimizeNetty = true
-        replaceLogbackXml = true
-    }
-
-}
-
-tasks.named('dockerfileNative') {
-    jdkVersion = '21'
 }
