@@ -38,7 +38,7 @@ public class MaterializeCommand implements Runnable {
 
     @Option(
             names = { "-r", "--table-rename" },
-            description = "Table rename template (for example: 'prefix_{clean|lower|10}_suffix')")
+            description = "Table rename template (for example: 'prefix_{ascii|lower|10}_suffix')")
     private String tableRenameTemplate;
 
     @Option(

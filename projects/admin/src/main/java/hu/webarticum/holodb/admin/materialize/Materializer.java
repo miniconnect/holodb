@@ -30,7 +30,8 @@ public class Materializer {
     public void materialize() {
         
         // TODO
-        System.out.println(tableRenamer.apply("LoremIpsum"));
+        //System.out.println(tableRenamer.apply("LoremIpsum"));
+        System.out.println(tableRenamer.apply("loremIPSUMDolorSit123AMET"));
         
     }
 
