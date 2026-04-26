@@ -33,9 +33,11 @@ dependencies {
     implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
     implementation project(':bootstrap')
     implementation project(':embedded')
+    implementation project(':storage')
 
-    implementation 'info.picocli:picocli:4.7.7'
     implementation 'org.slf4j:slf4j-api:2.0.17'
+    implementation 'info.picocli:picocli:4.7.7'
+    implementation 'org.jooq:jooq:3.21.2'
 
     runtimeOnly 'org.apache.logging.log4j:log4j-core:2.25.3'
     runtimeOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.25.3'

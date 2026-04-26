@@ -1,10 +1,14 @@
 package hu.webarticum.holodb.admin.materialize;
 
 import java.io.File;
+import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import hu.webarticum.holodb.admin.util.NameTransformer;
 import hu.webarticum.holodb.bootstrap.factory.ConfigLoader;
@@ -19,6 +23,8 @@ import picocli.CommandLine.Option;
         description = "Materializes a HoloDB virtual dataset",
         mixinStandardHelpOptions = true)
 public class MaterializeCommand implements Runnable {
+
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Option(
             names = { "-c", "--config-file" },
@@ -40,6 +46,24 @@ public class MaterializeCommand implements Runnable {
             names = { "-r", "--table-rename" },
             description = "Table rename template (for example: 'prefix_{ascii|lower|10}_suffix')")
     private String tableRenameTemplate;
+
+    @Option(
+            names = { "-d", "--drop" },
+            description = "Drop existing target tables",
+            defaultValue = "false")
+    private boolean drop;
+
+    @Option(
+            names = { "-N", "--no-create" },
+            description = "Skips table creation",
+            defaultValue = "false")
+    private boolean noCreate;
+
+    @Option(
+            names = { "-n", "--no-insert" },
+            description = "Skips insertion of data rows",
+            defaultValue = "false")
+    private boolean noInsert;
 
     @Option(
             names = { "-j", "--jdbc-url" },
@@ -64,8 +88,9 @@ public class MaterializeCommand implements Runnable {
     public void run() {
         try (Connection connection = connect()) {
             materialize(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            System.err.println("ERROR: " + e.getMessage());
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -76,10 +101,11 @@ public class MaterializeCommand implements Runnable {
     private void materialize(Connection connection) {
         HoloConfig config = new ConfigLoader(new File(configFilePath)).load();
         StorageAccess storageAccess = StorageAccessFactory.createStorageAccess(config);
-        Materializer.MaterializerBuilder builder = Materializer.builder(storageAccess, connection);
-        if (sourceSchemaName != null) {
-            builder.sourceSchemaName(sourceSchemaName);
-        }
+        Materializer.MaterializerBuilder builder = Materializer.builder(storageAccess, connection)
+                .sourceSchemaName(sourceSchemaName)
+                .dropTables(drop)
+                .createTables(!noCreate)
+                .insertData(!noInsert);
         if (tableFilterRegex != null) {
             builder.tableFilter(Pattern.compile(tableFilterRegex).asMatchPredicate());
         }
