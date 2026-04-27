@@ -1,37 +1,23 @@
 # HoloDB &ndash; the on-the-fly relational database
 
-HoloDB is a lightweight relational database simulator.
-It launches instantly from your declarative configuration and presents a coherent, performant, writable database view without storing any data.
-Ideal for demos, prototypes, testing, education, or any situation traditionally involving synthetic or anonymized data.
+**Launch a scalable, writable, and consistent SQL database instantly from a configuration file -
+eliminating the need for persistent data storage.**
+
+Ideal for demos, automated testing, and CI/CD pipelines where you need a database-shaped system
+without the overhead of data management, migrations, or unnecessary resource waste.
 
 
 ## :bulb: Why HoloDB?
 
-> ***No data generation &ndash; no storage costs &ndash; no migrations.***
->
-> **Sketch up your schema and characteristics, and you're ready to start querying!**
-
-HoloDB is for those moments when you need a database-shaped system but are tired of the complications of actually managing data.
-Instead of setting up or importing datasets, you simply provide a configuration file (or ORM entities)
-and immediately start working with an on-the-fly (yet performant) relational system that computes every result from definition rules, not storage.
-
-What you get from it:
-
-- **On-the-fly data engine** &rarr; generates consistent data dynamically, no pre-generation.
-- **Declarative control** &rarr; lets you define schema and values via YAML/JSON config or JPA annotations.
-- **Searchable and writable** &rarr; on-the-fly data you can still search and update like a real DB.
-- **Versatile usage modes** &rarr; supports multiple ways to run (embedded, JPA-based, Docker etc.).
-- **Integration options** &rarr; offers several ways to connect (JDBC, [MiniConnect](https://github.com/miniconnect/miniconnect), TCP) and upcoming integrations (Postgres, DBeaver).
-- **Portable across environments** &rarr; runs seamlessly in Java or Docker, on any platform.
-- **Open source and transparent** &rarr; freely available, inspectable, and adaptable to your needs.
-
-Work with a database as if it were real, minus the cost of setup and maintenance.
+- **Virtual Data Layer:** Data is served from declarative rules instead of storage.
+- **Instant Availability:** No pre-generation scripts or time-consuming data imports.
+- **Fully Functional:** Searchable, writable, and compatible with JDBC, Docker, and JPA.
+- **Deterministic:** Using a seed ensures the exact same dataset across every environment.
 
 
 ## :rocket: Quick start
 
-One easy way to try out HoloDB is to run it via [the official Docker image](https://hub.docker.com/r/miniconnect/holodb).
-All you need is a YAML configuration file:
+1. **Create `config.yaml:`**
 
 ```yaml
 seed: 98765
@@ -42,28 +28,20 @@ schemas:
         writeable: true
         size: 1500
         columns:
-          - name: id
-            mode: COUNTER
-          - name: code
-            valuesPattern: '[A-F]{3}[0-9]{2}'
-          - name: year
-            shuffleQuality: high
-            valuesRange: [1950, 2000]
+          - { name: id, mode: counter }
+          - { name: code, valuesPattern: '[A-F]{3}[0-9]{2}' }
+          - { name: year, shuffleQuality: high, valuesRange: [1950, 2000] }
 ```
 
-> [!TIP]
-> [You can download a more complex sample configuration from here.](https://raw.githubusercontent.com/miniconnect/general-docs/refs/heads/main/examples/holodb-standalone/config.yaml).
-
-Save this as `config.yaml`, and you are now ready to start the queryable database server:
+2. **Run the server:**
 
 ```bash
 docker run --rm -p 3430:3430 -v '/<path-to-you-file>/config.yaml:/app/config.yaml' miniconnect/holodb
 ```
 
+3. **Query instantly**
+
 You can now connect to the server on port 3430.
-The simplest way to do this is to use the `micl` command line application, which is an SQL REPL.
-You can get it from the [`miniconnect-client` project](https://github.com/miniconnect/miniconnect-client).
-Start, select the schema, and run queries:
 
 > `$` &nbsp; **`micl`**
 >
@@ -89,7 +67,10 @@ Start, select the schema, and run queries:
 > >  └─────┴───────┴──────┘
 > > ```
 
-For other ways to use the server, such as connecting from your application, see later.
+For more info about the `micl` command-line REPL
+[see the `miniconnect-client` project](https://github.com/miniconnect/miniconnect-client).
+
+For other ways to use the server and embedded mode see later.
 
 
 ## :books: More examples
