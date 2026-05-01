@@ -2,6 +2,7 @@ plugins {
     id 'org.ajoberstar.grgit' version '5.3.2'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'nebula.lint' version '20.6.2'
+    id 'com.github.ben-manes.versions' version '0.54.0'
 }
 
 description = "HoloDB - instant random relational data"
