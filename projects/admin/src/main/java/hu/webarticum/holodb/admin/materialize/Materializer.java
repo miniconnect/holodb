@@ -2,10 +2,14 @@ package hu.webarticum.holodb.admin.materialize;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 import org.jooq.DataType;
 import org.jooq.DSLContext;
@@ -19,6 +23,7 @@ import hu.webarticum.holodb.admin.util.JooqUtil;
 import hu.webarticum.minibase.storage.api.Column;
 import hu.webarticum.minibase.storage.api.ColumnDefinition;
 import hu.webarticum.minibase.storage.api.NamedResourceStore;
+import hu.webarticum.minibase.storage.api.Row;
 import hu.webarticum.minibase.storage.api.Schema;
 import hu.webarticum.minibase.storage.api.StorageAccess;
 import hu.webarticum.minibase.storage.api.Table;
@@ -28,12 +33,17 @@ import hu.webarticum.miniconnect.lang.LargeInteger;
 
 public class Materializer {
 
+    public static final BiFunction<String, ImmutableList<String>, String> DEFAULT_INDEX_NAMER = Materializer::createDefaultIndexName;
+
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final StorageAccess storageAccess;
     private final Optional<String> sourceSchemaName;
     private final Predicate<String> tableFilter;
+    private final Predicate<String> columnFilter;
     private final UnaryOperator<String> tableRenamer;
+    private final UnaryOperator<String> columnRenamer;
+    private final BiFunction<String, ImmutableList<String>, String> indexNamer;
     private final boolean dropTables;
     private final boolean createTables;
     private final boolean insertData ;
@@ -44,7 +54,10 @@ public class Materializer {
         this.storageAccess = builder.storageAccess;
         this.sourceSchemaName = builder.sourceSchemaName;
         this.tableFilter = builder.tableFilter;
+        this.columnFilter = builder.columnFilter;
         this.tableRenamer = builder.tableRenamer;
+        this.columnRenamer = builder.columnRenamer;
+        this.indexNamer = builder.indexNamer;
         this.dropTables = builder.dropTables;
         this.createTables = builder.createTables;
         this.insertData = builder.insertData;
@@ -53,6 +66,12 @@ public class Materializer {
 
     public static MaterializerBuilder builder(StorageAccess storageAccess, Connection connection) {
         return new MaterializerBuilder(storageAccess, connection);
+    }
+
+    private static String createDefaultIndexName(String tableName, ImmutableList<String> columnNames) {
+        StringBuilder resultBuilder = new StringBuilder("idx_" + tableName);
+        columnNames.forEach(v -> resultBuilder.append("_" + v));
+        return resultBuilder.toString();
     }
 
     public void materialize() {
@@ -86,26 +105,41 @@ public class Materializer {
 
     private void materializeTable(Table table) {
         String targetName = tableRenamer.apply(table.name());
-        var fields = extractFields(table);
+        var columns = extractColumns(table);
         if (dropTables) {
              dropTable(targetName);
         }
+        if (columns.isEmpty()) {
+            logger.info("Skipped table with no columns: " + targetName);
+            return;
+        }
         if (createTables) {
-            createTable(fields, targetName);
+            createTable(columns, targetName);
         }
         if (insertData) {
-            populateTable(table, fields, targetName);
+            populateTable(table, columns, targetName);
         }
         if (createTables) {
-            postprocessTable(table, targetName);
+            postprocessTable(table, columns, targetName);
         }
     }
 
-    private static List<? extends Field<?>> extractFields(Table table) {
-        return table.columns().resources().map(c -> fieldOf(c)).asList();
+    private LinkedHashMap<String, ColumnItem> extractColumns(Table table) {
+        LinkedHashMap<String, ColumnItem> result = new LinkedHashMap<>();
+        String tableName = table.name();
+        for (Column column : table.columns().resources()) {
+            String columnName = column.name();
+            String fullyQualifiedName = tableName + "." + columnName;
+            if (columnFilter.test(fullyQualifiedName)) {
+                String targetName = columnRenamer.apply(column.name());
+                Field<?> field = DSL.field(DSL.name(targetName), dataTypeOf(column));
+                result.put(columnName, new ColumnItem(column, field));
+            }
+        }
+        return result;
     }
 
-    private static Field<?> fieldOf(Column column) {
+    private DataType<?> dataTypeOf(Column column) {
         ColumnDefinition columnDefinition = column.definition();
         DataType<?> dataType = JooqUtil.toDataType(column).nullable(columnDefinition.isNullable());
         if (columnDefinition.isAutoIncremented()) {
@@ -115,11 +149,11 @@ public class Materializer {
         if (defaultValue != null && !columnDefinition.isAutoIncremented()) {
             dataType = applyDefaultValue(dataType, JooqUtil.normalizeValue(defaultValue));
         }
-        return DSL.field(DSL.name(column.name()), dataType);
+        return dataType;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private static DataType<?> applyDefaultValue(DataType<?> dataType, Object defaultValue) {
+    private DataType<?> applyDefaultValue(DataType<?> dataType, Object defaultValue) {
         return ((DataType) dataType).defaultValue(defaultValue);
     }
 
@@ -128,36 +162,50 @@ public class Materializer {
         executeQuery(dslContext.dropTableIfExists(targetName));
     }
 
-    private void createTable(List<? extends Field<?>> fields, String targetName) {
+    private void createTable(LinkedHashMap<String, ColumnItem> columns, String targetName) {
         logger.info("Create table: " + targetName);
+        var fields = columns.values().stream().map(c -> c.targetField()).collect(Collectors.toList());
         executeQuery(dslContext.createTable(DSL.name(targetName)).columns(fields));
     }
 
-    private void populateTable(Table table, List<? extends Field<?>> fields, String targetName) {
+    private void populateTable(Table table, LinkedHashMap<String, ColumnItem> columns, String targetName) {
         logger.info("Populate table: " + targetName);
         var targetTable = DSL.table(DSL.name(targetName));
         LargeInteger rowCount = table.size();
+        var fields = columns.values().stream().map(c -> c.targetField()).collect(Collectors.toList());
+        var sourceColumnNames = ImmutableList.fromCollection(columns.keySet());
         for (var i = LargeInteger.ZERO; i.isLessThan(rowCount); i = i.increment()) {
-            executeQuery(dslContext
-                    .insertInto(targetTable, fields)
-                    .values(table.row(i).getAll().map(v -> JooqUtil.normalizeValue(v)).asList()));
+            Row row = table.row(i);
+            var values = sourceColumnNames.map(k -> JooqUtil.normalizeValue(row.get(k)));
+            executeQuery(dslContext.insertInto(targetTable, fields).values(values.asList()));
         }
     }
 
-    private void postprocessTable(Table table, String targetName) {
+    private void postprocessTable(Table table, LinkedHashMap<String, ColumnItem> columns, String targetName) {
         logger.info("Postprocess table: " + targetName);
-        var targetTable = DSL.table(DSL.name(targetName));
         for (TableIndex index : table.indexes().resources()) {
-            var indexName = DSL.name(targetName + "_" + index.name());
-            var createIndexStep = index.isUnique() ?
-                    dslContext.createUniqueIndex(indexName) :
-                    dslContext.createIndex(indexName);
-            executeQuery(createIndexStep.on(targetTable, indexFields(index)));
+            addIndexIfApplicable(targetName, index, columns);
         }
     }
 
-    private List<? extends Field<?>> indexFields(TableIndex index) {
-        return index.columnNames().map(n -> DSL.field(DSL.name(n))).asList();
+    private void addIndexIfApplicable(String targetTableName, TableIndex index, LinkedHashMap<String, ColumnItem> columns) {
+        var allColumnNames = index.columnNames();
+        List<Field<?>> indexFields = new ArrayList<>(allColumnNames.size());
+        for (String columnName : allColumnNames) {
+            ColumnItem columnItem = columns.get(columnName);
+            if (columnItem == null) {
+                return;
+            }
+            indexFields.add(columnItem.targetField());
+        }
+        ImmutableList<String> targetColumnNames = indexFields.stream()
+                .map(Field::getName).collect(ImmutableList.createCollector());
+        String indexName = indexNamer.apply(targetTableName, targetColumnNames);
+        var createIndexStep = index.isUnique() ?
+                dslContext.createUniqueIndex(DSL.name(indexName)) :
+                dslContext.createIndex(DSL.name(indexName));
+        var targetTable = DSL.table(DSL.name(targetTableName));
+        executeQuery(createIndexStep.on(targetTable, indexFields));
     }
 
     private void executeQuery(Query query) {
@@ -167,6 +215,8 @@ public class Materializer {
         query.execute();
     }
 
+    private static record ColumnItem(Column sourceColumn, Field<?> targetField) {}
+
     public static class MaterializerBuilder {
 
         private final StorageAccess storageAccess;
@@ -174,7 +224,10 @@ public class Materializer {
 
         private Optional<String> sourceSchemaName = Optional.empty();
         private Predicate<String> tableFilter = t -> true;
+        private Predicate<String> columnFilter = t -> true;
         private UnaryOperator<String> tableRenamer = t -> t;
+        private UnaryOperator<String> columnRenamer = t -> t;
+        private BiFunction<String, ImmutableList<String>, String> indexNamer = DEFAULT_INDEX_NAMER;
         private boolean dropTables = true;
         private boolean createTables = true;
         private boolean insertData = true;
@@ -194,8 +247,24 @@ public class Materializer {
             return this;
         }
 
+        public MaterializerBuilder columnFilter(Predicate<String> columnFilter) {
+            this.columnFilter = columnFilter;
+            return this;
+        }
+
         public MaterializerBuilder tableRenamer(UnaryOperator<String> tableRenamer) {
             this.tableRenamer = tableRenamer;
+            return this;
+        }
+
+        public MaterializerBuilder columnRenamer(UnaryOperator<String> columnRenamer) {
+            this.columnRenamer = columnRenamer;
+            return this;
+        }
+
+        public MaterializerBuilder indexNamer(
+                BiFunction<String, ImmutableList<String>, String> indexNamer) {
+            this.indexNamer = indexNamer;
             return this;
         }
 

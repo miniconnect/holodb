@@ -100,7 +100,24 @@ public class NameTransformerTest {
         assertThat(NameTransformer.parse("{ascii}").transform("lorem")).isEqualTo("lorem");
         assertThat(NameTransformer.parse("{ascii}").transform("háztűznéző")).isEqualTo("haztuznezo");
         assertThat(NameTransformer.parse("{ascii}").transform("űrlényﬁ$𝕳𝖊𝖑𝖑𝖔▒𝟙𝟚𝟛")).isEqualTo("urlenyfi$Hello123");
+        assertThat(NameTransformer.parse("{ascii}").transform("《ł𝖔®𝟛ᴍ−∣ꝓßűm》")).isEqualTo("<<lo(R)3M-|pssum>>");
         assertThat(NameTransformer.parse("lorem_{ascii}_ipsum_{}").transform("űr")).isEqualTo("lorem_ur_ipsum_űr");
+    }
+
+    @Test
+    void testBase64() {
+        assertThat(NameTransformer.parse("{base64}").transform("")).isEqualTo("");
+        assertThat(NameTransformer.parse("{base64}").transform("lorem")).isEqualTo("bG9yZW0=");
+        assertThat(NameTransformer.parse("{base64}").transform("háztűznéző")).isEqualTo("aMOhenTFsXpuw6l6xZE=");
+        assertThat(NameTransformer.parse("lorem_{base64}_ipsum_{}").transform("űr")).isEqualTo("lorem_xbFy_ipsum_űr");
+    }
+
+    @Test
+    void testEscnum() {
+        assertThat(NameTransformer.parse("{escnum}").transform("")).isEqualTo("");
+        assertThat(NameTransformer.parse("{escnum}").transform("lorem")).isEqualTo("lorem");
+        assertThat(NameTransformer.parse("{escnum}").transform("12men")).isEqualTo("_12men");
+        assertThat(NameTransformer.parse("lorem_{escnum}_ipsum_{}").transform("12men")).isEqualTo("lorem__12men_ipsum_12men");
     }
 
     @Test
@@ -129,6 +146,8 @@ public class NameTransformerTest {
         assertThat(NameTransformer.parse("\\|{}\\{}").transform("dolor")).isEqualTo("|dolor{}");
         assertThat(NameTransformer.parse("lorem{upper}_\\{}_{3|lower|2}_{}\\\\\\sit").transform("DoLoR"))
                 .isEqualTo("loremDOLOR_{}_do_DoLoR\\sit");
+        assertThat(NameTransformer.parse("\\{{upper}\\}{ascii|snake}/{base64|5}").transform("űɍ↔łæȵƴ"))
+                .isEqualTo("{ŰɌ↔ŁÆȵƳ}ur_laeny/xbHJj");
     }
 
 }

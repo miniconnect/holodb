@@ -1,7 +1,9 @@
 package hu.webarticum.holodb.admin.util;
 
+import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.function.Function;
 
@@ -10,12 +12,56 @@ import hu.webarticum.miniconnect.lang.ImmutableMap;
 
 public class NameTransformer {
 
+    public static final String HELP_TEXT =
+            "Templates for renaming:\n" +
+            "  Syntax:\n" +
+            "    {}                original name\n" +
+            "    {ascii}           transformed name\n" +
+            "    {ascii|snake|30}  chains transformations\n" +
+            "    prefix_{}         adds prefix\n" +
+            "    A{}B{ascii}C      reuses the name multiple times\n" +
+            "  Supported transformations:\n" +
+            "    {lower}    lowercase\n" +
+            "    {upper}    uppercase\n" +
+            "    {const}    CONSTANT_CASE\n" +
+            "    {snake}    snake_case\n" +
+            "    {camel}    camelCase\n" +
+            "    {pascal}   PascalCase\n" +
+            "    {ascii}    ASCII transliteration\n" +
+            "    {base64}   Base64 encoding\n" +
+            "    {escnum}   prefix leading digit with '_'\n" +
+            "    {10}       limit length to 10 (or any number)";
+
     private enum AlnumType { UPPER, LOWER, DIGIT };
 
     private static final char ESCAPE_CHAR = '\\';
     private static final char OPEN_CHAR = '{';
     private static final char CLOSE_CHAR = '}';
     private static final char PIPE_CHAR = '|';
+
+    private static final char LEADING_DIGIT_ESCAPE_CHAR = '_';
+
+    private static final String[] CLDR_ASCII_TRANSLITERATIONS = new String[] {
+        "¡!", "©(C)", "«<<", "®(R)", "±+/-", "»>>", "¿?", "ÆAE", "ÐD", "×*", "ØO", "ÞTH", "ßss", "æae", "ðd", "÷/", "øo", "þth", "ĐD", "đd",
+        "ĦH", "ħh", "ıi", "ĸq", "ŁL", "łl", "ŊN", "ŋn", "ŒO", "œo", "ŦT", "ŧt", "ƀb", "ƁB", "ƂB", "ƃb", "ƇC", "ƈc", "ƉD", "ƊD",
+        "ƋD", "ƌd", "ƐE", "ƑF", "ƒf", "ƓG", "ƕh", "ƖI", "ƗI", "ƘK", "ƙk", "ƚl", "ƝN", "ƞn", "ƢO", "ƣo", "ƤP", "ƥp", "ƫt", "ƬT",
+        "ƭt", "ƮT", "ƲV", "ƳY", "ƴy", "ƵZ", "ƶz", "ǤG", "ǥg", "ȡd", "ȤZ", "ȥz", "ȴl", "ȵn", "ȶt", "ȷj", "ȸdb", "ȹqp", "ȺA", "ȻC",
+        "ȼc", "ȽL", "ȾT", "ȿs", "ɀz", "ɃB", "ɄU", "ɆE", "ɇe", "ɈJ", "ɉj", "ɌR", "ɍr", "ɎY", "ɏy", "ɓb", "ɕc", "ɖd", "ɗd", "ɛe",
+        "ɟj", "ɠg", "ɡg", "ɢG", "ɦh", "ɧh", "ɨi", "ɪI", "ɫl", "ɬl", "ɭl", "ɱm", "ɲn", "ɳn", "ɴN", "ɶOE", "ɼr", "ɽr", "ɾr", "ʀR",
+        "ʂs", "ʈt", "ʉu", "ʋv", "ʏY", "ʐz", "ʑz", "ʙB", "ʛG", "ʜH", "ʝj", "ʟL", "ʠq", "ʣdz", "ʥdz", "ʦts", "ʪls", "ʫlz", "ʹ'", "ʺ\"",
+        "ʻ'", "ʼ'", "ʽ'", "˂<", "˃>", "˄^", "ˆ^", "ˈ'", "ˋ`", "ː:", "˖+", "˗-", "ᴀA", "ᴁAE", "ᴃB", "ᴄC", "ᴅD", "ᴆD", "ᴇE", "ᴊJ",
+        "ᴋK", "ᴌL", "ᴍM", "ᴏO", "ᴘP", "ᴛT", "ᴜU", "ᴠV", "ᴡW", "ᴢZ", "ᵫue", "ᵬb", "ᵭd", "ᵮf", "ᵯm", "ᵰn", "ᵱp", "ᵲr", "ᵳr", "ᵴs",
+        "ᵵt", "ᵶz", "ᵺth", "ᵻI", "ᵽp", "ᵾU", "ᶀb", "ᶁd", "ᶂf", "ᶃg", "ᶄk", "ᶅl", "ᶆm", "ᶇn", "ᶈp", "ᶉr", "ᶊs", "ᶌv", "ᶍx", "ᶎz",
+        "ᶏa", "ᶑd", "ᶒe", "ᶓe", "ᶖi", "ᶙu", "ẜs", "ẝs", "ẞSS", "ỺLL", "ỻll", "ỼV", "ỽv", "ỾY", "ỿy", "‐-", "‒-", "–-", "—-", "―-",
+        "‖||", "‘'", "’'", "‚,", "‛'", "“\"", "”\"", "„,,", "‟\"", "′'", "‹<", "›>", "⁅[", "⁆]", "⁎*", "₠CE", "₢Cr", "₣Fr.", "₤L.", "₧Pts",
+        "₹Rs", "₺TL", "℗(P)", "℘P", "℞Rx", "←<-", "→->", "↔<->", "−-", "∕/", "∖\\", "∣|", "∥||", "≪<<", "≫>>", "⦅((", "⦆))", "ⱠL", "ⱡl", "ⱢL",
+        "ⱣP", "ⱤR", "ⱥa", "ⱦt", "ⱧH", "ⱨh", "ⱩK", "ⱪk", "ⱫZ", "ⱬz", "ⱮM", "ⱱv", "ⱲW", "ⱳw", "ⱴv", "ⱸe", "ⱺo", "ⱾS", "ⱿZ", "、,",
+        "。.", "〇0", "〈<", "〉>", "《<<", "》>>", "〔[", "〕]", "〘[", "〙]", "〚[", "〛]", "〝\"", "〞\"", "ꜰF", "ꜱS", "ꜲAA", "ꜳaa", "ꜴAO", "ꜵao",
+        "ꜶAU", "ꜷau", "ꜸAV", "ꜹav", "ꜺAV", "ꜻav", "ꜼAY", "ꜽay", "ꝀK", "ꝁk", "ꝂK", "ꝃk", "ꝄK", "ꝅk", "ꝆL", "ꝇl", "ꝈL", "ꝉl", "ꝊO", "ꝋo",
+        "ꝌO", "ꝍo", "ꝎOO", "ꝏoo", "ꝐP", "ꝑp", "ꝒP", "ꝓp", "ꝔP", "ꝕp", "ꝖQ", "ꝗq", "ꝘQ", "ꝙq", "ꝞV", "ꝟv", "ꝠVY", "ꝡvy", "ꝤTH", "ꝥth",
+        "ꝦTH", "ꝧth", "ꝱd", "ꝲl", "ꝳm", "ꝴn", "ꝵr", "ꝶR", "ꝷt", "ꝹD", "ꝺd", "ꝻF", "ꝼf", "ꞆT", "ꞇt", "ꞐN", "ꞑn", "ꞒC", "ꞓc", "ꞠG",
+        "ꞡg", "ꞢK", "ꞣk", "ꞤN", "ꞥn", "ꞦR", "ꞧr", "ꞨS", "ꞩs", "ꞪH",
+    };
 
     private static final ImmutableMap<String, Function<String, String>> TRANSFORMS = ImmutableMap.of(
             "lower", String::toLowerCase,
@@ -24,7 +70,11 @@ public class NameTransformer {
             "snake", NameTransformer::toSnakeCase,
             "camel", NameTransformer::toCamelCase,
             "pascal", NameTransformer::toPascalCase,
-            "ascii", NameTransformer::toAsciiPrintable);
+            "ascii", NameTransformer::toAsciiPrintable,
+            "base64", NameTransformer::toBase64,
+            "escnum", NameTransformer::escapeLeadingDigit);
+
+    private static final java.util.Base64.Encoder BASE64_ENCODER = Base64.getEncoder();
 
     private final ImmutableList<Function<String, String>> parts;
 
@@ -262,11 +312,48 @@ public class NameTransformer {
         StringBuilder resultBuilder = new StringBuilder(decomposedLength);
         for (int i = 0; i < decomposedLength; i++) {
             char c = decomposed.charAt(i);
-            if (!Character.isISOControl(c) && Character.getType(c) != Character.UNASSIGNED && c < 128) {
+            if ((c - 32) < 95) {
                 resultBuilder.append(c);
+            } else {
+                appendTransliterationIfExists(resultBuilder, c);
             }
         }
         return resultBuilder.toString();
+    }
+
+    private static void appendTransliterationIfExists(StringBuilder resultBuilder, char c) {
+        int low = 0;
+        int high = CLDR_ASCII_TRANSLITERATIONS.length - 1;
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            String item = CLDR_ASCII_TRANSLITERATIONS[mid];
+            char itemChar = item.charAt(0);
+            if (itemChar < c) {
+                low = mid + 1;
+            } else if (itemChar > c) {
+                high = mid - 1;
+            } else {
+                resultBuilder.append(item.substring(1));
+                return;
+            }
+        }
+    }
+
+    private static String toBase64(String name) {
+        byte[] bytes = name.getBytes(StandardCharsets.UTF_8);
+        return BASE64_ENCODER.encodeToString(bytes);
+    }
+
+    private static String escapeLeadingDigit(String name) {
+        if (name.isEmpty()) {
+            return "";
+        }
+        char c = name.charAt(0);
+        if (c >= '0' && c <= '9') {
+            return LEADING_DIGIT_ESCAPE_CHAR + name;
+        } else {
+            return name;
+        }
     }
 
     public String transform(String original) {

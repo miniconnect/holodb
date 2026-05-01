@@ -5,6 +5,8 @@ import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -15,12 +17,14 @@ import hu.webarticum.holodb.bootstrap.factory.ConfigLoader;
 import hu.webarticum.holodb.bootstrap.factory.StorageAccessFactory;
 import hu.webarticum.holodb.config.HoloConfig;
 import hu.webarticum.minibase.storage.api.StorageAccess;
+import hu.webarticum.miniconnect.lang.ImmutableList;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 @Command(
         name = "materialize",
         description = "Materializes a HoloDB virtual dataset",
+        footer = "%n" + NameTransformer.HELP_TEXT,
         mixinStandardHelpOptions = true)
 public class MaterializeCommand implements Runnable {
 
@@ -43,13 +47,39 @@ public class MaterializeCommand implements Runnable {
     private String tableFilterRegex;
 
     @Option(
-            names = { "-r", "--table-rename" },
-            description = "Table rename template (for example: 'prefix_{ascii|lower|10}_suffix')")
+            names = { "-F", "--column-filter" },
+            description = "Source column filter regex (fully qualified)")
+    private String columnFilterRegex;
+
+    @Option(
+            names = { "-r", "--rename" },
+            description = "General rename template")
+    private String renameTemplate;
+
+    @Option(
+            names = { "-T", "--table-rename" },
+            description = "Table rename template")
     private String tableRenameTemplate;
 
     @Option(
+            names = { "-C", "--column-rename" },
+            description = "Column rename template")
+    private String columnRenameTemplate;
+
+    @Option(
+            names = { "-I", "--index-rename" },
+            description = "Index rename template (default: 'idx_' + general rename)")
+    private String indexRenameTemplate;
+
+    @Option(
+            names = { "-x", "--index-rename-no-table" },
+            description = "Omits table name from index names",
+            defaultValue = "false")
+    private boolean indexRenameNoTable;
+
+    @Option(
             names = { "-d", "--drop" },
-            description = "Drop existing target tables",
+            description = "Drops existing target tables",
             defaultValue = "false")
     private boolean drop;
 
@@ -109,11 +139,36 @@ public class MaterializeCommand implements Runnable {
         if (tableFilterRegex != null) {
             builder.tableFilter(Pattern.compile(tableFilterRegex).asMatchPredicate());
         }
-        if (tableRenameTemplate != null) {
-            builder.tableRenamer(NameTransformer.parse(tableRenameTemplate)::transform);
+        if (columnFilterRegex != null) {
+            builder.columnFilter(Pattern.compile(columnFilterRegex).asMatchPredicate());
         }
+        createNameTransformer(tableRenameTemplate).ifPresent(t -> builder.tableRenamer(t::transform));
+        Optional<NameTransformer> columnNameTransformer = createNameTransformer(columnRenameTemplate);
+        columnNameTransformer.ifPresent(t -> builder.columnRenamer(t::transform));
+        builder.indexNamer(createIndexNamer());
         Materializer materializer = builder.build();
         materializer.materialize();
+    }
+
+    private Optional<NameTransformer> createNameTransformer(String specificTemplate) {
+        String effectiveTemplate = specificTemplate != null ? specificTemplate : renameTemplate;
+        return Optional.ofNullable(effectiveTemplate).map(NameTransformer::parse);
+    }
+
+    private BiFunction<String, ImmutableList<String>, String> createIndexNamer() {
+        BiFunction<String, ImmutableList<String>, String> result = indexRenameNoTable ?
+                (t, cs) -> String.join("_", cs) :
+                (t, cs) -> t + "_" + String.join("_", cs);
+
+        if (indexRenameTemplate != null) {
+            return result.andThen(NameTransformer.parse(indexRenameTemplate)::transform);
+        }
+
+        result = result.andThen(v -> "idx_" + v);
+        if (renameTemplate != null) {
+            result = result.andThen(NameTransformer.parse(renameTemplate)::transform);
+        }
+        return result;
     }
 
 }
