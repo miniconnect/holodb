@@ -47,6 +47,7 @@ public class Materializer {
     private final boolean dropTables;
     private final boolean createTables;
     private final boolean insertData ;
+    private final boolean dryRun ;
 
     private final DSLContext dslContext;
 
@@ -61,6 +62,7 @@ public class Materializer {
         this.dropTables = builder.dropTables;
         this.createTables = builder.createTables;
         this.insertData = builder.insertData;
+        this.dryRun = builder.dryRun;
         this.dslContext = DSL.using(builder.connection);
     }
 
@@ -75,6 +77,10 @@ public class Materializer {
     }
 
     public void materialize() {
+        if (dryRun) {
+            System.out.println("DRY-RUN!");
+            logger.info("Started in dry-run mode, no query will be executed");
+        }
         for (Table table : findSchema().tables().resources()) {
             if (isTableIncluded(table)) {
                 materializeTable(table);
@@ -105,14 +111,15 @@ public class Materializer {
 
     private void materializeTable(Table table) {
         String targetName = tableRenamer.apply(table.name());
-        var columns = extractColumns(table);
         if (dropTables) {
              dropTable(targetName);
         }
+        var columns = extractColumns(table);
         if (columns.isEmpty()) {
             logger.info("Skipped table with no columns: " + targetName);
             return;
         }
+
         if (createTables) {
             createTable(columns, targetName);
         }
@@ -212,7 +219,9 @@ public class Materializer {
         if (logger.isDebugEnabled()) {
             logger.debug("SQL: " + query.getSQL());
         }
-        query.execute();
+        if (!dryRun) {
+            query.execute();
+        }
     }
 
     private static record ColumnItem(Column sourceColumn, Field<?> targetField) {}
@@ -231,6 +240,7 @@ public class Materializer {
         private boolean dropTables = true;
         private boolean createTables = true;
         private boolean insertData = true;
+        private boolean dryRun = false;
 
         private MaterializerBuilder(StorageAccess storageAccess, Connection connection) {
             this.storageAccess = storageAccess;
@@ -280,6 +290,11 @@ public class Materializer {
 
         public MaterializerBuilder insertData(boolean insertData) {
             this.insertData = insertData;
+            return this;
+        }
+
+        public MaterializerBuilder dryRun(boolean dryRun) {
+            this.dryRun = dryRun;
             return this;
         }
 

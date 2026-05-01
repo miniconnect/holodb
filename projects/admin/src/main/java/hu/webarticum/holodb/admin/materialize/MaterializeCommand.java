@@ -114,6 +114,12 @@ public class MaterializeCommand implements Runnable {
             arity = "0..1")
     private String password;
 
+    @Option(
+            names = { "--dry-run" },
+            description = "Dry-run mode, no query will be executed",
+            defaultValue = "false")
+    private boolean dryRun;
+
     @Override
     public void run() {
         try (Connection connection = connect()) {
@@ -146,6 +152,7 @@ public class MaterializeCommand implements Runnable {
         Optional<NameTransformer> columnNameTransformer = createNameTransformer(columnRenameTemplate);
         columnNameTransformer.ifPresent(t -> builder.columnRenamer(t::transform));
         builder.indexNamer(createIndexNamer());
+        builder.dryRun(dryRun);
         Materializer materializer = builder.build();
         materializer.materialize();
     }
