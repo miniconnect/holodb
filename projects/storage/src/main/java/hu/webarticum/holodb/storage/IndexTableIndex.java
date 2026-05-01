@@ -31,7 +31,7 @@ public class IndexTableIndex implements SingleColumnTableIndex {
 
     @Override
     public boolean isUnique() {
-        return false;
+        return index.isUnique();
     }
 
     @Override

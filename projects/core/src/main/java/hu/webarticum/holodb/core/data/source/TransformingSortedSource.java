@@ -70,6 +70,11 @@ public class TransformingSortedSource<T, U> implements SortedSource<U> {
     }
 
     @Override
+    public boolean isUnique() {
+        return baseSource.isUnique();
+    }
+
+    @Override
     public Comparator<?> comparator() {
         return comparator;
     }

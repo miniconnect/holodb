@@ -6,6 +6,8 @@ import hu.webarticum.holodb.core.data.selection.Selection;
 
 public interface Index {
 
+    public boolean isUnique();
+
     public Comparator<?> comparator(); // NOSONAR it is unbound
 
     public Selection findBetween(
