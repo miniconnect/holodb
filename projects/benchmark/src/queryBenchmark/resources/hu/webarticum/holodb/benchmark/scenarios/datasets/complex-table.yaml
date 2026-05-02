@@ -3,7 +3,6 @@ schemas:
   - name: benchmark
     tables:
       - name: members
-        writeable: true
         size: 12000
         columns:
           - name: id

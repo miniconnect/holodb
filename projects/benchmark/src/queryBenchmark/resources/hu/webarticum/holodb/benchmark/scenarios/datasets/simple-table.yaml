@@ -3,7 +3,6 @@ schemas:
   - name: benchmark
     tables:
       - name: test_table
-        writeable: true
         size: 3500
         columns:
           - name: id

@@ -18,6 +18,7 @@ class QueryBenchmarkSuiteDescriptionTest extends AbstractResourceBasedTest {
         QueryBenchmarkSuiteDescription suite = loadSuite();
         assertThat(suite.description()).isEqualTo("This is a sample benchmark suite");
         assertThat(suite.holoConfigResource()).isEqualTo("dataset.yaml");
+        assertThat(suite.writeable()).isTrue();
         assertThat(suite.initQueries()).containsExactly("USE sch");
         assertThat(suite.cases()).hasSize(1);
 

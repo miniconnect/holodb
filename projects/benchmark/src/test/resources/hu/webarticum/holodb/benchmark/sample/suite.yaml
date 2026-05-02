@@ -1,5 +1,6 @@
 description: This is a sample benchmark suite
 holoConfigResource: dataset.yaml
+writeable: true
 initQueries:
   - "USE sch"
 cases:
