@@ -46,7 +46,7 @@ public class QueryBenchmarkMain implements Callable<Integer> {
         int successCount = successCounter.get();
         System.out.println();
         System.out.println(String.format(
-                "%2$s/%1$s benchmark was run successfully",
+                "%2$s/%1$s benchmarks were run successfully",
                 totalCount, successCount));
         return totalCount == successCount ? 0 : 1;
     }
