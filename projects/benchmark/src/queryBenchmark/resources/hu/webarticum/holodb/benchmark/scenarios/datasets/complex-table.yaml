@@ -3,18 +3,18 @@ schemas:
   - name: benchmark
     tables:
       - name: members
-        size: 12000
+        size: 100000
         columns:
           - name: id
             mode: COUNTER
           - name: member_code
             valuesPattern: '[A-F]{3}\-(temp|con|admin)\-[0-9]{3,4}'
+            nullCount: 5000
           - name: firstname
             valuesBundle: forenames
           - name: lastname
             valuesBundle: surnames
           - name: birth_year
-            shuffleQuality: high
             valuesRange: [1940, 2005]
           - name: address_street_name
             valuesTextKind: title

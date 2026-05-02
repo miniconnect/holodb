@@ -4,11 +4,96 @@ initQueries:
   - USE benchmark
 cases:
 
-  - name: xxx
-    description: Select single field by id
-    query: "SELECT member_code FROM members WHERE id = 1"
-    repeats: 5000
+  - name: select-all
+    description: Selectá all records
+    query: "SELECT * FROM members"
+    repeats: 10
+    columns:
+      - name: id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: member_code
+        type: java.lang.String
+        nullable: true
+      - name: firstname
+        type: java.lang.String
+        nullable: false
+      - name: lastname
+        type: java.lang.String
+        nullable: false
+      - name: birth_year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: address_street_name
+        type: java.lang.String
+        nullable: false
+      - name: address_street_type
+        type: java.lang.String
+        nullable: false
+      - name: address_house_number
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
+  - name: count-all
+    description: Count all records
+    query: "SELECT COUNT(*) FROM members"
+    repeats: 1000
+    columns:
+      - type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
+  - name: count-filtered
+    description: Count filtered records
+    query: |
+      SELECT COUNT(*) FROM members
+      WHERE
+        address_street_type = 'Road' AND
+        birth_year > 1975
+    repeats: 300
+    columns:
+      - type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
+  - name: compound-filter
+    description: Compound filter
+    query: |
+      SELECT 1 one
+      FROM members
+      WHERE birth_year < 1990 AND id < 12000
+      LIMIT 1
+    repeats: 300
+    columns:
+      - name: one
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
+  - name: complex-select
+    description: Complex select
+    query: |
+      SELECT
+        member_code,
+        CONCAT(firstname, ' ', lastname) name,
+        CONCAT(address_street_name, ' ', address_street_type, ' ', address_house_number) address,
+        SUBSTRING(address_street_name FOR 4) str,
+        NULLIF(((id * 58) / 42) % 10, 3) k
+      FROM members
+      WHERE birth_year < 1990 AND id < 12000
+      ORDER BY lastname ASC, firstname ASC
+      OFFSET 20 LIMIT 100
+    repeats: 50
     columns:
       - name: member_code
         type: java.lang.String
+        nullable: true
+      - name: name
+        type: java.lang.String
         nullable: false
+      - name: address
+        type: java.lang.String
+        nullable: false
+      - name: str
+        type: java.lang.String
+        nullable: false
+      - name: k
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: true
