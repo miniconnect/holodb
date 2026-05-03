@@ -6,7 +6,7 @@ schemas:
         size: 100000
         columns:
           - name: id
-            mode: COUNTER
+            mode: counter
           - name: member_code
             valuesPattern: '[A-F]{3}\-(temp|con|admin)\-[0-9]{3,4}'
             nullCount: 5000

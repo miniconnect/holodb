@@ -6,4 +6,4 @@ schemas:
         size: 200
         columns:
           - name: id
-            mode: COUNTER
+            mode: counter
