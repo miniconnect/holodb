@@ -1,4 +1,4 @@
-package hu.webarticum.holodb.admin.materialize;
+package hu.webarticum.holodb.admin.dump;
 
 import java.io.File;
 import java.lang.invoke.MethodHandles;
@@ -6,9 +6,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
+import org.jooq.DSLContext;
+import org.jooq.Query;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +21,8 @@ import hu.webarticum.holodb.admin.util.NameTransformer;
 import hu.webarticum.holodb.bootstrap.factory.ConfigLoader;
 import hu.webarticum.holodb.bootstrap.factory.StorageAccessFactory;
 import hu.webarticum.holodb.config.HoloConfig;
+import hu.webarticum.minibase.storage.api.NamedResourceStore;
+import hu.webarticum.minibase.storage.api.Schema;
 import hu.webarticum.minibase.storage.api.StorageAccess;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import picocli.CommandLine.Command;
@@ -26,9 +33,33 @@ import picocli.CommandLine.Option;
         description = "Materializes a HoloDB virtual dataset",
         footer = "%n" + NameTransformer.HELP_TEXT,
         mixinStandardHelpOptions = true)
-public class MaterializeCommand implements Runnable {
+public class MaterializeCommand implements Callable<Integer> {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    @Option(
+            names = { "-j", "--jdbc-url" },
+            description = "JDBC URL to connect to",
+            required = true)
+    private String jdbcUrl;
+
+    @Option(
+            names = { "-u", "--username" },
+            description = "Database username")
+    private String username;
+
+    @Option(
+            names = { "-p", "--password" }, 
+            description = "Database password",
+            prompt = "Password: ",
+            interactive = true, 
+            arity = "0..1")
+    private String password;
+
+    @Option(
+            names = { "-D", "--dialect" },
+            description = "SQL dialect to render")
+    private String sqlDialectName;
 
     @Option(
             names = { "-c", "--config-file" },
@@ -96,37 +127,20 @@ public class MaterializeCommand implements Runnable {
     private boolean noInsert;
 
     @Option(
-            names = { "-j", "--jdbc-url" },
-            description = "JDBC URL to connect to",
-            required = true)
-    private String jdbcUrl;
-
-    @Option(
-            names = { "-u", "--username" },
-            description = "Database username")
-    private String username;
-
-    @Option(
-            names = { "-p", "--password" }, 
-            description = "Database password",
-            prompt = "Password: ",
-            interactive = true, 
-            arity = "0..1")
-    private String password;
-
-    @Option(
             names = { "--dry-run" },
             description = "Dry-run mode, no query will be executed",
             defaultValue = "false")
     private boolean dryRun;
 
     @Override
-    public void run() {
+    public Integer call() throws Exception {
         try (Connection connection = connect()) {
             materialize(connection);
+            return 0;
         } catch (Exception e) {
             System.err.println("ERROR: " + e.getMessage());
             logger.error(e.getMessage(), e);
+            return 1;
         }
     }
 
@@ -137,7 +151,15 @@ public class MaterializeCommand implements Runnable {
     private void materialize(Connection connection) {
         HoloConfig config = new ConfigLoader(new File(configFilePath)).load();
         StorageAccess storageAccess = StorageAccessFactory.createStorageAccess(config);
-        Materializer.MaterializerBuilder builder = Materializer.builder(storageAccess, connection)
+        NamedResourceStore<Schema> schemas = storageAccess.schemas();
+        if (schemas.names().isEmpty()) {
+            throw new IllegalArgumentException("No source schema found");
+        }
+        if (sourceSchemaName != null && !schemas.contains(sourceSchemaName)) {
+            throw new IllegalArgumentException("Source schema not found: " + sourceSchemaName);
+        }
+        DSLContext dslContext = createDSLContext(connection);
+        Dumper.DumperBuilder builder = Dumper.builder(storageAccess, dslContext)
                 .sourceSchemaName(sourceSchemaName)
                 .dropTables(drop)
                 .createTables(!noCreate)
@@ -152,9 +174,21 @@ public class MaterializeCommand implements Runnable {
         Optional<NameTransformer> columnNameTransformer = createNameTransformer(columnRenameTemplate);
         columnNameTransformer.ifPresent(t -> builder.columnRenamer(t::transform));
         builder.indexNamer(createIndexNamer());
-        builder.dryRun(dryRun);
-        Materializer materializer = builder.build();
-        materializer.materialize();
+
+        Dumper dumper = builder.build(this::executeQuery);
+        if (dryRun) {
+            System.out.println("DRY-RUN!");
+            logger.info("Started in dry-run mode, no query will be executed");
+        }
+        dumper.dump();
+    }
+
+    private DSLContext createDSLContext(Connection connection) {
+        if (sqlDialectName == null) {
+            return DSL.using(connection);
+        }
+        SQLDialect sqlDialect = SQLDialect.valueOf(sqlDialectName.toUpperCase());
+        return DSL.using(connection, sqlDialect);
     }
 
     private Optional<NameTransformer> createNameTransformer(String specificTemplate) {
@@ -176,6 +210,15 @@ public class MaterializeCommand implements Runnable {
             result = result.andThen(NameTransformer.parse(renameTemplate)::transform);
         }
         return result;
+    }
+
+    private void executeQuery(Query query) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("SQL: " + query.getSQL());
+        }
+        if (!dryRun) {
+            query.execute();
+        }
     }
 
 }

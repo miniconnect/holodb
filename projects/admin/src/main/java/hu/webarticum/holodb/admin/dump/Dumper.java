@@ -1,12 +1,12 @@
-package hu.webarticum.holodb.admin.materialize;
+package hu.webarticum.holodb.admin.dump;
 
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -31,13 +31,14 @@ import hu.webarticum.minibase.storage.api.TableIndex;
 import hu.webarticum.miniconnect.lang.ImmutableList;
 import hu.webarticum.miniconnect.lang.LargeInteger;
 
-public class Materializer {
+public class Dumper {
 
-    public static final BiFunction<String, ImmutableList<String>, String> DEFAULT_INDEX_NAMER = Materializer::createDefaultIndexName;
+    public static final BiFunction<String, ImmutableList<String>, String> DEFAULT_INDEX_NAMER = Dumper::createDefaultIndexName;
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final StorageAccess storageAccess;
+    private final DSLContext dslContext;
     private final Optional<String> sourceSchemaName;
     private final Predicate<String> tableFilter;
     private final Predicate<String> columnFilter;
@@ -47,12 +48,11 @@ public class Materializer {
     private final boolean dropTables;
     private final boolean createTables;
     private final boolean insertData ;
-    private final boolean dryRun ;
+    private final Consumer<Query> queryCallback;
 
-    private final DSLContext dslContext;
-
-    private Materializer(MaterializerBuilder builder) {
+    private Dumper(DumperBuilder builder, Consumer<Query> queryCallback) {
         this.storageAccess = builder.storageAccess;
+        this.dslContext = builder.dslContext;
         this.sourceSchemaName = builder.sourceSchemaName;
         this.tableFilter = builder.tableFilter;
         this.columnFilter = builder.columnFilter;
@@ -62,12 +62,11 @@ public class Materializer {
         this.dropTables = builder.dropTables;
         this.createTables = builder.createTables;
         this.insertData = builder.insertData;
-        this.dryRun = builder.dryRun;
-        this.dslContext = DSL.using(builder.connection);
+        this.queryCallback = queryCallback;
     }
 
-    public static MaterializerBuilder builder(StorageAccess storageAccess, Connection connection) {
-        return new MaterializerBuilder(storageAccess, connection);
+    public static DumperBuilder builder(StorageAccess storageAccess, DSLContext dslContext) {
+        return new DumperBuilder(storageAccess, dslContext);
     }
 
     private static String createDefaultIndexName(String tableName, ImmutableList<String> columnNames) {
@@ -76,11 +75,7 @@ public class Materializer {
         return resultBuilder.toString();
     }
 
-    public void materialize() {
-        if (dryRun) {
-            System.out.println("DRY-RUN!");
-            logger.info("Started in dry-run mode, no query will be executed");
-        }
+    public void dump() {
         for (Table table : findSchema().tables().resources()) {
             if (isTableIncluded(table)) {
                 materializeTable(table);
@@ -112,7 +107,7 @@ public class Materializer {
     private void materializeTable(Table table) {
         String targetName = tableRenamer.apply(table.name());
         if (dropTables) {
-             dropTable(targetName);
+            dropTable(targetName);
         }
         var columns = extractColumns(table);
         if (columns.isEmpty()) {
@@ -166,13 +161,13 @@ public class Materializer {
 
     private void dropTable(String targetName) {
         logger.info("Drop table: " + targetName);
-        executeQuery(dslContext.dropTableIfExists(targetName));
+        applyQuery(dslContext.dropTableIfExists(targetName));
     }
 
     private void createTable(LinkedHashMap<String, ColumnItem> columns, String targetName) {
         logger.info("Create table: " + targetName);
         var fields = columns.values().stream().map(c -> c.targetField()).collect(Collectors.toList());
-        executeQuery(dslContext.createTable(DSL.name(targetName)).columns(fields));
+        applyQuery(dslContext.createTable(DSL.name(targetName)).columns(fields));
     }
 
     private void populateTable(Table table, LinkedHashMap<String, ColumnItem> columns, String targetName) {
@@ -184,7 +179,7 @@ public class Materializer {
         for (var i = LargeInteger.ZERO; i.isLessThan(rowCount); i = i.increment()) {
             Row row = table.row(i);
             var values = sourceColumnNames.map(k -> JooqUtil.normalizeValue(row.get(k)));
-            executeQuery(dslContext.insertInto(targetTable, fields).values(values.asList()));
+            applyQuery(dslContext.insertInto(targetTable, fields).values(values.asList()));
         }
     }
 
@@ -212,24 +207,19 @@ public class Materializer {
                 dslContext.createUniqueIndex(DSL.name(indexName)) :
                 dslContext.createIndex(DSL.name(indexName));
         var targetTable = DSL.table(DSL.name(targetTableName));
-        executeQuery(createIndexStep.on(targetTable, indexFields));
+        applyQuery(createIndexStep.on(targetTable, indexFields));
     }
 
-    private void executeQuery(Query query) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("SQL: " + query.getSQL());
-        }
-        if (!dryRun) {
-            query.execute();
-        }
+    private void applyQuery(Query query) {
+        queryCallback.accept(query);
     }
 
     private static record ColumnItem(Column sourceColumn, Field<?> targetField) {}
 
-    public static class MaterializerBuilder {
+    public static class DumperBuilder {
 
         private final StorageAccess storageAccess;
-        private final Connection connection;
+        private final DSLContext dslContext;
 
         private Optional<String> sourceSchemaName = Optional.empty();
         private Predicate<String> tableFilter = t -> true;
@@ -240,66 +230,60 @@ public class Materializer {
         private boolean dropTables = true;
         private boolean createTables = true;
         private boolean insertData = true;
-        private boolean dryRun = false;
 
-        private MaterializerBuilder(StorageAccess storageAccess, Connection connection) {
+        private DumperBuilder(StorageAccess storageAccess, DSLContext dslContext) {
             this.storageAccess = storageAccess;
-            this.connection = connection;
+            this.dslContext = dslContext;
         }
 
-        public MaterializerBuilder sourceSchemaName(String sourceSchemaName) {
+        public DumperBuilder sourceSchemaName(String sourceSchemaName) {
             this.sourceSchemaName = Optional.ofNullable(sourceSchemaName);
             return this;
         }
 
-        public MaterializerBuilder tableFilter(Predicate<String> tableFilter) {
+        public DumperBuilder tableFilter(Predicate<String> tableFilter) {
             this.tableFilter = tableFilter;
             return this;
         }
 
-        public MaterializerBuilder columnFilter(Predicate<String> columnFilter) {
+        public DumperBuilder columnFilter(Predicate<String> columnFilter) {
             this.columnFilter = columnFilter;
             return this;
         }
 
-        public MaterializerBuilder tableRenamer(UnaryOperator<String> tableRenamer) {
+        public DumperBuilder tableRenamer(UnaryOperator<String> tableRenamer) {
             this.tableRenamer = tableRenamer;
             return this;
         }
 
-        public MaterializerBuilder columnRenamer(UnaryOperator<String> columnRenamer) {
+        public DumperBuilder columnRenamer(UnaryOperator<String> columnRenamer) {
             this.columnRenamer = columnRenamer;
             return this;
         }
 
-        public MaterializerBuilder indexNamer(
+        public DumperBuilder indexNamer(
                 BiFunction<String, ImmutableList<String>, String> indexNamer) {
             this.indexNamer = indexNamer;
             return this;
         }
 
-        public MaterializerBuilder dropTables(boolean dropTables) {
+        public DumperBuilder dropTables(boolean dropTables) {
             this.dropTables = dropTables;
             return this;
         }
 
-        public MaterializerBuilder createTables(boolean createTables) {
+        public DumperBuilder createTables(boolean createTables) {
             this.createTables = createTables;
             return this;
         }
 
-        public MaterializerBuilder insertData(boolean insertData) {
+        public DumperBuilder insertData(boolean insertData) {
             this.insertData = insertData;
             return this;
         }
 
-        public MaterializerBuilder dryRun(boolean dryRun) {
-            this.dryRun = dryRun;
-            return this;
-        }
-
-        public Materializer build() {
-            return new Materializer(this);
+        public Dumper build(Consumer<Query> queryCallback) {
+            return new Dumper(this, queryCallback);
         }
 
     }
