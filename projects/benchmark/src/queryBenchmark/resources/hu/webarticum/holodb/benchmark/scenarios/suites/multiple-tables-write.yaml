@@ -1,0 +1,6 @@
+description: Multi-table scenarios involving modifications
+holoConfigResource: ../datasets/multiple-tables.yaml
+writeable: true
+initQueries:
+  - USE benchmark
+cases: []

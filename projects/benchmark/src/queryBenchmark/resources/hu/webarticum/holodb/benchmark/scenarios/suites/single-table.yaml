@@ -61,7 +61,7 @@ cases:
       FROM members
       WHERE birth_year < 1990 AND id < 12000
       LIMIT 1
-    repeats: 300
+    repeats: 1000
     columns:
       - name: one
         type: hu.webarticum.miniconnect.lang.LargeInteger
@@ -80,7 +80,7 @@ cases:
       WHERE birth_year < 1990 AND id < 12000
       ORDER BY lastname ASC, firstname ASC
       OFFSET 20 LIMIT 100
-    repeats: 50
+    repeats: 20
     columns:
       - name: member_code
         type: java.lang.String

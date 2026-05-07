@@ -1,0 +1,6 @@
+description: Single-table scenarios involving modifications
+holoConfigResource: ../datasets/complex-table.yaml
+writeable: true
+initQueries:
+  - USE benchmark
+cases: []

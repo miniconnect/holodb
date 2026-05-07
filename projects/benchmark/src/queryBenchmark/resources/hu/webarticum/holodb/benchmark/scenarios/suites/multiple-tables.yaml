@@ -1,0 +1,37 @@
+description: Various multi-table queries
+holoConfigResource: ../datasets/multiple-tables.yaml
+initQueries:
+  - USE benchmark
+cases:
+
+  - name: many-joins
+    description: Case with all tables joined together
+    query: |
+      SELECT
+        st.id student_id,
+        CONCAT(st.firstname, ' ', st.lastname) name,
+        su.code,
+        su.name subject,
+        c.room
+      FROM applications a
+      INNER JOIN students st ON st.id = a.student_id
+      INNER JOIN courses c ON c.id = a.course_id
+      LEFT JOIN subjects su ON su.id = c.subject_id
+      LIMIT 100
+    repeats: 500
+    columns:
+      - name: student_id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: name
+        type: java.lang.String
+        nullable: false
+      - name: code
+        type: java.lang.String
+        nullable: true
+      - name: subject
+        type: java.lang.String
+        nullable: true
+      - name: room
+        type: java.lang.String
+        nullable: false

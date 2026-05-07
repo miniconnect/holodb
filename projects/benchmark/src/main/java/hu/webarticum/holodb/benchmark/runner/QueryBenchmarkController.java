@@ -49,10 +49,10 @@ public class QueryBenchmarkController {
 
     public void runSuites(QueryBenchmarkCaseCallback callback) {
         try {
-			runSuitesInternal(callback);
-		} catch (IOException e) {
-		    throw new UncheckedIOException("Unexpected " + e.getClass().getSimpleName(), e);
-		}
+            runSuitesInternal(callback);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Unexpected " + e.getClass().getSimpleName(), e);
+        }
     }
 
     private void runSuitesInternal(QueryBenchmarkCaseCallback callback) throws IOException {
