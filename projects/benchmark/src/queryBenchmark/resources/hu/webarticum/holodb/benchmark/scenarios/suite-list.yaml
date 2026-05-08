@@ -1,4 +1,4 @@
 suites:
-#  - suites/simple.yaml
-#  - suites/single-table.yaml
+  - suites/simple.yaml
+  - suites/single-table.yaml
   - suites/multiple-tables.yaml
