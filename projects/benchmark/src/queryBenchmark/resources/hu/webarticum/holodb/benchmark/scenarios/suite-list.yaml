@@ -1,4 +1,6 @@
 suites:
   - suites/simple.yaml
   - suites/single-table.yaml
+  - suites/single-table-write.yaml
   - suites/multiple-tables.yaml
+  - suites/multiple-tables-write.yaml
