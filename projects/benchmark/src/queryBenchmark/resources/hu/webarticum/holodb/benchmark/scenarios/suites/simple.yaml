@@ -40,7 +40,7 @@ cases:
   - name: single-column
     description: Select a full column
     query: "SELECT `year` FROM test_table"
-    repeats: 500
+    repeats: 100
     columns:
       - name: year
         type: hu.webarticum.miniconnect.lang.LargeInteger
@@ -49,7 +49,7 @@ cases:
   - name: full-table
     description: Select the entire table
     query: "SELECT * FROM test_table"
-    repeats: 500
+    repeats: 100
     columns:
       - name: id
         type: hu.webarticum.miniconnect.lang.LargeInteger

@@ -49,7 +49,7 @@ cases:
       WHERE
         address_street_type = 'Road' AND
         birth_year > 1975
-    repeats: 300
+    repeats: 100
     columns:
       - type: hu.webarticum.miniconnect.lang.LargeInteger
         nullable: false

@@ -51,7 +51,7 @@ cases:
       INNER JOIN courses c ON c.id = a.course_id
       LEFT JOIN subjects su ON su.id = c.subject_id
       WHERE st.birth_year = 1990
-    repeats: 100
+    repeats: 50
     columns:
       - name: student_id
         type: hu.webarticum.miniconnect.lang.LargeInteger
