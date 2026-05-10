@@ -78,7 +78,7 @@ public class QueryBenchmarkMain implements Callable<Integer> {
         int w6 = COLUMN_WIDTHS[6];
         String formatString = "| %-" + w0 + "s | %-" + w1 + "s | %-" + w2 + "s | %-" + w3 + "s | %-" + w4 + "s | %-" + w5 + "s | %-" + w6 + "s |";
         System.out.println(String.format(
-                formatString, "suite", "case", "w", "status", "repeats", "exec avg", "collect avg"));
+                formatString, "suite", "case", "w", "status", "repeats", "exec-avg", "collect-avg"));
         for (int columnWidth : COLUMN_WIDTHS) {
             System.out.print("| " + repeat('-', columnWidth) + " ");
         }
