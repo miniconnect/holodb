@@ -1,0 +1,48 @@
+description: Multi-table scenarios involving modifications
+holoConfigResource: ../datasets/multiple-tables.yaml
+writeable: true
+initQueries:
+  - USE benchmark
+cases:
+
+  - name: many-joins-few-mixed
+    description: Case with all tables joined after a few modifications
+    initQueries:
+      - INSERT INTO students VALUES(NULL, 'John', 'Doe', 1965)
+      - INSERT INTO students VALUES(NULL, 'Diana', 'Parker', 1990)
+      - INSERT INTO courses VALUES(NULL, '10', 'B7.123')
+      - UPDATE students SET lastname = 'Tarsky' WHERE id = 9876
+      - UPDATE students SET birth_year = 1990 WHERE id = 7654
+      - UPDATE students SET lastname = 'Benda', birth_year = 1995 WHERE id = 5432
+      - DELETE FROM students WHERE id = 9230
+      - DELETE FROM students WHERE id = 12620
+      - DELETE FROM applications WHERE id = 97345
+    query: |
+      SELECT
+        st.id student_id,
+        CONCAT(st.firstname, ' ', st.lastname) name,
+        su.code,
+        su.name subject,
+        c.room
+      FROM students st
+      INNER JOIN applications a ON a.student_id = st.id
+      INNER JOIN courses c ON c.id = a.course_id
+      LEFT JOIN subjects su ON su.id = c.subject_id
+      WHERE st.birth_year = 1990
+    repeats: 50
+    columns:
+      - name: student_id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: name
+        type: java.lang.String
+        nullable: false
+      - name: code
+        type: java.lang.String
+        nullable: true
+      - name: subject
+        type: java.lang.String
+        nullable: true
+      - name: room
+        type: java.lang.String
+        nullable: false

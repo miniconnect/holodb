@@ -46,12 +46,12 @@ cases:
         su.code,
         su.name subject,
         c.room
-      FROM applications a
-      INNER JOIN students st ON st.id = a.student_id
+      FROM students st
+      INNER JOIN applications a ON a.student_id = st.id
       INNER JOIN courses c ON c.id = a.course_id
       LEFT JOIN subjects su ON su.id = c.subject_id
-      LIMIT 100
-    repeats: 500
+      WHERE st.birth_year = 1990
+    repeats: 100
     columns:
       - name: student_id
         type: hu.webarticum.miniconnect.lang.LargeInteger
