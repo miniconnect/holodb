@@ -4,6 +4,7 @@ plugins {
 
 rootProject.name = 'holodb'
 
+include 'admin'
 include 'app'
 include 'benchmark'
 include 'bootstrap'

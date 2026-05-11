@@ -4,10 +4,19 @@ initQueries:
   - USE benchmark
 cases:
 
+  - name: standalone-constant
+    description: Select single standalone constant
+    query: "SELECT 1 one"
+    repeats: 10000
+    columns:
+      - name: one
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
   - name: single-field
     description: Select single field by id
     query: "SELECT code FROM test_table WHERE id = 1"
-    repeats: 1000
+    repeats: 10000
     columns:
       - name: code
         type: java.lang.String
@@ -16,7 +25,7 @@ cases:
   - name: one-row
     description: Select one row by id
     query: "SELECT * FROM test_table WHERE id = 1"
-    repeats: 1000
+    repeats: 10000
     columns:
       - name: id
         type: hu.webarticum.miniconnect.lang.LargeInteger

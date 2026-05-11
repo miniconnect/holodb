@@ -1,0 +1,66 @@
+plugins {
+    id 'java-library'
+    id 'application'
+    id 'com.gradleup.shadow' version '9.4.1'
+    id 'com.github.gmazzo.buildconfig' version '6.0.9'
+}
+
+description = 'Administration tools for HoloDB'
+
+buildConfig {
+    packageName('hu.webarticum.holodb.admin.buildconfig')
+    className('BuildConfig')
+    buildConfigField(String, 'APP_NAME', project.name)
+    buildConfigField(String, "APP_VERSION", provider { project.version })
+    buildConfigField(String, "APP_DESCRIPTION", provider { project.description })
+}
+
+def serverMainClass = 'hu.webarticum.holodb.admin.HolodbAdminMain'
+
+sourceSets {
+    lab {
+        compileClasspath += sourceSets.main.runtimeClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+configurations {
+    labImplementation.extendsFrom implementation
+    labRuntimeOnly.extendsFrom runtimeOnly
+}
+
+dependencies {
+    implementation "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
+    implementation project(':bootstrap')
+    implementation project(':embedded')
+    implementation project(':storage')
+
+    implementation 'org.slf4j:slf4j-api:2.0.17'
+    implementation 'info.picocli:picocli:4.7.7'
+    implementation 'org.jooq:jooq:3.21.3'
+
+    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.26.0'
+    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.26.0'
+
+    runtimeOnly 'com.h2database:h2:2.4.240'
+    runtimeOnly 'org.xerial:sqlite-jdbc:3.53.1.0'
+    runtimeOnly 'org.postgresql:postgresql:42.7.11'
+    
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.14.4'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.14.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.14.4'
+    testImplementation 'org.assertj:assertj-core:3.27.7'
+}
+
+application {
+    mainClass = serverMainClass
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion('21')
+    targetCompatibility = JavaVersion.toVersion('21')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+}

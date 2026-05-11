@@ -21,6 +21,8 @@ import hu.webarticum.holodb.benchmark.model.suite.QueryBenchmarkSuiteDescription
 import hu.webarticum.holodb.benchmark.model.suite.QueryBenchmarkSuiteListDescription;
 import hu.webarticum.holodb.bootstrap.factory.ConfigLoader;
 import hu.webarticum.holodb.bootstrap.factory.EngineBuilder;
+import hu.webarticum.holodb.config.HoloConfig;
+import hu.webarticum.holodb.config.HoloConfigTable;
 import hu.webarticum.minibase.engine.api.Engine;
 import hu.webarticum.minibase.engine.facade.FrameworkSessionManager;
 import hu.webarticum.miniconnect.api.MiniColumnHeader;
@@ -47,10 +49,10 @@ public class QueryBenchmarkController {
 
     public void runSuites(QueryBenchmarkCaseCallback callback) {
         try {
-			runSuitesInternal(callback);
-		} catch (IOException e) {
-		    throw new UncheckedIOException("Unexpected " + e.getClass().getSimpleName(), e);
-		}
+            runSuitesInternal(callback);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Unexpected " + e.getClass().getSimpleName(), e);
+        }
     }
 
     private void runSuitesInternal(QueryBenchmarkCaseCallback callback) throws IOException {
@@ -79,23 +81,40 @@ public class QueryBenchmarkController {
             QueryBenchmarkSuiteDescription suiteDescription,
             QueryBenchmarkCaseDescription benchmarkCase,
             QueryBenchmarkCaseCallback callback
-            ) throws IOException {
+    ) throws IOException {
+        if (!suiteDescription.writeable()) {
+            handleCaseVariant(suiteNo, caseNo, suiteResourcePath, suiteDescription, benchmarkCase, callback, false);
+        }
+        handleCaseVariant(suiteNo, caseNo, suiteResourcePath, suiteDescription, benchmarkCase, callback, true);
+    }
+
+    private void handleCaseVariant(
+            int suiteNo,
+            int caseNo,
+            String suiteResourcePath,
+            QueryBenchmarkSuiteDescription suiteDescription,
+            QueryBenchmarkCaseDescription benchmarkCase,
+            QueryBenchmarkCaseCallback callback,
+            boolean forceWriteable
+    ) throws IOException {
         String caseName = benchmarkCase.name();
         int repeats = benchmarkCase.repeats();
         TableHeaderMatcher tableHeaderMatcher = buildTableHeaderMatcher(benchmarkCase);
-        ImmutableList<MiniColumnHeader> givenColumnHeaders = executeCase(suiteResourcePath, suiteDescription, benchmarkCase);
+        ImmutableList<MiniColumnHeader> givenColumnHeaders =
+                executeCaseVariant(suiteResourcePath, suiteDescription, benchmarkCase, forceWriteable);
         int warmupCount = calculateWarmupCount(suiteNo, caseNo, repeats);
         for (int i = 0; i < warmupCount; i++) {
-            measureCase(suiteResourcePath, suiteDescription, benchmarkCase);
+            measureCaseVariant(suiteResourcePath, suiteDescription, benchmarkCase, forceWriteable);
         }
         List<QueryBenchmarkResultItem> benchmarkResultItemsBuilder = new ArrayList<>();
         for (int i = 0; i < repeats; i++) {
-            QueryBenchmarkResultItem benchmarkResultItem = measureCase(suiteResourcePath, suiteDescription, benchmarkCase);
+            QueryBenchmarkResultItem benchmarkResultItem =
+                    measureCaseVariant(suiteResourcePath, suiteDescription, benchmarkCase, forceWriteable);
             benchmarkResultItemsBuilder.add(benchmarkResultItem);
         }
         ImmutableList<QueryBenchmarkResultItem> benchmarkResultItems = ImmutableList.fromCollection(benchmarkResultItemsBuilder);
         QueryBenchmarkResult benchmarkResult = QueryBenchmarkResult.of(benchmarkResultItems);
-        callback.accept(suiteResourcePath, caseName, tableHeaderMatcher, givenColumnHeaders, benchmarkResult);
+        callback.accept(suiteResourcePath, caseName, forceWriteable, tableHeaderMatcher, givenColumnHeaders, benchmarkResult);
     }
 
     private TableHeaderMatcher buildTableHeaderMatcher(QueryBenchmarkCaseDescription benchmarkCase) {
@@ -109,11 +128,13 @@ public class QueryBenchmarkController {
         return new ConfiguredColumnHeaderMatcher(name, type, nullable);
     }
 
-    private ImmutableList<MiniColumnHeader> executeCase(
+    private ImmutableList<MiniColumnHeader> executeCaseVariant(
             String suiteResourcePath,
             QueryBenchmarkSuiteDescription suiteDescription,
-            QueryBenchmarkCaseDescription benchmarkCase) throws IOException {
-        try (MiniSession session = loadSession(suiteResourcePath, suiteDescription)) {
+            QueryBenchmarkCaseDescription benchmarkCase,
+            boolean forceWriteable
+    ) throws IOException {
+        try (MiniSession session = loadSession(suiteResourcePath, suiteDescription, forceWriteable)) {
             for (String query : suiteDescription.initQueries()) {
                 session.execute(query).requireSuccess();
             }
@@ -125,16 +146,18 @@ public class QueryBenchmarkController {
     }
 
     private int calculateWarmupCount(int suiteNo, int caseNo, int repeats) {
-        int suiteWarmupFactor = Math.max(1, 3 * (2 - suiteNo));
-        int caseWarmupFactor = Math.max(1, 4 * (3 - caseNo));
+        int suiteWarmupFactor = Math.max(1, 2 - suiteNo);
+        int caseWarmupFactor = Math.max(1, 2 * (3 - caseNo));
         return suiteWarmupFactor * caseWarmupFactor * repeats;
     }
 
-    private QueryBenchmarkResultItem measureCase(
+    private QueryBenchmarkResultItem measureCaseVariant(
             String suiteResourcePath,
             QueryBenchmarkSuiteDescription suiteDescription,
-            QueryBenchmarkCaseDescription benchmarkCase) throws IOException {
-        try (MiniSession session = loadSession(suiteResourcePath, suiteDescription)) {
+            QueryBenchmarkCaseDescription benchmarkCase,
+            boolean forceWriteable
+    ) throws IOException {
+        try (MiniSession session = loadSession(suiteResourcePath, suiteDescription, forceWriteable)) {
             for (String query : suiteDescription.initQueries()) {
                 session.execute(query).requireSuccess();
             }
@@ -165,11 +188,38 @@ public class QueryBenchmarkController {
         }
     }
 
-    private MiniSession loadSession(String suiteResourcePath, QueryBenchmarkSuiteDescription suiteDescription) throws IOException {
+    private MiniSession loadSession(
+            String suiteResourcePath,
+            QueryBenchmarkSuiteDescription suiteDescription,
+            boolean forceWriteable
+    ) throws IOException {
         String holoConfigResourcePath = subpath(dirname(suiteResourcePath), suiteDescription.holoConfigResource());
         ConfigLoader configLoader = new ConfigLoader(holoConfigResourcePath);
-        Engine engine = EngineBuilder.ofConfig(configLoader.load()).build();
+        HoloConfig config = injectWriteable(configLoader.load(), forceWriteable);
+        Engine engine = EngineBuilder.ofConfig(config).build();
         return new FrameworkSessionManager(engine).openSession();
+    }
+
+    private HoloConfig injectWriteable(HoloConfig config, boolean writeable) {
+        return new HoloConfig(
+                config.seed(),
+                config.schemaDefaults(),
+                injectWriteable(config.tableDefaults(), writeable),
+                config.columnDefaults(),
+                config.schemas());
+    }
+
+    private HoloConfigTable injectWriteable(HoloConfigTable tableDefaults, boolean writeable) {
+        if (tableDefaults == null) {
+            return new HoloConfigTable(null, writeable, null, null, null);
+        }
+
+        return new HoloConfigTable(
+                tableDefaults.name(),
+                writeable,
+                tableDefaults.size(),
+                tableDefaults.columnDefaults(),
+                tableDefaults.columns());
     }
 
     private <T> T loadYaml(String resourcePath, Class<T> type) throws IOException {

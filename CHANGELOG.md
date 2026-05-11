@@ -1,6 +1,29 @@
 # Changelog
 
 
+## Version 0.9.0
+
+Released on *2026-05-11*
+
+### Fixed:
+
+- Fixed unique index handling
+
+### Added:
+
+- Added the `admin` tool project (including the `dump` and `materialize` commands)
+
+### Improved:
+
+- Made resource list retrieval deterministic
+
+### Development:
+
+- Upgraded to gradle 9.5.0 and improved build
+- Added CONTRIBUTING.md and CODE_OF_CONDUCT.md
+- Improved query benchmarks
+
+
 ## Version 0.8.0
 
 Released on *2026-03-03*

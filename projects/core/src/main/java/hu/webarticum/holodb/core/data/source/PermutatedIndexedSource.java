@@ -48,6 +48,11 @@ public class PermutatedIndexedSource<T> implements IndexedSource<T> {
     }
 
     @Override
+    public boolean isUnique() {
+        return baseSource.isUnique();
+    }
+
+    @Override
     public Comparator<?> comparator() {
         return baseSource.comparator();
     }

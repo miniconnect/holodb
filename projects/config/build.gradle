@@ -16,6 +16,10 @@ configurations {
     schemaGenRuntimeOnly.extendsFrom runtimeOnly
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
+
 dependencies {
     implementation project(':spi')
     api "hu.webarticum.miniconnect.api:lang:${miniConnectApiVersion}"
@@ -25,7 +29,7 @@ dependencies {
 
     schemaGenImplementation "hu.webarticum.miniconnect.api:lang-jackson:${miniConnectApiVersion}"
     schemaGenImplementation 'com.kjetland:mbknor-jackson-jsonschema_2.13:1.0.39'
-    schemaGenImplementation 'org.scala-lang:scala-library:2.13.16'
+    schemaGenImplementation 'org.scala-lang:scala-library:2.13.18'
 }
 
 def schemaFile = layout.buildDirectory.file('schemas/holodb-config.schema.json')

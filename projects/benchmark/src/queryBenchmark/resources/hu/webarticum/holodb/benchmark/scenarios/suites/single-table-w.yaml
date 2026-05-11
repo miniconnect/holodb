@@ -1,0 +1,312 @@
+description: Single-table scenarios involving modifications
+holoConfigResource: ../datasets/complex-table.yaml
+writeable: true
+initQueries:
+  - USE benchmark
+cases:
+
+  - name: few-insertions
+    description: Select after a few insertions
+    initQueries:
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7001', 'A', 'K', 1954, 'Str', 'Drive', 10)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7002', 'S', 'H', 1989, 'Foo', 'Avenue', 2)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7003', 'D', 'D', 2003, 'Bar', 'Square', 3)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7004', 'G', 'I', 1986, 'Baz', 'Street', 42)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7005', 'U', 'P', 1973, 'Far', 'Way', 77)
+    query: "SELECT id, lastname, birth_year FROM members WHERE birth_year BETWEEN 1985 AND 1990"
+    repeats: 50
+    columns:
+      - name: id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: lastname
+        type: java.lang.String
+        nullable: false
+      - name: birth_year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
+  - name: many-insertions
+    description: Select after many insertions
+    initQueries:
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7001', 'Alice', 'King', 1978, 'Cedar', 'Avenue', 7)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7002', 'Brian', 'Stone', 1951, 'Maple', 'Drive', 14)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7003', 'Clara', 'Morgan', 1994, 'Willow', 'Road', 21)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7004', 'David', 'Parker', 1962, 'River', 'Street', 28)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7005', 'Elena', 'Brooks', 2001, 'Hill', 'Square', 35)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7006', 'Frank', 'Miller', 1947, 'Oak', 'Way', 42)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7007', 'Grace', 'Bennett', 1986, 'Pine', 'Avenue', 49)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7008', 'Henry', 'Cooper', 1971, 'Lake', 'Drive', 56)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7009', 'Irene', 'Foster', 1999, 'Forest', 'Road', 63)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7010', 'Jack', 'Reed', 1958, 'Meadow', 'Street', 70)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7011', 'Karen', 'Ward', 1989, 'Sunset', 'Square', 77)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7012', 'Liam', 'Bell', 1942, 'Garden', 'Way', 84)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7013', 'Mia', 'Hayes', 2005, 'Spring', 'Avenue', 91)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7014', 'Noah', 'Price', 1969, 'Highland', 'Drive', 98)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7015', 'Olivia', 'Cook', 1983, 'Valley', 'Road', 105)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7016', 'Peter', 'Gray', 1954, 'North', 'Street', 112)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7017', 'Quinn', 'Hughes', 1991, 'South', 'Square', 119)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7018', 'Rachel', 'Carter', 1976, 'East', 'Way', 6)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7019', 'Simon', 'Turner', 1949, 'West', 'Avenue', 13)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7020', 'Tina', 'Phillips', 1985, 'Cherry', 'Drive', 20)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7021', 'Uma', 'Evans', 2003, 'Walnut', 'Road', 27)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7022', 'Victor', 'Collins', 1964, 'Aspen', 'Street', 34)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7023', 'Wendy', 'Ross', 1997, 'Birch', 'Square', 41)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7024', 'Xavier', 'Nelson', 1956, 'Elm', 'Way', 48)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7025', 'Yara', 'Bailey', 1988, 'Holly', 'Avenue', 55)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7026', 'Zane', 'Murphy', 1945, 'Laurel', 'Drive', 62)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7027', 'Amber', 'Kelly', 2000, 'Poplar', 'Road', 69)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7028', 'Bruce', 'Howard', 1973, 'Sycamore', 'Street', 76)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7029', 'Cora', 'Watson', 1990, 'Magnolia', 'Square', 83)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7030', 'Derek', 'James', 1961, 'Juniper', 'Way', 90)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7031', 'Eva', 'Wood', 1981, 'Cypress', 'Avenue', 97)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7032', 'Felix', 'Morris', 1953, 'Summit', 'Drive', 104)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7033', 'Gina', 'Rogers', 2004, 'Prairie', 'Road', 111)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7034', 'Hugo', 'Peterson', 1967, 'Harbor', 'Street', 118)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7035', 'Isla', 'Rivera', 1987, 'Orchard', 'Square', 5)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7036', 'Jonas', 'Long', 1940, 'Silver', 'Way', 12)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7037', 'Kira', 'Perry', 1995, 'Golden', 'Avenue', 19)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7038', 'Leon', 'Powell', 1979, 'Liberty', 'Drive', 26)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7039', 'Maya', 'Russell', 1959, 'Heritage', 'Road', 33)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7040', 'Nolan', 'Bryant', 1984, 'Central', 'Street', 40)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7041', 'Opal', 'Griffin', 2002, 'Crystal', 'Square', 47)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7042', 'Paula', 'Diaz', 1960, 'Autumn', 'Way', 54)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7043', 'Ronan', 'Hayden', 1992, 'Winter', 'Avenue', 61)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7044', 'Sara', 'Myers', 1975, 'Summer', 'Drive', 68)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7045', 'Theo', 'Ford', 1985, 'Springfield', 'Road', 75)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7046', 'Ursula', 'Hamilton', 1944, 'Fairview', 'Street', 82)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7047', 'Vera', 'Graham', 1998, 'Ridge', 'Square', 89)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7048', 'Walter', 'Sullivan', 1970, 'Park', 'Way', 96)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7049', 'Xena', 'Wallace', 1986, 'Union', 'Avenue', 103)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7050', 'Yusuf', 'Webb', 1950, 'Market', 'Drive', 110)
+    query: "SELECT id, lastname, birth_year FROM members WHERE birth_year BETWEEN 1985 AND 1990"
+    repeats: 50
+    columns:
+      - name: id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: lastname
+        type: java.lang.String
+        nullable: false
+      - name: birth_year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
+  - name: few-updates
+    description: Select after a few updates
+    initQueries:
+      - UPDATE members SET firstname = 'Géza', address_street_name = 'Fő' WHERE id = 5234
+      - UPDATE members SET lastname = 'Kiss' WHERE id = 351
+      - UPDATE members SET firstname = 'Béla', lastname = 'Tarr' WHERE id = 72104
+      - UPDATE members SET birth_year = 2000 WHERE id = 61810
+      - UPDATE members SET birth_year = 1988, lastname = 'Kovács' WHERE id = 99
+    query: "SELECT id, lastname, birth_year FROM members WHERE birth_year BETWEEN 1985 AND 1990"
+    repeats: 50
+    columns:
+      - name: id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: lastname
+        type: java.lang.String
+        nullable: false
+      - name: birth_year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
+  - name: many-updates
+    description: Select after many updates
+    initQueries:
+      - UPDATE members SET firstname = 'Géza', address_street_name = 'Fő' WHERE id = 5234
+      - UPDATE members SET lastname = 'Kiss' WHERE id = 351
+      - UPDATE members SET firstname = 'Béla', lastname = 'Tarr' WHERE id = 72104
+      - UPDATE members SET birth_year = 2000 WHERE id = 61810
+      - UPDATE members SET birth_year = 1988, lastname = 'Kovács' WHERE id = 99
+      - UPDATE members SET firstname = 'Kinga', address_street_name = 'Széchenyi' WHERE id = 4923
+      - UPDATE members SET lastname = 'Nagy' WHERE id = 193
+      - UPDATE members SET firstname = 'Zoltán', lastname = 'Fábri' WHERE id = 65733
+      - UPDATE members SET birth_year = 2005 WHERE id = 34595
+      - UPDATE members SET birth_year = 1987, lastname = 'Szabó' WHERE id = 11
+      - UPDATE members SET birth_year = 1998 WHERE id BETWEEN 500 AND 550
+      - UPDATE members SET birth_year = 1986 WHERE id BETWEEN 1400 AND 1450
+    query: "SELECT id, lastname, birth_year FROM members WHERE birth_year BETWEEN 1985 AND 1990"
+    repeats: 50
+    columns:
+      - name: id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: lastname
+        type: java.lang.String
+        nullable: false
+      - name: birth_year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
+  - name: few-deletions
+    description: Select after a few deletions
+    initQueries:
+      - DELETE FROM members WHERE id = 7910
+      - DELETE FROM members WHERE id = 12345
+      - DELETE FROM members WHERE id = 87654
+      - DELETE FROM members WHERE id = 3
+      - DELETE FROM members WHERE id = 11111
+    query: "SELECT id, lastname, birth_year FROM members WHERE birth_year BETWEEN 1985 AND 1990"
+    repeats: 50
+    columns:
+      - name: id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: lastname
+        type: java.lang.String
+        nullable: false
+      - name: birth_year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
+  - name: many-deletions
+    description: Select after many deletions
+    initQueries:
+      - DELETE FROM members WHERE id = 7910
+      - DELETE FROM members WHERE id = 12345
+      - DELETE FROM members WHERE id = 87654
+      - DELETE FROM members WHERE id = 3
+      - DELETE FROM members WHERE id = 11111
+      - DELETE FROM members WHERE id = 9342
+      - DELETE FROM members WHERE id = 15201
+      - DELETE FROM members WHERE id = 70210
+      - DELETE FROM members WHERE id = 7
+      - DELETE FROM members WHERE id = 44333
+      - DELETE FROM members WHERE id BETWEEN 35200 AND 35250
+      - DELETE FROM members WHERE id BETWEEN 73500 AND 73550
+    query: "SELECT id, lastname, birth_year FROM members WHERE birth_year BETWEEN 1985 AND 1990"
+    repeats: 50
+    columns:
+      - name: id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: lastname
+        type: java.lang.String
+        nullable: false
+      - name: birth_year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
+  - name: few-mixed
+    description: Select after a few various modifications
+    initQueries:
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7001', 'A', 'K', 1954, 'Str', 'Drive', 10)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7002', 'S', 'H', 1989, 'Foo', 'Avenue', 2)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7003', 'D', 'D', 2003, 'Bar', 'Square', 3)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7004', 'G', 'I', 1986, 'Baz', 'Street', 42)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7005', 'U', 'P', 1973, 'Far', 'Way', 77)
+      - UPDATE members SET firstname = 'Géza', address_street_name = 'Fő' WHERE id = 5234
+      - UPDATE members SET lastname = 'Kiss' WHERE id = 351
+      - UPDATE members SET firstname = 'Béla', lastname = 'Tarr' WHERE id = 72104
+      - UPDATE members SET birth_year = 2000 WHERE id = 61810
+      - UPDATE members SET birth_year = 1988, lastname = 'Kovács' WHERE id = 99
+      - DELETE FROM members WHERE id = 7910
+      - DELETE FROM members WHERE id = 12345
+      - DELETE FROM members WHERE id = 87654
+      - DELETE FROM members WHERE id = 3
+      - DELETE FROM members WHERE id = 11111
+    query: "SELECT id, lastname, birth_year FROM members WHERE birth_year BETWEEN 1985 AND 1990"
+    repeats: 50
+    columns:
+      - name: id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: lastname
+        type: java.lang.String
+        nullable: false
+      - name: birth_year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+
+  - name: many-mixed
+    description: Select after many various modifications
+    initQueries:
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7001', 'Alice', 'King', 1978, 'Cedar', 'Avenue', 7)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7002', 'Brian', 'Stone', 1951, 'Maple', 'Drive', 14)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7003', 'Clara', 'Morgan', 1994, 'Willow', 'Road', 21)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7004', 'David', 'Parker', 1962, 'River', 'Street', 28)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7005', 'Elena', 'Brooks', 2001, 'Hill', 'Square', 35)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7006', 'Frank', 'Miller', 1947, 'Oak', 'Way', 42)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7007', 'Grace', 'Bennett', 1986, 'Pine', 'Avenue', 49)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7008', 'Henry', 'Cooper', 1971, 'Lake', 'Drive', 56)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7009', 'Irene', 'Foster', 1999, 'Forest', 'Road', 63)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7010', 'Jack', 'Reed', 1958, 'Meadow', 'Street', 70)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7011', 'Karen', 'Ward', 1989, 'Sunset', 'Square', 77)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7012', 'Liam', 'Bell', 1942, 'Garden', 'Way', 84)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7013', 'Mia', 'Hayes', 2005, 'Spring', 'Avenue', 91)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7014', 'Noah', 'Price', 1969, 'Highland', 'Drive', 98)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7015', 'Olivia', 'Cook', 1983, 'Valley', 'Road', 105)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7016', 'Peter', 'Gray', 1954, 'North', 'Street', 112)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7017', 'Quinn', 'Hughes', 1991, 'South', 'Square', 119)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7018', 'Rachel', 'Carter', 1976, 'East', 'Way', 6)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7019', 'Simon', 'Turner', 1949, 'West', 'Avenue', 13)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7020', 'Tina', 'Phillips', 1985, 'Cherry', 'Drive', 20)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7021', 'Uma', 'Evans', 2003, 'Walnut', 'Road', 27)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7022', 'Victor', 'Collins', 1964, 'Aspen', 'Street', 34)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7023', 'Wendy', 'Ross', 1997, 'Birch', 'Square', 41)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7024', 'Xavier', 'Nelson', 1956, 'Elm', 'Way', 48)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7025', 'Yara', 'Bailey', 1988, 'Holly', 'Avenue', 55)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7026', 'Zane', 'Murphy', 1945, 'Laurel', 'Drive', 62)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7027', 'Amber', 'Kelly', 2000, 'Poplar', 'Road', 69)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7028', 'Bruce', 'Howard', 1973, 'Sycamore', 'Street', 76)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7029', 'Cora', 'Watson', 1990, 'Magnolia', 'Square', 83)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7030', 'Derek', 'James', 1961, 'Juniper', 'Way', 90)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7031', 'Eva', 'Wood', 1981, 'Cypress', 'Avenue', 97)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7032', 'Felix', 'Morris', 1953, 'Summit', 'Drive', 104)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7033', 'Gina', 'Rogers', 2004, 'Prairie', 'Road', 111)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7034', 'Hugo', 'Peterson', 1967, 'Harbor', 'Street', 118)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7035', 'Isla', 'Rivera', 1987, 'Orchard', 'Square', 5)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7036', 'Jonas', 'Long', 1940, 'Silver', 'Way', 12)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7037', 'Kira', 'Perry', 1995, 'Golden', 'Avenue', 19)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7038', 'Leon', 'Powell', 1979, 'Liberty', 'Drive', 26)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7039', 'Maya', 'Russell', 1959, 'Heritage', 'Road', 33)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7040', 'Nolan', 'Bryant', 1984, 'Central', 'Street', 40)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7041', 'Opal', 'Griffin', 2002, 'Crystal', 'Square', 47)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7042', 'Paula', 'Diaz', 1960, 'Autumn', 'Way', 54)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7043', 'Ronan', 'Hayden', 1992, 'Winter', 'Avenue', 61)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7044', 'Sara', 'Myers', 1975, 'Summer', 'Drive', 68)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7045', 'Theo', 'Ford', 1985, 'Springfield', 'Road', 75)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7046', 'Ursula', 'Hamilton', 1944, 'Fairview', 'Street', 82)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7047', 'Vera', 'Graham', 1998, 'Ridge', 'Square', 89)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7048', 'Walter', 'Sullivan', 1970, 'Park', 'Way', 96)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7049', 'Xena', 'Wallace', 1986, 'Union', 'Avenue', 103)
+      - INSERT INTO members VALUES(NULL, 'ABC-temp-7050', 'Yusuf', 'Webb', 1950, 'Market', 'Drive', 110)
+      - UPDATE members SET firstname = 'Géza', address_street_name = 'Fő' WHERE id = 5234
+      - UPDATE members SET lastname = 'Kiss' WHERE id = 351
+      - UPDATE members SET firstname = 'Béla', lastname = 'Tarr' WHERE id = 72104
+      - UPDATE members SET birth_year = 2000 WHERE id = 61810
+      - UPDATE members SET birth_year = 1988, lastname = 'Kovács' WHERE id = 99
+      - UPDATE members SET firstname = 'Kinga', address_street_name = 'Széchenyi' WHERE id = 4923
+      - UPDATE members SET lastname = 'Nagy' WHERE id = 193
+      - UPDATE members SET firstname = 'Zoltán', lastname = 'Fábri' WHERE id = 65733
+      - UPDATE members SET birth_year = 2005 WHERE id = 34595
+      - UPDATE members SET birth_year = 1987, lastname = 'Szabó' WHERE id = 11
+      - UPDATE members SET birth_year = 1998 WHERE id BETWEEN 500 AND 550
+      - UPDATE members SET birth_year = 1986 WHERE id BETWEEN 1400 AND 1450
+      - DELETE FROM members WHERE id = 7910
+      - DELETE FROM members WHERE id = 12345
+      - DELETE FROM members WHERE id = 87654
+      - DELETE FROM members WHERE id = 3
+      - DELETE FROM members WHERE id = 11111
+      - DELETE FROM members WHERE id = 9342
+      - DELETE FROM members WHERE id = 15201
+      - DELETE FROM members WHERE id = 70210
+      - DELETE FROM members WHERE id = 7
+      - DELETE FROM members WHERE id = 44333
+      - DELETE FROM members WHERE id BETWEEN 35200 AND 35250
+      - DELETE FROM members WHERE id BETWEEN 73500 AND 73550
+    query: "SELECT id, lastname, birth_year FROM members WHERE birth_year BETWEEN 1985 AND 1990"
+    repeats: 50
+    columns:
+      - name: id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: lastname
+        type: java.lang.String
+        nullable: false
+      - name: birth_year
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false

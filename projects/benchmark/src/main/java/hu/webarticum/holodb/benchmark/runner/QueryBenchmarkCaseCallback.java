@@ -10,6 +10,7 @@ public interface QueryBenchmarkCaseCallback {
     public void accept(
             String resourcePath,
             String caseName,
+            boolean writeable,
             TableHeaderMatcher tableHeaderMatcher,
             ImmutableList<MiniColumnHeader> givenColumnHeaders,
             QueryBenchmarkResult benchmarkResult);

@@ -1,0 +1,21 @@
+### gradle: ###
+/build/
+/.gradle/
+
+### maven: ###
+/target/
+
+### eclipse: ###
+/bin/
+/.settings/
+/.classpath
+/.project
+
+### theia: ###
+/.theia/
+
+### idea: ###
+/.idea/
+
+### vscode: ###
+/.vscode/

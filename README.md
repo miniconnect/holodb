@@ -1,37 +1,23 @@
 # HoloDB &ndash; the on-the-fly relational database
 
-HoloDB is a lightweight relational database simulator.
-It launches instantly from your declarative configuration and presents a coherent, performant, writable database view without storing any data.
-Ideal for demos, prototypes, testing, education, or any situation traditionally involving synthetic or anonymized data.
+**Launch a scalable, writable, and consistent SQL database instantly from a configuration file -
+eliminating the need for persistent data storage.**
+
+Ideal for demos, automated testing, and CI/CD pipelines where you need a database-shaped system
+without the overhead of data management, migrations, or unnecessary resource waste.
 
 
 ## :bulb: Why HoloDB?
 
-> ***No data generation &ndash; no storage costs &ndash; no migrations.***
->
-> **Sketch up your schema and characteristics, and you're ready to start querying!**
-
-HoloDB is for those moments when you need a database-shaped system but are tired of the complications of actually managing data.
-Instead of setting up or importing datasets, you simply provide a configuration file (or ORM entities)
-and immediately start working with an on-the-fly (yet performant) relational system that computes every result from definition rules, not storage.
-
-What you get from it:
-
-- **On-the-fly data engine** &rarr; generates consistent data dynamically, no pre-generation.
-- **Declarative control** &rarr; lets you define schema and values via YAML/JSON config or JPA annotations.
-- **Searchable and writable** &rarr; on-the-fly data you can still search and update like a real DB.
-- **Versatile usage modes** &rarr; supports multiple ways to run (embedded, JPA-based, Docker etc.).
-- **Integration options** &rarr; offers several ways to connect (JDBC, [MiniConnect](https://github.com/miniconnect/miniconnect), TCP) and upcoming integrations (Postgres, DBeaver).
-- **Portable across environments** &rarr; runs seamlessly in Java or Docker, on any platform.
-- **Open source and transparent** &rarr; freely available, inspectable, and adaptable to your needs.
-
-Work with a database as if it were real, minus the cost of setup and maintenance.
+- **Virtual Data Layer:** Data is served from declarative rules instead of storage.
+- **Instant Availability:** No pre-generation scripts or time-consuming data imports.
+- **Fully Functional:** Searchable, writable, and compatible with JDBC, Docker, and JPA.
+- **Deterministic:** Using a seed ensures the exact same dataset across every environment.
 
 
 ## :rocket: Quick start
 
-One easy way to try out HoloDB is to run it via [the official Docker image](https://hub.docker.com/r/miniconnect/holodb).
-All you need is a YAML configuration file:
+1. **Create `config.yaml:`**
 
 ```yaml
 seed: 98765
@@ -42,28 +28,20 @@ schemas:
         writeable: true
         size: 1500
         columns:
-          - name: id
-            mode: COUNTER
-          - name: code
-            valuesPattern: '[A-F]{3}[0-9]{2}'
-          - name: year
-            shuffleQuality: high
-            valuesRange: [1950, 2000]
+          - { name: id, mode: counter }
+          - { name: code, valuesPattern: '[A-F]{3}[0-9]{2}' }
+          - { name: year, shuffleQuality: high, valuesRange: [1950, 2000] }
 ```
 
-> [!TIP]
-> [You can download a more complex sample configuration from here.](https://raw.githubusercontent.com/miniconnect/general-docs/refs/heads/main/examples/holodb-standalone/config.yaml).
-
-Save this as `config.yaml`, and you are now ready to start the queryable database server:
+2. **Run the server:**
 
 ```bash
-docker run --rm -p 3430:3430 -v /tmp/config.yaml:/app/config.yaml miniconnect/holodb
+docker run --rm -p 3430:3430 -v '/<path-to-you-file>/config.yaml:/app/config.yaml' miniconnect/holodb
 ```
 
+3. **Query instantly**
+
 You can now connect to the server on port 3430.
-The simplest way to do this is to use the `micl` command line application, which is an SQL REPL.
-You can get it from the [`miniconnect-client` project](https://github.com/miniconnect/miniconnect-client).
-Start, select the schema, and run queries:
 
 > `$` &nbsp; **`micl`**
 >
@@ -89,7 +67,10 @@ Start, select the schema, and run queries:
 > >  └─────┴───────┴──────┘
 > > ```
 
-For other ways to use the server, such as connecting from your application, see later.
+For more info about the `micl` command-line REPL
+[see the `miniconnect-client` project](https://github.com/miniconnect/miniconnect-client).
+
+For other ways to use the server and embedded mode see later.
 
 
 ## :books: More examples
@@ -169,8 +150,6 @@ and should be preferred in most cases.
 
 The `valuesTextKind` key can be used to generate dummy text in various forms.
 These are based on randomly mixed words from the "lorem ipsum" text, supplemented with some English conjunctions.
-The values will not be indexed
-(for an indexed column containing single words, use the `valuesBundle` key with the value "lorem").
 The available values are as follows:
 
 | Text kind | Example | Description |
@@ -178,9 +157,12 @@ The available values are as follows:
 | `phrase` | *eiusmod an aliqua ullamco* | a short phrase |
 | `title` | *The Nulla Sit Tempor* | a title with capitalization |
 | `sentence` | *Some exercitation an occaecat anim the duis.* | a sentence terminated with perid |
-| `paragraph` |  | a paragraph of containing 3-6 sentences |
+| `paragraph` |  | a paragraph containing 3-6 sentences |
 | `markdown` |  | MarkDown formatted text containing a few headers and paragraphs |
 | `html` |  | HTML formatted text containing a few headers and paragraphs |
+
+The column defined using `valuesTextKind` will not be indexed
+(for an indexed column containing single words, use the `valuesBundle` key with the value `lorem`).
 
 There are several possible values for `valuesBundle`:
 
@@ -192,7 +174,7 @@ There are several possible values for `valuesBundle`:
 | `female-forenames` | 100 frequent English female forenames |
 | `forenames` | 100 frequent English forenames (50 female, 50 male) |
 | `fruits` | 26 of the best selling fruits |
-| `log-levels` | 6 standard log levels (from log4j) |
+| `log-levels` | the 6 common log levels (from log4j) |
 | `lorem` | 49 lower-case words of the *Lorem ipsum* text |
 | `male-forenames` | 100 frequent English male forenames |
 | `months` | the 12 month names |
@@ -235,7 +217,7 @@ The meaning of `mode` values:
 | `enum` | similar to `default`, but with different proper rules for equality check, sort order and insertion/update |
 
 In the case of writable tables, if other than the `enum` mode is used,
-users can also put values ​​different from the initial ones.
+users can also put values different from the initial ones.
 
 If `nullCount` is specified (even if `0`), then the column will be nullable.
 Omit `nullCount` to make the column `NOT NULL`.
@@ -250,7 +232,7 @@ The type of a `counter` column is always `hu.webarticum.miniconnect.lang.LargeIn
 If `seedKey` is specified, it will be explicitly used as a key for the sub-random-generator for the column.
 Setting or changing this value alters the data distribution, shuffling, etc. for this column without affecting other columns.
 If two columns of a table share the same non-null `seedKey` while they have the same settings (except for `name`),
-then they will provide the exact same values in the exact same order , effectively making them mirrors of each other.
+then they will provide the exact same values in the exact same order, effectively making them mirrors of each other.
 This also means that such a column can be renamed without remixing its content.
 
 You can set default configuration for schemas, tables, and columns at any higher level in the configuration tree.
@@ -322,7 +304,7 @@ You can use a predefined value set resource with the `valuesResource` key in `co
             valuesResource: 'my-car-brands.txt'
 ```
 
-If you don't already have a value list, you can retrieve existing data from several sources,
+You can also retrieve existing data from several sources,
 for example [WikiData](https://www.wikidata.org/),
 [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 or [Kaggle](https://www.kaggle.com/).
@@ -509,7 +491,7 @@ These are the supported annotations:
 | `@HoloVirtualColumn` | class | Defines an additional column for the entity (multiple occurrences allowed) |
 
 `@HoloColumn` and `@HoloVirtualColumn` accepts all the columns configurations
-(for `@HoloVirtualColumn` `name` and `type` are mandatory).
+(for `@HoloVirtualColumn`, `name` and `type` are mandatory).
 
 Some numeric settings have two variants, one for usual and one for large values:
 

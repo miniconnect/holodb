@@ -15,7 +15,7 @@ import picocli.CommandLine.Parameters;
 @Command(name = "QueryTestMain", mixinStandardHelpOptions = true)
 public class QueryBenchmarkMain implements Callable<Integer> {
 
-    private static final int[] COLUMN_WIDTHS = { 25, 20, 7, 7, 12, 12 };
+    private static final int[] COLUMN_WIDTHS = { 25, 20, 1, 7, 7, 12, 12 };
 
     @Parameters(
             paramLabel = "<test-suite-list-resource>",
@@ -35,8 +35,8 @@ public class QueryBenchmarkMain implements Callable<Integer> {
         printHeader();
         QueryBenchmarkController
                 .ofResource(testSuiteListResourcePath)
-                .runSuites((path, name, matcher, headers, result) -> {
-                    boolean success = acceptCase(path, name, matcher, headers, result);
+                .runSuites((path, name, writeable, matcher, headers, result) -> {
+                    boolean success = acceptCase(path, name, writeable, matcher, headers, result);
                     totalCounter.incrementAndGet();
                     if (success) {
                         successCounter.incrementAndGet();
@@ -46,7 +46,7 @@ public class QueryBenchmarkMain implements Callable<Integer> {
         int successCount = successCounter.get();
         System.out.println();
         System.out.println(String.format(
-                "%2$s/%1$s benchmark was run successfully",
+                "%2$s/%1$s benchmarks were run successfully",
                 totalCount, successCount));
         return totalCount == successCount ? 0 : 1;
     }
@@ -54,6 +54,7 @@ public class QueryBenchmarkMain implements Callable<Integer> {
     private boolean acceptCase(
             String resourcePath,
             String caseName,
+            boolean writeable,
             TableHeaderMatcher tableHeaderMatcher,
             ImmutableList<MiniColumnHeader> givenColumnHeaders,
             QueryBenchmarkResult benchmarkResult) {
@@ -63,7 +64,7 @@ public class QueryBenchmarkMain implements Callable<Integer> {
         } catch (Exception e) {
             success = false;
         }
-        printResultRow(resourcePath, caseName, success, benchmarkResult);
+        printResultRow(resourcePath, caseName, writeable, success, benchmarkResult);
         return success;
     }
 
@@ -74,9 +75,10 @@ public class QueryBenchmarkMain implements Callable<Integer> {
         int w3 = COLUMN_WIDTHS[3];
         int w4 = COLUMN_WIDTHS[4];
         int w5 = COLUMN_WIDTHS[5];
-        String formatString = "| %-" + w0 + "s | %-" + w1 + "s | %-" + w2 + "s | %-" + w3 + "s | %-" + w4 + "s | %-" + w5 + "s |";
+        int w6 = COLUMN_WIDTHS[6];
+        String formatString = "| %-" + w0 + "s | %-" + w1 + "s | %-" + w2 + "s | %-" + w3 + "s | %-" + w4 + "s | %-" + w5 + "s | %-" + w6 + "s |";
         System.out.println(String.format(
-                formatString, "suite", "case", "status", "repeats", "exec avg", "collect avg"));
+                formatString, "suite", "case", "w", "status", "repeats", "exec-avg", "collect-avg"));
         for (int columnWidth : COLUMN_WIDTHS) {
             System.out.print("| " + repeat('-', columnWidth) + " ");
         }
@@ -91,20 +93,28 @@ public class QueryBenchmarkMain implements Callable<Integer> {
         return resultBuilder.toString();
     }
 
-    private void printResultRow(String resourcePath, String caseName, boolean success, QueryBenchmarkResult benchmarkResult) {
+    private void printResultRow(
+            String resourcePath,
+            String caseName,
+            boolean writeable,
+            boolean success,
+            QueryBenchmarkResult benchmarkResult
+    ) {
         String successText = success ? "SUCCESS" : "FAIL";
         int count = benchmarkResult.count();
         long executeAvg = benchmarkResult.executeNanosAvg();
         long collectAvg = benchmarkResult.collectNanosAvg();
+        int writeableInt = writeable ? 1 : 0;
         int w0 = COLUMN_WIDTHS[0];
         int w1 = COLUMN_WIDTHS[1];
         int w2 = COLUMN_WIDTHS[2];
         int w3 = COLUMN_WIDTHS[3];
         int w4 = COLUMN_WIDTHS[4];
         int w5 = COLUMN_WIDTHS[5];
-        String formatString = "| %-" + w0 + "s | %-" + w1 + "s | %-" + w2 + "s | %" + w3 + "d | %" + w4 + "d | %" + w5 + "d |";
+        int w6 = COLUMN_WIDTHS[6];
+        String formatString = "| %-" + w0 + "s | %-" + w1 + "s | %-" + w2 + "s | %-" + w3 + "s | %" + w4 + "d | %" + w5 + "d | %" + w6 + "d |";
         System.out.println(String.format(
-                formatString, basename(resourcePath), caseName, successText, count, executeAvg, collectAvg));
+                formatString, basename(resourcePath), caseName, writeableInt, successText, count, executeAvg, collectAvg));
     }
 
     private String basename(String path) {

@@ -3,11 +3,10 @@ schemas:
   - name: benchmark
     tables:
       - name: test_table
-        writeable: true
         size: 3500
         columns:
           - name: id
-            mode: COUNTER
+            mode: counter
           - name: code
             valuesPattern: '[A-F]{3}[0-9]{2}'
           - name: year

@@ -1,0 +1,89 @@
+description: Various multi-table queries
+holoConfigResource: ../datasets/multiple-tables.yaml
+initQueries:
+  - USE benchmark
+cases:
+
+  - name: minimal-join
+    description: One field from each of of two smaller joined tables
+    query: |
+      SELECT s.name, c.room
+      FROM courses c
+      INNER JOIN subjects s ON s.id = c.subject_id
+      WHERE c.id = 1
+    repeats: 1000
+    columns:
+      - name: name
+        type: java.lang.String
+        nullable: false
+      - name: room
+        type: java.lang.String
+        nullable: false
+
+  - name: ordered-join
+    description: Order-by on each of two joined table
+    query: |
+      SELECT s.name, c.room
+      FROM courses c
+      INNER JOIN subjects s ON s.id = c.subject_id
+      ORDER BY s.name ASC, c.room ASC
+      LIMIT 50
+    repeats: 500
+    columns:
+      - name: name
+        type: java.lang.String
+        nullable: false
+      - name: room
+        type: java.lang.String
+        nullable: false
+
+  - name: many-joins
+    description: Case with all tables joined together
+    query: |
+      SELECT
+        st.id student_id,
+        CONCAT(st.firstname, ' ', st.lastname) name,
+        su.code,
+        su.name subject,
+        c.room
+      FROM students st
+      INNER JOIN applications a ON a.student_id = st.id
+      INNER JOIN courses c ON c.id = a.course_id
+      LEFT JOIN subjects su ON su.id = c.subject_id
+      WHERE st.birth_year = 1990
+    repeats: 50
+    columns:
+      - name: student_id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: name
+        type: java.lang.String
+        nullable: false
+      - name: code
+        type: java.lang.String
+        nullable: true
+      - name: subject
+        type: java.lang.String
+        nullable: true
+      - name: room
+        type: java.lang.String
+        nullable: false
+
+  - name: outer-filter
+    description: Filter on the joined table
+    query: |
+      SELECT a.student_id, a.course_id, c.subject_id
+      FROM applications a
+      LEFT JOIN courses c ON c.id = a.course_id
+      WHERE c.subject_id < 30 
+    repeats: 10
+    columns:
+      - name: student_id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: course_id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: subject_id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: true

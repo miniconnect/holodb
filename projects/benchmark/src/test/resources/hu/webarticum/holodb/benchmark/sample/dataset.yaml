@@ -3,8 +3,7 @@ schemas:
   - name: sch
     tables:
       - name: tbl
-        writeable: true
         size: 200
         columns:
           - name: id
-            mode: COUNTER
+            mode: counter

@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id 'com.gradleup.shadow' version '9.3.0'
+    id 'com.gradleup.shadow' version '9.4.1'
 }
 
 description = 'HoloDB query execution benchmarks'
@@ -20,23 +20,27 @@ dependencies {
     implementation "hu.webarticum.miniconnect:record:${miniConnectVersion}"
 
     api 'com.fasterxml.jackson.core:jackson-annotations:2.21'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.21.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.21.1'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.21.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.21.3'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.3'
     implementation "hu.webarticum.miniconnect.api:lang-jackson:${miniConnectApiVersion}"
 
-    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.25.3'
-    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.25.3'
+    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.26.0'
+    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.26.0'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.14.3'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.14.3'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.14.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.14.4'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.14.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.14.4'
     testImplementation 'org.assertj:assertj-core:3.27.7'
     testImplementation "hu.webarticum.miniconnect.api:lang-assertj:${miniConnectApiVersion}"
     testImplementation "hu.webarticum.miniconnect:impl:${miniConnectVersion}"
 
     queryBenchmarkImplementation 'info.picocli:picocli:4.7.7'
     queryBenchmarkImplementation 'org.slf4j:slf4j-api:2.0.17'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
 }
 
 tasks.register('queryBenchmark', JavaExec) {

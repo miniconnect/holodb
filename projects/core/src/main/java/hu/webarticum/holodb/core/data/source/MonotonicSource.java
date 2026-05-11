@@ -41,6 +41,11 @@ public class MonotonicSource<T> implements SortedSource<T> {
     }
 
     @Override
+    public boolean isUnique() {
+        return false;
+    }
+
+    @Override
     public Comparator<?> comparator() {
         return baseSource.comparator();
     }

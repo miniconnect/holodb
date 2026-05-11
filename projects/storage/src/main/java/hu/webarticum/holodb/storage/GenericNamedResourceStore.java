@@ -52,7 +52,7 @@ public class GenericNamedResourceStore<T extends NamedResource> implements Named
 
     @Override
     public ImmutableList<T> resources() {
-        return ImmutableList.fromCollection(resourcesByName.values());
+        return names.map(this::get);
     }
 
     @Override

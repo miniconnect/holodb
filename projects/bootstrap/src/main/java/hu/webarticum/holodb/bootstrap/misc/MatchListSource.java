@@ -38,6 +38,11 @@ public class MatchListSource implements SortedSource<String> {
     }
 
     @Override
+    public boolean isUnique() {
+        return true;
+    }
+
+    @Override
     public Comparator<String> comparator() {
         return Collator.getInstance(Locale.US)::compare;
     }

@@ -44,6 +44,11 @@ public class RangeSource implements SortedSource<LargeInteger> {
     }
 
     @Override
+    public boolean isUnique() {
+        return true;
+    }
+
+    @Override
     public Comparator<LargeInteger> comparator() {
         return LargeInteger::compareTo;
     }

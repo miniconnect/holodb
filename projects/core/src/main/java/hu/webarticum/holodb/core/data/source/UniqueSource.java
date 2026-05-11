@@ -77,6 +77,11 @@ public class UniqueSource<T extends Comparable<T>> implements SortedSource<T> {
     }
 
     @Override
+    public boolean isUnique() {
+        return true;
+    }
+
+    @Override
     public Comparator<T> comparator() {
         return comparator;
     }

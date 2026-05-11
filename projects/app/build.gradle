@@ -1,11 +1,20 @@
 plugins {
     id 'java-library'
     id 'application'
-    id 'com.google.cloud.tools.jib' version '3.5.2'
-    id 'com.gradleup.shadow' version '9.3.0'
+    id 'com.google.cloud.tools.jib' version '3.5.3'
+    id 'com.gradleup.shadow' version '9.4.1'
+    id 'com.github.gmazzo.buildconfig' version '6.0.9'
 }
 
 description = "HoloDB standalone app"
+
+buildConfig {
+    packageName('hu.webarticum.holodb.app.buildconfig')
+    className('BuildConfig')
+    buildConfigField(String, 'APP_NAME', project.name)
+    buildConfigField(String, "APP_VERSION", provider { project.version })
+    buildConfigField(String, "APP_DESCRIPTION", provider { project.description })
+}
 
 def serverMainClass = 'hu.webarticum.holodb.app.launch.HolodbServerMain'
 
@@ -27,12 +36,16 @@ dependencies {
     implementation 'info.picocli:picocli:4.7.7'
     implementation 'org.slf4j:slf4j-api:2.0.17'
 
-    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.25.3'
-    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.25.3'
+    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.26.0'
+    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.26.0'
 }
 
 application {
     mainClass = serverMainClass
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
 }
 
 jib {

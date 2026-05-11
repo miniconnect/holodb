@@ -1,7 +1,8 @@
 plugins {
-    id 'org.ajoberstar.grgit' version '5.3.2'
+    id 'org.ajoberstar.grgit' version '5.3.3'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
-    id 'nebula.lint' version '20.6.2'
+    id 'nebula.lint' version '21.2.0'
+    id 'com.github.ben-manes.versions' version '0.54.0'
 }
 
 description = "HoloDB - instant random relational data"
@@ -43,9 +44,9 @@ allprojects {
     group = groupName
     version = automaticVersion
 
-    ext.miniConnectApiVersion = '0.5.0'
-    ext.miniConnectVersion = '0.8.0'
-    ext.miniBaseVersion = '0.5.0'
+    ext.miniConnectApiVersion = '0.6.0'
+    ext.miniConnectVersion = '0.9.0'
+    ext.miniBaseVersion = '0.6.0'
 
     repositories {
         mavenCentral()
@@ -64,17 +65,6 @@ subprojects { subproject ->
             withSourcesJar()
         }
 
-        subproject.tasks.withType(JavaCompile).configureEach { compileTask ->
-            compileTask.javaCompiler = javaToolchains.compilerFor {
-                languageVersion = JavaLanguageVersion.of(8)
-            }
-            compileTask.options.encoding = 'UTF-8'
-        }
-
-        subproject.tasks.withType(Javadoc).configureEach { javadocTask ->
-            javadocTask.options.addStringOption('Xdoclint:none', '-quiet')
-        }
-
         subproject.sourceSets.matching { it.name == 'lab' }.all { labSourceSet ->
             subproject.tasks.register('execLab', JavaExec) {
                 group = 'Execution'
@@ -83,6 +73,15 @@ subprojects { subproject ->
                 mainClass = System.getProperty('lab.exec.main.class')
                 standardInput = System.in
             }
+        }
+
+        subproject.tasks.withType(JavaCompile).configureEach {
+            options.encoding = 'UTF-8'
+            options.compilerArgs += ['-Xlint:-options']
+        }
+
+        subproject.tasks.withType(Javadoc).configureEach { javadocTask ->
+            javadocTask.options.addStringOption('Xdoclint:none', '-quiet')
         }
 
         def moduleName = groupName + '.' + subproject.name.replaceAll(/\W/, ".")

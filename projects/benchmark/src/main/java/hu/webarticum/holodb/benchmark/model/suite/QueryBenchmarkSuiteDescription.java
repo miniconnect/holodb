@@ -15,6 +15,8 @@ public class QueryBenchmarkSuiteDescription {
 
     private final String holoConfigResource;
 
+    private final boolean writeable;
+
     private final ImmutableList<String> initQueries;
 
     private final ImmutableList<QueryBenchmarkCaseDescription> cases;
@@ -22,10 +24,12 @@ public class QueryBenchmarkSuiteDescription {
     public QueryBenchmarkSuiteDescription(
             @JsonProperty("description") String description,
             @JsonProperty("holoConfigResource") String holoConfigResource,
+            @JsonProperty("writeable") Boolean writeable,
             @JsonProperty("initQueries") ImmutableList<String> initQueries,
             @JsonProperty("cases") ImmutableList<QueryBenchmarkCaseDescription> cases) {
         this.description = description != null ? description : "";
         this.holoConfigResource = Objects.requireNonNull(holoConfigResource, "holoConfigResource must not be null");
+        this.writeable = writeable != null ? writeable : false;
         this.initQueries = initQueries != null ? initQueries : ImmutableList.empty();
         this.cases = Objects.requireNonNull(cases, "cases must not be null");
         Set<String> names = new HashSet<>(cases.size());
@@ -45,6 +49,11 @@ public class QueryBenchmarkSuiteDescription {
     @JsonGetter("holoConfigResource")
     public String holoConfigResource() {
         return holoConfigResource;
+    }
+
+    @JsonGetter("writeable")
+    public boolean writeable() {
+        return writeable;
     }
 
     @JsonGetter("initQueries")
