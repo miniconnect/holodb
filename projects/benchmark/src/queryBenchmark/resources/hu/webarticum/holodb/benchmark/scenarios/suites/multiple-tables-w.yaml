@@ -5,7 +5,7 @@ initQueries:
   - USE benchmark
 cases:
 
-  - name: many-joins-few-mixed
+  - name: many-joins-few-w
     description: Case with all tables joined after a few modifications
     initQueries:
       - INSERT INTO students VALUES(NULL, 'John', 'Doe', 1965)
@@ -15,8 +15,105 @@ cases:
       - UPDATE students SET birth_year = 1990 WHERE id = 7654
       - UPDATE students SET lastname = 'Benda', birth_year = 1995 WHERE id = 5432
       - DELETE FROM students WHERE id = 9230
-      - DELETE FROM students WHERE id = 12620
-      - DELETE FROM applications WHERE id = 97345
+      - DELETE FROM applications WHERE student_id = 9230
+      - DELETE FROM applications WHERE id = 12620
+    query: |
+      SELECT
+        st.id student_id,
+        CONCAT(st.firstname, ' ', st.lastname) name,
+        su.code,
+        su.name subject,
+        c.room
+      FROM students st
+      INNER JOIN applications a ON a.student_id = st.id
+      INNER JOIN courses c ON c.id = a.course_id
+      LEFT JOIN subjects su ON su.id = c.subject_id
+      WHERE st.birth_year = 1990
+    repeats: 50
+    columns:
+      - name: student_id
+        type: hu.webarticum.miniconnect.lang.LargeInteger
+        nullable: false
+      - name: name
+        type: java.lang.String
+        nullable: false
+      - name: code
+        type: java.lang.String
+        nullable: true
+      - name: subject
+        type: java.lang.String
+        nullable: true
+      - name: room
+        type: java.lang.String
+        nullable: false
+
+  - name: many-joins-many-w
+    description: Case with all tables joined after many modifications
+    initQueries:
+      - INSERT INTO students VALUES(NULL, 'John', 'Doe', 1965)
+      - INSERT INTO students VALUES(NULL, 'Diana', 'Parker', 1990)
+      - INSERT INTO students VALUES(NULL, 'Michael', 'Smith', 1987)
+      - INSERT INTO students VALUES(NULL, 'Emily', 'Johnson', 1992)
+      - INSERT INTO students VALUES(NULL, 'Daniel', 'Williams', 1985)
+      - INSERT INTO students VALUES(NULL, 'Sarah', 'Brown', 1998)
+      - INSERT INTO students VALUES(NULL, 'Matthew', 'Jones', 1979)
+      - INSERT INTO students VALUES(NULL, 'Laura', 'Miller', 1994)
+      - INSERT INTO students VALUES(NULL, 'Christopher', 'Davis', 1981)
+      - INSERT INTO students VALUES(NULL, 'Jessica', 'Garcia', 1996)
+      - INSERT INTO students VALUES(NULL, 'Andrew', 'Rodriguez', 2001)
+      - INSERT INTO students VALUES(NULL, 'Rachel', 'Wilson', 1989)
+      - INSERT INTO students VALUES(NULL, 'Joshua', 'Martinez', 1993)
+      - INSERT INTO students VALUES(NULL, 'Amanda', 'Anderson', 1984)
+      - INSERT INTO students VALUES(NULL, 'Nicholas', 'Taylor', 2000)
+      - INSERT INTO students VALUES(NULL, 'Stephanie', 'Thomas', 1976)
+      - INSERT INTO students VALUES(NULL, 'Kevin', 'Moore', 1997)
+      - INSERT INTO students VALUES(NULL, 'Megan', 'Jackson', 1988)
+      - INSERT INTO students VALUES(NULL, 'Brian', 'Martin', 1991)
+      - INSERT INTO students VALUES(NULL, 'Hannah', 'Lee', 2002)
+      - INSERT INTO students VALUES(NULL, 'Justin', 'Perez', 1983)
+      - INSERT INTO students VALUES(NULL, 'Olivia', 'Thompson', 1999)
+      - INSERT INTO students VALUES(NULL, 'Brandon', 'White', 1974)
+      - INSERT INTO students VALUES(NULL, 'Samantha', 'Harris', 1995)
+      - INSERT INTO students VALUES(NULL, 'Tyler', 'Sanchez', 2003)
+      - INSERT INTO students VALUES(NULL, 'Rebecca', 'Clark', 1986)
+      - INSERT INTO students VALUES(NULL, 'Jonathan', 'Ramirez', 1978)
+      - INSERT INTO students VALUES(NULL, 'Lauren', 'Lewis', 1990)
+      - INSERT INTO students VALUES(NULL, 'Ryan', 'Robinson', 2004)
+      - INSERT INTO students VALUES(NULL, 'Victoria', 'Walker', 1982)
+      - INSERT INTO students VALUES(NULL, 'Eric', 'Young', 1971)
+      - INSERT INTO students VALUES(NULL, 'Nicole', 'Allen', 1996)
+      - INSERT INTO students VALUES(NULL, 'Kyle', 'King', 2005)
+      - INSERT INTO students VALUES(NULL, 'Allison', 'Wright', 1980)
+      - INSERT INTO students VALUES(NULL, 'Jason', 'Scott', 1973)
+      - INSERT INTO students VALUES(NULL, 'Angela', 'Torres', 1994)
+      - INSERT INTO students VALUES(NULL, 'Nathan', 'Nguyen', 1987)
+      - INSERT INTO students VALUES(NULL, 'Grace', 'Hill', 2001)
+      - INSERT INTO students VALUES(NULL, 'Patrick', 'Green', 1977)
+      - INSERT INTO students VALUES(NULL, 'Katherine', 'Adams', 1998)
+      - INSERT INTO courses VALUES(NULL, 10, 'A3.102')
+      - INSERT INTO courses VALUES(NULL, 2, 'D1.210')
+      - INSERT INTO courses VALUES(NULL, 15, 'A2.115')
+      - INSERT INTO courses VALUES(NULL, 7, 'B4.063')
+      - INSERT INTO courses VALUES(NULL, 74, 'E2.092')
+      - INSERT INTO courses VALUES(NULL, 90, 'B1.020')
+      - INSERT INTO courses VALUES(NULL, 14, 'A2.132')
+      - INSERT INTO courses VALUES(NULL, 55, 'C1.034')
+      - INSERT INTO courses VALUES(NULL, 47, 'A1.179')
+      - INSERT INTO courses VALUES(NULL, 12, 'B4.230')
+      - UPDATE students SET lastname = 'Tarsky' WHERE id = 9876
+      - UPDATE students SET birth_year = 1990 WHERE id = 7654
+      - UPDATE students SET lastname = 'Benda', birth_year = 1995 WHERE id = 5432
+      - UPDATE students SET birth_year = 1980 WHERE id BETWEEN 1200 AND 1220
+      - UPDATE students SET birth_year = 1990 WHERE id BETWEEN 1700 AND 1720
+      - DELETE FROM students WHERE id = 3200
+      - DELETE FROM students WHERE id = 9230
+      - DELETE FROM students WHERE id = 11235
+      - DELETE FROM applications WHERE student_id = 3200
+      - DELETE FROM applications WHERE student_id = 9230
+      - DELETE FROM applications WHERE student_id = 11235
+      - DELETE FROM applications WHERE id BETWEEN 700 AND 750
+      - DELETE FROM applications WHERE id = 8452
+      - DELETE FROM applications WHERE id = 12620
     query: |
       SELECT
         st.id student_id,
