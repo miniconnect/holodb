@@ -44,9 +44,9 @@ allprojects {
     group = groupName
     version = automaticVersion
 
-    ext.miniConnectApiVersion = '0.5.1-SNAPSHOT'
-    ext.miniConnectVersion = '0.8.1-SNAPSHOT'
-    ext.miniBaseVersion = '0.5.1-SNAPSHOT'
+    ext.miniConnectApiVersion = '0.6.0'
+    ext.miniConnectVersion = '0.9.0'
+    ext.miniBaseVersion = '0.6.0'
 
     repositories {
         mavenCentral()
